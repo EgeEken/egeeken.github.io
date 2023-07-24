@@ -20,12 +20,15 @@ h1 {
     margin-bottom: 10px;
 }
 
+.current {
+    font-size: 20px;
+}
+
 ul {
     list-style: none;
 }
 
 li {
-    cursor: ;
     padding: 10px;
     border: 1px solid #ddd;
     margin-bottom: 10px;
@@ -56,5 +59,48 @@ li:hover .job-title {
 li:hover .description {
     display: block;
     margin-left: 10px;
+    color: rgb(50, 50, 75)
+}
+
+.result {
+    width: 35%;
+    height: 35%;
+    border-color: black;
+    border-radius: 10px;
+    border: 7px solid rgba(38, 46, 50, 0.845);
+    margin: 10px;
+}
+
+.bigresult {
+    width: 45%;
+    height: 45%;
+    border-color: black;
+    border-radius: 10px;
+    border: 7px solid rgba(38, 46, 50, 0.845);
+    margin: 10px;
+}
+
+#portfolio {
+    margin-bottom: 30px;
+    transition: all 0.5s ease;
+}
+
+.details {
+    display: none;
+    transition: all 0.5s ease;
+}
+
+li li:hover .project {
+    font-weight: bold;
+    color: rgb(20, 20, 40)
+}
+
+li li li li:hover .subproject {
+    font-weight: bold;
+    color: rgb(20, 20, 40)
+}
+
+li:hover>ul.details {
+    display: block;
     color: rgb(50, 50, 75)
 }
