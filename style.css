@@ -326,15 +326,15 @@ li:hover .job-title {
 
 @media screen and (min-width: 1700px) {
     .project-name {
-        font-size: 43px;
+        font-size: 37px;
     }
     .project-description {
-        font-size: 35px;
+        font-size: 30px;
     }
     .project-thumbnail:hover .project-name {
-        font-size: 43px;
+        font-size: 37px;
     }
     .project-thumbnail:hover .project-description {
-        font-size: 35px;
+        font-size: 30px;
     }
 }
