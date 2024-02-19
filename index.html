@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV</title>
     <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+    <title>CV</title>
 </head>
 <body>
     <header>
@@ -12,529 +13,470 @@
         <h1>Tarık Ege Eken</h1>
     </header>
 
-    <section id="personal-info">
-        <section id="numbers"> 
-            <h1> Phone Numbers </h1>
-            <ul>
-                <li> +90 536 486 87 86 </li>
-                <li> +33 6 95 83 72 07 </li>
-            </ul>
-        </section>
-        <section id="email"> 
-            <h1> E-mail </h1>
-            <ul>
-                <li> egeeken.tr@gmail.com </li>
-            </ul>
-        </section>
-        <section id="links">
-            <h1> Links </h1>
-            <ul>
-                <li>
-                    <a target="_blank" href="https://github.com/EgeEken"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="Github" width="60px"/></a>
-                    <a target="_blank" href="https://www.instagram.com/egeinparis"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/2048px-Instagram_icon.png" alt="Instagram" width="60px"/></a>
-                    <a target="_blank" href="https://www.linkedin.com/in/tarikegeeken/"><img src="https://i.imgur.com/9mUrCCb.png" alt="LinkedIn" width="60px"/></a>
-                </li>
-            </ul>
-        </section>
+    <section id="contact">
+        <h2>Contact</h2>
+        <ul>
+            <li>Turkish Number: +90 536 486 87 86 (<img src=https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png alt = "WhatsApp" width="30px"/>)</li>
+            <li>French Number: +33 6 95 83 72 07</li>
+            <li>Email: egeeken.tr@gmail.com </li>
+        </ul>
+    </section>
+
+    <section id="links">
+        <h2>Links</h2>
+        <a target="_blank" href="https://www.linkedin.com/in/tarikegeeken/">
+            <img src="https://i.imgur.com/9mUrCCb.png" 
+            alt="LinkedIn" 
+            width="60px"/>
+        </a> 
+        <a target="_blank" href="https://www.instagram.com/egeinparis">
+            <img 
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/2048px-Instagram_icon.png"
+            alt="Instagram" 
+            width="60px"/>
+        </a>
+        <a target="_blank" href="https://github.com/EgeEken">
+            <img 
+            src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg"
+            alt="GitHub" 
+            width="60px"/>
+        </a>
     </section>
 
     <section id="languages">
-        <h1> Languages </h1>
-        <ul>
-            <li> Turkish (Native) </li>
-            <li> English (Fluent, IELTS 8/9) </li>
-            <li> French (Fluent, DALF C1) </li>
-        </ul>
+        <h2>Languages</h2>
+        <p>
+            <img alt="Turkish" width="50px" style="padding-right:10px;" src="https://flagicons.lipis.dev/flags/4x3/tr.svg"/>
+            Turkish (Native)
+        </p>
+        <p>
+            <img alt="English" width="50px" style="padding-right:10px;" src="https://flagicons.lipis.dev/flags/4x3/gb.svg"/>
+            English (Fluent, IELTS 8/9)
+        </p>
+        <p>
+            <img alt="French" width="50px" style="padding-right:10px;" src="https://flagicons.lipis.dev/flags/4x3/fr.svg"/>
+            French (Fluent, DALF C1)
+        </p>
     </section>
 
     <section id="education">
-        <h1> Education </h1>
+        <h2>Education</h2>
         <ul>
-            <li> <span class="current"> Computer Science Bachelors Degree - Sorbonne Université (2020 - 2024) </span> </li>
-            <li> High School - Saint Joseph French High School (2016-2021) </li>
-            <li> Violin and Music Theory - Istanbul University State Conservatory (2015-2021) </li>
-            <li> Computer Science and Design Summer Tech Camp - Sabancı University  (2019) </li>
+            <li> 
+                <span class="current"> <span class="job-title"> 
+                    Computer Science Bachelors Degree - Sorbonne Université (2020 - 2024) 
+                </span> </span> 
+                <p class="description"> 
+                    Licence Informatique <br>
+                    Overall average so far (S1-S5): 12.4/20, S6 in progress
+                </p>
+            </li> <br>
+            <li> 
+                <span class="job-title"> 
+                    High School - Saint Joseph French High School (2016-2021) 
+                </span>
+                <p class="description"> 
+                    Diploma equivalent of a Bac S <br>
+                    Overall average: 17.8/20
+                </p>
+            </li><br>
+            <li> <span class="job-title"> Violin and Music Theory - Istanbul University State Conservatory (2015-2021) </span></li><br>
+            <li> <span class="job-title"> Computer Science, Robotics and Design Summer Tech Camp - Sabancı University  (2019) </span></li>
         </ul>
     </section>
 
-    <section id="work-experience">
-        <h1>Experience</h1>
+    <section id="experiences">
+        <h2>Experiences</h2>
         <ul>
+            <li>
+                <span class="job-title"> Student Association Administrator, AMEVS (2023-Present)</span>
+                <p class="description"> 
+                    Management of the student association, planning and participating in rehearsals, concerts and meetings 
+                </p>
+            </li><br>
+            <li>    
+                <span class="job-title"> Participation in Beta Testing, DALL-E, Stable Diffusion (2022) </span>
+                <p class="description">
+                    Helping test and assess the quality of various AI Image generators as part of an early access beta testing program.
+                </p>
+            </li><br>
+
             <li>
                 <span class="job-title">Design and Translation Internship, BILFEN (2020)</span>
-                <p class="description">Stage design for the organization of the dealers meeting,
-                    reception and translation for the guests</p>
-            </li>
+                <p class="description">
+                    Stage design for the organization of the dealers meeting, reception and translation for the guests
+                </p>
+            </li><br>
             <li>
                 <span class="job-title">Design Internship, STOK (2020)</span>
-                <p class="description">Preparation of presentations for company meetings, welcoming 
-                    guests</p>
-            </li>
+                <p class="description">
+                    Preparation of presentations for company meetings, welcoming guests
+                </p>
+            </li><br>
             <li>
                 <span class="job-title">Part-time Media Production Work, UMEDYA (2017-2020)</span>
-                <p class="description">Media production, video editing and translation</p>
-            </li>
+                <p class="description">
+                    Media production, video editing and translation
+                </p>
+            </li><br>
             <li>
-                <span class="job-title">Organization of a TEDx Event, Saint Joseph High School</span>
-                <p class="description">Setting up the stage, participation in planning, music performance 
-                    during intermission</p>
+                <span class="job-title">Organization of a TEDx Event, Saint Joseph High School (2018)</span>
+                <p class="description">
+                    Setting up the stage, participation in planning, music performance during intermission
+                </p>
             </li>
         </ul>
     </section>
-    
 
-    <section id="skills">
-        <div class="technical">
-            <h2>Technical Skills</h2>
-            <ul>
-                <li> Programming Languages
-                    <ul>
-                        <li> Python, C, Java, SQL, OCaml, HTML, PHP, CSS, JavaScript </li>
-                    </ul>
-                </li>
-                <li> Microsoft Excel, LibreOffice Calc </li>
-                <li> Google Drive, Docs, Forms </li>
-                <li> Adobe Premiere Pro, After Effects </li>
-                <li> Edius 9 </li>
-                <li> TeamViewer 12 </li>
-                <li> Nuendo, ProTools, Musescore 3, LMMS </li>
-            </ul>
-        </div>
-
-        <div class="artistic">
-            <h2>Artistic Skills</h2>
-            <ul>
-                <li> Violin (Conservatory graduate) </li>
-                <li> Music Theory (Conservatory graduate) </li>
-                <li> Piano (since 2015) </li>
-                <li> Drums (since 2022) </li>
-                <li> Drawing </li>
-                <li> Photography </li>
-                <li> Video Editing </li>
-            </ul>
-        </div>
-
-        <div class="other">
-            <h2>Other Interests</h2>
-            <ul>
-                <li> Chess (top 7% on chess.com, top 12% on lichess)</li>
-                <li> Scuba Diving (International brevet issued by the 
-                    world confederation of underwater activities) </li>
-                <li> AI (My personal projects can be found in the portfolio section) </li>
-                <li> Image Processing and Generation</li>
-                <li> Game Design </li>
-                <li> Cinema </li>
-                <li> Skiing, Billiards, Ping Pong</li>
-                <li> Economy and Politics </li>
-            </ul>
-        </div>
+    <section id="coding-languages">
+        <h2>Coding Languages</h2>
+        <img alt="Python" width="40px" style="padding-right:20px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"/>
+        <img alt="Java" width="40px" style="padding-right:20px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg"/>
+        <img alt="HTML" width="40px" style="padding-right:20px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-plain.svg" />
+        <img alt="CSS" width="40px" style="padding-right:20px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-plain.svg" />
+        <img alt="PHP" width="40px" style="padding-right:20px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-plain.svg" />
+        <img alt="JavaScript" width="40px" style="padding-right:20px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-plain.svg" />
+        <img alt="C" width="40px" style="padding-right:20px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" />
+        <img alt="Bash" width="40px" style="padding-right:20px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg"/>
+        <img alt="OCaml" width="40px" style="padding-right:20px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ocaml/ocaml-original.svg" />
+        <img alt="SQL" width="40px" style="padding-right:20px;" src="https://db.cs.uni-tuebingen.de/teaching/ws2223/sql-is-a-programming-language/logo.svg" />
     </section>
 
-    <section id="portfolio">
-        <h1>Portfolio</h1>
+    <section id="technical-skills">
+        <h2>Technical Skills</h2>
         <ul>
-            <li> Image Processing
-                <ul>
-                    <li>
-                        <span class="project">Simplify</span>
-                        <ul class="details">
-                            <li>
-                                <p>Simplifies a given image into a black over white version of it that resembles a sketch.</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    <img class="result" src="https://user-images.githubusercontent.com/96302110/165158714-77f4cae7-b1df-4972-8a26-0b6b2713eec7.png">
-                                    <img class="result" src="https://user-images.githubusercontent.com/96302110/165160112-1e23cbc3-af04-4b4e-aa02-115c3e7fd922.png">
-                                </li>
-                                <li><a href="https://github.com/egeeken/Simplify" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li> 
-                        <span class="project"> Simplify Video </span>
-                        <ul class="details">
-                            <li>
-                                <p>Video version of the Simplify program</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    <img class="result" src="https://user-images.githubusercontent.com/96302110/219778627-3a9f2813-2ecb-4899-bf76-7257ec69aa87.gif">
-                                    <img class="result" src="https://user-images.githubusercontent.com/96302110/219778666-3e9dda27-280a-4531-ab12-c450f8d7a1ce.gif">
-                                </li>
-                                <li><a href="https://github.com/egeeken/Simplify-Video" target="_blank">Github Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li> 
-                        <span class="project"> Simplify Color </span>
-                        <ul class="details">
-                            <li>
-                                <p>Simplifies a given image's colors by reducing the amount of unique colors of pixels in it.</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    <img class="result" src="https://user-images.githubusercontent.com/96302110/170580353-ad76f66e-6f5a-4bab-8a12-8bd7a17de28f.png">
-                                    <img class="result" src="https://user-images.githubusercontent.com/96302110/170580388-db096f8f-d03e-4bbf-97f5-e9a75312eef0.png">
-                                </li>
-                                <li><a href="https://github.com/egeeken/Simplify-Color" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li> 
-                        <span class="project"> Fill Object </span>
-                        <ul class="details">
-                            <li>
-                                <p>Fills any closed "objects" in a black over white image.</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/181615417-a6839f6c-9e9d-4bfe-95a4-3a86d95c4572.png">
-                                    <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/181619835-385958c4-d4f3-4c04-b9e8-642c6a3baab4.png">
-                                </li>
-                                <li><a href="https://github.com/egeeken/Fill-Object" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-                    
-                    <li> 
-                        <span class="project"> Detect Object </span>
-                        <ul class="details">
-                            <li>
-                                <p>Detects the object in an image and crops out the rest.</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/181904088-78246a0f-54ee-4b03-a041-adb8b81c59b8.png">
-                                    <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/181905526-0166421b-6546-46a9-8b2c-012c4e0b3e8f.png">
-                                </li>
-                                <li><a href="https://github.com/egeeken/Detect-Object" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <span class="project"> Saturate </span>
-                        <ul class="details">
-                            <li>
-                                <p>Changes the saturation of the given image based on the given coefficient</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/185106812-d1dce009-baf4-4fd4-832c-207ba5a0ced0.png">
-                                </li>
-                                <li><a href="https://github.com/egeeken/Saturate" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <span class="project"> Brighten </span>
-                        <ul class="details">
-                            <li>
-                                <p>Changes the brightness of the given image based on the given coefficient</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/185119707-e5bfa200-4219-4d55-a31e-a5ba9a6659bc.png">
-                                </li>
-                                <li><a href="https://github.com/egeeken/Brighten" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <span class="project"> Submerge </span>
-                        <ul class="details">
-                            <li>
-                                <p>Submerges an area of land based on the given topographical data and satellite image</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    Jakarta
-                                    <video loop autoplay muted playsinline class="result" src="https://user-images.githubusercontent.com/96302110/165179413-d00621f2-f9c8-45e8-a18f-3119ed977873.mp4"> 
-                                    </video>
-                                    Turkey
-                                    <video loop autoplay muted playsinline class="result" src="https://user-images.githubusercontent.com/96302110/165179431-fbcc2169-23e5-49f7-b248-52f653ddb8e2.mp4">
-                                    </video>
-                                </li>
-                                <li><a href="https://github.com/egeeken/Submerge" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <span class="project"> AI Number Reader </span>
-                        <ul class="details">
-                            <li>
-                                <p>An AI program that can be trained to read numbers on a 16x16 black and white image.
-
-                                    Weights and biases for a 2 layer neural network model with 83% accuracy are in the linked page, as well as a training dataset of 1000 labeled images + 200 for testing</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/213899417-5ee56354-d802-43ed-9941-cb3d1024b2bc.gif"> 
-                                </li>
-                                <li><a href="https://github.com/egeeken/Number-Reader" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-
-                </ul>
-            </li>
-
-            <li> AI
-                <ul>
-                    <li>
-                        <span class="project"> AI Number Reader </span>
-                        <ul class="details">
-                            <li>
-                                <p>An AI program that can be trained to read numbers on a 16x16 black and white image.
-
-                                    Weights and biases for a 2 layer neural network model with 83% accuracy are in the linked page, as well as a training dataset of 1000 labeled images + 200 for testing</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/213899417-5ee56354-d802-43ed-9941-cb3d1024b2bc.gif"> 
-                                </li>
-                                <li><a href="https://github.com/egeeken/Number-Reader" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-
-            <li> Simulations
-                <ul>
-                    <li>
-                        <span class="project"> Submerge </span>
-                        <ul class="details">
-                            <li>
-                                <p>Simulates and visualises the satellite image of a section of land that has been submerged up to a certain height, calculates the results based on inputted topographical datamaps and satellite imagery</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    Jakarta
-                                    <video loop autoplay muted playsinline class="result" src="https://user-images.githubusercontent.com/96302110/165179413-d00621f2-f9c8-45e8-a18f-3119ed977873.mp4"> 
-                                    </video>
-                                    Turkey
-                                    <video loop autoplay muted playsinline class="result" src="https://user-images.githubusercontent.com/96302110/165179431-fbcc2169-23e5-49f7-b248-52f653ddb8e2.mp4">
-                                    </video>
-                                </li>
-                                <li><a href="https://github.com/egeeken/Submerge" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <span class="project"> Pi with Monte Carlo </span>
-                        <ul class="details">
-                            <li>
-                                <p>Estimates pi using the Monte Carlo method</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/182940705-1b11cf3f-9c3b-45d0-bed0-26758a16e98d.png">
-                                </li>
-                                <li><a href="https://github.com/egeeken/Pi-with-Monte-Carlo" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <span class="project"> Flies and Flowers </span>
-                        <ul class="details">
-                            <li>
-                                <p>Simulates an environment with flies and flowers, entities have pathfinding algorithms and distinct sleep cycles</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    <video loop autoplay muted playsinline class="bigresult" src="https://user-images.githubusercontent.com/96302110/206923993-c7099278-fc71-454a-b1d4-3ca254800599.mp4">
-                                    </video>
-                                </li>
-                                <li><a href="https://github.com/egeeken/Flies-and-Flowers" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-                    
-                    <li>
-                        <span class="project"> Monty Hall </span>
-                        <ul class="details">
-                            <li>
-                                <p>Simulates a demonstration of the Monty Hall statistics problem</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    <img class="result" src="https://user-images.githubusercontent.com/96302110/165194877-3090f710-3c5d-49b0-846d-86210266eeda.png">
-                                    <img class="result" src="https://user-images.githubusercontent.com/96302110/165194957-282b3e03-b276-45b0-96e3-b0dea0735fe0.png">
-                                </li>
-                                <li><a href="https://github.com/egeeken/MontyHall" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-                    
-                </ul>
-            </li>
-
-            <li> PyGame
-                <ul>
-                    <li>
-                        <span class="project"> Minesweeper </span>
-                        <ul class="details">
-                            <li>
-                                <p>Play the famous minesweeper puzzle game.</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    <img class="result" src="https://user-images.githubusercontent.com/96302110/185715231-b8473ca3-27c6-47b5-8928-288c38f65575.png">
-                                </li>
-                                <li><a href="https://github.com/egeeken/Minesweeper" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <span class="project"> Snake </span>
-                        <ul class="details">
-                            <li>
-                                <p>Play snake.</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/190721748-cf02d6f6-521d-43e4-94df-17f31a90965c.gif">
-                                </li>
-                                <li><a href="https://github.com/egeeken/Snake" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <span class="project"> Human Benchmark </span>
-                        <ul class="details">
-                            <li>
-                                <p>Play the Human Benchmark tests.</p>
-                            </li>
-                            <li>
-                                <p class="results"> Results: </p>
-                                <ul>
-                                    <li> <span class="subproject"> Reaction Time </span>
-                                        <ul class="details">
-                                            <li>
-                                                <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/195985409-5692d1ed-3abd-4a85-bd95-c5d28024be7c.gif">
-                                            </li>
-                                        </ul>
-                                    </li>
-
-                                    <li> <span class="subproject"> Sequence Memory </span>
-                                        <ul class="details">
-                                            <li>
-                                                <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/196301263-31e1ed65-89d0-48f2-b758-50373a658580.gif">
-                                            </li>
-                                        </ul>
-                                    </li>
-
-                                    <li> <span class="subproject"> Aim Trainer </span>
-                                        <ul class="details">
-                                            <li>
-                                                <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/196504214-85d8775a-e413-4084-919b-cc26d1671a84.gif">
-                                            </li>
-                                        </ul>
-                                    </li>
-
-                                    <li> <span class="subproject"> Visual Memory </span>
-                                        <ul class="details">
-                                            <li>
-                                                <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/196817239-f9d0f27a-9d6b-4f45-92cf-a2c9b146aa92.gif">
-                                            </li>
-                                        </ul>
-                                    </li>
-
-                                    <li> <span class="subproject"> Chimp Test </span>
-                                        <ul class="details">
-                                            <li>
-                                                <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/197075859-fe431622-1aae-41fd-baae-e9ab8a9c5fd7.gif">
-                                            </li>
-                                        </ul>
-                                    </li>
-
-                                    <li> <span class="subproject"> Number Memory </span>
-                                        <ul class="details">
-                                            <li>
-                                                <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/197221144-029c8fe8-9b3e-40a1-afa8-0dcc2ac0d58b.gif">
-                                            </li>
-                                        </ul>
-                                    </li>
-
-                                    <li> <span class="subproject"> Verbal Memory </span>
-                                        <ul class="details">
-                                            <li>
-                                                <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/197283609-a442cd38-e99d-46c1-aac8-21b7eeed0fd4.gif">
-                                            </li>
-                                        </ul>
-                                    </li>
-
-                                    <li> <span class="subproject"> Typing </span>
-                                        <ul class="details">
-                                            <li>
-                                                <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/197369222-66c8fb94-851f-4f1b-9451-ac3bdea7244c.gif">
-                                            </li>
-                                        </ul>
-                                    </li>
-
-                                    <li> <span class="subproject"> All </span>
-                                        <ul class="details">
-                                            <li>
-                                                <img class="bigresult" src="https://user-images.githubusercontent.com/96302110/199061810-ebc1152e-92bc-4bce-9585-0d17f944a200.gif">
-                                            </li>
-                                        </ul>
-                                    </li>
-
-                                </ul>
-                            </li>
-                            <li><a href="https://github.com/egeeken/Human-Benchmark" target="_blank">GitHub Repository</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-
-            <li> Miscellaneous
-                <ul>
-                    <li>
-                        <span class="project"> Wordle </span>
-                        <ul class="details">
-                            <li>
-                                <p>Solves Wordle puzzles and a couple of variant versions (Nerdle, hellowordl)</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    <img class="result" src="https://user-images.githubusercontent.com/96302110/165194035-9822b452-fff7-4ab7-a4e0-d9b5544b2e91.png">
-                                    <img class="result" src="https://user-images.githubusercontent.com/96302110/165194143-ab3a0c4a-f0b9-476a-9fdc-bb57bfc5fd8b.png">
-                                    <img class="result" src="https://user-images.githubusercontent.com/96302110/165194165-47983fcf-499b-4b29-a3a5-86ef829b2089.png">
-                                </li>
-                                <li><a href="https://github.com/egeeken/Wordle" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <span class="project"> Pattern Finder </span>
-                        <ul class="details">
-                            <li>
-                                <p>Finds the pattern in the given list of numbers, and continues it.</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    <img class="result" src="https://user-images.githubusercontent.com/96302110/182657875-fbdc7ec9-b546-45ef-9df3-7285fd2184d7.png">
-                                    <img class="result" src="https://user-images.githubusercontent.com/96302110/182663075-beb6489c-16a2-440d-92fb-c04ce3e2eb5e.png">
-                                </li>
-                                <li><a href="https://github.com/egeeken/Pattern-Finder" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <span class="project"> Stats </span>
-                        <ul class="details">
-                            <li>
-                                <p>Shows some quick stats on the inputted set of numbers.</p>
-                                <li>
-                                    <p class="results"> Results: </p>
-                                    <img class="result" src="https://user-images.githubusercontent.com/96302110/196819747-639df420-8011-4582-8240-bb9675317cd1.png">
-                                </li>
-                                <li><a href="https://github.com/egeeken/Stats" target="_blank">GitHub Repository</a></li>
-                            </li>
-                        </ul>
-                    </li>
-
-                </ul>
-            </li>
+            <li>Microsoft Excel, LibreOffice Calc</li><br>
+            <li>Google Drive, Docs, Forms, Sheets</li><br>
+            <li>Adobe Premiere Pro, After Effects, Illustrator, Photoshop</li><br>
+            <li>Stable Diffusion</li><br>
+            <li>Godot</li><br>
+            <li>Edius 9</li><br>
+            <li>Nuendo, ProTools, Musescore 4, LMMS</li><br>
+            <li>TeamViewer 12</li>
         </ul>
     </section>
 
-    <script src="script.js"></script>
+    <section id="artistic-skills">
+        <h2>Artistic Skills</h2>
+        <ul>
+            <li> Violin (Conservatory graduate) </li><br>
+            <li> Piano (since 2015) </li><br>
+            <li> Drums (since 2022) </li><br>
+            <li> Music Theory (Conservatory graduate) </li><br>
+            <li> Orchestra performances with OSIUP (Paris Inter-University Symphony Orchestra) </li><br>
+            <li> Chamber music performances with AMEVS</li><br>
+            <li> Drawing </li><br>
+            <li> Photography </li><br>
+            <li> Video Editing </li>
+        </ul>
+    </section>
+
+    <section id="other-skills">
+        <h2>Other Skills / Interests</h2>
+        <ul>
+            <li> Chess (In the top 7% with on chess.com with 1400 elo, top 12% on lichess with 2000 elo) </li><br>
+            <li> Scuba Diving (Interational brevet issued by the world confederation of underwater activities) </li><br>
+            <li> Ski, Billiard, Ping Pong </li><br>
+            <li> Cinema </li><br>
+            <li> Economy and politics </li><br>
+            <li> Additional computer science related skills/interests can be seen below in the portfolio section</li>
+        </ul>
+    </section>
+
+
+    <footer>
+        <h2>Portfolio</h2>
+
+        <div id="category-buttons">
+            <button id="programming-btn" onclick="showCategory('programming')">Programming</button>
+            <button id="music-btn" onclick="showCategory('music')">Concerts</button>
+            <!--<button id="other-btn" onclick="showCategory('other')">Other</button>-->
+        </div>
+
+        <div id="tag-selector">
+            <h3>Filter by Tag</h3>
+            <button onclick="filterProjects('ALL')">All</button>
+            <button onclick="filterProjects('IMAGE')">Image Processing</button>
+            <button onclick="filterProjects('GAME')">Game Design</button>
+            <button onclick="filterProjects('SIMULATIONS')">Simulations</button>
+            <button onclick="filterProjects('AI')">AI</button>
+            <button onclick="filterProjects('DATA')">Data Analysis</button>
+        </div>
+
+        <div class="category" id="programming">
+            <h3>Programming Projects</h3>
+
+            <div class="programming-project" data-tags="PYTHON IMAGE">
+                <a href="https://github.com/EgeEken/Detect-Object" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://user-images.githubusercontent.com/96302110/181905526-0166421b-6546-46a9-8b2c-012c4e0b3e8f.png" alt="Detect Object">
+                        <div class="project-info">
+                            <p class="project-name">Detect Object</p>
+                            <p class="project-description">Detects the object in an image and crops out the rest.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="programming-project" data-tags="PYTHON IMAGE">
+                <a href="https://github.com/EgeEken/Simplify-Color" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://user-images.githubusercontent.com/96302110/170580353-ad76f66e-6f5a-4bab-8a12-8bd7a17de28f.png" alt="Simplify Color">
+                        <div class="project-info">
+                            <p class="project-name">Simplify Color</p>
+                            <p class="project-description">Simplifies a given image's colors by reducing the amount of unique colors of pixels in it.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="programming-project" data-tags="PYTHON IMAGE">
+                <a href="https://github.com/EgeEken/Movement-Tracker" target="_blank">
+                    <div class="project-thumbnail">
+                        <video loop autoplay muted playsinline src="https://github.com/EgeEken/Movement-Tracker/assets/96302110/7a32bc2e-4452-4102-be41-7c256087b06e" alt="Movement Tracker"> 
+                        <div class="project-info">
+                            <p class="project-name">Movement Tracker</p>
+                            <p class="project-description">Tracks the movement in a given video, placing a red dot on the most active object.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="programming-project" data-tags="PYTHON IMAGE DATA SIMULATIONS">
+                <a href="https://github.com/EgeEken/Submerge" target="_blank">
+                    <div class="project-thumbnail">
+                        <video loop autoplay muted playsinline src="https://user-images.githubusercontent.com/96302110/165179413-d00621f2-f9c8-45e8-a18f-3119ed977873.mp4" alt="Jakarta"> 
+                        <div class="project-info">
+                            <p class="project-name">Submerge</p>
+                            <p class="project-description">Simulates and visualizes an area of land being submerged based on the given topographical data and satellite image.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="programming-project" data-tags="PYTHON IMAGE DATA AI">
+                <a href="https://github.com/EgeEken/Number-Reader" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://user-images.githubusercontent.com/96302110/213899417-5ee56354-d802-43ed-9941-cb3d1024b2bc.gif" alt="AI Number Reader">
+                        <div class="project-info">
+                            <p class="project-name">AI Number Reader</p>
+                            <p class="project-description">An AI program that can be trained to read numbers on a 16x16 black and white image.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="programming-project" data-tags="PYTHON IMAGE">
+                <a href="https://github.com/EgeEken/Simplify" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://user-images.githubusercontent.com/96302110/165160112-1e23cbc3-af04-4b4e-aa02-115c3e7fd922.png" alt="Simplify">
+                        <div class="project-info">
+                            <p class="project-name">Simplify</p>
+                            <p class="project-description">Creates a simplified version of a given image by finding the high contrast points.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="programming-project" data-tags="PYTHON IMAGE">
+                <a href="https://github.com/EgeEken/Simplify-Video" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://user-images.githubusercontent.com/96302110/219778666-3e9dda27-280a-4531-ab12-c450f8d7a1ce.gif" alt="Simplify Video">
+                        <div class="project-info">
+                            <p class="project-name">Simplify Video</p>
+                            <p class="project-description">Creates a simplified version of a given video by finding the high contrast points.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="programming-project" data-tags="PYTHON IMAGE AI DATA">
+                <a href="https://github.com/EgeEken/Image-Generator" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://github.com/EgeEken/EgeEken/assets/96302110/65a55f87-d367-4816-ab11-e24160e0c0ea" alt="Image Generator">
+                        <div class="project-info">
+                            <p class="project-name">AI Image Generator</p>
+                            <p class="project-description">An AI program that can be trained to take sketches as inputs and generate photographs of them.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="programming-project" data-tags="PYTHON AI GAME SIMULATIONS">
+                <a href="https://github.com/EgeEken/AI-PaintWars" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://github.com/EgeEken/AI-PaintWars/assets/96302110/598b38da-9b22-449b-b8ce-dec0c4b35366" alt="Robot Simulation">
+                        <div class="project-info">
+                            <p class="project-name">AI Robot Simulation</p>
+                            <p class="project-description">An AI based solution for a simulated robotics project in my "AI and Games" class</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="programming-project" data-tags="JAVA SIMULATIONS">
+                <a href="https://github.com/EgeEken/Flies-and-Flowers" target="_blank">
+                    <div class="project-thumbnail">
+                        <video loop autoplay muted playsinline src="https://user-images.githubusercontent.com/96302110/206923993-c7099278-fc71-454a-b1d4-3ca254800599.mp4" alt="Java Simulation"> 
+                        <div class="project-info">
+                            <p class="project-name">Flies and Flowers</p>
+                            <p class="project-description">Simulates a few flies and different types of flowers on a flat terrain. Project for a java class</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="programming-project" data-tags="PYTHON SIMULATIONS">
+                <a href="https://github.com/EgeEken/Pi-with-Monte-Carlo" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://user-images.githubusercontent.com/96302110/182940705-1b11cf3f-9c3b-45d0-bed0-26758a16e98d.png" alt="Monte Carlo">
+                        <div class="project-info">
+                            <p class="project-name">Pi with Monte Carlo</p>
+                            <p class="project-description">Estimates pi using a simulation of the Monte Carlo method</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="programming-project" data-tags="PYTHON GAME">
+                <a href="https://github.com/EgeEken/Human-Benchmark" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://user-images.githubusercontent.com/96302110/199061810-ebc1152e-92bc-4bce-9585-0d17f944a200.gif" alt="Human Benchmark">
+                        <div class="project-info">
+                            <p class="project-name">Human Benchmark</p>
+                            <p class="project-description">The human benchmark games recreated using PyGame</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="programming-project" data-tags="PYTHON GAME">
+                <a href="https://github.com/EgeEken/Smaller-Fish" target="_blank">
+                    <div class="project-thumbnail">
+                        <video loop autoplay muted playsinline src="https://github.com/EgeEken/Smaller-Fish/assets/96302110/504cf11a-d956-4efa-bc73-9d3c3d5ea545" alt="Smaller Fish"> 
+                        <div class="project-info">
+                            <p class="project-name">Smaller Fish</p>
+                            <p class="project-description">My submission to the Pygame Community Summer 2023 Game Jam.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="programming-project" data-tags="PYTHON GAME">
+                <a href="https://github.com/EgeEken/Snake" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://user-images.githubusercontent.com/96302110/190721748-cf02d6f6-521d-43e4-94df-17f31a90965c.gif" alt="Snake">
+                        <div class="project-info">
+                            <p class="project-name">Snake</p>
+                            <p class="project-description">The snake game recreated using PyGame</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="programming-project" data-tags="PYTHON GAME">
+                <a href="https://github.com/EgeEken/Minesweeper" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://user-images.githubusercontent.com/96302110/185715231-b8473ca3-27c6-47b5-8928-288c38f65575.png" alt="Minesweeper">
+                        <div class="project-info">
+                            <p class="project-name">Minesweeper</p>
+                            <p class="project-description">The minesweeper game recreated using PyGame</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="programming-project" data-tags="PYTHON GAME">
+                <a href="https://github.com/EgeEken/Wordle" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://user-images.githubusercontent.com/96302110/165194143-ab3a0c4a-f0b9-476a-9fdc-bb57bfc5fd8b.png" alt="Wordle">
+                        <div class="project-info">
+                            <p class="project-name">Wordle Solver</p>
+                            <p class="project-description">Solves Wordle puzzles and a couple of variant versions <br> (Nerdle, hellowordl)</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+        <div class="category" id="music">
+            <h3>Concerts</h3>
+
+            <div class="project" data-tags="music">
+                <div class="project-thumbnail">
+                    <img src="images/OSIUP-1.jpg" alt="OSIUP JANVIER 2024">
+                    <div class="project-info">
+                        <p class="project-name">OSIUP<br>31/01/2024<br>02/02/2024<br>04/02/2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project" data-tags="music">
+                <div class="project-thumbnail">
+                    <img src="images/amevs-fev.jpg" alt="AMEVS FEVRIER 2024">
+                    <div class="project-info">
+                        <p class="project-name">AMEVS<br>06/02/2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project" data-tags="music">
+                <div class="project-thumbnail">
+                    <img src="images/welcome.jpg" alt="WELCOME DAY 2023">
+                    <div class="project-info">
+                        <p class="project-name">WELCOME DAY 2023<br>21/09/2023</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project" data-tags="music">
+                <div class="project-thumbnail">
+                    <img src="images/amevs-avril.jpg" alt="AMEVS AVRIL 2023">
+                    <div class="project-info">
+                        <p class="project-name">AMEVS<br>17/04/2023</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project" data-tags="music">
+                <div class="project-thumbnail">
+                    <img src="images/edac-2.jpg" alt="EDAC AVRIL 2023">
+                    <div class="project-info">
+                        <p class="project-name">EDAC<br>04/04/2023</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project" data-tags="music">
+                <div class="project-thumbnail">
+                    <img src="images/amevs-dec.jpg" alt="AMEVS DECEMBRE 2022">
+                    <div class="project-info">
+                        <p class="project-name">AMEVS<br>05/12/2022</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project" data-tags="music">
+                <div class="project-thumbnail">
+                    <img src="images/edac-1.jpg" alt="EDAC AVRIL 2022">
+                    <div class="project-info">
+                        <p class="project-name">EDAC<br>06/04/2022</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Other category with project examples 
+        <div class="category" id="other">
+            <h3>Other Projects</h3>
+            <div class="project">
+                <img src="ai_project_thumbnail.jpg" alt="AI Project">
+                <p>AI Project 1</p> 
+            </div>
+        </div>
+        -->
+    </footer>
 </body>
 </html>

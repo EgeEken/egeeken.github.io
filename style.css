@@ -1,10 +1,28 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #c0cabf, #404384);
+}
+
 header {
     background-color: #333;
-    color: #fff;
+    color: #eee;
     padding: 10px;
     text-align: center;
     margin-bottom: 30px;
     background: linear-gradient(135deg, #273a4d, #126364);
+}
+
+footer {
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 25px;
+    background-color: #333;
+    color: #eee;
+    padding: 10px;
+    text-align: center;
+    margin-top: 30px;
+    background: linear-gradient(90deg, #6281a0, #60c3c5);
 }
 
 .picture {
@@ -17,100 +35,303 @@ header {
     transition: transform 0.5s ease;
 }
 
-h1 {
-    font-size: 24px;
-    margin-bottom: 10px;
+section {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
     padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
-    padding: 20px;
+#info h1 {
+    color: #333;
+}
+
+#contact, #links, #languages, #education, #experiences #coding-languages{
+    margin-top: 20px;
 }
 
 .current {
-    font-size: 20px;
-}
-
-ul {
-    list-style: none;
-}
-
-li {
-    padding: 10px;
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-    transition: all 0.5s ease;
-}
-
-li > ul {
-    margin-top: 10px;
-}
-
-li > ul > li {
-    margin: 2px;
-}
-
-#work-experience {
-    margin-bottom: 30px;
+    font-size: 18px;
 }
 
 .description {
-    display: none;
+    max-height: 0;
+    transition: max-height 3s ease-in-out, opacity 2.5s ease-in-out;
+    opacity: 0;
+    overflow: hidden;
+}
+
+li:hover .description {
+    margin-left: 10px;
+    color: rgb(50, 50, 75);
+    transition: max-height 0.6s ease-in-out, opacity 0.5s ease-in-out;
+    max-height: 100px;
+    opacity: 1;
 }
 
 li:hover .job-title {
     font-weight: bold;
-    color: rgb(20, 20, 40)
-}
-
-li:hover .description {
-    display: block;
-    margin-left: 10px;
-    color: rgb(50, 50, 75)
-}
-
-.result {
-    width: 35%;
-    height: 35%;
-    border-color: black;
-    border-radius: 10px;
-    border: 7px solid rgba(38, 46, 50, 0.845);
-    margin: 10px;
-}
-
-.bigresult {
-    width: 45%;
-    height: 45%;
-    border-color: black;
-    border-radius: 10px;
-    border: 7px solid rgba(38, 46, 50, 0.845);
-    margin: 10px;
+    color: rgb(20, 20, 40);
 }
 
 #portfolio {
-    margin-bottom: 30px;
-    transition: all 0.5s ease;
+    margin-top: 40px;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.8s ease-in-out;
 }
 
-.details {
+#portfolio.open {
+    max-height: 1000px;
+}
+
+.category h3 {
+    color: #001429;
+}
+
+#category-buttons {
+    margin-top: 10px;
+    text-align: center;
+}
+
+#category-buttons button {
+    background-color: #1b5c87aa;
+    color: #dfdfdf;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#category-buttons button:hover {
+    background-color: #101b38cc;
+}
+
+#tag-selector {
+    margin-bottom: 20px;
+}
+
+#tag-selector {
     display: none;
-    transition: all 0.5s ease;
 }
 
-li li:hover .project {
+#tag-selector {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#tag-selector button {
+    background-color: #0c3049aa;
+    color: #dfdfdf;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#tag-selector button:hover {
+    background-color: #060a2abf;
+}
+
+
+.category {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    margin-top: 20px;
+    grid-gap: 20px;
+}
+
+#programming {
+    display: none;
+}
+
+#music {
+    display: none;
+}
+
+#other {
+    display: none;
+}
+
+.programming-project {
+    position: relative;
+    overflow: hidden;
+    width: 70%;
+    height: 70%;
+    margin: 5px auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.project {
+    position: relative;
+    overflow: hidden;
+    width: 70%;
+    height: 70%;
+    margin: 5px auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.project:hover {
+    transform: scale(1.1);
+}
+
+.project-thumbnail {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    filter: blur(0px);
+    transition: transform 0.3s, filter 0.3s;
+    background: linear-gradient(90deg, #6281a0, #60c3c5);
+    text-align: center;
+}
+
+.project-thumbnail:hover {
+    transform: scale(1.3);
+}
+
+.project-thumbnail:hover img {
+    filter: blur(8px);
+    transition: filter 0.3s;
+}
+
+.project-thumbnail img {
+    height: 70%;
+    width: 70%;
+    filter: blur(0px);
+    transition: filter 0.3s;
+    object-fit: cover;
+}
+
+.project-thumbnail:hover video {
+    filter: blur(8px);
+    transition: filter 0.3s;
+}
+
+.project-thumbnail video {
+    height: 70%;
+    width: 70%;
+    filter: blur(0px);
+    transition: filter 0.3s;
+    object-fit: cover;
+}
+
+
+.project-info {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    text-align: center;
+    word-wrap: normal;
+    color: #fff;
+    -webkit-text-stroke: 1px #30303075;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, width 0.4s ease-in-out, transform 0.4s ease-in-out;
+}
+
+
+.project-info p {
+    margin: 0;
+}
+
+.project-thumbnail:hover .project-info {
+    opacity: 1;
+    width: 70%;
+}
+
+.project-name {
+    font-size: 10px;
     font-weight: bold;
-    color: rgb(20, 20, 40)
 }
 
-li li li li:hover .subproject {
-    font-weight: bold;
-    color: rgb(20, 20, 40)
+.project-thumbnail:hover .project-name {
+    font-size: 10px;
+    text-shadow: 1px 1px 2px #00000074;
 }
 
-li:hover>ul.details {
-    display: block;
-    color: rgb(50, 50, 75)
+.project-description {
+    font-size: 5px;
+    margin-top: 10px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out, font-size 0.2s ease-in-out;
 }
 
+.project-thumbnail:hover .project-description {
+    max-height: 100px;
+    font-size: 5px;
+    text-shadow: 1px 1px 2px #00000074;
+}
+
+@media screen and (min-width: 300px) {
+    .project-name {
+        font-size: 15px;
+    }
+    .project-description {
+        font-size: 10px;
+    }
+    .project-thumbnail:hover .project-name {
+        font-size: 15px;
+    }
+    .project-thumbnail:hover .project-description {
+        font-size: 10px;
+    }
+}
+
+@media screen and (min-width: 500px) {
+    .project-name {
+        font-size: 20px;
+    }
+    .project-description {
+        font-size: 15px;
+    }
+    .project-thumbnail:hover .project-name {
+        font-size: 20px;
+    }
+    .project-thumbnail:hover .project-description {
+        font-size: 15px;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .project-name {
+        font-size: 33px;
+    }
+    .project-description {
+        font-size: 25px;
+    }
+    .project-thumbnail:hover .project-name {
+        font-size: 33px;
+    }
+    .project-thumbnail:hover .project-description {
+        font-size: 25px;
+    }
+}
+
+@media screen and (min-width: 1700px) {
+    .project-name {
+        font-size: 43px;
+    }
+    .project-description {
+        font-size: 35px;
+    }
+    .project-thumbnail:hover .project-name {
+        font-size: 43px;
+    }
+    .project-thumbnail:hover .project-description {
+        font-size: 35px;
+    }
+}
