@@ -1,5 +1,6 @@
 body {
     font-family: 'Arial', sans-serif;
+    font-size: 20px;
     margin: 0;
     padding: 0;
     background: linear-gradient(135deg, #c0cabf, #404384);
@@ -22,6 +23,7 @@ footer {
     padding: 10px;
     text-align: center;
     margin-top: 30px;
+    padding-bottom: 100px;
     background: linear-gradient(90deg, #6281a0, #60c3c5);
 }
 
@@ -165,7 +167,7 @@ li:hover .job-title {
     overflow: hidden;
     width: 70%;
     height: 70%;
-    margin: 5px auto;
+    margin: 20px auto;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
@@ -176,7 +178,7 @@ li:hover .job-title {
     overflow: hidden;
     width: 70%;
     height: 70%;
-    margin: 5px auto;
+    margin: 20px auto;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
@@ -311,30 +313,30 @@ li:hover .job-title {
 
 @media screen and (min-width: 1000px) {
     .project-name {
-        font-size: 33px;
+        font-size: 25px;
     }
     .project-description {
-        font-size: 25px;
+        font-size: 20px;
     }
     .project-thumbnail:hover .project-name {
-        font-size: 33px;
+        font-size: 25px;
     }
     .project-thumbnail:hover .project-description {
-        font-size: 25px;
+        font-size: 20px;
     }
 }
 
-@media screen and (min-width: 1700px) {
+@media screen and (min-width: 1500px) {
     .project-name {
-        font-size: 37px;
+        font-size: 30px;
     }
     .project-description {
-        font-size: 30px;
+        font-size: 25px;
     }
     .project-thumbnail:hover .project-name {
-        font-size: 37px;
+        font-size: 30px;
     }
     .project-thumbnail:hover .project-description {
-        font-size: 30px;
+        font-size: 25px;
     }
 }
