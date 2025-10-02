@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <title>Tarık Ege Eken - Computer Science Portfolio</title>
+</head>
+
+<body>
+    <header>
+        <a href="portfolio.html" class="back-button">← Return to Portfolio List</a>
+        <h1>My Computer Science Portfolio</h1>
+    </header>
+
+    <div id="tag-selector">
+        <h3>Filter by Tag</h3>
+        <button data-tag="ALL" onclick="filterProjects('ALL')">All Projects</button>
+        <button data-tag="AI" onclick="filterProjects('AI')">AI</button>
+        <button data-tag="DATA" onclick="filterProjects('DATA')">Data Analysis</button>
+        <button data-tag="IMAGE" onclick="filterProjects('IMAGE')">Image Processing</button>
+        <button data-tag="SIMULATIONS" onclick="filterProjects('SIMULATIONS')">Simulations</button>
+        <button data-tag="GAME" onclick="filterProjects('GAME')">Game Design</button>
+    </div>
+
+    
+    <div class="programming-project" data-tags="AI IMAGE DATA">
+        <a href="https://github.com/EGarrabe/Perception-active/blob/main/Rapport.pdf" target="_blank">
+            <div class="project-thumbnail">
+                <video loop autoplay muted playsinline src="assets/perc_active_rapport.mp4" alt="Active Perception with VLM"> </video>
+                <div class="project-info">
+                    <p class="project-name">Active Perception with VLM</p>
+                    <p class="project-description">Project applying multimodal language models for active perception tasks. Done at the Institute of Intelligent Systems and Robotics (ISIR)</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="programming-project" data-tags="AI DATA">
+        <a href="https://github.com/EgeEken/AI-Chatbot" target="_blank">
+            <div class="project-thumbnail">
+                <img src="assets/ai_chatbot.png" alt="AI Chatbot">
+                <div class="project-info">
+                    <p class="project-name">AI Chatbot</p>
+                    <p class="project-description">A locally built and trained GPT model using PyTorch.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="programming-project" data-tags="IMAGE">
+        <a href="https://github.com/EgeEken/PBC" target="_blank">
+            <div class="project-thumbnail">
+                <img src="https://github.com/EgeEken/PBC/assets/96302110/c5b012e3-3008-4132-876b-5abdcdec9cd2" alt="PBC">
+                <div class="project-info">
+                    <p class="project-name">Probabilistic Brush Compression</p>
+                    <p class="project-description">A new image compression algorithm using a probabilistic approach that I designed, currently deployed on Hugging Face Spaces</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="programming-project" data-tags="AI SIMULATIONS">
+        <a href="https://github.com/EgeEken/PROJET_FOSYMA" target="_blank">
+            <div class="project-thumbnail">
+                <video loop autoplay muted playsinline src="https://github.com/user-attachments/assets/c65a5825-ee63-4eb1-96be-c095eda69585" alt="Multi Agent DEDALE"> </video>
+                <div class="project-info">
+                    <p class="project-name">Multi Agent Coordination</p>
+                    <p class="project-description">Project of optimizing the communication and coordination protocols between multiple agents in a shared environment.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="programming-project" data-tags="AI IMAGE WEB">
+        <a href="https://github.com/EgeEken/Image-Upscaler" target="_blank">
+            <div class="project-thumbnail">
+                <img src="https://github.com/EgeEken/Image-Upscaler/assets/96302110/13e3f3d7-2bfe-45b6-beaa-47eb3d3012cc" alt="AI Image Upscaler">
+                <div class="project-info">
+                    <p class="project-name">AI Image Upscaler</p>
+                    <p class="project-description">A web interface built with Flask, HTML, JavaScript and CSS that uses Hugging Face transformer models to upscale the given images.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="programming-project" data-tags="IMAGE">
+        <a href="https://github.com/EgeEken/Detect-Object" target="_blank">
+            <div class="project-thumbnail">
+                <img src="https://user-images.githubusercontent.com/96302110/181905526-0166421b-6546-46a9-8b2c-012c4e0b3e8f.png" alt="Detect Object">
+                <div class="project-info">
+                    <p class="project-name">Detect Object</p>
+                    <p class="project-description">Detects the object in an image and crops out the rest. Purely algorithmic approach of my design, not using any learning algorithms</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="programming-project" data-tags="IMAGE">
+                <a href="https://github.com/EgeEken/Simplify-Color" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://user-images.githubusercontent.com/96302110/170580353-ad76f66e-6f5a-4bab-8a12-8bd7a17de28f.png" alt="Simplify Color">
+                        <div class="project-info">
+                            <p class="project-name">Simplify Color</p>
+                            <p class="project-description">Simplifies a given image's colors by reducing the amount of unique colors of pixels in it.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+    <div class="programming-project" data-tags="IMAGE">
+                <a href="https://github.com/EgeEken/Movement-Tracker" target="_blank">
+                    <div class="project-thumbnail">
+                        <video loop autoplay muted playsinline src="https://github.com/EgeEken/Movement-Tracker/assets/96302110/7a32bc2e-4452-4102-be41-7c256087b06e" alt="Movement Tracker"> </video>
+                        <div class="project-info">
+                            <p class="project-name">Movement Tracker</p>
+                            <p class="project-description">Tracks the movement in a given video, placing a red dot on the most active object.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+    <div class="programming-project" data-tags="DATA SIMULATIONS">
+                <a href="https://github.com/EgeEken/Submerge" target="_blank">
+                    <div class="project-thumbnail">
+                        <video loop autoplay muted playsinline src="https://user-images.githubusercontent.com/96302110/165179413-d00621f2-f9c8-45e8-a18f-3119ed977873.mp4" alt="Jakarta"> </video>
+                        <div class="project-info">
+                            <p class="project-name">Submerge</p>
+                            <p class="project-description">Simulates and visualizes an area of land being submerged based on the given topographical data and satellite image.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+    
+    
+    <div class="programming-project" data-tags="IMAGE DATA AI">
+                <a href="https://github.com/EgeEken/Number-Reader" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://user-images.githubusercontent.com/96302110/213899417-5ee56354-d802-43ed-9941-cb3d1024b2bc.gif" alt="AI Number Reader">
+                        <div class="project-info">
+                            <p class="project-name">AI Number Reader</p>
+                            <p class="project-description">An AI program that can be trained to read numbers on a 16x16 black and white image.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="programming-project" data-tags="AI GAME SIMULATIONS">
+                <a href="https://github.com/EgeEken/AI-PaintWars" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://github.com/EgeEken/AI-PaintWars/assets/96302110/598b38da-9b22-449b-b8ce-dec0c4b35366" alt="Robot Simulation">
+                        <div class="project-info">
+                            <p class="project-name">AI Robot Simulation</p>
+                            <p class="project-description">An AI based solution for a simulated robotics project in my "AI and Games" class</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="programming-project" data-tags="GAME">
+                <a href="https://github.com/EgeEken/Human-Benchmark" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://user-images.githubusercontent.com/96302110/199061810-ebc1152e-92bc-4bce-9585-0d17f944a200.gif" alt="Human Benchmark">
+                        <div class="project-info">
+                            <p class="project-name">Human Benchmark</p>
+                            <p class="project-description">The human benchmark games recreated using PyGame</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="programming-project" data-tags="GAME">
+                <a href="https://github.com/EgeEken/Smaller-Fish" target="_blank">
+                    <div class="project-thumbnail">
+                        <video loop autoplay muted playsinline src="https://github.com/EgeEken/Smaller-Fish/assets/96302110/504cf11a-d956-4efa-bc73-9d3c3d5ea545" alt="Smaller Fish"> </video> 
+                        <div class="project-info">
+                            <p class="project-name">Smaller Fish</p>
+                            <p class="project-description">My submission to the Pygame Community Summer 2023 Game Jam.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="programming-project" data-tags="IMAGE">
+                <a href="https://github.com/EgeEken/Simplify" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://user-images.githubusercontent.com/96302110/165160112-1e23cbc3-af04-4b4e-aa02-115c3e7fd922.png" alt="Simplify">
+                        <div class="project-info">
+                            <p class="project-name">Simplify</p>
+                            <p class="project-description">Creates a simplified version of a given image by finding the high contrast points.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="programming-project" data-tags="IMAGE">
+                <a href="https://github.com/EgeEken/Simplify-Video" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://user-images.githubusercontent.com/96302110/219778666-3e9dda27-280a-4531-ab12-c450f8d7a1ce.gif" alt="Simplify Video">
+                        <div class="project-info">
+                            <p class="project-name">Simplify Video</p>
+                            <p class="project-description">Creates a simplified version of a given video by finding the high contrast points.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="programming-project" data-tags="GAME">
+                <a href="https://github.com/EgeEken/Snake" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://user-images.githubusercontent.com/96302110/190721748-cf02d6f6-521d-43e4-94df-17f31a90965c.gif" alt="Snake">
+                        <div class="project-info">
+                            <p class="project-name">Snake</p>
+                            <p class="project-description">The snake game recreated using PyGame</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="programming-project" data-tags="SIMULATIONS">
+                <a href="https://github.com/EgeEken/Flies-and-Flowers" target="_blank">
+                    <div class="project-thumbnail">
+                        <video loop autoplay muted playsinline src="https://user-images.githubusercontent.com/96302110/206923993-c7099278-fc71-454a-b1d4-3ca254800599.mp4" alt="Java Simulation"> </video>
+                        <div class="project-info">
+                            <p class="project-name">Flies and Flowers</p>
+                            <p class="project-description">Simulates a few flies and different types of flowers on a flat terrain. Project for a java class</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="programming-project" data-tags="GAME">
+                <a href="https://github.com/EgeEken/Minesweeper" target="_blank">
+                    <div class="project-thumbnail">
+                        <img src="https://user-images.githubusercontent.com/96302110/185715231-b8473ca3-27c6-47b5-8928-288c38f65575.png" alt="Minesweeper">
+                        <div class="project-info">
+                            <p class="project-name">Minesweeper</p>
+                            <p class="project-description">The minesweeper game recreated using PyGame</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+
+
+    
+    
+</body>
+</html>

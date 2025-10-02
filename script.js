@@ -1,32 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-
-    function showCategory(category) {
-        const tagSelector = document.getElementById('tag-selector');
-        const categories = document.querySelectorAll('.category');
-        categories.forEach(cat => {
-            if (cat.id === category) {
-                if (cat.style.display === 'none') {
-                    cat.style.display = 'block';
-                    if (category === 'programming') {
-                        tagSelector.style.display = 'block';
-                    } else {
-                        tagSelector.style.display = 'none';
-                    }
-                } else {
-                    cat.style.display = 'none';
-                    tagSelector.style.display = 'none';
-                }
-            } else {
-                cat.style.display = 'none';
-            }
-        });
-    }
-
-    const programmingButton = document.getElementById('programming-btn');
-    const musicButton = document.getElementById('music-btn');
-    showCategory('programming');
-    programmingButton.addEventListener('click', () => showCategory('programming'));
-    musicButton.addEventListener('click', () => showCategory('music'));
+    filterProjects('ALL');
+    setActiveButton(document.querySelector('#tag-selector button[data-tag="ALL"]'));
 });
 
 function filterProjects(tags) {
@@ -34,18 +8,24 @@ function filterProjects(tags) {
         tags = [tags];
     }
 
-    const projects = document.querySelectorAll('.category .programming-project');
-    
+    const projects = document.querySelectorAll('.programming-project');
+
     projects.forEach(project => {
         const projectTags = (project.dataset.tags || '').split(' ');
-
         const showProject = tags.includes('ALL') || tags.every(tag => projectTags.includes(tag));
-
-        if (showProject) {
-            project.style.display = 'block';
-        } else {
-            project.style.display = 'none';
-        }
+        project.style.display = showProject ? 'block' : 'none';
     });
+
+    // Update button states
+    const allButtons = document.querySelectorAll('#tag-selector button');
+    allButtons.forEach(btn => btn.classList.remove('active'));
+
+    const clicked = document.querySelector(`#tag-selector button[data-tag="${tags[0]}"]`);
+    if (clicked) clicked.classList.add('active');
 }
 
+function setActiveButton(button) {
+    const allButtons = document.querySelectorAll('#tag-selector button');
+    allButtons.forEach(btn => btn.classList.remove('active'));
+    if (button) button.classList.add('active');
+}
