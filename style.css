@@ -212,7 +212,7 @@ section {
     overflow: hidden;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    filter: blur(0px);
+    filter: brightness(1) blur(0px);
     transition: transform 0.3s, filter 0.3s;
     background: linear-gradient(90deg, #9da5ad, #c5cfcf);
     text-align: center;
@@ -223,21 +223,21 @@ section {
 }
 
 .project-thumbnail:hover img {
-    filter: blur(8px);
+    filter: brightness(0.5) blur(8px);
     transition: filter 0.3s;
 }
 
 .project-thumbnail img {
     height: 70%;
     width: 70%;
-    filter: blur(0px);
+    filter: brightness(1) blur(0px);
     transition: filter 0.3s;
     object-fit: cover;
 }
 
 .project-thumbnail:hover video {
     z-index: 0;
-    filter: blur(8px);
+    filter: brightness(0.5) blur(8px);
     transition: filter 0.3s;
 }
 
@@ -245,7 +245,7 @@ section {
     z-index: 0;
     height: 70%;
     width: 70%;
-    filter: blur(0px);
+    filter: brightness(1) blur(0px);
     transition: filter 0.3s;
     object-fit: cover;
 }
