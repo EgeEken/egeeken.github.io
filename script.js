@@ -60,8 +60,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.addEventListener("click", e => {
 document.querySelectorAll(".photo.expanded, .favorite img.expanded")
           .forEach(img => img.classList.remove("expanded"));
-      if (e.target.matches(".photo, .favorite img")) {       e.target.classList.toggle("expanded");
-      }
+      if (e.target.matches(".photo, .favorite img") && !e.target.classList.contains("expanded")) {
+  e.target.classList.toggle("expanded");
+}
     });
   }
 });
