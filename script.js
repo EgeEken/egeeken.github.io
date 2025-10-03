@@ -58,11 +58,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (isTouchDevice) {
     document.body.addEventListener("click", e => {
-      if (e.target.matches(".photo, .favorite img")) {
-        document.querySelectorAll(".photo.expanded, .favorite img.expanded")
+document.querySelectorAll(".photo.expanded, .favorite img.expanded")
           .forEach(img => img.classList.remove("expanded"));
-
-        e.target.classList.toggle("expanded");
+      if (e.target.matches(".photo, .favorite img")) {       e.target.classList.toggle("expanded");
       }
     });
   }
