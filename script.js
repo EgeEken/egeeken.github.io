@@ -67,3 +67,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
+  if (isTouchDevice) {
+    document.querySelectorAll(".programming-project a").forEach(link => {
+      link.addEventListener("contextmenu", e => e.preventDefault());
+    });
+  }
+});
