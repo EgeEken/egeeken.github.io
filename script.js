@@ -29,3 +29,27 @@ function setActiveButton(button) {
     allButtons.forEach(btn => btn.classList.remove('active'));
     if (button) button.classList.add('active');
 }
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const gallery = document.getElementById("photo-gallery");
+
+  try {
+    const response = await fetch("assets/photography.json");
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const images = await response.json();
+    console.log("Loaded images:", images);
+
+    images.forEach(file => {
+      const img = document.createElement("img");
+      img.src = "assets/photography/" + file;
+      img.alt = "Photography work: " + file;
+      img.classList.add("photo");
+      img.onerror = () => console.error("Image failed to load:", img.src);
+      gallery.appendChild(img);
+    });
+  } catch (err) {
+    console.error("Failed to load photography.json:", err);
+  }
+});
