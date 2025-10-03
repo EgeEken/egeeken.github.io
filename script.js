@@ -16,7 +16,6 @@ function filterProjects(tags) {
         project.style.display = showProject ? 'block' : 'none';
     });
 
-    // Update button states
     const allButtons = document.querySelectorAll('#tag-selector button');
     allButtons.forEach(btn => btn.classList.remove('active'));
 
@@ -60,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (isTouchDevice) {
     document.body.addEventListener("click", e => {
       if (e.target.matches(".photo, .favorite img")) {
-        e.preventDefault(); // stops long-press context menu
+        //e.preventDefault(); // stops long-press context menu
         e.target.classList.toggle("expanded");
       }
     });

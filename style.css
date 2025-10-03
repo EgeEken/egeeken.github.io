@@ -8,9 +8,23 @@ header {
 }
 
 header h1 {
+    width: 80%;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
     font-family: 'Futura', sans-serif;
     font-size: 2.5em;
-    margin-top: 5%;
+}
+
+header h1:not(.main-menu-exception) {
+    margin-top: 6%;
+    transition: margin-top 0.3s ease;
+}
+
+@media screen and (max-width: 1000px) {
+    header h1:not(.main-menu-exception) {
+        margin-top: 16%;
+    }
 }
 
 header h2
@@ -78,6 +92,14 @@ section {
     background-color: #e5efef;
     color: #366;
     transform: scale(1.1);
+}
+
+.menu-button img {
+    width: 40%;
+    height: auto;
+    transition: 
+    transform 0.3s ease,
+    box-shadow 0.8s ease;
 }
 
 .contact-button {
@@ -162,6 +184,7 @@ section {
     position: relative;
     overflow: hidden;
     width: 70%;
+    max-width: 1000px;
     height: 70%;
     margin: 20px auto;
     border-radius: 8px;
@@ -341,12 +364,14 @@ section {
     text-align: center;
     display: block;
     width: 50%; 
+    max-width: 800px;
     margin: 10px auto;
     padding: 20px;
     background-color: #eee;
     color: #333;
     text-decoration: none;
     font-size: 1.2em;
+    z-index: 5;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     transition: transform 0.3s, background-color 0.3s;
@@ -358,20 +383,6 @@ section {
     transition: 
     transform 0.3s ease,
     box-shadow 0.8s ease;
-}
-
-.favorite img:hover {
-    transform: scale(1.05);
-}
-
-.favorite img:active {
-    transform: scale(1.7);
-    border-radius: 0;
-    box-shadow: 0 0 120px 120px rgba(0,0,0,1);
-    transform-origin: center center;
-    transition: 
-    transform 1s ease,
-    box-shadow 1s ease;
 }
 
 #photo-gallery {
@@ -397,30 +408,47 @@ section {
     background-color 0.5s ease;
 }
 
+.favorite img:hover,
 #photo-gallery img.photo:hover {
     transform: scale(1.05);
-}
-
-#photo-gallery img.photo:active {
-    transform: scale(1.8);
-    border-radius: 0;
-    background-color: #000000;
-    box-shadow: 0 0 120px 120px rgba(0,0,0,1);
-    transform-origin: center center;
-    transition: 
-        transform 0.8s ease,
-        box-shadow 0.8s ease,
-        background-color 0.7s ease;
+    z-index: 100;
+    cursor: zoom-in;
 }
 
 #photo-gallery img.photo:active,
 .favorite img:active,
 #photo-gallery img.photo.expanded,
 .favorite img.expanded {
-  transform: scale(1.8);
-  border-radius: 0;
-  background-color: #000;
-  box-shadow: 0 0 120px 120px rgba(0,0,0,1);
-  transform-origin: center center;
-  transition: transform 0.8s ease, box-shadow 0.8s ease, background-color 0.7s ease;
+    transform: scale(1.8);
+    border-radius: 0;
+    background-color: #000;
+    box-shadow: 0 0 120px 120px rgba(0,0,0,1);
+    transform-origin: center center;
+    cursor: none;
+    z-index: 100;
+    cursor: none;
+    transition: 
+        transform 0.8s ease, 
+        box-shadow 0.8s ease, 
+        background-color 0.7s ease;
+}
+
+@media screen and (min-width: 2000px) {
+    #photo-gallery img.photo:active,
+    .favorite img:active,
+    #photo-gallery img.photo.expanded,
+    .favorite img.expanded {
+        transform: scale(3);
+        border-radius: 0;
+        background-color: #000;
+        box-shadow: 0 0 120px 120px rgba(0,0,0,1);
+        transform-origin: center center;
+        cursor: none;
+        z-index: 100;
+        cursor: none;
+        transition: 
+            transform 0.8s ease, 
+            box-shadow 0.8s ease, 
+            background-color 0.7s ease;
+    }
 }
