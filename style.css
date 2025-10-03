@@ -64,6 +64,14 @@ img.picture {
     height: auto; 
 }
 
+img.picture-music {
+    display: block;
+    margin: 0 auto;
+    width: 40%;
+    min-width: 200px;
+    max-width: 500px;
+}
+
 
 section {
     width: 80%;
