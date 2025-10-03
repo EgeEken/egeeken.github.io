@@ -377,13 +377,15 @@ section {
 #photo-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 15px;
+  margin-left: 5%;
+  margin-right: 5%;
+  gap: 20px;
   padding: 20px;
   justify-items: center;
 }
 
 #photo-gallery img.photo {
-  width: 50%;
+  width: 70%;
   aspect-ratio: 1/1;
   object-fit: contain;
   border-radius: 8px;
@@ -409,4 +411,16 @@ section {
         transform 0.8s ease,
         box-shadow 0.8s ease,
         background-color 0.7s ease;
+}
+
+#photo-gallery img.photo:active,
+.favorite img:active,
+#photo-gallery img.photo.expanded,
+.favorite img.expanded {
+  transform: scale(1.8);
+  border-radius: 0;
+  background-color: #000;
+  box-shadow: 0 0 120px 120px rgba(0,0,0,1);
+  transform-origin: center center;
+  transition: transform 0.8s ease, box-shadow 0.8s ease, background-color 0.7s ease;
 }

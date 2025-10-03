@@ -53,3 +53,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Failed to load photography.json:", err);
   }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
+  if (isTouchDevice) {
+    document.body.addEventListener("click", e => {
+      if (e.target.matches(".photo, .favorite img")) {
+        e.preventDefault(); // stops long-press context menu
+        e.target.classList.toggle("expanded");
+      }
+    });
+  }
+});
