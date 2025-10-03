@@ -59,7 +59,9 @@ document.addEventListener("DOMContentLoaded", () => {
   if (isTouchDevice) {
     document.body.addEventListener("click", e => {
       if (e.target.matches(".photo, .favorite img")) {
-        //e.preventDefault(); // stops long-press context menu
+        document.querySelectorAll(".photo.expanded, .favorite img.expanded")
+          .forEach(img => img.classList.remove("expanded"));
+
         e.target.classList.toggle("expanded");
       }
     });
