@@ -460,3 +460,24 @@ section {
             background-color 0.7s ease;
     }
 }
+
+.other {
+    text-align: center;
+    display: block;
+    width: 80%; 
+    max-width: 800px;
+    margin: 10px auto;
+    padding: 20px;
+    background-color: #eee;
+    color: #333;
+    text-decoration: none;
+    font-size: 1.2em;
+    z-index: 5;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.other img {
+    width: 60%;
+    min-width: 200px;
+}
