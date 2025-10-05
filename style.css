@@ -393,7 +393,7 @@ section {
     box-shadow 0.8s ease;
 }
 
-#photo-gallery {
+#photo-gallery, #art-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   margin-left: 5%;
@@ -403,7 +403,8 @@ section {
   justify-items: center;
 }
 
-#photo-gallery img.photo {
+#photo-gallery img.photo,
+#art-gallery img.photo {
   width: 70%;
   aspect-ratio: 1/1;
   object-fit: contain;
@@ -417,7 +418,8 @@ section {
 }
 
 .favorite img:hover,
-#photo-gallery img.photo:hover {
+#photo-gallery img.photo:hover,
+#art-gallery img.photo:hover {
     transform: scale(1.05);
     z-index: 100;
     cursor: zoom-in;
@@ -426,7 +428,9 @@ section {
 #photo-gallery img.photo:active,
 .favorite img:active,
 #photo-gallery img.photo.expanded,
-.favorite img.expanded {
+.favorite img.expanded,
+#art-gallery img.photo:active,
+#art-gallery img.photo.expanded {
     transform: scale(1.8);
     border-radius: 0;
     background-color: #000;
@@ -445,7 +449,9 @@ section {
     #photo-gallery img.photo:active,
     .favorite img:active,
     #photo-gallery img.photo.expanded,
-    .favorite img.expanded {
+    .favorite img.expanded,
+    #art-gallery img.photo:active,
+    #art-gallery img.photo.expanded {
         transform: scale(3);
         border-radius: 0;
         background-color: #000;

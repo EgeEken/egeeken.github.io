@@ -53,16 +53,39 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
+document.addEventListener("DOMContentLoaded", async () => {
+  const gallery = document.getElementById("art-gallery");
+
+  try {
+    const response = await fetch("assets/art.json");
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const images = await response.json();
+    console.log("Loaded images:", images);
+
+    images.forEach(file => {
+      const img = document.createElement("img");
+      img.src = "assets/art/" + file;
+      img.alt = "Art work: " + file;
+      img.classList.add("photo");
+      img.onerror = () => console.error("Image failed to load:", img.src);
+      gallery.appendChild(img);
+    });
+  } catch (err) {
+    console.error("Failed to load art.json:", err);
+  }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
   if (isTouchDevice) {
     document.body.addEventListener("click", e => {
-document.querySelectorAll(".photo.expanded, .favorite img.expanded")
+      document.querySelectorAll(".photo.expanded, .favorite img.expanded, #art-gallery img.photo.expanded")
           .forEach(img => img.classList.remove("expanded"));
-      if (e.target.matches(".photo, .favorite img") && !e.target.classList.contains("expanded")) {
-  e.target.classList.toggle("expanded");
-}
+      if (e.target.matches(".photo, .favorite img, #art-gallery img.photo") && !e.target.classList.contains("expanded")) {
+        e.target.classList.toggle("expanded");
+      }
     });
   }
 });
