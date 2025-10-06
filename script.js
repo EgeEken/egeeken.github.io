@@ -23,6 +23,26 @@ function filterProjects(tags) {
     if (clicked) clicked.classList.add('active');
 }
 
+function filterMusicProjects(tags) {
+    if (!Array.isArray(tags)) {
+        tags = [tags];
+    }
+
+    const projects = document.querySelectorAll('.music-project');
+
+    projects.forEach(project => {
+        const projectTags = (project.dataset.tags || '').split(' ');
+        const showProject = tags.includes('ALL') || tags.every(tag => projectTags.includes(tag));
+        project.style.display = showProject ? 'block' : 'none';
+    });
+
+    const allButtons = document.querySelectorAll('#tag-selector button');
+    allButtons.forEach(btn => btn.classList.remove('active'));
+
+    const clicked = document.querySelector(`#tag-selector button[data-tag="${tags[0]}"]`);
+    if (clicked) clicked.classList.add('active');
+}
+
 function setActiveButton(button) {
     const allButtons = document.querySelectorAll('#tag-selector button');
     allButtons.forEach(btn => btn.classList.remove('active'));
