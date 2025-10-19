@@ -1,3 +1,3 @@
 # [egeeken.github.io](https://egeeken.github.io/)
 
-My online resume
+My online resume and portfolio.
