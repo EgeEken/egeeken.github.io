@@ -72,6 +72,16 @@ img.picture-music {
     max-width: 500px;
 }
 
+.picture-photo {
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    transform: translate(-50%, 87%);
+    width: 40%;
+    margin-top: -40%;
+    padding: 0;
+    z-index: 5;
+}
 
 section {
     width: 80%;
@@ -390,6 +400,7 @@ section {
     width: 50%; 
     max-width: 800px;
     margin: 10px auto;
+    margin-top: 33%;
     padding: 20px;
     background-color: #eee;
     color: #333;
