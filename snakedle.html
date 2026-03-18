@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Tarık Ege Eken - Snakedle</title>
+    <style>
+        #snakedle-wrapper {
+            width: min(980px, 96%);
+            margin: 20px auto 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            color: #eee;
+        }
+
+        .snakedle-stat {
+            font-family: 'Futura', sans-serif;
+            letter-spacing: 1px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        #snakedle-layout {
+            width: 100%;
+            display: grid;
+            grid-template-columns: minmax(180px, 230px) minmax(280px, 1fr) minmax(180px, 260px);
+            gap: 18px;
+            align-items: center;
+        }
+
+        .snakedle-panel {
+            background: rgba(12, 32, 48, 0.72);
+            border: 1px solid rgba(125, 223, 223, 0.25);
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 0 15px rgba(12, 32, 48, 0.35);
+        }
+
+        #snakedle-board-wrap {
+            display: flex;
+            justify-content: center;
+        }
+
+        #snakedle-canvas {
+            width: min(94vw, 420px);
+            height: auto;
+            border: 3px solid #126364;
+            border-radius: 10px;
+            box-shadow: 0 0 25px rgba(18, 99, 100, 0.5);
+            background-color: #0c2030;
+        }
+
+        #dpad-snakedle {
+            display: grid;
+            gap: 8px;
+            justify-items: center;
+        }
+
+        .dpad-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .snakedle-btn {
+            width: 58px;
+            height: 58px;
+            border: none;
+            border-radius: 8px;
+            background-color: #126364;
+            color: #eee;
+            font-size: 1.3em;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+            box-shadow: 0 0 8px rgba(18, 99, 100, 0.45);
+        }
+
+        .snakedle-btn:active {
+            transform: scale(0.95);
+            background-color: #0d4f50;
+        }
+
+        .snakedle-btn.alt {
+            width: calc(50% - 6px);
+            font-size: 0.9em;
+            height: 42px;
+            margin-top: 6px;
+        }
+
+        #move-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+            margin-top: 6px;
+            margin-bottom: 10px;
+        }
+
+        .move-cell {
+            aspect-ratio: 1;
+            border-radius: 6px;
+            border: 1px solid rgba(187, 221, 221, 0.35);
+            background: rgba(12, 32, 48, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #cbe4e4;
+            font-size: 1.1em;
+            font-family: 'Futura', sans-serif;
+        }
+
+        .move-cell.filled {
+            background: rgba(18, 99, 100, 0.85);
+            color: #fff;
+            border-color: rgba(125, 223, 223, 0.8);
+        }
+
+        #submit-snakedle {
+            width: 100%;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 8px;
+            background-color: #7ddfdf;
+            color: #102334;
+            font-family: 'Futura', sans-serif;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 700;
+            transition: transform 0.15s, background-color 0.25s;
+        }
+
+        #submit-snakedle:hover {
+            transform: scale(1.02);
+            background-color: #a7eded;
+        }
+
+        #status-line {
+            margin-top: 8px;
+            color: #bbd;
+            min-height: 22px;
+            text-align: center;
+            font-size: 0.92em;
+        }
+
+        #results-modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(8, 15, 24, 0.78);
+            z-index: 1200;
+        }
+
+        #results-card {
+            width: min(92vw, 460px);
+            background: #102334;
+            border: 2px solid #126364;
+            border-radius: 12px;
+            padding: 18px;
+            color: #eee;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(8, 15, 24, 0.7);
+        }
+
+        #results-text {
+            white-space: pre-wrap;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0 14px;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .results-actions button {
+            border: none;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-family: 'Futura', sans-serif;
+            cursor: pointer;
+        }
+
+        #copy-share {
+            background: #7ddfdf;
+            color: #102334;
+            font-weight: 700;
+        }
+
+        #close-results {
+            background: #2e4b61;
+            color: #e8f0f0;
+        }
+
+        @media (max-width: 880px) {
+            #snakedle-layout {
+                grid-template-columns: 1fr;
+            }
+
+            #snakedle-board-wrap {
+                order: -1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="games.html" class="back-button">← Return to Games</a>
+        <h1>🧩 Snakedle</h1>
+        <h2>Daily snake-routing puzzle. Queue your moves, then submit your best solve.</h2>
+    </header>
+
+    <main id="snakedle-wrapper">
+        <div class="snakedle-stat" id="daily-label">Snakedle Day 1</div>
+        <div class="snakedle-stat" id="fruit-progress">Fruits: 0 / 5</div>
+        <div class="snakedle-stat" id="move-progress">Moves: 0 / --</div>
+
+        <section id="snakedle-layout">
+            <div class="snakedle-panel">
+                <div id="dpad-snakedle">
+                    <button class="snakedle-btn" data-dir="U" aria-label="Up">▲</button>
+                    <div class="dpad-row">
+                        <button class="snakedle-btn" data-dir="L" aria-label="Left">◀</button>
+                        <button class="snakedle-btn" data-dir="D" aria-label="Down">▼</button>
+                        <button class="snakedle-btn" data-dir="R" aria-label="Right">▶</button>
+                    </div>
+                    <div class="dpad-row" style="width:100%;">
+                        <button class="snakedle-btn alt" id="undo-move">Undo</button>
+                        <button class="snakedle-btn alt" id="clear-moves">Clear</button>
+                    </div>
+                </div>
+                <div id="status-line">Use the buttons or arrow keys to queue moves.</div>
+            </div>
+
+            <div id="snakedle-board-wrap">
+                <canvas id="snakedle-canvas" width="420" height="420"></canvas>
+            </div>
+
+            <div class="snakedle-panel">
+                <div style="text-align:center; margin-bottom:4px;">Move Queue (max 25)</div>
+                <div id="move-grid"></div>
+                <button id="submit-snakedle">Submit run</button>
+            </div>
+        </section>
+    </main>
+
+    <div id="results-modal" role="dialog" aria-modal="true">
+        <div id="results-card">
+            <h3>Result</h3>
+            <div id="results-text"></div>
+            <div class="results-actions">
+                <button id="copy-share">Copy Share Text</button>
+                <button id="close-results">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const GRID_SIZE = 5;
+        const CELL_SIZE = 84;
+        const FRUIT_COUNT = 5;
+        const MAX_MOVES = 25;
+        const LAUNCH_DAY_UTC = Date.UTC(2026, 0, 1);
+
+        const DIRS = {
+            U: { x: 0, y: -1 },
+            D: { x: 0, y: 1 },
+            L: { x: -1, y: 0 },
+            R: { x: 1, y: 0 }
+        };
+        const DIR_ORDER = ['U', 'R', 'D', 'L'];
+        const ARROW = { U: '↑', D: '↓', L: '←', R: '→' };
+
+        const canvas = document.getElementById('snakedle-canvas');
+        const ctx = canvas.getContext('2d');
+        const fruitProgressEl = document.getElementById('fruit-progress');
+        const moveProgressEl = document.getElementById('move-progress');
+        const dailyLabelEl = document.getElementById('daily-label');
+        const moveGridEl = document.getElementById('move-grid');
+        const statusLineEl = document.getElementById('status-line');
+        const resultsModal = document.getElementById('results-modal');
+        const resultsTextEl = document.getElementById('results-text');
+
+        const queueMoves = [];
+        const moveCells = [];
+
+        const dayNumber = getDayNumber(new Date());
+        dailyLabelEl.textContent = `Snakedle Day ${dayNumber}`;
+
+        const puzzle = generateDailyPuzzle(dayNumber);
+        const optimalMoves = puzzle.optimalMoves;
+
+        let playbackFrames = [];
+        let playbackTimer = null;
+
+        for (let i = 0; i < MAX_MOVES; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'move-cell';
+            moveGridEl.appendChild(cell);
+            moveCells.push(cell);
+        }
+
+        function getDayNumber(date) {
+            const todayUtc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+            return Math.max(1, Math.floor((todayUtc - LAUNCH_DAY_UTC) / 86400000) + 1);
+        }
+
+        function mulberry32(seed) {
+            let t = seed >>> 0;
+            return function () {
+                t += 0x6D2B79F5;
+                let r = Math.imul(t ^ (t >>> 15), 1 | t);
+                r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+                return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+            };
+        }
+
+        function cellKey(x, y) {
+            return `${x},${y}`;
+        }
+
+        function parseKey(key) {
+            const [x, y] = key.split(',').map(Number);
+            return { x, y };
+        }
+
+        function inBounds(x, y) {
+            return x >= 0 && x < GRID_SIZE && y >= 0 && y < GRID_SIZE;
+        }
+
+        function pickRandom(list, rng) {
+            return list[Math.floor(rng() * list.length)];
+        }
+
+        function shuffled(list, rng) {
+            const arr = list.slice();
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(rng() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function generateDailyPuzzle(day) {
+            const baseSeed = day * 2654435761;
+            for (let attempt = 0; attempt < 450; attempt++) {
+                const rng = mulberry32((baseSeed + attempt * 1013904223) >>> 0);
+                const wallCount = 3 + Math.floor(rng() * 3);
+                const allCells = [];
+                for (let y = 0; y < GRID_SIZE; y++) {
+                    for (let x = 0; x < GRID_SIZE; x++) {
+                        allCells.push(cellKey(x, y));
+                    }
+                }
+
+                const wallSet = new Set(shuffled(allCells, rng).slice(0, wallCount));
+                const openCells = allCells.filter(k => !wallSet.has(k));
+                if (openCells.length < FRUIT_COUNT + 2) {
+                    continue;
+                }
+
+                const headKey = pickRandom(openCells, rng);
+                const head = parseKey(headKey);
+                const neighbors = DIR_ORDER
+                    .map(d => ({ x: head.x + DIRS[d].x, y: head.y + DIRS[d].y }))
+                    .filter(c => inBounds(c.x, c.y) && !wallSet.has(cellKey(c.x, c.y)));
+                if (neighbors.length === 0) {
+                    continue;
+                }
+
+                const tail = pickRandom(neighbors, rng);
+                const snakeStartKeys = new Set([headKey, cellKey(tail.x, tail.y)]);
+                const fruitPool = shuffled(openCells.filter(k => !snakeStartKeys.has(k)), rng);
+                const fruits = fruitPool.slice(0, FRUIT_COUNT).map(parseKey);
+
+                let oneWayFruits = 0;
+                let badFruit = false;
+                for (const fruit of fruits) {
+                    let openSides = 0;
+                    for (const d of DIR_ORDER) {
+                        const nx = fruit.x + DIRS[d].x;
+                        const ny = fruit.y + DIRS[d].y;
+                        if (inBounds(nx, ny) && !wallSet.has(cellKey(nx, ny))) {
+                            openSides++;
+                        }
+                    }
+                    if (openSides < 1) {
+                        badFruit = true;
+                        break;
+                    }
+                    if (openSides === 1) {
+                        oneWayFruits++;
+                    }
+                }
+
+                if (badFruit || oneWayFruits > 1) {
+                    continue;
+                }
+
+                const candidate = {
+                    walls: wallSet,
+                    fruits,
+                    snakeStart: [head, tail]
+                };
+
+                const optimal = findOptimalMoves(candidate);
+                if (Number.isFinite(optimal) && optimal <= MAX_MOVES) {
+                    return { ...candidate, optimalMoves: optimal };
+                }
+            }
+
+            return {
+                walls: new Set(['1,1', '3,1', '1,3', '3,3']),
+                fruits: [{ x: 0, y: 2 }, { x: 2, y: 0 }, { x: 4, y: 2 }, { x: 2, y: 4 }, { x: 2, y: 2 }],
+                snakeStart: [{ x: 0, y: 0 }, { x: 0, y: 1 }],
+                optimalMoves: 14
+            };
+        }
+
+        function findOptimalMoves(candidate) {
+            const fruitIndex = new Map();
+            candidate.fruits.forEach((fruit, i) => fruitIndex.set(cellKey(fruit.x, fruit.y), i));
+            const targetMask = (1 << candidate.fruits.length) - 1;
+
+            const startBody = candidate.snakeStart.map(c => ({ x: c.x, y: c.y }));
+            const startState = {
+                body: startBody,
+                mask: 0,
+                steps: 0
+            };
+
+            const queue = [startState];
+            let queueIndex = 0;
+            const visited = new Set([encodeState(startBody, 0)]);
+
+            while (queueIndex < queue.length) {
+                const state = queue[queueIndex++];
+                for (const dirKey of DIR_ORDER) {
+                    const next = advanceState(state.body, state.mask, dirKey, candidate.walls, fruitIndex);
+                    if (!next.valid) {
+                        continue;
+                    }
+                    if (next.mask === targetMask) {
+                        return state.steps + 1;
+                    }
+                    const encoded = encodeState(next.body, next.mask);
+                    if (!visited.has(encoded)) {
+                        visited.add(encoded);
+                        queue.push({ body: next.body, mask: next.mask, steps: state.steps + 1 });
+                    }
+                }
+            }
+            return Infinity;
+        }
+
+        function encodeState(body, mask) {
+            return `${mask}|${body.map(c => `${c.x}.${c.y}`).join(';')}`;
+        }
+
+        function advanceState(body, mask, dirKey, walls, fruitIndex) {
+            const dir = DIRS[dirKey];
+            const nextHead = { x: body[0].x + dir.x, y: body[0].y + dir.y };
+            if (!inBounds(nextHead.x, nextHead.y) || walls.has(cellKey(nextHead.x, nextHead.y))) {
+                return { valid: false };
+            }
+
+            const nextHeadKey = cellKey(nextHead.x, nextHead.y);
+            const fruitAtHead = fruitIndex.has(nextHeadKey) ? fruitIndex.get(nextHeadKey) : -1;
+            const willEat = fruitAtHead >= 0 && (mask & (1 << fruitAtHead)) === 0;
+            const collisionBody = willEat ? body : body.slice(0, -1);
+            if (collisionBody.some(c => c.x === nextHead.x && c.y === nextHead.y)) {
+                return { valid: false };
+            }
+
+            const nextBody = [nextHead, ...body.map(c => ({ x: c.x, y: c.y }))];
+            if (!willEat) {
+                nextBody.pop();
+            }
+
+            let nextMask = mask;
+            if (willEat) {
+                nextMask |= (1 << fruitAtHead);
+            }
+
+            return { valid: true, body: nextBody, mask: nextMask };
+        }
+
+        function simulateMoves(moves) {
+            const fruitIndex = new Map();
+            puzzle.fruits.forEach((fruit, i) => fruitIndex.set(cellKey(fruit.x, fruit.y), i));
+            const targetMask = (1 << puzzle.fruits.length) - 1;
+
+            let body = puzzle.snakeStart.map(c => ({ x: c.x, y: c.y }));
+            let mask = 0;
+            const frames = [{ body: body.map(c => ({ ...c })), mask, state: 'running' }];
+            let resultState = 'running';
+
+            for (let i = 0; i < moves.length; i++) {
+                const step = advanceState(body, mask, moves[i], puzzle.walls, fruitIndex);
+                if (!step.valid) {
+                    resultState = 'dead';
+                    frames.push({ body: body.map(c => ({ ...c })), mask, state: 'dead' });
+                    return { frames, state: resultState, movesUsed: i + 1, fruitsEaten: countBits(mask) };
+                }
+                body = step.body;
+                mask = step.mask;
+
+                if (mask === targetMask) {
+                    resultState = 'win';
+                    frames.push({ body: body.map(c => ({ ...c })), mask, state: 'win' });
+                    return { frames, state: resultState, movesUsed: i + 1, fruitsEaten: puzzle.fruits.length };
+                }
+
+                frames.push({ body: body.map(c => ({ ...c })), mask, state: 'running' });
+            }
+
+            return { frames, state: resultState, movesUsed: moves.length, fruitsEaten: countBits(mask) };
+        }
+
+        function countBits(num) {
+            let n = num;
+            let count = 0;
+            while (n) {
+                count += n & 1;
+                n >>= 1;
+            }
+            return count;
+        }
+
+        function refreshMoveGrid() {
+            for (let i = 0; i < moveCells.length; i++) {
+                const move = queueMoves[i];
+                const cell = moveCells[i];
+                if (move) {
+                    cell.textContent = ARROW[move];
+                    cell.classList.add('filled');
+                } else {
+                    cell.textContent = '';
+                    cell.classList.remove('filled');
+                }
+            }
+        }
+
+        function drawBoard(frame) {
+            ctx.fillStyle = '#0c2030';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.strokeStyle = 'rgba(125, 223, 223, 0.18)';
+            ctx.lineWidth = 1;
+            for (let c = 0; c <= GRID_SIZE; c++) {
+                ctx.beginPath();
+                ctx.moveTo(c * CELL_SIZE, 0);
+                ctx.lineTo(c * CELL_SIZE, canvas.height);
+                ctx.stroke();
+            }
+            for (let r = 0; r <= GRID_SIZE; r++) {
+                ctx.beginPath();
+                ctx.moveTo(0, r * CELL_SIZE);
+                ctx.lineTo(canvas.width, r * CELL_SIZE);
+                ctx.stroke();
+            }
+
+            for (const key of puzzle.walls) {
+                const { x, y } = parseKey(key);
+                const px = x * CELL_SIZE;
+                const py = y * CELL_SIZE;
+                ctx.fillStyle = '#24384a';
+                ctx.fillRect(px + 6, py + 6, CELL_SIZE - 12, CELL_SIZE - 12);
+                ctx.strokeStyle = '#3e5a71';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(px + 6, py + 6, CELL_SIZE - 12, CELL_SIZE - 12);
+            }
+
+            const collectedMask = frame.mask;
+            puzzle.fruits.forEach((fruit, index) => {
+                if ((collectedMask & (1 << index)) !== 0) {
+                    return;
+                }
+                const fx = fruit.x * CELL_SIZE + CELL_SIZE / 2;
+                const fy = fruit.y * CELL_SIZE + CELL_SIZE / 2;
+                const fr = CELL_SIZE * 0.22;
+                ctx.fillStyle = '#e05555';
+                ctx.beginPath();
+                ctx.arc(fx, fy, fr, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#ff9999';
+                ctx.beginPath();
+                ctx.arc(fx - fr * 0.35, fy - fr * 0.35, fr * 0.28, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            for (let i = frame.body.length - 1; i >= 0; i--) {
+                const segment = frame.body[i];
+                const x = segment.x * CELL_SIZE;
+                const y = segment.y * CELL_SIZE;
+                const pad = 6;
+                const size = CELL_SIZE - pad * 2;
+                const radius = 12;
+                ctx.fillStyle = i === 0 ? '#7ddfdf' : '#126364';
+                ctx.strokeStyle = '#0a4a4a';
+                ctx.lineWidth = 2;
+
+                roundRect(ctx, x + pad, y + pad, size, size, radius);
+                ctx.fill();
+                ctx.stroke();
+            }
+
+            if (frame.state === 'dead') {
+                ctx.fillStyle = 'rgba(224, 85, 85, 0.28)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        function roundRect(context, x, y, w, h, r) {
+            context.beginPath();
+            context.moveTo(x + r, y);
+            context.lineTo(x + w - r, y);
+            context.quadraticCurveTo(x + w, y, x + w, y + r);
+            context.lineTo(x + w, y + h - r);
+            context.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            context.lineTo(x + r, y + h);
+            context.quadraticCurveTo(x, y + h, x, y + h - r);
+            context.lineTo(x, y + r);
+            context.quadraticCurveTo(x, y, x + r, y);
+            context.closePath();
+        }
+
+        function refreshPlayback() {
+            if (playbackTimer) {
+                clearInterval(playbackTimer);
+                playbackTimer = null;
+            }
+
+            const simulation = simulateMoves(queueMoves);
+            playbackFrames = simulation.frames;
+            fruitProgressEl.textContent = `Fruits: ${simulation.fruitsEaten} / ${FRUIT_COUNT}`;
+            moveProgressEl.textContent = `Moves: ${queueMoves.length} / ${optimalMoves}`;
+
+            let frameIndex = 0;
+            drawBoard(playbackFrames[frameIndex]);
+            if (playbackFrames.length <= 1) {
+                return;
+            }
+            playbackTimer = setInterval(() => {
+                frameIndex += 1;
+                drawBoard(playbackFrames[Math.min(frameIndex, playbackFrames.length - 1)]);
+                if (frameIndex >= playbackFrames.length - 1) {
+                    clearInterval(playbackTimer);
+                    playbackTimer = null;
+                    if (simulation.state === 'dead') {
+                        statusLineEl.textContent = 'Route crashes. Undo or clear and try again.';
+                    } else if (simulation.state === 'win') {
+                        statusLineEl.textContent = 'All fruits collected in preview. Submit when ready.';
+                    } else {
+                        statusLineEl.textContent = 'Route preview updated.';
+                    }
+                }
+            }, 170);
+
+            if (queueMoves.length === 0) {
+                statusLineEl.textContent = 'Use the buttons or arrow keys to queue moves.';
+            } else {
+                const last = queueMoves[queueMoves.length - 1];
+                statusLineEl.textContent = `Queued move ${queueMoves.length}: ${ARROW[last]}`;
+            }
+        }
+
+        function addMove(dirKey) {
+            if (queueMoves.length >= MAX_MOVES) {
+                statusLineEl.textContent = 'Move queue is full (25). Submit, undo, or clear.';
+                return;
+            }
+            queueMoves.push(dirKey);
+            refreshMoveGrid();
+            refreshPlayback();
+        }
+
+        function undoMove() {
+            if (queueMoves.length === 0) {
+                return;
+            }
+            queueMoves.pop();
+            refreshMoveGrid();
+            refreshPlayback();
+        }
+
+        function clearMoves() {
+            queueMoves.length = 0;
+            refreshMoveGrid();
+            refreshPlayback();
+        }
+
+        function performanceEmoji(used, optimal) {
+            const ratio = used / optimal;
+            if (ratio <= 1) return '🟦';
+            if (ratio <= 1.15) return '🟩';
+            if (ratio <= 1.25) return '🟨';
+            if (ratio <= 1.5) return '🟧';
+            return '🟥';
+        }
+
+        function submitRun() {
+            const simulation = simulateMoves(queueMoves);
+            if (simulation.state !== 'win') {
+                statusLineEl.textContent = 'You need a valid route that collects all 5 fruits before submitting.';
+                return;
+            }
+
+            const usedMoves = simulation.movesUsed;
+            const emoji = performanceEmoji(usedMoves, optimalMoves);
+            const shareText = `Snakedle Day ${dayNumber} : ${usedMoves}/${optimalMoves} ${emoji}\nhttps://egeeken.github.io/snakedle`;
+            resultsTextEl.textContent = shareText;
+            resultsModal.style.display = 'flex';
+
+            localStorage.setItem(
+                `snakedle-${dayNumber}`,
+                JSON.stringify({ usedMoves, optimalMoves, emoji, at: new Date().toISOString() })
+            );
+        }
+
+        document.querySelectorAll('[data-dir]').forEach(btn => {
+            btn.addEventListener('click', () => addMove(btn.dataset.dir));
+        });
+
+        document.getElementById('undo-move').addEventListener('click', undoMove);
+        document.getElementById('clear-moves').addEventListener('click', clearMoves);
+        document.getElementById('submit-snakedle').addEventListener('click', submitRun);
+
+        document.addEventListener('keydown', (e) => {
+            const keyMap = {
+                ArrowUp: 'U',
+                ArrowDown: 'D',
+                ArrowLeft: 'L',
+                ArrowRight: 'R',
+                w: 'U',
+                W: 'U',
+                s: 'D',
+                S: 'D',
+                a: 'L',
+                A: 'L',
+                d: 'R',
+                D: 'R'
+            };
+            if (keyMap[e.key]) {
+                e.preventDefault();
+                addMove(keyMap[e.key]);
+            } else if (e.key === 'Backspace') {
+                e.preventDefault();
+                undoMove();
+            }
+        });
+
+        document.getElementById('copy-share').addEventListener('click', async () => {
+            const text = resultsTextEl.textContent;
+            try {
+                await navigator.clipboard.writeText(text);
+                statusLineEl.textContent = 'Share text copied to clipboard.';
+            } catch (err) {
+                const temp = document.createElement('textarea');
+                temp.value = text;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+                statusLineEl.textContent = 'Share text copied to clipboard.';
+            }
+        });
+
+        document.getElementById('close-results').addEventListener('click', () => {
+            resultsModal.style.display = 'none';
+        });
+
+        resultsModal.addEventListener('click', (e) => {
+            if (e.target === resultsModal) {
+                resultsModal.style.display = 'none';
+            }
+        });
+
+        refreshMoveGrid();
+        refreshPlayback();
+    </script>
+</body>
+
+</html>

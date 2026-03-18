@@ -42,6 +42,9 @@
 
         #overlay {
             position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -393,6 +396,12 @@
         });
 
         document.addEventListener('keydown', (e) => {
+            const isStartKey = e.key === 'Enter' || e.key === ' ';
+            if (isStartKey && (state === 'idle' || state === 'over')) {
+                e.preventDefault();
+                startGame();
+                return;
+            }
             const keyMap = {
                 'ArrowUp': { x: 0, y: -1 }, 'w': { x: 0, y: -1 }, 'W': { x: 0, y: -1 },
                 'ArrowDown': { x: 0, y: 1 }, 's': { x: 0, y: 1 }, 'S': { x: 0, y: 1 },
