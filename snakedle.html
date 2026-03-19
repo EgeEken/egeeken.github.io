@@ -253,7 +253,7 @@
 
 <body>
     <header>
-        <a href="./games/snakedle/" class="back-button">← Return to Snakedle</a>
+        <a href="/games/snakedle/" class="back-button">← Return to Snakedle</a>
         <h1>🧩 Snakedle</h1>
         <h2>Daily snake-routing puzzle. Queue your moves, then submit your best solve.</h2>
     </header>
@@ -321,6 +321,10 @@
         };
         const DIR_ORDER = ['U', 'R', 'D', 'L'];
         const ARROW = { U: '▴', D: '▾', L: '◂', R: '▸' };
+        const MOVE_ICON_MIN_SIZE_EM = 0.7;
+        const MOVE_ICON_BASE_SIZE_EM = 1.2;
+        const MOVE_ICON_REFERENCE_GRID_SIZE = 6;
+        const MOVE_ICON_SIZE_STEP_EM = 0.13;
 
         const canvas = document.getElementById('snakedle-canvas');
         const ctx = canvas.getContext('2d');
@@ -342,7 +346,10 @@
         document.documentElement.style.setProperty('--snakedle-grid-size', String(GRID_SIZE));
         document.documentElement.style.setProperty(
             '--snakedle-move-icon-size',
-            `${Math.max(0.7, 1.2 - (GRID_SIZE - 6) * 0.13)}em`
+            `${Math.max(
+                MOVE_ICON_MIN_SIZE_EM,
+                MOVE_ICON_BASE_SIZE_EM - (GRID_SIZE - MOVE_ICON_REFERENCE_GRID_SIZE) * MOVE_ICON_SIZE_STEP_EM
+            )}em`
         );
 
         const puzzle = generateDailyPuzzle(dayNumber);

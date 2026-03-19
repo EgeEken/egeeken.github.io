@@ -325,7 +325,7 @@
 
 <body>
     <header>
-        <a href="./games/snakedle/" class="back-button">← Return to Snakedle</a>
+        <a href="/games/snakedle/" class="back-button">← Return to Snakedle</a>
         <h1>🧩 Snakedle</h1>
         <h2>Random snake-routing puzzle. Set parameters in the configuration panel to load a reproducible map.</h2>
     </header>
@@ -482,11 +482,11 @@
         }
 
         let randomConfig = parseRandomConfigFromHash();
-        let GRID_SIZE = randomConfig.mapSize;
-        let CELL_SIZE = 420 / GRID_SIZE;
-        let FRUIT_COUNT = randomConfig.fruitCount;
-        let WALL_COUNT = randomConfig.wallCount;
-        let MAX_MOVES = GRID_SIZE * GRID_SIZE;
+        let gridSize = randomConfig.mapSize;
+        let cellSize = 420 / gridSize;
+        let fruitCount = randomConfig.fruitCount;
+        let wallCount = randomConfig.wallCount;
+        let maxMoves = gridSize * gridSize;
         const LAUNCH_DAY_UTC = Date.UTC(2026, 2, 19); // March 19, 2026
 
         const DIRS = {
@@ -497,6 +497,10 @@
         };
         const DIR_ORDER = ['U', 'R', 'D', 'L'];
         const ARROW = { U: '▴', D: '▾', L: '◂', R: '▸' };
+        const MOVE_ICON_MIN_SIZE_EM = 0.7;
+        const MOVE_ICON_BASE_SIZE_EM = 1.2;
+        const MOVE_ICON_REFERENCE_GRID_SIZE = 6;
+        const MOVE_ICON_SIZE_STEP_EM = 0.13;
 
         const canvas = document.getElementById('snakedle-canvas');
         const ctx = canvas.getContext('2d');
@@ -515,11 +519,17 @@
 
         let randomPuzzleId = randomConfig.seed;
         dailyLabelEl.textContent = `Snakedle Random (Seed ${randomPuzzleId})`;
-        document.documentElement.style.setProperty('--snakedle-grid-size', String(GRID_SIZE));
-        document.documentElement.style.setProperty(
-            '--snakedle-move-icon-size',
-            `${Math.max(0.7, 1.2 - (GRID_SIZE - 6) * 0.13)}em`
-        );
+        function setMoveGridCss(size) {
+            document.documentElement.style.setProperty('--snakedle-grid-size', String(size));
+            document.documentElement.style.setProperty(
+                '--snakedle-move-icon-size',
+                `${Math.max(
+                    MOVE_ICON_MIN_SIZE_EM,
+                    MOVE_ICON_BASE_SIZE_EM - (size - MOVE_ICON_REFERENCE_GRID_SIZE) * MOVE_ICON_SIZE_STEP_EM
+                )}em`
+            );
+        }
+        setMoveGridCss(gridSize);
 
         let puzzle = generateDailyPuzzle(randomPuzzleId);
         let optimalMoves = puzzle.optimalMoves;
@@ -532,13 +542,9 @@
         function rebuildMoveGrid() {
             moveGridEl.innerHTML = '';
             moveCells.length = 0;
-            document.documentElement.style.setProperty('--snakedle-grid-size', String(randomConfig.mapSize));
-            document.documentElement.style.setProperty(
-                '--snakedle-move-icon-size',
-                `${Math.max(0.7, 1.2 - (randomConfig.mapSize - 6) * 0.13)}em`
-            );
-            const maxMoves = randomConfig.mapSize * randomConfig.mapSize;
-            for (let i = 0; i < maxMoves; i++) {
+            setMoveGridCss(randomConfig.mapSize);
+            const totalMoveCells = randomConfig.mapSize * randomConfig.mapSize;
+            for (let i = 0; i < totalMoveCells; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'move-cell';
                 moveGridEl.appendChild(cell);
@@ -554,11 +560,11 @@
             }
 
             randomConfig = nextConfig;
-            GRID_SIZE = randomConfig.mapSize;
-            CELL_SIZE = 420 / GRID_SIZE;
-            FRUIT_COUNT = randomConfig.fruitCount;
-            WALL_COUNT = randomConfig.wallCount;
-            MAX_MOVES = GRID_SIZE * GRID_SIZE;
+            gridSize = randomConfig.mapSize;
+            cellSize = 420 / gridSize;
+            fruitCount = randomConfig.fruitCount;
+            wallCount = randomConfig.wallCount;
+            maxMoves = gridSize * gridSize;
             randomPuzzleId = randomConfig.seed;
             dailyLabelEl.textContent = `Snakedle Random (Seed ${randomPuzzleId})`;
 
@@ -636,7 +642,7 @@
         }
 
         function inBounds(x, y) {
-            return x >= 0 && x < GRID_SIZE && y >= 0 && y < GRID_SIZE;
+            return x >= 0 && x < gridSize && y >= 0 && y < gridSize;
         }
 
         function pickRandom(list, rng) {
@@ -656,17 +662,16 @@
             const baseSeed = day * 2654435761;
             for (let attempt = 0; attempt < 450; attempt++) {
                 const rng = mulberry32((baseSeed + attempt * 1013904223) >>> 0);
-                const wallCount = WALL_COUNT;
                 const allCells = [];
-                for (let y = 0; y < GRID_SIZE; y++) {
-                    for (let x = 0; x < GRID_SIZE; x++) {
+                for (let y = 0; y < gridSize; y++) {
+                    for (let x = 0; x < gridSize; x++) {
                         allCells.push(cellKey(x, y));
                     }
                 }
 
                 const wallSet = new Set(shuffled(allCells, rng).slice(0, wallCount));
                 const openCells = allCells.filter(k => !wallSet.has(k));
-                if (openCells.length < FRUIT_COUNT + 2) {
+                if (openCells.length < fruitCount + 2) {
                     continue;
                 }
 
@@ -682,7 +687,7 @@
                 const tail = pickRandom(neighbors, rng);
                 const snakeStartKeys = new Set([headKey, cellKey(tail.x, tail.y)]);
                 const fruitPool = shuffled(openCells.filter(k => !snakeStartKeys.has(k)), rng);
-                const fruits = fruitPool.slice(0, FRUIT_COUNT).map(parseKey);
+                const fruits = fruitPool.slice(0, fruitCount).map(parseKey);
 
                 let oneWayFruits = 0;
                 let badFruit = false;
@@ -715,7 +720,7 @@
                 };
 
                 const optimal = findOptimalMoves(candidate);
-                if (Number.isFinite(optimal) && optimal <= MAX_MOVES) {
+                if (Number.isFinite(optimal) && optimal <= maxMoves) {
                     return { ...candidate, optimalMoves: optimal };
                 }
             }
@@ -866,28 +871,28 @@
 
             ctx.strokeStyle = 'rgba(125, 223, 223, 0.18)';
             ctx.lineWidth = 1;
-            for (let c = 0; c <= GRID_SIZE; c++) {
+            for (let c = 0; c <= gridSize; c++) {
                 ctx.beginPath();
-                ctx.moveTo(c * CELL_SIZE, 0);
-                ctx.lineTo(c * CELL_SIZE, canvas.height);
+                ctx.moveTo(c * cellSize, 0);
+                ctx.lineTo(c * cellSize, canvas.height);
                 ctx.stroke();
             }
-            for (let r = 0; r <= GRID_SIZE; r++) {
+            for (let r = 0; r <= gridSize; r++) {
                 ctx.beginPath();
-                ctx.moveTo(0, r * CELL_SIZE);
-                ctx.lineTo(canvas.width, r * CELL_SIZE);
+                ctx.moveTo(0, r * cellSize);
+                ctx.lineTo(canvas.width, r * cellSize);
                 ctx.stroke();
             }
 
             for (const key of puzzle.walls) {
                 const { x, y } = parseKey(key);
-                const px = x * CELL_SIZE;
-                const py = y * CELL_SIZE;
+                const px = x * cellSize;
+                const py = y * cellSize;
                 ctx.fillStyle = '#24384a';
-                ctx.fillRect(px + 6, py + 6, CELL_SIZE - 12, CELL_SIZE - 12);
+                ctx.fillRect(px + 6, py + 6, cellSize - 12, cellSize - 12);
                 ctx.strokeStyle = '#3e5a71';
                 ctx.lineWidth = 2;
-                ctx.strokeRect(px + 6, py + 6, CELL_SIZE - 12, CELL_SIZE - 12);
+                ctx.strokeRect(px + 6, py + 6, cellSize - 12, cellSize - 12);
             }
 
             const collectedMask = frame.mask;
@@ -895,9 +900,9 @@
                 if ((collectedMask & (1 << index)) !== 0) {
                     return;
                 }
-                const fx = fruit.x * CELL_SIZE + CELL_SIZE / 2;
-                const fy = fruit.y * CELL_SIZE + CELL_SIZE / 2;
-                const fr = CELL_SIZE * 0.22;
+                const fx = fruit.x * cellSize + cellSize / 2;
+                const fy = fruit.y * cellSize + cellSize / 2;
+                const fr = cellSize * 0.22;
                 ctx.fillStyle = '#e05555';
                 ctx.beginPath();
                 ctx.arc(fx, fy, fr, 0, Math.PI * 2);
@@ -910,10 +915,10 @@
 
             for (let i = frame.body.length - 1; i >= 0; i--) {
                 const segment = frame.body[i];
-                const x = segment.x * CELL_SIZE;
-                const y = segment.y * CELL_SIZE;
+                const x = segment.x * cellSize;
+                const y = segment.y * cellSize;
                 const pad = 6;
-                const size = CELL_SIZE - pad * 2;
+                const size = cellSize - pad * 2;
                 const radius = 12;
                 ctx.fillStyle = i === 0 ? '#7ddfdf' : '#126364';
                 ctx.strokeStyle = '#0a4a4a';
@@ -934,21 +939,21 @@
                     dy = head.y - neck.y;
                 }
 
-                const headX = head.x * CELL_SIZE;
-                const headY = head.y * CELL_SIZE;
-                const eyeR = CELL_SIZE * 0.11;
+                const headX = head.x * cellSize;
+                const headY = head.y * cellSize;
+                const eyeR = cellSize * 0.11;
 
-                let eye1 = [headX + CELL_SIZE * 0.28, headY + CELL_SIZE * 0.3];
-                let eye2 = [headX + CELL_SIZE * 0.72, headY + CELL_SIZE * 0.3];
+                let eye1 = [headX + cellSize * 0.28, headY + cellSize * 0.3];
+                let eye2 = [headX + cellSize * 0.72, headY + cellSize * 0.3];
                 if (dx > 0) {
-                    eye1 = [headX + CELL_SIZE * 0.68, headY + CELL_SIZE * 0.3];
-                    eye2 = [headX + CELL_SIZE * 0.68, headY + CELL_SIZE * 0.7];
+                    eye1 = [headX + cellSize * 0.68, headY + cellSize * 0.3];
+                    eye2 = [headX + cellSize * 0.68, headY + cellSize * 0.7];
                 } else if (dx < 0) {
-                    eye1 = [headX + CELL_SIZE * 0.32, headY + CELL_SIZE * 0.3];
-                    eye2 = [headX + CELL_SIZE * 0.32, headY + CELL_SIZE * 0.7];
+                    eye1 = [headX + cellSize * 0.32, headY + cellSize * 0.3];
+                    eye2 = [headX + cellSize * 0.32, headY + cellSize * 0.7];
                 } else if (dy > 0) {
-                    eye1 = [headX + CELL_SIZE * 0.3, headY + CELL_SIZE * 0.68];
-                    eye2 = [headX + CELL_SIZE * 0.7, headY + CELL_SIZE * 0.68];
+                    eye1 = [headX + cellSize * 0.3, headY + cellSize * 0.68];
+                    eye2 = [headX + cellSize * 0.7, headY + cellSize * 0.68];
                 }
 
                 ctx.fillStyle = '#042223';
@@ -988,7 +993,7 @@
 
             const simulation = simulateMoves(queueMoves);
             playbackFrames = simulation.frames;
-            fruitProgressEl.textContent = `Fruits: ${simulation.fruitsEaten} / ${FRUIT_COUNT}`;
+            fruitProgressEl.textContent = `Fruits: ${simulation.fruitsEaten} / ${fruitCount}`;
             moveProgressEl.textContent = `Moves: ${queueMoves.length} / ${optimalMoves}`;
             drawBoard(playbackFrames[playbackFrames.length - 1]);
             if (autoSubmitTimer) {
@@ -1060,8 +1065,8 @@
                 statusLineEl.textContent = 'All fruits are already collected. Submit your run or edit it.';
                 return;
             }
-            if (queueMoves.length >= MAX_MOVES) {
-                statusLineEl.textContent = `Move queue is full (${MAX_MOVES}). Submit, undo, or clear.`;
+            if (queueMoves.length >= maxMoves) {
+                statusLineEl.textContent = `Move queue is full (${maxMoves}). Submit, undo, or clear.`;
                 return;
             }
             const heading = getCurrentHeadingDir();
@@ -1108,7 +1113,7 @@
             }
             const simulation = simulateMoves(queueMoves);
             if (simulation.state !== 'win') {
-                statusLineEl.textContent = `You need a valid route that collects all ${FRUIT_COUNT} fruits before submitting.`;
+                statusLineEl.textContent = `You need a valid route that collects all ${fruitCount} fruits before submitting.`;
                 return;
             }
             if (isAuto && simulation.movesUsed !== optimalMoves) {
@@ -1118,7 +1123,7 @@
             const usedMoves = simulation.movesUsed;
             const emoji = performanceEmoji(usedMoves, optimalMoves);
             const shareUrl = getRandomShareUrl(randomConfig);
-            const shareText = `Snakedle Random (${GRID_SIZE}x${GRID_SIZE}, seed ${randomConfig.seed}) : ${usedMoves}/${optimalMoves} ${emoji}\n${shareUrl}`;
+            const shareText = `Snakedle Random (${gridSize}x${gridSize}, seed ${randomConfig.seed}) : ${usedMoves}/${optimalMoves} ${emoji}\n${shareUrl}`;
             resultsTextEl.textContent = shareText;
             statusLineEl.textContent = 'Submitting... replaying your run.';
             isSubmitting = true;
