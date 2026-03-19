@@ -46,6 +46,8 @@
             margin-top: 12px;
             display: grid;
             gap: 8px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .config-header {
@@ -59,16 +61,29 @@
             align-items: center;
             gap: 8px;
             font-size: 0.9em;
+            min-width: 0;
+        }
+
+        .config-row label {
+            min-width: 0;
+            overflow-wrap: anywhere;
         }
 
         .config-row input {
-            width: 100px;
+            width: 130px;
             background: rgba(12, 32, 48, 0.9);
             border: 1px solid rgba(125, 223, 223, 0.55);
             border-radius: 6px;
             color: #e8f0f0;
             font-family: 'Futura', sans-serif;
             padding: 4px 6px;
+        }
+
+        .config-row output {
+            font-weight: 700;
+            color: #d6f5f5;
+            justify-self: end;
+            font-size: 0.95em;
         }
 
         #load-random-config {
@@ -109,7 +124,8 @@
             display: grid;
             gap: 8px;
             justify-items: center;
-            padding: 5px;
+            padding: 10px;
+            box-sizing: border-box;
         }
 
         .dpad-row {
@@ -119,13 +135,13 @@
         }
 
         .snakedle-btn {
-            width: 58px;
-            height: 58px;
+            width: clamp(46px, 7vw, 58px);
+            height: clamp(46px, 7vw, 58px);
             border: none;
             border-radius: 8px;
             background-color: #126364;
             color: #eee;
-            font-size: 1.3em;
+            font-size: clamp(1.05em, 1.8vw, 1.25em);
             cursor: pointer;
             transition: transform 0.1s, background-color 0.2s;
             box-shadow: 0 0 8px rgba(18, 99, 100, 0.45);
@@ -134,6 +150,7 @@
             justify-content: center;
             padding: 0;
             line-height: 1;
+            font-weight: 700;
         }
 
         .snakedle-btn:active {
@@ -151,7 +168,7 @@
         #move-grid {
             display: grid;
             grid-template-columns: repeat(var(--snakedle-grid-size), minmax(0, 1fr));
-            gap: 5px;
+            gap: clamp(2px, 0.6vw, 5px);
             margin-top: 6px;
             margin-bottom: 10px;
             width: 100%;
@@ -168,8 +185,11 @@
             align-items: center;
             justify-content: center;
             color: #cbe4e4;
-            font-size: 1.1em;
+            font-size: var(--snakedle-move-icon-size, 1.1em);
             font-family: 'Futura', sans-serif;
+            overflow: hidden;
+            line-height: 1;
+            font-weight: 700;
         }
 
         .move-cell.filled {
@@ -277,12 +297,35 @@
                 order: -1;
             }
         }
+
+        @media (max-width: 600px) {
+            .config-row {
+                grid-template-columns: 1fr;
+                gap: 4px;
+            }
+
+            .config-row input {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .config-row output {
+                justify-self: start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .snakedle-btn {
+                width: 52px;
+                height: 52px;
+            }
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <a href="games.html" class="back-button">← Return to Games</a>
+        <a href="games/snakedle/" class="back-button">← Return to Snakedle</a>
         <h1>🧩 Snakedle</h1>
         <h2>Random snake-routing puzzle. Set parameters in the configuration panel to load a reproducible map.</h2>
     </header>
@@ -297,11 +340,11 @@
         <section id="snakedle-layout">
             <div class="snakedle-panel">
                 <div id="dpad-snakedle">
-                    <button class="snakedle-btn" data-dir="U" aria-label="Up">▲</button>
+                    <button class="snakedle-btn" data-dir="U" aria-label="Up">▴</button>
                     <div class="dpad-row">
-                        <button class="snakedle-btn" data-dir="L" aria-label="Left">◀</button>
-                        <button class="snakedle-btn" data-dir="D" aria-label="Down">▼</button>
-                        <button class="snakedle-btn" data-dir="R" aria-label="Right">▶</button>
+                        <button class="snakedle-btn" data-dir="L" aria-label="Left">◂</button>
+                        <button class="snakedle-btn" data-dir="D" aria-label="Down">▾</button>
+                        <button class="snakedle-btn" data-dir="R" aria-label="Right">▸</button>
                     </div>
                     <div class="dpad-row" style="width:100%;">
                         <button class="snakedle-btn alt" id="undo-move">Undo</button>
@@ -321,10 +364,26 @@
                 <button id="submit-snakedle">Submit run</button>
                 <div id="random-config">
                     <div class="config-header">Load specific random map</div>
-                    <div class="config-row"><label for="cfg-seed">Seed (0-1000000)</label><input id="cfg-seed" type="number" min="0" max="1000000"></div>
-                    <div class="config-row"><label for="cfg-map-size">Map size (6-10)</label><input id="cfg-map-size" type="number" min="6" max="10"></div>
-                    <div class="config-row"><label for="cfg-fruit-count">Fruit count (5-10)</label><input id="cfg-fruit-count" type="number" min="5" max="10"></div>
-                    <div class="config-row"><label for="cfg-wall-count">Wall count (3-10)</label><input id="cfg-wall-count" type="number" min="3" max="10"></div>
+                    <div class="config-row">
+                        <label for="cfg-seed">Seed (0-1000000)</label>
+                        <input id="cfg-seed" type="range" min="0" max="1000000" step="1">
+                        <output id="cfg-seed-output" for="cfg-seed">0</output>
+                    </div>
+                    <div class="config-row">
+                        <label for="cfg-map-size">Map size (6-10)</label>
+                        <input id="cfg-map-size" type="range" min="6" max="10" step="1">
+                        <output id="cfg-map-size-output" for="cfg-map-size">8</output>
+                    </div>
+                    <div class="config-row">
+                        <label for="cfg-fruit-count">Fruit count (5-10)</label>
+                        <input id="cfg-fruit-count" type="range" min="5" max="10" step="1">
+                        <output id="cfg-fruit-count-output" for="cfg-fruit-count">5</output>
+                    </div>
+                    <div class="config-row">
+                        <label for="cfg-wall-count">Wall count (3-10)</label>
+                        <input id="cfg-wall-count" type="range" min="3" max="10" step="1">
+                        <output id="cfg-wall-count-output" for="cfg-wall-count">8</output>
+                    </div>
                     <button id="load-random-config">Load map</button>
                 </div>
             </div>
@@ -422,12 +481,12 @@
             return `${window.location.origin}${getCanonicalRandomPagePath()}#${buildRandomConfigHash(config)}`;
         }
 
-        const randomConfig = parseRandomConfigFromHash();
-        const GRID_SIZE = randomConfig.mapSize;
-        const CELL_SIZE = 420 / GRID_SIZE;
-        const FRUIT_COUNT = randomConfig.fruitCount;
-        const WALL_COUNT = randomConfig.wallCount;
-        const MAX_MOVES = GRID_SIZE * GRID_SIZE;
+        let randomConfig = parseRandomConfigFromHash();
+        let GRID_SIZE = randomConfig.mapSize;
+        let CELL_SIZE = 420 / GRID_SIZE;
+        let FRUIT_COUNT = randomConfig.fruitCount;
+        let WALL_COUNT = randomConfig.wallCount;
+        let MAX_MOVES = GRID_SIZE * GRID_SIZE;
         const LAUNCH_DAY_UTC = Date.UTC(2026, 2, 19); // March 19, 2026
 
         const DIRS = {
@@ -437,7 +496,7 @@
             R: { x: 1, y: 0 }
         };
         const DIR_ORDER = ['U', 'R', 'D', 'L'];
-        const ARROW = { U: '↑', D: '↓', L: '←', R: '→' };
+        const ARROW = { U: '▴', D: '▾', L: '◂', R: '▸' };
 
         const canvas = document.getElementById('snakedle-canvas');
         const ctx = canvas.getContext('2d');
@@ -453,27 +512,103 @@
         const moveCells = [];
         const OPPOSITE = { U: 'D', D: 'U', L: 'R', R: 'L' };
 
-        const randomPuzzleId = randomConfig.seed;
+        let randomPuzzleId = randomConfig.seed;
         dailyLabelEl.textContent = `Snakedle Random (Seed ${randomPuzzleId})`;
         document.documentElement.style.setProperty('--snakedle-grid-size', String(GRID_SIZE));
+        document.documentElement.style.setProperty(
+            '--snakedle-move-icon-size',
+            `${Math.max(0.7, 1.2 - (GRID_SIZE - 6) * 0.13)}em`
+        );
 
-        const puzzle = generateDailyPuzzle(randomPuzzleId);
-        const optimalMoves = puzzle.optimalMoves;
+        let puzzle = generateDailyPuzzle(randomPuzzleId);
+        let optimalMoves = puzzle.optimalMoves;
 
         let playbackFrames = [];
         let playbackTimer = null;
+        let autoSubmitTimer = null;
+        let isSubmitting = false;
 
-        for (let i = 0; i < MAX_MOVES; i++) {
-            const cell = document.createElement('div');
-            cell.className = 'move-cell';
-            moveGridEl.appendChild(cell);
-            moveCells.push(cell);
+        function rebuildMoveGrid() {
+            moveGridEl.innerHTML = '';
+            moveCells.length = 0;
+            document.documentElement.style.setProperty('--snakedle-grid-size', String(randomConfig.mapSize));
+            document.documentElement.style.setProperty(
+                '--snakedle-move-icon-size',
+                `${Math.max(0.7, 1.2 - (randomConfig.mapSize - 6) * 0.13)}em`
+            );
+            const maxMoves = randomConfig.mapSize * randomConfig.mapSize;
+            for (let i = 0; i < maxMoves; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'move-cell';
+                moveGridEl.appendChild(cell);
+                moveCells.push(cell);
+            }
         }
+
+        function applyConfig(nextConfig, skipHashWrite = false) {
+            const nextHash = buildRandomConfigHash(nextConfig);
+            if (!skipHashWrite && window.location.hash.slice(1) !== nextHash) {
+                window.location.hash = nextHash;
+                return;
+            }
+
+            randomConfig = nextConfig;
+            GRID_SIZE = randomConfig.mapSize;
+            CELL_SIZE = 420 / GRID_SIZE;
+            FRUIT_COUNT = randomConfig.fruitCount;
+            WALL_COUNT = randomConfig.wallCount;
+            MAX_MOVES = GRID_SIZE * GRID_SIZE;
+            randomPuzzleId = randomConfig.seed;
+            dailyLabelEl.textContent = `Snakedle Random (Seed ${randomPuzzleId})`;
+
+            document.getElementById('cfg-seed').value = String(randomConfig.seed);
+            document.getElementById('cfg-map-size').value = String(randomConfig.mapSize);
+            document.getElementById('cfg-fruit-count').value = String(randomConfig.fruitCount);
+            document.getElementById('cfg-wall-count').value = String(randomConfig.wallCount);
+            document.getElementById('cfg-seed-output').value = String(randomConfig.seed);
+            document.getElementById('cfg-map-size-output').value = String(randomConfig.mapSize);
+            document.getElementById('cfg-fruit-count-output').value = String(randomConfig.fruitCount);
+            document.getElementById('cfg-wall-count-output').value = String(randomConfig.wallCount);
+
+            if (playbackTimer) {
+                clearInterval(playbackTimer);
+                playbackTimer = null;
+            }
+            if (autoSubmitTimer) {
+                clearTimeout(autoSubmitTimer);
+                autoSubmitTimer = null;
+            }
+            isSubmitting = false;
+            queueMoves.length = 0;
+            rebuildMoveGrid();
+            puzzle = generateDailyPuzzle(randomPuzzleId);
+            optimalMoves = puzzle.optimalMoves;
+            refreshMoveGrid();
+            refreshPlayback();
+        }
+        rebuildMoveGrid();
 
         document.getElementById('cfg-seed').value = String(randomConfig.seed);
         document.getElementById('cfg-map-size').value = String(randomConfig.mapSize);
         document.getElementById('cfg-fruit-count').value = String(randomConfig.fruitCount);
         document.getElementById('cfg-wall-count').value = String(randomConfig.wallCount);
+        document.getElementById('cfg-seed-output').value = String(randomConfig.seed);
+        document.getElementById('cfg-map-size-output').value = String(randomConfig.mapSize);
+        document.getElementById('cfg-fruit-count-output').value = String(randomConfig.fruitCount);
+        document.getElementById('cfg-wall-count-output').value = String(randomConfig.wallCount);
+
+        function bindSliderOutput(inputId, outputId) {
+            const input = document.getElementById(inputId);
+            const output = document.getElementById(outputId);
+            input.addEventListener('input', () => {
+                output.value = input.value;
+            });
+        }
+
+        bindSliderOutput('cfg-seed', 'cfg-seed-output');
+        bindSliderOutput('cfg-map-size', 'cfg-map-size-output');
+        bindSliderOutput('cfg-fruit-count', 'cfg-fruit-count-output');
+        bindSliderOutput('cfg-wall-count', 'cfg-wall-count-output');
 
         function getDayNumber(date) {
             const todayUtc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
@@ -855,6 +990,10 @@
             fruitProgressEl.textContent = `Fruits: ${simulation.fruitsEaten} / ${FRUIT_COUNT}`;
             moveProgressEl.textContent = `Moves: ${queueMoves.length} / ${optimalMoves}`;
             drawBoard(playbackFrames[playbackFrames.length - 1]);
+            if (autoSubmitTimer) {
+                clearTimeout(autoSubmitTimer);
+                autoSubmitTimer = null;
+            }
             if (queueMoves.length === 0) {
                 statusLineEl.textContent = 'Use the buttons or arrow keys to queue moves.';
                 return;
@@ -862,6 +1001,11 @@
             if (simulation.state === 'dead') {
                 statusLineEl.textContent = 'Route crashes. Undo or clear and try again.';
             } else if (simulation.state === 'win') {
+                if (simulation.movesUsed === optimalMoves && !isSubmitting) {
+                    statusLineEl.textContent = 'Perfect route found! Auto-submitting...';
+                    autoSubmitTimer = setTimeout(() => submitRun(true), 120);
+                    return;
+                }
                 statusLineEl.textContent = 'All fruits collected. Submit to watch the full replay.';
             } else {
                 const last = queueMoves[queueMoves.length - 1];
@@ -953,10 +1097,20 @@
             return '🟥';
         }
 
-        function submitRun() {
+        function submitRun(isAuto = false) {
+            if (isSubmitting) {
+                return;
+            }
+            if (autoSubmitTimer) {
+                clearTimeout(autoSubmitTimer);
+                autoSubmitTimer = null;
+            }
             const simulation = simulateMoves(queueMoves);
             if (simulation.state !== 'win') {
                 statusLineEl.textContent = `You need a valid route that collects all ${FRUIT_COUNT} fruits before submitting.`;
+                return;
+            }
+            if (isAuto && simulation.movesUsed !== optimalMoves) {
                 return;
             }
 
@@ -966,12 +1120,14 @@
             const shareText = `Snakedle Random (${GRID_SIZE}x${GRID_SIZE}, seed ${randomConfig.seed}) : ${usedMoves}/${optimalMoves} ${emoji}\n${shareUrl}`;
             resultsTextEl.textContent = shareText;
             statusLineEl.textContent = 'Submitting... replaying your run.';
+            isSubmitting = true;
             playSubmissionAnimation(simulation, () => {
                 resultsModal.style.display = 'flex';
                 localStorage.setItem(
                     `snakedle-random-last`,
                     JSON.stringify({ usedMoves, optimalMoves, emoji, at: new Date().toISOString() })
                 );
+                isSubmitting = false;
             });
         }
 
@@ -1010,10 +1166,22 @@
                 )
             };
 
-            window.location.href = `${getCanonicalRandomPagePath()}#${buildRandomConfigHash(nextConfig)}`;
+            applyConfig(nextConfig);
+        });
+
+        window.addEventListener('hashchange', () => {
+            const nextConfig = parseRandomConfigFromHash();
+            applyConfig(nextConfig, true);
         });
 
         document.addEventListener('keydown', (e) => {
+            const target = e.target;
+            if (
+                target instanceof HTMLElement &&
+                (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
+            ) {
+                return;
+            }
             const keyMap = {
                 ArrowUp: 'U',
                 ArrowDown: 'D',
