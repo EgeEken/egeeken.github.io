@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Tarık Ege Eken - Snakedle</title>
+    <title>Ege - Snakedle</title>
     <style>
         #snakedle-wrapper {
             width: min(980px, 96%);
@@ -28,7 +28,7 @@
             width: 100%;
             display: grid;
             grid-template-columns: minmax(180px, 230px) minmax(280px, 1fr) minmax(180px, 260px);
-            gap: 18px;
+            gap: 100px;
             align-items: center;
         }
 
@@ -46,7 +46,7 @@
         }
 
         #snakedle-canvas {
-            width: min(94vw, 420px);
+            width: min(94vw, 672px); /* Adjusted for 8x8 grid */
             height: auto;
             border: 3px solid #126364;
             border-radius: 10px;
@@ -58,6 +58,7 @@
             display: grid;
             gap: 8px;
             justify-items: center;
+            padding: 12px; /* Added padding to increase bounding box size */
         }
 
         .dpad-row {
@@ -92,7 +93,7 @@
 
         #move-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(8, 1fr); /* Adjusted for 8x8 grid */
             gap: 5px;
             margin-top: 6px;
             margin-bottom: 10px;
@@ -219,9 +220,11 @@
     </header>
 
     <main id="snakedle-wrapper">
-        <div class="snakedle-stat" id="daily-label">Snakedle Day 1</div>
-        <div class="snakedle-stat" id="fruit-progress">Fruits: 0 / 5</div>
-        <div class="snakedle-stat" id="move-progress">Moves: 0 / --</div>
+        <div class="snakedle-panel">
+            <div class="snakedle-stat" id="daily-label">Snakedle Day 1</div>
+            <div class="snakedle-stat" id="fruit-progress">Fruits: 0 / 5</div>
+            <div class="snakedle-stat" id="move-progress">Moves: 0 / --</div>
+        </div>
 
         <section id="snakedle-layout">
             <div class="snakedle-panel">
@@ -245,7 +248,7 @@
             </div>
 
             <div class="snakedle-panel">
-                <div style="text-align:center; margin-bottom:4px;">Move Queue (max 25)</div>
+                <div style="text-align:center; margin-bottom:4px;">Move Queue</div>
                 <div id="move-grid"></div>
                 <button id="submit-snakedle">Submit run</button>
             </div>
@@ -264,11 +267,12 @@
     </div>
 
     <script>
-        const GRID_SIZE = 5;
-        const CELL_SIZE = 84;
+        const GRID_SIZE = 6;
+        const CELL_SIZE = 420 / GRID_SIZE;
         const FRUIT_COUNT = 5;
-        const MAX_MOVES = 25;
-        const LAUNCH_DAY_UTC = Date.UTC(2026, 0, 1);
+        const WALL_COUNT = 5; // Base number of walls, can be 3 to 5 based on RNG
+        const MAX_MOVES = GRID_SIZE * GRID_SIZE;
+        const LAUNCH_DAY_UTC = Date.UTC(2026, 2, 19); // March 19, 2026
 
         const DIRS = {
             U: { x: 0, y: -1 },
@@ -353,7 +357,7 @@
             const baseSeed = day * 2654435761;
             for (let attempt = 0; attempt < 450; attempt++) {
                 const rng = mulberry32((baseSeed + attempt * 1013904223) >>> 0);
-                const wallCount = 3 + Math.floor(rng() * 3);
+                const wallCount = WALL_COUNT;
                 const allCells = [];
                 for (let y = 0; y < GRID_SIZE; y++) {
                     for (let x = 0; x < GRID_SIZE; x++) {
