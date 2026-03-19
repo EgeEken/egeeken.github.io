@@ -48,6 +48,11 @@
             gap: 8px;
         }
 
+        .config-header {
+            text-align: center;
+            margin-bottom: 2px;
+        }
+
         .config-row {
             display: grid;
             grid-template-columns: 1fr auto;
@@ -279,7 +284,7 @@
     <header>
         <a href="games.html" class="back-button">← Return to Games</a>
         <h1>🧩 Snakedle</h1>
-        <h2>Random snake-routing puzzle. Set parameters below to load a reproducible map.</h2>
+        <h2>Random snake-routing puzzle. Set parameters in the configuration panel to load a reproducible map.</h2>
     </header>
 
     <main id="snakedle-wrapper">
@@ -315,11 +320,11 @@
                 <div id="move-grid"></div>
                 <button id="submit-snakedle">Submit run</button>
                 <div id="random-config">
-                    <div style="text-align:center; margin-bottom:2px;">Load specific random map</div>
-                    <label class="config-row">Seed (0-1000000)<input id="cfg-seed" type="number" min="0" max="1000000"></label>
-                    <label class="config-row">Map size (6-10)<input id="cfg-map-size" type="number" min="6" max="10"></label>
-                    <label class="config-row">Fruit count (5-10)<input id="cfg-fruit-count" type="number" min="5" max="10"></label>
-                    <label class="config-row">Wall count (3-10)<input id="cfg-wall-count" type="number" min="3" max="10"></label>
+                    <div class="config-header">Load specific random map</div>
+                    <div class="config-row"><label for="cfg-seed">Seed (0-1000000)</label><input id="cfg-seed" type="number" min="0" max="1000000"></div>
+                    <div class="config-row"><label for="cfg-map-size">Map size (6-10)</label><input id="cfg-map-size" type="number" min="6" max="10"></div>
+                    <div class="config-row"><label for="cfg-fruit-count">Fruit count (5-10)</label><input id="cfg-fruit-count" type="number" min="5" max="10"></div>
+                    <div class="config-row"><label for="cfg-wall-count">Wall count (3-10)</label><input id="cfg-wall-count" type="number" min="3" max="10"></div>
                     <button id="load-random-config">Load map</button>
                 </div>
             </div>
@@ -349,6 +354,11 @@
             fruitCount: { min: 5, max: 10 },
             wallCount: { min: 3, max: 10 }
         };
+        function generateRandomSeed() {
+            const min = RANDOM_LIMITS.seed.min;
+            const max = RANDOM_LIMITS.seed.max;
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
 
         function clampValue(value, min, max) {
             return Math.min(max, Math.max(min, value));
@@ -356,7 +366,7 @@
 
         function parseIntParam(rawValue, fallback, min, max) {
             const parsed = Number.parseInt(rawValue, 10);
-            if (!Number.isFinite(parsed)) {
+            if (Number.isNaN(parsed)) {
                 return fallback;
             }
             return clampValue(parsed, min, max);
@@ -367,7 +377,7 @@
             return {
                 seed: parseIntParam(
                     hashParams.get('seed'),
-                    Math.floor(Math.random() * (RANDOM_LIMITS.seed.max + 1)),
+                    generateRandomSeed(),
                     RANDOM_LIMITS.seed.min,
                     RANDOM_LIMITS.seed.max
                 ),
@@ -401,15 +411,22 @@
             return hashParams.toString();
         }
 
+        function getCanonicalRandomPagePath() {
+            return window.location.pathname.replace(
+                /\/games\/snakedle\/snakedle-random\.html$/,
+                '/snakedle-random.html'
+            );
+        }
+
         function getRandomShareUrl(config) {
-            return `${window.location.origin}/games/snakedle/snakedle-random.html#${buildRandomConfigHash(config)}`;
+            return `${window.location.origin}${getCanonicalRandomPagePath()}#${buildRandomConfigHash(config)}`;
         }
 
         const randomConfig = parseRandomConfigFromHash();
         const GRID_SIZE = randomConfig.mapSize;
         const CELL_SIZE = 420 / GRID_SIZE;
         const FRUIT_COUNT = randomConfig.fruitCount;
-        const WALL_COUNT = randomConfig.wallCount; // Base number of walls, can be 3 to 5 based on RNG
+        const WALL_COUNT = randomConfig.wallCount;
         const MAX_MOVES = GRID_SIZE * GRID_SIZE;
         const LAUNCH_DAY_UTC = Date.UTC(2026, 2, 19); // March 19, 2026
 
@@ -993,8 +1010,7 @@
                 )
             };
 
-            window.location.hash = buildRandomConfigHash(nextConfig);
-            window.location.reload();
+            window.location.href = `${getCanonicalRandomPagePath()}#${buildRandomConfigHash(nextConfig)}`;
         });
 
         document.addEventListener('keydown', (e) => {
