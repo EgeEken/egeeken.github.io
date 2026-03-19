@@ -511,6 +511,11 @@
                 return { valid: false };
             }
 
+            // make sure it's invalid if the snake tries to move backward into itself, even if its size is 2 meaning that the tail would move away
+            if (body.length === 2 && nextHead.x === body[1].x && nextHead.y === body[1].y) {
+                return { valid: false };
+            }
+
             const nextBody = [nextHead, ...body.map(c => ({ x: c.x, y: c.y }))];
             if (!willEat) {
                 nextBody.pop();
