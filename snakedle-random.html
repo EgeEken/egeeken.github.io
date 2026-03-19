@@ -325,7 +325,7 @@
 
 <body>
     <header>
-        <a href="games/snakedle/" class="back-button">← Return to Snakedle</a>
+        <a href="./games/snakedle/" class="back-button">← Return to Snakedle</a>
         <h1>🧩 Snakedle</h1>
         <h2>Random snake-routing puzzle. Set parameters in the configuration panel to load a reproducible map.</h2>
     </header>
@@ -511,6 +511,7 @@
         const queueMoves = [];
         const moveCells = [];
         const OPPOSITE = { U: 'D', D: 'U', L: 'R', R: 'L' };
+        const AUTO_SUBMIT_DELAY_MS = 120;
 
         let randomPuzzleId = randomConfig.seed;
         dailyLabelEl.textContent = `Snakedle Random (Seed ${randomPuzzleId})`;
@@ -1003,7 +1004,7 @@
             } else if (simulation.state === 'win') {
                 if (simulation.movesUsed === optimalMoves && !isSubmitting) {
                     statusLineEl.textContent = 'Perfect route found! Auto-submitting...';
-                    autoSubmitTimer = setTimeout(() => submitRun(true), 120);
+                    autoSubmitTimer = setTimeout(() => submitRun(true), AUTO_SUBMIT_DELAY_MS);
                     return;
                 }
                 statusLineEl.textContent = 'All fruits collected. Submit to watch the full replay.';

@@ -253,7 +253,7 @@
 
 <body>
     <header>
-        <a href="games/snakedle/" class="back-button">← Return to Snakedle</a>
+        <a href="./games/snakedle/" class="back-button">← Return to Snakedle</a>
         <h1>🧩 Snakedle</h1>
         <h2>Daily snake-routing puzzle. Queue your moves, then submit your best solve.</h2>
     </header>
@@ -335,6 +335,7 @@
         const queueMoves = [];
         const moveCells = [];
         const OPPOSITE = { U: 'D', D: 'U', L: 'R', R: 'L' };
+        const AUTO_SUBMIT_DELAY_MS = 120;
 
         const dayNumber = getDayNumber(new Date());
         dailyLabelEl.textContent = `Snakedle Day ${dayNumber}`;
@@ -752,7 +753,7 @@
             } else if (simulation.state === 'win') {
                 if (simulation.movesUsed === optimalMoves && !isSubmitting) {
                     statusLineEl.textContent = 'Perfect route found! Auto-submitting...';
-                    autoSubmitTimer = setTimeout(() => submitRun(true), 120);
+                    autoSubmitTimer = setTimeout(() => submitRun(true), AUTO_SUBMIT_DELAY_MS);
                     return;
                 }
                 statusLineEl.textContent = 'All fruits collected. Submit to watch the full replay.';
