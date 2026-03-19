@@ -68,7 +68,8 @@
             display: grid;
             gap: 8px;
             justify-items: center;
-            padding: 5px;
+            padding: 10px;
+            box-sizing: border-box;
         }
 
         .dpad-row {
@@ -78,13 +79,13 @@
         }
 
         .snakedle-btn {
-            width: 58px;
-            height: 58px;
+            width: clamp(46px, 7vw, 58px);
+            height: clamp(46px, 7vw, 58px);
             border: none;
             border-radius: 8px;
             background-color: #126364;
             color: #eee;
-            font-size: 1.3em;
+            font-size: clamp(1.05em, 1.8vw, 1.25em);
             cursor: pointer;
             transition: transform 0.1s, background-color 0.2s;
             box-shadow: 0 0 8px rgba(18, 99, 100, 0.45);
@@ -93,6 +94,7 @@
             justify-content: center;
             padding: 0;
             line-height: 1;
+            font-weight: 700;
         }
 
         .snakedle-btn:active {
@@ -110,7 +112,7 @@
         #move-grid {
             display: grid;
             grid-template-columns: repeat(var(--snakedle-grid-size), minmax(0, 1fr));
-            gap: 5px;
+            gap: clamp(2px, 0.6vw, 5px);
             margin-top: 6px;
             margin-bottom: 10px;
             width: 100%;
@@ -127,8 +129,11 @@
             align-items: center;
             justify-content: center;
             color: #cbe4e4;
-            font-size: 1.1em;
+            font-size: var(--snakedle-move-icon-size, 1.1em);
             font-family: 'Futura', sans-serif;
+            overflow: hidden;
+            line-height: 1;
+            font-weight: 700;
         }
 
         .move-cell.filled {
@@ -236,12 +241,19 @@
                 order: -1;
             }
         }
+
+        @media (max-width: 480px) {
+            .snakedle-btn {
+                width: 52px;
+                height: 52px;
+            }
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <a href="games.html" class="back-button">← Return to Games</a>
+        <a href="/games/snakedle/" class="back-button">← Return to Snakedle</a>
         <h1>🧩 Snakedle</h1>
         <h2>Daily snake-routing puzzle. Queue your moves, then submit your best solve.</h2>
     </header>
@@ -256,11 +268,11 @@
         <section id="snakedle-layout">
             <div class="snakedle-panel">
                 <div id="dpad-snakedle">
-                    <button class="snakedle-btn" data-dir="U" aria-label="Up">▲</button>
+                    <button class="snakedle-btn" data-dir="U" aria-label="Up">▴</button>
                     <div class="dpad-row">
-                        <button class="snakedle-btn" data-dir="L" aria-label="Left">◀</button>
-                        <button class="snakedle-btn" data-dir="D" aria-label="Down">▼</button>
-                        <button class="snakedle-btn" data-dir="R" aria-label="Right">▶</button>
+                        <button class="snakedle-btn" data-dir="L" aria-label="Left">◂</button>
+                        <button class="snakedle-btn" data-dir="D" aria-label="Down">▾</button>
+                        <button class="snakedle-btn" data-dir="R" aria-label="Right">▸</button>
                     </div>
                     <div class="dpad-row" style="width:100%;">
                         <button class="snakedle-btn alt" id="undo-move">Undo</button>
@@ -308,7 +320,11 @@
             R: { x: 1, y: 0 }
         };
         const DIR_ORDER = ['U', 'R', 'D', 'L'];
-        const ARROW = { U: '↑', D: '↓', L: '←', R: '→' };
+        const ARROW = { U: '▴', D: '▾', L: '◂', R: '▸' };
+        const MOVE_ICON_MIN_SIZE_EM = 0.7;
+        const MOVE_ICON_BASE_SIZE_EM = 1.2;
+        const MOVE_ICON_REFERENCE_GRID_SIZE = 6;
+        const MOVE_ICON_SIZE_STEP_EM = 0.13;
 
         const canvas = document.getElementById('snakedle-canvas');
         const ctx = canvas.getContext('2d');
@@ -323,16 +339,26 @@
         const queueMoves = [];
         const moveCells = [];
         const OPPOSITE = { U: 'D', D: 'U', L: 'R', R: 'L' };
+        const AUTO_SUBMIT_DELAY_MS = 120;
 
         const dayNumber = getDayNumber(new Date());
         dailyLabelEl.textContent = `Snakedle Day ${dayNumber}`;
         document.documentElement.style.setProperty('--snakedle-grid-size', String(GRID_SIZE));
+        document.documentElement.style.setProperty(
+            '--snakedle-move-icon-size',
+            `${Math.max(
+                MOVE_ICON_MIN_SIZE_EM,
+                MOVE_ICON_BASE_SIZE_EM - (GRID_SIZE - MOVE_ICON_REFERENCE_GRID_SIZE) * MOVE_ICON_SIZE_STEP_EM
+            )}em`
+        );
 
         const puzzle = generateDailyPuzzle(dayNumber);
         const optimalMoves = puzzle.optimalMoves;
 
         let playbackFrames = [];
         let playbackTimer = null;
+        let autoSubmitTimer = null;
+        let isSubmitting = false;
 
         for (let i = 0; i < MAX_MOVES; i++) {
             const cell = document.createElement('div');
@@ -721,6 +747,10 @@
             fruitProgressEl.textContent = `Fruits: ${simulation.fruitsEaten} / ${FRUIT_COUNT}`;
             moveProgressEl.textContent = `Moves: ${queueMoves.length} / ${optimalMoves}`;
             drawBoard(playbackFrames[playbackFrames.length - 1]);
+            if (autoSubmitTimer) {
+                clearTimeout(autoSubmitTimer);
+                autoSubmitTimer = null;
+            }
             if (queueMoves.length === 0) {
                 statusLineEl.textContent = 'Use the buttons or arrow keys to queue moves.';
                 return;
@@ -728,6 +758,11 @@
             if (simulation.state === 'dead') {
                 statusLineEl.textContent = 'Route crashes. Undo or clear and try again.';
             } else if (simulation.state === 'win') {
+                if (simulation.movesUsed === optimalMoves && !isSubmitting) {
+                    statusLineEl.textContent = 'Perfect route found! Auto-submitting...';
+                    autoSubmitTimer = setTimeout(() => submitRun(true), AUTO_SUBMIT_DELAY_MS);
+                    return;
+                }
                 statusLineEl.textContent = 'All fruits collected. Submit to watch the full replay.';
             } else {
                 const last = queueMoves[queueMoves.length - 1];
@@ -819,10 +854,20 @@
             return '🟥';
         }
 
-        function submitRun() {
+        function submitRun(isAuto = false) {
+            if (isSubmitting) {
+                return;
+            }
+            if (autoSubmitTimer) {
+                clearTimeout(autoSubmitTimer);
+                autoSubmitTimer = null;
+            }
             const simulation = simulateMoves(queueMoves);
             if (simulation.state !== 'win') {
                 statusLineEl.textContent = 'You need a valid route that collects all 5 fruits before submitting.';
+                return;
+            }
+            if (isAuto && simulation.movesUsed !== optimalMoves) {
                 return;
             }
 
@@ -831,12 +876,14 @@
             const shareText = `Snakedle Day ${dayNumber} : ${usedMoves}/${optimalMoves} ${emoji}\nhttps://egeeken.github.io/snakedle`;
             resultsTextEl.textContent = shareText;
             statusLineEl.textContent = 'Submitting... replaying your run.';
+            isSubmitting = true;
             playSubmissionAnimation(simulation, () => {
                 resultsModal.style.display = 'flex';
                 localStorage.setItem(
                     `snakedle-${dayNumber}`,
                     JSON.stringify({ usedMoves, optimalMoves, emoji, at: new Date().toISOString() })
                 );
+                isSubmitting = false;
             });
         }
 
@@ -849,6 +896,13 @@
         document.getElementById('submit-snakedle').addEventListener('click', submitRun);
 
         document.addEventListener('keydown', (e) => {
+            const target = e.target;
+            if (
+                target instanceof HTMLElement &&
+                (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
+            ) {
+                return;
+            }
             const keyMap = {
                 ArrowUp: 'U',
                 ArrowDown: 'D',
