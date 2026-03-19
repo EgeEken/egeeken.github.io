@@ -292,10 +292,10 @@
     </div>
 
     <script>
-        const GRID_SIZE = 6;
+        const GRID_SIZE = 8; // MODIFY HERE FOR DIFFERENT SIZES
         const CELL_SIZE = 420 / GRID_SIZE;
         const FRUIT_COUNT = 5;
-        const WALL_COUNT = 5; // Base number of walls, can be 3 to 5 based on RNG
+        const WALL_COUNT = 8; // Base number of walls, can be 3 to 5 based on RNG
         const MAX_MOVES = GRID_SIZE * GRID_SIZE;
         const LAUNCH_DAY_UTC = Date.UTC(2026, 2, 19); // March 19, 2026
 
@@ -508,6 +508,11 @@
             const willEat = fruitAtHead >= 0 && (mask & (1 << fruitAtHead)) === 0;
             const collisionBody = willEat ? body : body.slice(0, -1);
             if (collisionBody.some(c => c.x === nextHead.x && c.y === nextHead.y)) {
+                return { valid: false };
+            }
+
+            // make sure it's invalid if the snake tries to move backward into itself, even if its size is 2 meaning that the tail would move away
+            if (body.length === 2 && nextHead.x === body[1].x && nextHead.y === body[1].y) {
                 return { valid: false };
             }
 
