@@ -24,6 +24,12 @@
             font-size: 1.1em;
         }
 
+        .snakedle-stat#daily-label {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #7ddfdf;
+        }
+
         #snakedle-layout {
             width: 100%;
             display: grid;
@@ -46,7 +52,7 @@
         }
 
         #snakedle-canvas {
-            width: min(94vw, 672px); /* Adjusted for 8x8 grid */
+            width: min(94vw, 672px);
             height: auto;
             border: 3px solid #126364;
             border-radius: 10px;
@@ -58,7 +64,7 @@
             display: grid;
             gap: 8px;
             justify-items: center;
-            padding: 12px; /* Added padding to increase bounding box size */
+            padding: 5px;
         }
 
         .dpad-row {
@@ -93,7 +99,7 @@
 
         #move-grid {
             display: grid;
-            grid-template-columns: repeat(8, 1fr); /* Adjusted for 8x8 grid */
+            grid-template-columns: repeat(6, 1fr);
             gap: 5px;
             margin-top: 6px;
             margin-bottom: 10px;
