@@ -241,12 +241,12 @@
     <header>
         <a href="games.html" class="back-button">← Return to Games</a>
         <h1>🧩 Snakedle</h1>
-        <h2>Daily snake-routing puzzle. Queue your moves, then submit your best solve.</h2>
+        <h2>Random snake-routing puzzle. Refresh for a brand new map.</h2>
     </header>
 
     <main id="snakedle-wrapper">
         <div class="snakedle-panel">
-            <div class="snakedle-stat" id="daily-label">Snakedle Day 1</div>
+            <div class="snakedle-stat" id="daily-label">Snakedle Random</div>
             <div class="snakedle-stat" id="fruit-progress">Fruits: 0 / 5</div>
             <div class="snakedle-stat" id="move-progress">Moves: 0 / --</div>
         </div>
@@ -322,11 +322,11 @@
         const moveCells = [];
         const OPPOSITE = { U: 'D', D: 'U', L: 'R', R: 'L' };
 
-        const dayNumber = getDayNumber(new Date());
-        dailyLabelEl.textContent = `Snakedle Day ${dayNumber}`;
+        const randomPuzzleId = Math.floor((Date.now() + Math.random() * 1000000) % 2147483647);
+        dailyLabelEl.textContent = 'Snakedle Random';
         document.documentElement.style.setProperty('--snakedle-grid-size', String(GRID_SIZE));
 
-        const puzzle = generateDailyPuzzle(dayNumber);
+        const puzzle = generateDailyPuzzle(randomPuzzleId);
         const optimalMoves = puzzle.optimalMoves;
 
         let playbackFrames = [];
@@ -821,13 +821,13 @@
 
             const usedMoves = simulation.movesUsed;
             const emoji = performanceEmoji(usedMoves, optimalMoves);
-            const shareText = `Snakedle Day ${dayNumber} : ${usedMoves}/${optimalMoves} ${emoji}\nhttps://egeeken.github.io/snakedle`;
+            const shareText = `Snakedle Random : ${usedMoves}/${optimalMoves} ${emoji}\nhttps://egeeken.github.io/snakedle-random`;
             resultsTextEl.textContent = shareText;
             statusLineEl.textContent = 'Submitting... replaying your run.';
             playSubmissionAnimation(simulation, () => {
                 resultsModal.style.display = 'flex';
                 localStorage.setItem(
-                    `snakedle-${dayNumber}`,
+                    `snakedle-random-last`,
                     JSON.stringify({ usedMoves, optimalMoves, emoji, at: new Date().toISOString() })
                 );
             });
