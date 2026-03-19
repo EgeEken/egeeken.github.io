@@ -42,6 +42,47 @@
             align-items: center;
         }
 
+        #random-config {
+            margin-top: 12px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .config-header {
+            text-align: center;
+            margin-bottom: 2px;
+        }
+
+        .config-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+
+        .config-row input {
+            width: 100px;
+            background: rgba(12, 32, 48, 0.9);
+            border: 1px solid rgba(125, 223, 223, 0.55);
+            border-radius: 6px;
+            color: #e8f0f0;
+            font-family: 'Futura', sans-serif;
+            padding: 4px 6px;
+        }
+
+        #load-random-config {
+            margin-top: 2px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 10px;
+            background: #2e4b61;
+            color: #e8f0f0;
+            font-family: 'Futura', sans-serif;
+            cursor: pointer;
+        }
+
         .snakedle-panel {
             background: rgba(12, 32, 48, 0.72);
             border: 1px solid rgba(125, 223, 223, 0.25);
@@ -228,6 +269,8 @@
         @media (max-width: 880px) {
             #snakedle-layout {
                 grid-template-columns: 1fr;
+                row-gap: 50px;
+                column-gap: 150px;
             }
 
             #snakedle-board-wrap {
@@ -241,7 +284,7 @@
     <header>
         <a href="games.html" class="back-button">← Return to Games</a>
         <h1>🧩 Snakedle</h1>
-        <h2>Random snake-routing puzzle. Refresh for a brand new map.</h2>
+        <h2>Random snake-routing puzzle. Set parameters in the configuration panel to load a reproducible map.</h2>
     </header>
 
     <main id="snakedle-wrapper">
@@ -276,6 +319,14 @@
                 <div style="text-align:center; margin-bottom:4px;">Move Queue</div>
                 <div id="move-grid"></div>
                 <button id="submit-snakedle">Submit run</button>
+                <div id="random-config">
+                    <div class="config-header">Load specific random map</div>
+                    <div class="config-row"><label for="cfg-seed">Seed (0-1000000)</label><input id="cfg-seed" type="number" min="0" max="1000000"></div>
+                    <div class="config-row"><label for="cfg-map-size">Map size (6-10)</label><input id="cfg-map-size" type="number" min="6" max="10"></div>
+                    <div class="config-row"><label for="cfg-fruit-count">Fruit count (5-10)</label><input id="cfg-fruit-count" type="number" min="5" max="10"></div>
+                    <div class="config-row"><label for="cfg-wall-count">Wall count (3-10)</label><input id="cfg-wall-count" type="number" min="3" max="10"></div>
+                    <button id="load-random-config">Load map</button>
+                </div>
             </div>
         </section>
     </main>
@@ -292,10 +343,90 @@
     </div>
 
     <script>
-        const GRID_SIZE = 8; // MODIFY HERE FOR DIFFERENT SIZES
+        const RANDOM_DEFAULTS = {
+            mapSize: 8,
+            fruitCount: 5,
+            wallCount: 8
+        };
+        const RANDOM_LIMITS = {
+            seed: { min: 0, max: 1000000 },
+            mapSize: { min: 6, max: 10 },
+            fruitCount: { min: 5, max: 10 },
+            wallCount: { min: 3, max: 10 }
+        };
+        function generateRandomSeed() {
+            const min = RANDOM_LIMITS.seed.min;
+            const max = RANDOM_LIMITS.seed.max;
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function clampValue(value, min, max) {
+            return Math.min(max, Math.max(min, value));
+        }
+
+        function parseIntParam(rawValue, fallback, min, max) {
+            const parsed = Number.parseInt(rawValue, 10);
+            if (Number.isNaN(parsed)) {
+                return fallback;
+            }
+            return clampValue(parsed, min, max);
+        }
+
+        function parseRandomConfigFromHash() {
+            const hashParams = new URLSearchParams(window.location.hash.slice(1));
+            return {
+                seed: parseIntParam(
+                    hashParams.get('seed'),
+                    generateRandomSeed(),
+                    RANDOM_LIMITS.seed.min,
+                    RANDOM_LIMITS.seed.max
+                ),
+                mapSize: parseIntParam(
+                    hashParams.get('mapSize'),
+                    RANDOM_DEFAULTS.mapSize,
+                    RANDOM_LIMITS.mapSize.min,
+                    RANDOM_LIMITS.mapSize.max
+                ),
+                fruitCount: parseIntParam(
+                    hashParams.get('fruitCount'),
+                    RANDOM_DEFAULTS.fruitCount,
+                    RANDOM_LIMITS.fruitCount.min,
+                    RANDOM_LIMITS.fruitCount.max
+                ),
+                wallCount: parseIntParam(
+                    hashParams.get('wallCount'),
+                    RANDOM_DEFAULTS.wallCount,
+                    RANDOM_LIMITS.wallCount.min,
+                    RANDOM_LIMITS.wallCount.max
+                )
+            };
+        }
+
+        function buildRandomConfigHash(config) {
+            const hashParams = new URLSearchParams();
+            hashParams.set('seed', String(config.seed));
+            hashParams.set('mapSize', String(config.mapSize));
+            hashParams.set('fruitCount', String(config.fruitCount));
+            hashParams.set('wallCount', String(config.wallCount));
+            return hashParams.toString();
+        }
+
+        function getCanonicalRandomPagePath() {
+            return window.location.pathname.replace(
+                /\/games\/snakedle\/snakedle-random\.html$/,
+                '/snakedle-random.html'
+            );
+        }
+
+        function getRandomShareUrl(config) {
+            return `${window.location.origin}${getCanonicalRandomPagePath()}#${buildRandomConfigHash(config)}`;
+        }
+
+        const randomConfig = parseRandomConfigFromHash();
+        const GRID_SIZE = randomConfig.mapSize;
         const CELL_SIZE = 420 / GRID_SIZE;
-        const FRUIT_COUNT = 5;
-        const WALL_COUNT = 8; // Base number of walls, can be 3 to 5 based on RNG
+        const FRUIT_COUNT = randomConfig.fruitCount;
+        const WALL_COUNT = randomConfig.wallCount;
         const MAX_MOVES = GRID_SIZE * GRID_SIZE;
         const LAUNCH_DAY_UTC = Date.UTC(2026, 2, 19); // March 19, 2026
 
@@ -322,8 +453,8 @@
         const moveCells = [];
         const OPPOSITE = { U: 'D', D: 'U', L: 'R', R: 'L' };
 
-        const randomPuzzleId = Math.floor((Date.now() + Math.random() * 1000000) % 2147483647);
-        dailyLabelEl.textContent = 'Snakedle Random';
+        const randomPuzzleId = randomConfig.seed;
+        dailyLabelEl.textContent = `Snakedle Random (Seed ${randomPuzzleId})`;
         document.documentElement.style.setProperty('--snakedle-grid-size', String(GRID_SIZE));
 
         const puzzle = generateDailyPuzzle(randomPuzzleId);
@@ -338,6 +469,11 @@
             moveGridEl.appendChild(cell);
             moveCells.push(cell);
         }
+
+        document.getElementById('cfg-seed').value = String(randomConfig.seed);
+        document.getElementById('cfg-map-size').value = String(randomConfig.mapSize);
+        document.getElementById('cfg-fruit-count').value = String(randomConfig.fruitCount);
+        document.getElementById('cfg-wall-count').value = String(randomConfig.wallCount);
 
         function getDayNumber(date) {
             const todayUtc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
@@ -820,13 +956,14 @@
         function submitRun() {
             const simulation = simulateMoves(queueMoves);
             if (simulation.state !== 'win') {
-                statusLineEl.textContent = 'You need a valid route that collects all 5 fruits before submitting.';
+                statusLineEl.textContent = `You need a valid route that collects all ${FRUIT_COUNT} fruits before submitting.`;
                 return;
             }
 
             const usedMoves = simulation.movesUsed;
             const emoji = performanceEmoji(usedMoves, optimalMoves);
-            const shareText = `Snakedle Random : ${usedMoves}/${optimalMoves} ${emoji}\nhttps://egeeken.github.io/snakedle-random`;
+            const shareUrl = getRandomShareUrl(randomConfig);
+            const shareText = `Snakedle Random (${GRID_SIZE}x${GRID_SIZE}, seed ${randomConfig.seed}) : ${usedMoves}/${optimalMoves} ${emoji}\n${shareUrl}`;
             resultsTextEl.textContent = shareText;
             statusLineEl.textContent = 'Submitting... replaying your run.';
             playSubmissionAnimation(simulation, () => {
@@ -845,6 +982,36 @@
         document.getElementById('undo-move').addEventListener('click', undoMove);
         document.getElementById('clear-moves').addEventListener('click', clearMoves);
         document.getElementById('submit-snakedle').addEventListener('click', submitRun);
+        document.getElementById('load-random-config').addEventListener('click', () => {
+            const nextConfig = {
+                seed: parseIntParam(
+                    document.getElementById('cfg-seed').value,
+                    randomConfig.seed,
+                    RANDOM_LIMITS.seed.min,
+                    RANDOM_LIMITS.seed.max
+                ),
+                mapSize: parseIntParam(
+                    document.getElementById('cfg-map-size').value,
+                    randomConfig.mapSize,
+                    RANDOM_LIMITS.mapSize.min,
+                    RANDOM_LIMITS.mapSize.max
+                ),
+                fruitCount: parseIntParam(
+                    document.getElementById('cfg-fruit-count').value,
+                    randomConfig.fruitCount,
+                    RANDOM_LIMITS.fruitCount.min,
+                    RANDOM_LIMITS.fruitCount.max
+                ),
+                wallCount: parseIntParam(
+                    document.getElementById('cfg-wall-count').value,
+                    randomConfig.wallCount,
+                    RANDOM_LIMITS.wallCount.min,
+                    RANDOM_LIMITS.wallCount.max
+                )
+            };
+
+            window.location.href = `${getCanonicalRandomPagePath()}#${buildRandomConfigHash(nextConfig)}`;
+        });
 
         document.addEventListener('keydown', (e) => {
             const keyMap = {
