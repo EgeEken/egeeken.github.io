@@ -57,26 +57,27 @@
 
         .config-row {
             display: grid;
-            grid-template-columns: 1fr auto;
-            align-items: center;
-            gap: 8px;
+            grid-template-columns: 1fr;
+            align-items: start;
+            gap: 4px;
             font-size: 0.9em;
             min-width: 0;
         }
 
         .config-row label {
             min-width: 0;
-            overflow-wrap: anywhere;
+            overflow-wrap: break-word;
         }
 
         .config-row input {
-            width: 130px;
+            width: 100%;
             background: rgba(12, 32, 48, 0.9);
             border: 1px solid rgba(125, 223, 223, 0.55);
             border-radius: 6px;
             color: #e8f0f0;
             font-family: 'Futura', sans-serif;
             padding: 4px 6px;
+            box-sizing: border-box;
         }
 
         .config-row output {
@@ -299,16 +300,6 @@
         }
 
         @media (max-width: 600px) {
-            .config-row {
-                grid-template-columns: 1fr;
-                gap: 4px;
-            }
-
-            .config-row input {
-                width: 100%;
-                box-sizing: border-box;
-            }
-
             .config-row output {
                 justify-self: start;
             }
@@ -365,24 +356,24 @@
                 <div id="random-config">
                     <div class="config-header">Load specific random map</div>
                     <div class="config-row">
-                        <label for="cfg-seed">Seed (0-1000000)</label>
-                        <input id="cfg-seed" type="range" min="0" max="1000000" step="1">
-                        <output id="cfg-seed-output" for="cfg-seed">0</output>
+                        <label for="cfg-seed" data-config-key="seed">Seed</label>
+                        <input id="cfg-seed" type="range">
+                        <output id="cfg-seed-output" for="cfg-seed"></output>
                     </div>
                     <div class="config-row">
-                        <label for="cfg-map-size">Map size (6-10)</label>
-                        <input id="cfg-map-size" type="range" min="6" max="10" step="1">
-                        <output id="cfg-map-size-output" for="cfg-map-size">8</output>
+                        <label for="cfg-map-size" data-config-key="mapSize">Map size</label>
+                        <input id="cfg-map-size" type="range">
+                        <output id="cfg-map-size-output" for="cfg-map-size"></output>
                     </div>
                     <div class="config-row">
-                        <label for="cfg-fruit-count">Fruit count (5-10)</label>
-                        <input id="cfg-fruit-count" type="range" min="5" max="10" step="1">
-                        <output id="cfg-fruit-count-output" for="cfg-fruit-count">5</output>
+                        <label for="cfg-fruit-count" data-config-key="fruitCount">Fruit count</label>
+                        <input id="cfg-fruit-count" type="range">
+                        <output id="cfg-fruit-count-output" for="cfg-fruit-count"></output>
                     </div>
                     <div class="config-row">
-                        <label for="cfg-wall-count">Wall count (3-10)</label>
-                        <input id="cfg-wall-count" type="range" min="3" max="10" step="1">
-                        <output id="cfg-wall-count-output" for="cfg-wall-count">8</output>
+                        <label for="cfg-wall-count" data-config-key="wallCount">Wall count</label>
+                        <input id="cfg-wall-count" type="range">
+                        <output id="cfg-wall-count-output" for="cfg-wall-count"></output>
                     </div>
                     <button id="load-random-config">Load map</button>
                 </div>
@@ -404,15 +395,22 @@
     <script>
         const RANDOM_DEFAULTS = {
             mapSize: 8,
-            fruitCount: 5,
+            fruitCount: 8,
             wallCount: 8
         };
         const RANDOM_LIMITS = {
-            seed: { min: 0, max: 1000000 },
+            seed: { min: 0, max: 100000 },
             mapSize: { min: 6, max: 10 },
-            fruitCount: { min: 5, max: 10 },
-            wallCount: { min: 3, max: 10 }
+            fruitCount: { min: 2, max: 10 },
+            wallCount: { min: 0, max: 10 }
         };
+        const RANDOM_CONFIG_FIELDS = [
+            { key: 'seed', inputId: 'cfg-seed', outputId: 'cfg-seed-output', label: 'Seed' },
+            { key: 'mapSize', inputId: 'cfg-map-size', outputId: 'cfg-map-size-output', label: 'Map size' },
+            { key: 'fruitCount', inputId: 'cfg-fruit-count', outputId: 'cfg-fruit-count-output', label: 'Fruit count' },
+            { key: 'wallCount', inputId: 'cfg-wall-count', outputId: 'cfg-wall-count-output', label: 'Wall count' }
+        ];
+        
         function generateRandomSeed() {
             const min = RANDOM_LIMITS.seed.min;
             const max = RANDOM_LIMITS.seed.max;
@@ -479,6 +477,39 @@
 
         function getRandomShareUrl(config) {
             return `${window.location.origin}${getCanonicalRandomPagePath()}#${buildRandomConfigHash(config)}`;
+        }
+
+        function setupRandomConfigUi() {
+            RANDOM_CONFIG_FIELDS.forEach(field => {
+                const limits = RANDOM_LIMITS[field.key];
+                const input = document.getElementById(field.inputId);
+                const label = document.querySelector(`label[for="${field.inputId}"]`);
+                if (!limits || !input || !label) {
+                    return;
+                }
+
+                input.min = String(limits.min);
+                input.max = String(limits.max);
+                input.step = '1';
+                label.textContent = `${field.label} (${limits.min}-${limits.max})`;
+            });
+        }
+
+        function syncRandomConfigUi(config) {
+            RANDOM_CONFIG_FIELDS.forEach(field => {
+                const input = document.getElementById(field.inputId);
+                const output = document.getElementById(field.outputId);
+                const value = config[field.key];
+                const valueText = String(value);
+
+                if (input) {
+                    input.value = valueText;
+                }
+                if (output) {
+                    output.value = valueText;
+                    output.textContent = valueText;
+                }
+            });
         }
 
         let randomConfig = parseRandomConfigFromHash();
@@ -567,15 +598,7 @@
             maxMoves = gridSize * gridSize;
             randomPuzzleId = randomConfig.seed;
             dailyLabelEl.textContent = `Snakedle Random (Seed ${randomPuzzleId})`;
-
-            document.getElementById('cfg-seed').value = String(randomConfig.seed);
-            document.getElementById('cfg-map-size').value = String(randomConfig.mapSize);
-            document.getElementById('cfg-fruit-count').value = String(randomConfig.fruitCount);
-            document.getElementById('cfg-wall-count').value = String(randomConfig.wallCount);
-            document.getElementById('cfg-seed-output').value = String(randomConfig.seed);
-            document.getElementById('cfg-map-size-output').value = String(randomConfig.mapSize);
-            document.getElementById('cfg-fruit-count-output').value = String(randomConfig.fruitCount);
-            document.getElementById('cfg-wall-count-output').value = String(randomConfig.wallCount);
+            syncRandomConfigUi(randomConfig);
 
             if (playbackTimer) {
                 clearInterval(playbackTimer);
@@ -594,21 +617,15 @@
             refreshPlayback();
         }
         rebuildMoveGrid();
-
-        document.getElementById('cfg-seed').value = String(randomConfig.seed);
-        document.getElementById('cfg-map-size').value = String(randomConfig.mapSize);
-        document.getElementById('cfg-fruit-count').value = String(randomConfig.fruitCount);
-        document.getElementById('cfg-wall-count').value = String(randomConfig.wallCount);
-        document.getElementById('cfg-seed-output').value = String(randomConfig.seed);
-        document.getElementById('cfg-map-size-output').value = String(randomConfig.mapSize);
-        document.getElementById('cfg-fruit-count-output').value = String(randomConfig.fruitCount);
-        document.getElementById('cfg-wall-count-output').value = String(randomConfig.wallCount);
+        setupRandomConfigUi();
+        syncRandomConfigUi(randomConfig);
 
         function bindSliderOutput(inputId, outputId) {
             const input = document.getElementById(inputId);
             const output = document.getElementById(outputId);
             input.addEventListener('input', () => {
                 output.value = input.value;
+                output.textContent = input.value;
             });
         }
 
@@ -1095,15 +1112,17 @@
         }
 
         function performanceEmoji(used, optimal) {
-            const ratio = used / optimal;
-            if (ratio <= 1) return '🟦';
-            if (ratio <= 1.15) return '🟩';
-            if (ratio <= 1.25) return '🟨';
-            if (ratio <= 1.5) return '🟧';
+            // blue box emoji for perfect, then green for one off, yellow for 2-3 off, orange for 3-6 off, red for 7+ off
+            const off_by = used - optimal;
+            if (off_by === 0) return '🟦';
+            if (off_by === 1) return '🟩';
+            if (off_by <= 3) return '🟨';
+            if (off_by <= 6) return '🟧';
             return '🟥';
         }
 
         function submitRun(isAuto = false) {
+            const isAutoSubmit = isAuto === true;
             if (isSubmitting) {
                 return;
             }
@@ -1116,7 +1135,7 @@
                 statusLineEl.textContent = `You need a valid route that collects all ${fruitCount} fruits before submitting.`;
                 return;
             }
-            if (isAuto && simulation.movesUsed !== optimalMoves) {
+            if (isAutoSubmit && simulation.movesUsed !== optimalMoves) {
                 return;
             }
 
@@ -1143,7 +1162,7 @@
 
         document.getElementById('undo-move').addEventListener('click', undoMove);
         document.getElementById('clear-moves').addEventListener('click', clearMoves);
-        document.getElementById('submit-snakedle').addEventListener('click', submitRun);
+        document.getElementById('submit-snakedle').addEventListener('click', () => submitRun());
         document.getElementById('load-random-config').addEventListener('click', () => {
             const nextConfig = {
                 seed: parseIntParam(

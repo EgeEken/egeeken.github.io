@@ -306,10 +306,10 @@
     </div>
 
     <script>
-        const GRID_SIZE = 6;
+        const GRID_SIZE = 8;
         const CELL_SIZE = 420 / GRID_SIZE;
-        const FRUIT_COUNT = 5;
-        const WALL_COUNT = 5; // Base number of walls, can be 3 to 5 based on RNG
+        const FRUIT_COUNT = 8;
+        const WALL_COUNT = 8; // Base number of walls, can be 3 to 5 based on RNG
         const MAX_MOVES = GRID_SIZE * GRID_SIZE;
         const LAUNCH_DAY_UTC = Date.UTC(2026, 2, 19); // March 19, 2026
 
@@ -846,15 +846,17 @@
         }
 
         function performanceEmoji(used, optimal) {
-            const ratio = used / optimal;
-            if (ratio <= 1) return '🟦';
-            if (ratio <= 1.15) return '🟩';
-            if (ratio <= 1.25) return '🟨';
-            if (ratio <= 1.5) return '🟧';
+            // blue box emoji for perfect, then green for one off, yellow for 2-3 off, orange for 3-6 off, red for 7+ off
+            const off_by = used - optimal;
+            if (off_by === 0) return '🟦';
+            if (off_by === 1) return '🟩';
+            if (off_by <= 3) return '🟨';
+            if (off_by <= 6) return '🟧';
             return '🟥';
         }
 
         function submitRun(isAuto = false) {
+            const isAutoSubmit = isAuto === true;
             if (isSubmitting) {
                 return;
             }
@@ -867,7 +869,7 @@
                 statusLineEl.textContent = 'You need a valid route that collects all 5 fruits before submitting.';
                 return;
             }
-            if (isAuto && simulation.movesUsed !== optimalMoves) {
+            if (isAutoSubmit && simulation.movesUsed !== optimalMoves) {
                 return;
             }
 
@@ -893,7 +895,7 @@
 
         document.getElementById('undo-move').addEventListener('click', undoMove);
         document.getElementById('clear-moves').addEventListener('click', clearMoves);
-        document.getElementById('submit-snakedle').addEventListener('click', submitRun);
+        document.getElementById('submit-snakedle').addEventListener('click', () => submitRun());
 
         document.addEventListener('keydown', (e) => {
             const target = e.target;
