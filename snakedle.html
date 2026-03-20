@@ -873,6 +873,8 @@
                 return;
             }
 
+            setButtonsDisabledState(true); // Disable buttons during submission
+
             const usedMoves = simulation.movesUsed;
             const emoji = performanceEmoji(usedMoves, optimalMoves);
             const shareText = `Snakedle Day ${dayNumber} : ${usedMoves}/${optimalMoves} ${emoji}\nhttps://egeeken.github.io/snakedle`;
@@ -886,15 +888,25 @@
                     JSON.stringify({ usedMoves, optimalMoves, emoji, at: new Date().toISOString() })
                 );
                 isSubmitting = false;
+                setButtonsDisabledState(false); // Re-enable buttons after submission
             });
+        }
+
+        // Disable undo and clear buttons during submission or animations
+        const undoButton = document.getElementById('undo-move');
+        const clearButton = document.getElementById('clear-moves');
+
+        function setButtonsDisabledState(disabled) {
+            undoButton.disabled = disabled;
+            clearButton.disabled = disabled;
         }
 
         document.querySelectorAll('[data-dir]').forEach(btn => {
             btn.addEventListener('click', () => addMove(btn.dataset.dir));
         });
 
-        document.getElementById('undo-move').addEventListener('click', undoMove);
-        document.getElementById('clear-moves').addEventListener('click', clearMoves);
+        undoButton.addEventListener('click', undoMove);
+        clearButton.addEventListener('click', clearMoves);
         document.getElementById('submit-snakedle').addEventListener('click', () => submitRun());
 
         document.addEventListener('keydown', (e) => {
