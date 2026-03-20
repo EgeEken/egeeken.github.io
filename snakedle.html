@@ -368,8 +368,10 @@
         }
 
         function getDayNumber(date) {
-            const todayUtc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
-            return Math.max(1, Math.floor((todayUtc - LAUNCH_DAY_UTC) / 86400000) + 1);
+            // Convert the current date to Paris time
+            const parisTime = new Date(date.toLocaleString('en-US', { timeZone: 'Europe/Paris' }));
+            const todayParis = Date.UTC(parisTime.getFullYear(), parisTime.getMonth(), parisTime.getDate());
+            return Math.max(1, Math.floor((todayParis - LAUNCH_DAY_UTC) / 86400000) + 1);
         }
 
         function mulberry32(seed) {
