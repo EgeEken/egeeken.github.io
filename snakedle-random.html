@@ -99,6 +99,31 @@
             cursor: pointer;
         }
 
+        
+        #shuffle-seed {
+            margin-top: 2px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 10px;
+            background: #3a245e;
+            color: #e8f0f0;
+            font-family: 'Futura', sans-serif;
+            cursor: pointer;
+        }
+
+        #full-shuffle {
+            margin-top: 2px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 10px;
+            background: #5f0b33;
+            color: #e8f0f0;
+            font-family: 'Futura', sans-serif;
+            cursor: pointer;
+        }
+
         #solve-map {
             margin-top: 2px;
             width: 100%;
@@ -336,7 +361,7 @@
     <main id="snakedle-wrapper">
         <div class="snakedle-panel">
             <div class="snakedle-stat" id="daily-label">Snakedle Random</div>
-            <div class="snakedle-stat" id="fruit-progress">Fruits: 0 / 5</div>
+            <div class="snakedle-stat" id="fruit-progress">Fruits: 0 / --</div>
             <div class="snakedle-stat" id="move-progress">Moves: 0 / --</div>
         </div>
 
@@ -388,6 +413,8 @@
                         <output id="cfg-wall-count-output" for="cfg-wall-count"></output>
                     </div>
                     <button id="load-random-config">Load map</button>
+                    <button id="shuffle-seed">Shuffle seed</button>
+                    <button id="full-shuffle">Full shuffle</button>
                     <button id="solve-map">Solve map</button>
                 </div>
             </div>
@@ -408,14 +435,14 @@
     <script>
         const RANDOM_DEFAULTS = {
             mapSize: 8,
-            fruitCount: 8,
-            wallCount: 8
+            fruitCount: 12,
+            wallCount: 20
         };
         const RANDOM_LIMITS = {
             seed: { min: 0, max: 100000 },
-            mapSize: { min: 6, max: 15 },
-            fruitCount: { min: 2, max: 10 },
-            wallCount: { min: 0, max: 20 }
+            mapSize: { min: 6, max: 10 },
+            fruitCount: { min: 2, max: 13 },
+            wallCount: { min: 0, max: 30 }
         };
         const RANDOM_CONFIG_FIELDS = [
             { key: 'seed', inputId: 'cfg-seed', outputId: 'cfg-seed-output', label: 'Seed' },
@@ -560,6 +587,8 @@
         const moveCells = [];
         const OPPOSITE = { U: 'D', D: 'U', L: 'R', R: 'L' };
         const AUTO_SUBMIT_DELAY_MS = 120;
+        const FRAME_DELAY_MS = 150;
+        const MAX_GEN_ATTEMPTS = 400;
 
         let randomPuzzleId = randomConfig.seed;
         dailyLabelEl.textContent = `Snakedle Random (Seed ${randomPuzzleId})`;
@@ -713,7 +742,6 @@
             const fruits = fruitPool.slice(0, fruitCount).map(parseKey);
             
             // Generate walls, these do matter, we want to make sure the puzzle is possible, so we will generate candidates until one is possible
-            const MAX_GEN_ATTEMPTS = 2000;
             for (let attempt = 0; attempt < MAX_GEN_ATTEMPTS; attempt++) {
                 if (attempt % 10 === 0) {
                     console.log(`Generation attempt ${attempt}/${MAX_GEN_ATTEMPTS}...`);
@@ -759,44 +787,177 @@
         }
 
         function findOptimalMoves(candidate) {
-            const fruitIndex = new Map();
-            candidate.fruits.forEach((fruit, i) => fruitIndex.set(cellKey(fruit.x, fruit.y), i));
+            const totalCells = gridSize * gridSize;
+            const wallBlocked = new Uint8Array(totalCells);
+            for (const wallKey of candidate.walls) {
+                const wall = parseKey(wallKey);
+                wallBlocked[wall.y * gridSize + wall.x] = 1;
+            }
+
+            const fruitAtCell = new Int16Array(totalCells);
+            fruitAtCell.fill(-1);
+            candidate.fruits.forEach((fruit, i) => {
+                fruitAtCell[fruit.y * gridSize + fruit.x] = i;
+            });
+
             const targetMask = (1 << candidate.fruits.length) - 1;
 
-            const startBody = candidate.snakeStart.map(c => ({ x: c.x, y: c.y }));
-            const startState = {
+            const nextUp = new Int16Array(totalCells);
+            const nextRight = new Int16Array(totalCells);
+            const nextDown = new Int16Array(totalCells);
+            const nextLeft = new Int16Array(totalCells);
+            nextUp.fill(-1);
+            nextRight.fill(-1);
+            nextDown.fill(-1);
+            nextLeft.fill(-1);
+
+            for (let y = 0; y < gridSize; y++) {
+                for (let x = 0; x < gridSize; x++) {
+                    const idx = y * gridSize + x;
+                    if (y > 0) nextUp[idx] = idx - gridSize;
+                    if (x < gridSize - 1) nextRight[idx] = idx + 1;
+                    if (y < gridSize - 1) nextDown[idx] = idx + gridSize;
+                    if (x > 0) nextLeft[idx] = idx - 1;
+                }
+            }
+
+            const nextByDir = [nextUp, nextRight, nextDown, nextLeft]; // U, R, D, L
+            const dirChars = ['U', 'R', 'D', 'L'];
+
+            const startBody = candidate.snakeStart.map(c => c.y * gridSize + c.x);
+            const states = [{
                 body: startBody,
                 mask: 0,
                 steps: 0,
-                moves: []
-            };
-
-            const queue = [startState];
+                parent: -1,
+                move: ''
+            }];
+            const queue = [0];
             let queueIndex = 0;
-            const visited = new Set([encodeState(startBody, 0)]);
+
+            const visitedByHeadMask = new Map();
+            const startHeadMaskKey = (startBody[0] | (0 << 8)) >>> 0;
+            visitedByHeadMask.set(startHeadMaskKey, new Set([encodeBodyShapePacked(startBody, gridSize)]));
 
             while (queueIndex < queue.length) {
-                const state = queue[queueIndex++];
-                for (const dirKey of DIR_ORDER) {
-                    const next = advanceState(state.body, state.mask, dirKey, candidate.walls, fruitIndex);
+                const stateIndex = queue[queueIndex++];
+                const state = states[stateIndex];
+
+                for (let dirIndex = 0; dirIndex < 4; dirIndex++) {
+                    const next = advanceStatePacked(state.body, state.mask, dirIndex, nextByDir, wallBlocked, fruitAtCell);
                     if (!next.valid) {
                         continue;
                     }
-                    const nextMoves = [...state.moves, dirKey];
+
                     if (next.mask === targetMask) {
-                        return { count: state.steps + 1, moves: nextMoves };
+                        return {
+                            count: state.steps + 1,
+                            moves: reconstructMoves(states, stateIndex, dirChars[dirIndex])
+                        };
                     }
-                    const encoded = encodeState(next.body, next.mask);
-                    if (!visited.has(encoded)) {
-                        visited.add(encoded);
-                        queue.push({ body: next.body, mask: next.mask, steps: state.steps + 1, moves: nextMoves });
+
+                    const headMaskKey = (next.body[0] | (next.mask << 8)) >>> 0;
+                    const bodyShapeKey = encodeBodyShapePacked(next.body, gridSize);
+                    const seenShapes = visitedByHeadMask.get(headMaskKey);
+                    if (!seenShapes) {
+                        visitedByHeadMask.set(headMaskKey, new Set([bodyShapeKey]));
+                    } else if (seenShapes.has(bodyShapeKey)) {
+                        continue;
+                    } else {
+                        seenShapes.add(bodyShapeKey);
                     }
+
+                    states.push({
+                        body: next.body,
+                        mask: next.mask,
+                        steps: state.steps + 1,
+                        parent: stateIndex,
+                        move: dirChars[dirIndex]
+                    });
+                    queue.push(states.length - 1);
                 }
             }
+
             return { count: Infinity, moves: [] };
         }
 
+        function reconstructMoves(states, stateIndex, lastMove) {
+            const reversed = [lastMove];
+            let cursor = stateIndex;
+
+            while (cursor >= 0) {
+                const state = states[cursor];
+                if (state.move) {
+                    reversed.push(state.move);
+                }
+                cursor = state.parent;
+            }
+
+            reversed.reverse();
+            return reversed;
+        }
+
+        function encodeBodyShapePacked(body, width) {
+            const length = body.length;
+            if (length <= 1) {
+                return (1 << 28) >>> 0;
+            }
+
+            let packed = 0;
+            for (let i = 0; i < length - 1; i++) {
+                const current = body[i];
+                const next = body[i + 1];
+                const diff = next - current;
+
+                let code = 0;
+                if (diff === -width) code = 0; // U
+                else if (diff === 1) code = 1; // R
+                else if (diff === width) code = 2; // D
+                else if (diff === -1) code = 3; // L
+
+                packed |= (code << (i * 2));
+            }
+
+            return (((length & 0x0f) << 28) | packed) >>> 0;
+        }
+
+        function advanceStatePacked(body, mask, dirIndex, nextByDir, wallBlocked, fruitAtCell) {
+            const nextHead = nextByDir[dirIndex][body[0]];
+            if (nextHead < 0 || wallBlocked[nextHead]) {
+                return { valid: false };
+            }
+
+            const fruitAtHead = fruitAtCell[nextHead];
+            const willEat = fruitAtHead >= 0 && (mask & (1 << fruitAtHead)) === 0;
+            const collisionLimit = willEat ? body.length : body.length - 1;
+            for (let i = 0; i < collisionLimit; i++) {
+                if (body[i] === nextHead) {
+                    return { valid: false };
+                }
+            }
+
+            if (body.length === 2 && nextHead === body[1]) {
+                return { valid: false };
+            }
+
+            const copyLength = willEat ? body.length : body.length - 1;
+            const nextBody = new Array(copyLength + 1);
+            nextBody[0] = nextHead;
+            for (let i = 0; i < copyLength; i++) {
+                nextBody[i + 1] = body[i];
+            }
+
+            let nextMask = mask;
+            if (willEat) {
+                nextMask |= (1 << fruitAtHead);
+            }
+
+            return { valid: true, body: nextBody, mask: nextMask };
+        }
+
         function encodeState(body, mask) {
+            // return `${mask}|${body.map(c => `${c.x},${c.y}`).join(';')}`;
+
             const head = body[0];
             return `${mask}|${head.x},${head.y}`;
         }
@@ -1035,7 +1196,7 @@
             if (simulation.state === 'dead') {
                 statusLineEl.textContent = 'Route crashes. Undo or clear and try again.';
             } else if (simulation.state === 'win') {
-                if (simulation.movesUsed === optimalMoves.count && !isSubmitting) {
+                if (simulation.movesUsed <= optimalMoves.count && !isSubmitting) {
                     statusLineEl.textContent = 'Perfect route found! Auto-submitting...';
                     autoSubmitTimer = setTimeout(() => submitRun(true), AUTO_SUBMIT_DELAY_MS);
                     return;
@@ -1057,17 +1218,21 @@
             drawBoard(playbackFrames[frameIndex]);
             if (playbackFrames.length <= 1) {
                 onDone();
+                isSubmitting = false; // Ensure isSubmitting is reset
+                setButtonsDisabledState(false); // Re-enable buttons
                 return;
             }
             playbackTimer = setInterval(() => {
                 frameIndex += 1;
-                drawBoard(playbackFrames[Math.min(frameIndex, playbackFrames.length - 1)]);
+                drawBoard(playbackFrames[frameIndex]);
                 if (frameIndex >= playbackFrames.length - 1) {
                     clearInterval(playbackTimer);
                     playbackTimer = null;
                     onDone();
+                    isSubmitting = false; // Ensure isSubmitting is reset
+                    setButtonsDisabledState(false); // Re-enable buttons
                 }
-            }, 170);
+            }, FRAME_DELAY_MS);
         }
 
         function getCurrentHeadingDir() {
@@ -1128,6 +1293,7 @@
         function performanceEmoji(used, optimal) {
             // blue box emoji for perfect, then green for one off, yellow for 2-3 off, orange for 3-6 off, red for 7+ off
             const off_by = used - optimal;
+            if (off_by < 0) return '!🟪!';
             if (off_by === 0) return '🟦';
             if (off_by === 1) return '🟩';
             if (off_by <= 3) return '🟨';
@@ -1149,7 +1315,7 @@
                 statusLineEl.textContent = `You need a valid route that collects all ${fruitCount} fruits before submitting.`;
                 return;
             }
-            if (isAutoSubmit && simulation.movesUsed !== optimalMoves.count) {
+            if (isAutoSubmit && simulation.movesUsed > optimalMoves.count) {
                 return;
             }
 
@@ -1218,6 +1384,32 @@
             };
 
             applyConfig(nextConfig);
+        });
+        document.getElementById('shuffle-seed').addEventListener('click', () => {
+            const randomSeed = Math.floor(Math.random() * 100000);
+            document.getElementById('cfg-seed').value = randomSeed;
+            document.getElementById('cfg-seed-output').value = randomSeed;
+            document.getElementById('cfg-seed-output').textContent = randomSeed;
+        });
+
+        document.getElementById('full-shuffle').addEventListener('click', () => {
+            const randomSeed = Math.floor(Math.random() * 100000);
+            const randomMapSize = Math.floor(Math.random() * (RANDOM_LIMITS.mapSize.max - RANDOM_LIMITS.mapSize.min + 1)) + RANDOM_LIMITS.mapSize.min;
+            const randomFruitCount = Math.floor(Math.random() * (RANDOM_LIMITS.fruitCount.max - RANDOM_LIMITS.fruitCount.min + 1)) + RANDOM_LIMITS.fruitCount.min;
+            const randomWallCount = Math.floor(Math.random() * (RANDOM_LIMITS.wallCount.max - RANDOM_LIMITS.wallCount.min + 1)) + RANDOM_LIMITS.wallCount.min;
+
+            document.getElementById('cfg-seed').value = randomSeed;
+            document.getElementById('cfg-seed-output').value = randomSeed;
+            document.getElementById('cfg-seed-output').textContent = randomSeed;
+            document.getElementById('cfg-map-size').value = randomMapSize;
+            document.getElementById('cfg-map-size-output').value = randomMapSize;
+            document.getElementById('cfg-map-size-output').textContent = randomMapSize;
+            document.getElementById('cfg-fruit-count').value = randomFruitCount;
+            document.getElementById('cfg-fruit-count-output').value = randomFruitCount;
+            document.getElementById('cfg-fruit-count-output').textContent = randomFruitCount;
+            document.getElementById('cfg-wall-count').value = randomWallCount;
+            document.getElementById('cfg-wall-count-output').value = randomWallCount;
+            document.getElementById('cfg-wall-count-output').textContent = randomWallCount;
         });
 
         window.addEventListener('hashchange', () => {
@@ -1324,7 +1516,7 @@
                     isSubmitting = false;
                     statusLineEl.textContent = 'Optimal route queued. Ready to submit.';
                 }
-            }, 170); // Adjust the interval as needed for animation speed
+            }, FRAME_DELAY_MS); // Adjust the interval as needed for animation speed
         });
 
         refreshMoveGrid();

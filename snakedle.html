@@ -752,7 +752,7 @@
             if (simulation.state === 'dead') {
                 statusLineEl.textContent = 'Route crashes. Undo or clear and try again.';
             } else if (simulation.state === 'win') {
-                if (simulation.movesUsed === optimalMoves.count && !isSubmitting) {
+                if (simulation.movesUsed <= optimalMoves.count && !isSubmitting) {
                     statusLineEl.textContent = 'Perfect route found! Auto-submitting...';
                     autoSubmitTimer = setTimeout(() => submitRun(true), AUTO_SUBMIT_DELAY_MS);
                     return;
@@ -842,13 +842,13 @@
         function performanceEmoji(used, optimal) {
             // blue box emoji for perfect, then green for one off, yellow for 2-3 off, orange for 3-6 off, red for 7+ off
             const off_by = used - optimal;
+            if (off_by < 0) return '!🟪!';
             if (off_by === 0) return '🟦';
             if (off_by === 1) return '🟩';
             if (off_by <= 3) return '🟨';
             if (off_by <= 6) return '🟧';
             return '🟥';
         }
-
         function submitRun(isAuto = false) {
             const isAutoSubmit = isAuto === true;
             if (isSubmitting) {
