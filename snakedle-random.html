@@ -1088,6 +1088,8 @@
         }
 
         function addMove(dirKey) {
+            if (playbackTimer) return; // Prevent adding moves during playback
+
             const currentSimulation = simulateMoves(queueMoves);
             if (currentSimulation.state === 'dead') {
                 statusLineEl.textContent = 'Route already crashes. Undo or clear to continue.';
@@ -1112,15 +1114,16 @@
         }
 
         function undoMove() {
-            if (queueMoves.length === 0) {
-                return;
-            }
+            if (playbackTimer || queueMoves.length === 0) return; // Prevent undo during playback
+
             queueMoves.pop();
             refreshMoveGrid();
             refreshPlayback();
         }
 
         function clearMoves() {
+            if (playbackTimer) return; // Prevent clearing during playback
+
             queueMoves.length = 0;
             refreshMoveGrid();
             refreshPlayback();
@@ -1284,7 +1287,7 @@
         });
 
         document.getElementById('solve-map').addEventListener('click', () => {
-            if (isSubmitting) return;
+            if (isSubmitting || playbackTimer) return;
 
             // Ensure optimalMoves is calculated
             if (!optimalMoves || !Array.isArray(optimalMoves.moves)) {
@@ -1292,15 +1295,40 @@
                 return;
             }
 
-            // Fill the move queue with optimal moves
+            // Clear the move queue and update the status log
             queueMoves.length = 0;
-            optimalMoves.moves.forEach(move => queueMoves.push(move));
+            statusLineEl.textContent = 'Queueing optimal moves...';
 
-            // Submit the solution
+            // Play the solve map animation, updating the move queue visually step by step
             isSubmitting = true;
-            playSubmissionAnimation(simulateMoves(queueMoves), () => {
-                isSubmitting = false;
-            });
+            let moveIndex = 0;
+            playbackFrames = simulateMoves([]).frames; // Start with an empty simulation
+            playbackTimer = setInterval(() => {
+                if (moveIndex < optimalMoves.moves.length) {
+                    queueMoves.push(optimalMoves.moves[moveIndex]);
+                    refreshMoveGrid(); // Update the move queue visually for each move
+
+                    // Highlight the current move cell with a green background
+                    const currentCell = moveCells[moveIndex];
+                    if (currentCell) {
+                        currentCell.style.backgroundColor = 'green';
+                    }
+
+                    statusLineEl.textContent = `Queued move ${moveIndex + 1}: ${ARROW[optimalMoves.moves[moveIndex]]}`;
+
+                    // Simulate the snake's movement frame by frame
+                    const simulation = simulateMoves(queueMoves);
+                    playbackFrames = simulation.frames;
+                    drawBoard(playbackFrames[playbackFrames.length - 1]);
+
+                    moveIndex++;
+                } else {
+                    clearInterval(playbackTimer);
+                    playbackTimer = null;
+                    isSubmitting = false;
+                    statusLineEl.textContent = 'Optimal route queued. Ready to submit.';
+                }
+            }, 170); // Adjust the interval as needed for animation speed
         });
 
         refreshMoveGrid();
