@@ -413,9 +413,9 @@
         };
         const RANDOM_LIMITS = {
             seed: { min: 0, max: 100000 },
-            mapSize: { min: 6, max: 10 },
+            mapSize: { min: 6, max: 15 },
             fruitCount: { min: 2, max: 10 },
-            wallCount: { min: 0, max: 10 }
+            wallCount: { min: 0, max: 20 }
         };
         const RANDOM_CONFIG_FIELDS = [
             { key: 'seed', inputId: 'cfg-seed', outputId: 'cfg-seed-output', label: 'Seed' },
@@ -713,9 +713,9 @@
             const fruits = fruitPool.slice(0, fruitCount).map(parseKey);
             
             // Generate walls, these do matter, we want to make sure the puzzle is possible, so we will generate candidates until one is possible
-            const MAX_GEN_ATTEMPTS = 450;
+            const MAX_GEN_ATTEMPTS = 2000;
             for (let attempt = 0; attempt < MAX_GEN_ATTEMPTS; attempt++) {
-                if (attempt % 1 === 0) {
+                if (attempt % 10 === 0) {
                     console.log(`Generation attempt ${attempt}/${MAX_GEN_ATTEMPTS}...`);
                 }
                 const rng = mulberry32(((baseSeed + attempt) * 1013904223) >>> 0);
@@ -744,12 +744,17 @@
                 }
             }
 
-            // Fallback in the extremely unlikely case that we fail to generate a valid puzzle after 450 attempts, return a hardcoded puzzle for the given parameters. This should never happen, especially for the default parameters, as they are very easy to generate valid puzzles for, but it's here just in case.
-            return {
+            // Fallback in the extremely unlikely case that we fail to generate a valid puzzle after 450 attempts, return a hardcoded puzzle for the given parameters. This should never happen, especially for the default parameters, as they are very easy to generate valid puzzles for, but it's here just in case. Map is a frowning face with the fruits and no walls.
+            const fallback_candidate = {
                 walls: new Set(),
-                fruits: [{ x: 1, y: 1 }],
-                snakeStart: [{ x: 0, y: 0 }, { x: 0, y: 1 }],
-                optimalMoves: { count: 1, moves: ['R'] }
+                fruits: [{ x: 1, y: 1 }, { x: 4, y: 1 }, //eyes
+                         { x: 1, y: 4 }, { x: 2, y: 3 }, { x: 3, y: 3 }, { x: 4, y: 4 }], // mouth
+                snakeStart: [{ x: 0, y: 1 }, { x: 0, y: 0 }],
+            }
+            const fallback_optimal = findOptimalMoves(fallback_candidate);
+            return {
+                ...fallback_candidate,
+                optimalMoves: fallback_optimal
             };
         }
 
@@ -792,7 +797,8 @@
         }
 
         function encodeState(body, mask) {
-            return `${mask}|${body.map(c => `${c.x}.${c.y}`).join(';')}`;
+            const head = body[0];
+            return `${mask}|${head.x},${head.y}`;
         }
 
         function advanceState(body, mask, dirKey, walls, fruitIndex) {

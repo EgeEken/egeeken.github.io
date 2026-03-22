@@ -412,77 +412,66 @@
 
         function generateDailyPuzzle(day) {
             const baseSeed = day * 2654435761;
-            for (let attempt = 0; attempt < 450; attempt++) {
-                const rng = mulberry32((baseSeed + attempt * 1013904223) >>> 0);
-                const wallCount = WALL_COUNT;
-                const allCells = [];
-                for (let y = 0; y < GRID_SIZE; y++) {
-                    for (let x = 0; x < GRID_SIZE; x++) {
-                        allCells.push(cellKey(x, y));
+            const allCells = [];
+            for (let y = 0; y < GRID_SIZE; y++) {
+                for (let x = 0; x < GRID_SIZE; x++) {
+                    allCells.push(cellKey(x, y));
+                }
+            }
+            const rng = mulberry32((baseSeed * 1013904223) >>> 0);
+            // Place snake, it doesn't matter where as long as the head and tail are adjacent and the map is empty
+            const headKey = pickRandom(allCells, rng);
+            const head = parseKey(headKey);
+            const neighbors = DIR_ORDER
+            .map(d => ({ x: head.x + DIRS[d].x, y: head.y + DIRS[d].y }))
+            .filter(c => inBounds(c.x, c.y));
+            const tail = pickRandom(neighbors, rng);
+            const snakeStartKeys = new Set([headKey, cellKey(tail.x, tail.y)]);
+            
+            // Generate fruits, they also don't matter, just have to be on the non-snake cells
+            const openCells = allCells.filter(k => !snakeStartKeys.has(k));
+            const fruitPool = shuffled(openCells, rng);
+            const fruits = fruitPool.slice(0, FRUIT_COUNT).map(parseKey);
+            
+            // Generate walls, these do matter, we want to make sure the puzzle is possible, so we will generate candidates until one is possible
+            const MAX_GEN_ATTEMPTS = 2000;
+            for (let attempt = 0; attempt < MAX_GEN_ATTEMPTS; attempt++) {
+                const rng = mulberry32(((baseSeed + attempt) * 1013904223) >>> 0);
+                const openCells = allCells.filter(k => {
+                    if (snakeStartKeys.has(k)) {
+                        return false;
                     }
-                }
-
-                const wallSet = new Set(shuffled(allCells, rng).slice(0, wallCount));
-                const openCells = allCells.filter(k => !wallSet.has(k));
-                if (openCells.length < FRUIT_COUNT + 2) {
-                    continue;
-                }
-
-                const headKey = pickRandom(openCells, rng);
-                const head = parseKey(headKey);
-                const neighbors = DIR_ORDER
-                    .map(d => ({ x: head.x + DIRS[d].x, y: head.y + DIRS[d].y }))
-                    .filter(c => inBounds(c.x, c.y) && !wallSet.has(cellKey(c.x, c.y)));
-                if (neighbors.length === 0) {
-                    continue;
-                }
-
-                const tail = pickRandom(neighbors, rng);
-                const snakeStartKeys = new Set([headKey, cellKey(tail.x, tail.y)]);
-                const fruitPool = shuffled(openCells.filter(k => !snakeStartKeys.has(k)), rng);
-                const fruits = fruitPool.slice(0, FRUIT_COUNT).map(parseKey);
-
-                let oneWayFruits = 0;
-                let badFruit = false;
-                for (const fruit of fruits) {
-                    let openSides = 0;
-                    for (const d of DIR_ORDER) {
-                        const nx = fruit.x + DIRS[d].x;
-                        const ny = fruit.y + DIRS[d].y;
-                        if (inBounds(nx, ny) && !wallSet.has(cellKey(nx, ny))) {
-                            openSides++;
+                    for (const fruit of fruits) {
+                        if (cellKey(fruit.x, fruit.y) === k) {
+                            return false;
                         }
                     }
-                    if (openSides < 1) {
-                        badFruit = true;
-                        break;
-                    }
-                    if (openSides === 1) {
-                        oneWayFruits++;
-                    }
-                }
-
-                if (badFruit || oneWayFruits > 1) {
-                    continue;
-                }
+                    return true;
+                });
+                const wallSet = new Set(shuffled(openCells, rng).slice(0, WALL_COUNT));
 
                 const candidate = {
                     walls: wallSet,
                     fruits,
                     snakeStart: [head, tail]
                 };
-
                 const optimal = findOptimalMoves(candidate);
-                if (Number.isFinite(optimal) && optimal <= MAX_MOVES) {
+                if (Number.isFinite(optimal.count) && optimal.count <= MAX_MOVES) {
                     return { ...candidate, optimalMoves: optimal };
                 }
             }
 
+            // Fallback in the extremely unlikely case that we fail to generate a valid puzzle after 450 attempts, return a hardcoded puzzle for the given parameters. This should never happen, especially for the default parameters, as they are very easy to generate valid puzzles for, but it's here just in case. Map is a frowning face with the fruits and no walls.
+            const fallback_candidate = {
+                walls: new Set(),
+                fruits: [{ x: 1, y: 1 }, { x: 4, y: 1 }, //eyes
+                         { x: 1, y: 4 }, { x: 2, y: 3 }, { x: 3, y: 3 }, { x: 4, y: 4 }], // mouth
+                snakeStart: [{ x: 0, y: 1 }, { x: 0, y: 0 }],
+            }
+            const fallback_optimal = findOptimalMoves(fallback_candidate);
             return {
-                walls: new Set(['1,1', '3,1', '1,3', '3,3']),
-                fruits: [{ x: 0, y: 2 }, { x: 2, y: 0 }, { x: 4, y: 2 }, { x: 2, y: 4 }, { x: 2, y: 2 }],
-                snakeStart: [{ x: 0, y: 0 }, { x: 0, y: 1 }],
-                optimalMoves: 14
+                ...fallback_candidate,
+                optimalMoves: fallback_optimal
             };
         }
 
@@ -495,7 +484,8 @@
             const startState = {
                 body: startBody,
                 mask: 0,
-                steps: 0
+                steps: 0,
+                moves: []
             };
 
             const queue = [startState];
@@ -509,21 +499,23 @@
                     if (!next.valid) {
                         continue;
                     }
+                    const nextMoves = [...state.moves, dirKey];
                     if (next.mask === targetMask) {
-                        return state.steps + 1;
+                        return { count: state.steps + 1, moves: nextMoves };
                     }
                     const encoded = encodeState(next.body, next.mask);
                     if (!visited.has(encoded)) {
                         visited.add(encoded);
-                        queue.push({ body: next.body, mask: next.mask, steps: state.steps + 1 });
+                        queue.push({ body: next.body, mask: next.mask, steps: state.steps + 1, moves: nextMoves });
                     }
                 }
             }
-            return Infinity;
+            return { count: Infinity, moves: [] };
         }
 
         function encodeState(body, mask) {
-            return `${mask}|${body.map(c => `${c.x}.${c.y}`).join(';')}`;
+            const head = body[0];
+            return `${mask}|${head.x},${head.y}`;
         }
 
         function advanceState(body, mask, dirKey, walls, fruitIndex) {
@@ -747,7 +739,7 @@
             const simulation = simulateMoves(queueMoves);
             playbackFrames = simulation.frames;
             fruitProgressEl.textContent = `Fruits: ${simulation.fruitsEaten} / ${FRUIT_COUNT}`;
-            moveProgressEl.textContent = `Moves: ${queueMoves.length} / ${optimalMoves}`;
+            moveProgressEl.textContent = `Moves: ${queueMoves.length} / ${optimalMoves.count}`;
             drawBoard(playbackFrames[playbackFrames.length - 1]);
             if (autoSubmitTimer) {
                 clearTimeout(autoSubmitTimer);
@@ -760,7 +752,7 @@
             if (simulation.state === 'dead') {
                 statusLineEl.textContent = 'Route crashes. Undo or clear and try again.';
             } else if (simulation.state === 'win') {
-                if (simulation.movesUsed === optimalMoves && !isSubmitting) {
+                if (simulation.movesUsed === optimalMoves.count && !isSubmitting) {
                     statusLineEl.textContent = 'Perfect route found! Auto-submitting...';
                     autoSubmitTimer = setTimeout(() => submitRun(true), AUTO_SUBMIT_DELAY_MS);
                     return;
@@ -871,15 +863,15 @@
                 statusLineEl.textContent = 'You need a valid route that collects all 5 fruits before submitting.';
                 return;
             }
-            if (isAutoSubmit && simulation.movesUsed !== optimalMoves) {
+            if (isAutoSubmit && simulation.movesUsed !== optimalMoves.count) {
                 return;
             }
 
             setButtonsDisabledState(true); // Disable buttons during submission
 
             const usedMoves = simulation.movesUsed;
-            const emoji = performanceEmoji(usedMoves, optimalMoves);
-            const shareText = `Snakedle Day ${dayNumber} : ${usedMoves}/${optimalMoves} ${emoji}\nhttps://egeeken.github.io/snakedle`;
+            const emoji = performanceEmoji(usedMoves, optimalMoves.count);
+            const shareText = `Snakedle Day ${dayNumber} : ${usedMoves}/${optimalMoves.count} ${emoji}\nhttps://egeeken.github.io/snakedle`;
             resultsTextEl.textContent = shareText;
             statusLineEl.textContent = 'Submitting... replaying your run.';
             isSubmitting = true;
