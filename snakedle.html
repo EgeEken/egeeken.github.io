@@ -260,8 +260,8 @@
 
     <main id="snakedle-wrapper">
         <div class="snakedle-panel">
-            <div class="snakedle-stat" id="daily-label">Snakedle Day 1</div>
-            <div class="snakedle-stat" id="fruit-progress">Fruits: 0 / 5</div>
+            <div class="snakedle-stat" id="daily-label">Snakedle Day --</div>
+            <div class="snakedle-stat" id="fruit-progress">Fruits: 0 / --</div>
             <div class="snakedle-stat" id="move-progress">Moves: 0 / --</div>
         </div>
 
@@ -860,7 +860,7 @@
             }
             const simulation = simulateMoves(queueMoves);
             if (simulation.state !== 'win') {
-                statusLineEl.textContent = 'You need a valid route that collects all 5 fruits before submitting.';
+                statusLineEl.textContent = 'You need a valid route that collects all ' + FRUIT_COUNT + ' fruits before submitting.';
                 return;
             }
             if (isAutoSubmit && simulation.movesUsed !== optimalMoves.count) {
