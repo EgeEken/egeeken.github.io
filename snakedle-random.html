@@ -99,6 +99,18 @@
             cursor: pointer;
         }
 
+        #solve-map {
+            margin-top: 2px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 10px;
+            background: #5a0e0e;
+            color: #e8f0f0;
+            font-family: 'Futura', sans-serif;
+            cursor: pointer;
+        }
+
         .snakedle-panel {
             background: rgba(12, 32, 48, 0.72);
             border: 1px solid rgba(125, 223, 223, 0.25);
@@ -318,7 +330,7 @@
     <header>
         <a href="/games/snakedle/" class="back-button">← Return to Snakedle</a>
         <h1>🧩 Snakedle</h1>
-        <h2>Random snake-routing puzzle. Set parameters in the configuration panel to load a reproducible map.</h2>
+        <h2>Play snakedle on any map, refresh the page to generate a random map. Set parameters in the configuration panel to load a reproducible map.</h2>
     </header>
 
     <main id="snakedle-wrapper">
@@ -376,6 +388,7 @@
                         <output id="cfg-wall-count-output" for="cfg-wall-count"></output>
                     </div>
                     <button id="load-random-config">Load map</button>
+                    <button id="solve-map">Solve map</button>
                 </div>
             </div>
         </section>
@@ -737,7 +750,7 @@
                 };
 
                 const optimal = findOptimalMoves(candidate);
-                if (Number.isFinite(optimal) && optimal <= maxMoves) {
+                if (Number.isFinite(optimal.count) && optimal.count <= maxMoves) {
                     return { ...candidate, optimalMoves: optimal };
                 }
             }
@@ -746,7 +759,7 @@
                 walls: new Set(['1,1', '3,1', '1,3', '3,3']),
                 fruits: [{ x: 0, y: 2 }, { x: 2, y: 0 }, { x: 4, y: 2 }, { x: 2, y: 4 }, { x: 2, y: 2 }],
                 snakeStart: [{ x: 0, y: 0 }, { x: 0, y: 1 }],
-                optimalMoves: 14
+                optimalMoves: { count: 14, moves: [] }
             };
         }
 
@@ -759,7 +772,8 @@
             const startState = {
                 body: startBody,
                 mask: 0,
-                steps: 0
+                steps: 0,
+                moves: []
             };
 
             const queue = [startState];
@@ -773,17 +787,18 @@
                     if (!next.valid) {
                         continue;
                     }
+                    const nextMoves = [...state.moves, dirKey];
                     if (next.mask === targetMask) {
-                        return state.steps + 1;
+                        return { count: state.steps + 1, moves: nextMoves };
                     }
                     const encoded = encodeState(next.body, next.mask);
                     if (!visited.has(encoded)) {
                         visited.add(encoded);
-                        queue.push({ body: next.body, mask: next.mask, steps: state.steps + 1 });
+                        queue.push({ body: next.body, mask: next.mask, steps: state.steps + 1, moves: nextMoves });
                     }
                 }
             }
-            return Infinity;
+            return { count: Infinity, moves: [] };
         }
 
         function encodeState(body, mask) {
@@ -1011,7 +1026,7 @@
             const simulation = simulateMoves(queueMoves);
             playbackFrames = simulation.frames;
             fruitProgressEl.textContent = `Fruits: ${simulation.fruitsEaten} / ${fruitCount}`;
-            moveProgressEl.textContent = `Moves: ${queueMoves.length} / ${optimalMoves}`;
+            moveProgressEl.textContent = `Moves: ${queueMoves.length} / ${optimalMoves.count}`;
             drawBoard(playbackFrames[playbackFrames.length - 1]);
             if (autoSubmitTimer) {
                 clearTimeout(autoSubmitTimer);
@@ -1024,7 +1039,7 @@
             if (simulation.state === 'dead') {
                 statusLineEl.textContent = 'Route crashes. Undo or clear and try again.';
             } else if (simulation.state === 'win') {
-                if (simulation.movesUsed === optimalMoves && !isSubmitting) {
+                if (simulation.movesUsed === optimalMoves.count && !isSubmitting) {
                     statusLineEl.textContent = 'Perfect route found! Auto-submitting...';
                     autoSubmitTimer = setTimeout(() => submitRun(true), AUTO_SUBMIT_DELAY_MS);
                     return;
@@ -1135,16 +1150,16 @@
                 statusLineEl.textContent = `You need a valid route that collects all ${fruitCount} fruits before submitting.`;
                 return;
             }
-            if (isAutoSubmit && simulation.movesUsed !== optimalMoves) {
+            if (isAutoSubmit && simulation.movesUsed !== optimalMoves.count) {
                 return;
             }
 
             setButtonsDisabledState(true); // Disable buttons during submission
 
             const usedMoves = simulation.movesUsed;
-            const emoji = performanceEmoji(usedMoves, optimalMoves);
+            const emoji = performanceEmoji(usedMoves, optimalMoves.count);
             const shareUrl = getRandomShareUrl(randomConfig);
-            const shareText = `Snakedle Random (${gridSize}x${gridSize}, seed ${randomConfig.seed}) : ${usedMoves}/${optimalMoves} ${emoji}\n${shareUrl}`;
+            const shareText = `Snakedle Random (${gridSize}x${gridSize}, seed ${randomConfig.seed}) : ${usedMoves}/${optimalMoves.count} ${emoji}\n${shareUrl}`;
             resultsTextEl.textContent = shareText;
             statusLineEl.textContent = 'Submitting... replaying your run.';
             isSubmitting = true;
@@ -1266,6 +1281,26 @@
             if (e.target === resultsModal) {
                 resultsModal.style.display = 'none';
             }
+        });
+
+        document.getElementById('solve-map').addEventListener('click', () => {
+            if (isSubmitting) return;
+
+            // Ensure optimalMoves is calculated
+            if (!optimalMoves || !Array.isArray(optimalMoves.moves)) {
+                console.error('Optimal moves are not available.');
+                return;
+            }
+
+            // Fill the move queue with optimal moves
+            queueMoves.length = 0;
+            optimalMoves.moves.forEach(move => queueMoves.push(move));
+
+            // Submit the solution
+            isSubmitting = true;
+            playSubmissionAnimation(simulateMoves(queueMoves), () => {
+                isSubmitting = false;
+            });
         });
 
         refreshMoveGrid();
