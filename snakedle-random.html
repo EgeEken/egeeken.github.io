@@ -496,6 +496,11 @@
             { key: 'fruitCount', inputId: 'cfg-fruit-count', outputId: 'cfg-fruit-count-output', label: 'Fruit count' },
             { key: 'wallCount', inputId: 'cfg-wall-count', outputId: 'cfg-wall-count-output', label: 'Wall count' }
         ];
+        const SHUFFLE_PARAMETER_LIMITS = {
+            mapSize: { min: 7, max: 10 },
+            fruitCount: { min: 8, max: 13 },
+            wallCount: { min: 10, max: 30 }
+        };
         
         function generateRandomSeed() {
             const min = RANDOM_LIMITS.seed.min;
@@ -505,6 +510,41 @@
 
         function clampValue(value, min, max) {
             return Math.min(max, Math.max(min, value));
+        }
+
+        function isValidParameterSet(mapSize, fruitCount, wallCount) {
+            if (mapSize + fruitCount > 20) {
+                return false;
+            }
+
+            return fruitCount + wallCount <= (mapSize * mapSize) / 2;
+        }
+
+        function getAllConstrainedParameterSets(limits) {
+            const sets = [];
+            for (let mapSize = limits.mapSize.min; mapSize <= limits.mapSize.max; mapSize++) {
+                for (let fruitCount = limits.fruitCount.min; fruitCount <= limits.fruitCount.max; fruitCount++) {
+                    for (let wallCount = limits.wallCount.min; wallCount <= limits.wallCount.max; wallCount++) {
+                        if (!isValidParameterSet(mapSize, fruitCount, wallCount)) {
+                            continue;
+                        }
+
+                        sets.push({ mapSize, fruitCount, wallCount });
+                    }
+                }
+            }
+
+            return sets;
+        }
+
+        function pickConstrainedParameters(seed, limits) {
+            const sets = getAllConstrainedParameterSets(limits);
+            if (sets.length === 0) {
+                throw new Error('No valid parameter sets found for the provided limits.');
+            }
+
+            const rng = mulberry32((seed * 1013904223) >>> 0);
+            return sets[Math.floor(rng() * sets.length)];
         }
 
         function parseIntParam(rawValue, fallback, min, max) {
@@ -1526,9 +1566,10 @@
 
         document.getElementById('full-shuffle').addEventListener('click', () => {
             const randomSeed = Math.floor(Math.random() * 100000);
-            const randomMapSize = Math.floor(Math.random() * (RANDOM_LIMITS.mapSize.max - RANDOM_LIMITS.mapSize.min + 1)) + RANDOM_LIMITS.mapSize.min;
-            const randomFruitCount = Math.floor(Math.random() * (RANDOM_LIMITS.fruitCount.max - RANDOM_LIMITS.fruitCount.min + 1)) + RANDOM_LIMITS.fruitCount.min;
-            const randomWallCount = Math.floor(Math.random() * (RANDOM_LIMITS.wallCount.max - RANDOM_LIMITS.wallCount.min + 1)) + RANDOM_LIMITS.wallCount.min;
+            const shuffledParameters = pickConstrainedParameters(randomSeed, SHUFFLE_PARAMETER_LIMITS);
+            const randomMapSize = shuffledParameters.mapSize;
+            const randomFruitCount = shuffledParameters.fruitCount;
+            const randomWallCount = shuffledParameters.wallCount;
 
             document.getElementById('cfg-seed').value = randomSeed;
             document.getElementById('cfg-seed-output').value = randomSeed;

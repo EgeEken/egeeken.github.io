@@ -352,12 +352,25 @@
     </div>
 
     <script>
-        const GRID_SIZE = 8;
-        const CELL_SIZE = 420 / GRID_SIZE;
-        const FRUIT_COUNT = 12;
-        const WALL_COUNT = 20;
-        const MAX_MOVES = GRID_SIZE * GRID_SIZE;
+        const DAILY_PARAMETER_LIMITS = {
+            mapSize: { min: 7, max: 10 },
+            fruitCount: { min: 8, max: 13 },
+            wallCount: { min: 10, max: 30 }
+        };
+        
+        const SELECTED_DAY_PARAMS = {
+            4: {mapSize: 8, fruitCount: 12, wallCount: 20},
+            7: {mapSize: 8, fruitCount: 12, wallCount: 20},
+        };
+
         const LAUNCH_DAY_UTC = Date.UTC(2026, 2, 19); // March 19, 2026
+        const dayNumber = getDayNumber(new Date());
+        const dailyParameters = pickConstrainedParameters(dayNumber, DAILY_PARAMETER_LIMITS, SELECTED_DAY_PARAMS);
+        const GRID_SIZE = dailyParameters.mapSize;
+        const CELL_SIZE = 420 / GRID_SIZE;
+        const FRUIT_COUNT = dailyParameters.fruitCount;
+        const WALL_COUNT = dailyParameters.wallCount;
+        const MAX_MOVES = GRID_SIZE * GRID_SIZE;
         const MAX_GEN_ATTEMPTS = 10000;
         const MAX_GEN_TIME_MS = 3000;
         const GENERATION_PROGRESS_UPDATE_EVERY = 8;
@@ -394,7 +407,6 @@
         const FRAME_DURATION_MS = 120;
         const AUTO_SUBMIT_DELAY_MS = 120;
 
-        const dayNumber = getDayNumber(new Date());
         dailyLabelEl.textContent = `Snakedle Day ${dayNumber}`;
         document.documentElement.style.setProperty('--snakedle-grid-size', String(GRID_SIZE));
         document.documentElement.style.setProperty(
@@ -462,6 +474,57 @@
             const parisTime = new Date(date.toLocaleString('en-US', { timeZone: 'Europe/Paris' }));
             const todayParis = Date.UTC(parisTime.getFullYear(), parisTime.getMonth(), parisTime.getDate());
             return Math.max(1, Math.floor((todayParis - LAUNCH_DAY_UTC) / 86400000) + 1);
+        }
+
+        function isValidParameterSet(mapSize, fruitCount, wallCount) {
+            if (mapSize < 7 || mapSize > 10) {
+                return false;
+            }
+            if (fruitCount < 8 || fruitCount > 13) {
+                return false;
+            }
+            if (wallCount < 10 || wallCount > 30) {
+                return false;
+            }
+            if (mapSize + fruitCount > 20) {
+                return false;
+            }
+            return fruitCount + wallCount <= (mapSize * mapSize) / 2;
+        }
+
+        function getAllConstrainedParameterSets(limits) {
+            const sets = [];
+            for (let mapSize = limits.mapSize.min; mapSize <= limits.mapSize.max; mapSize++) {
+                for (let fruitCount = limits.fruitCount.min; fruitCount <= limits.fruitCount.max; fruitCount++) {
+                    for (let wallCount = limits.wallCount.min; wallCount <= limits.wallCount.max; wallCount++) {
+                        if (!isValidParameterSet(mapSize, fruitCount, wallCount)) {
+                            continue;
+                        }
+
+                        sets.push({ mapSize, fruitCount, wallCount });
+                    }
+                }
+            }
+
+            return sets;
+        }
+
+        function pickConstrainedParameters(seed, limits) {
+            if (SELECTED_DAY_PARAMS[seed]) {
+                const params = SELECTED_DAY_PARAMS[seed];
+                if (isValidParameterSet(params.mapSize, params.fruitCount, params.wallCount)) {
+                    return params;
+                } else {
+                    console.warn(`Selected parameters for day ${seed} are invalid. Falling back to random selection.`);
+                }
+            }
+            const sets = getAllConstrainedParameterSets(limits);
+            if (sets.length === 0) {
+                throw new Error('No valid parameter sets found for the provided limits.');
+            }
+
+            const rng = mulberry32((seed * 1013904223) >>> 0);
+            return sets[Math.floor(rng() * sets.length)];
         }
 
         function mulberry32(seed) {
