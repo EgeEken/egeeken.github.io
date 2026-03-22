@@ -145,8 +145,49 @@
         }
 
         #snakedle-board-wrap {
+            position: relative;
             display: flex;
             justify-content: center;
+        }
+
+        #generation-overlay {
+            position: absolute;
+            inset: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: rgba(5, 12, 20, 0.62);
+            backdrop-filter: blur(4px);
+            border-radius: 10px;
+            z-index: 20;
+            color: #fff;
+            font-family: 'Futura', sans-serif;
+            letter-spacing: 0.6px;
+            text-align: center;
+            pointer-events: all;
+        }
+
+        .loading-spinner {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.35);
+            border-top-color: #fff;
+            border-right-color: transparent;
+            animation: snakedle-spin 0.9s linear infinite;
+        }
+
+        #generation-progress {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        @keyframes snakedle-spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         #snakedle-canvas {
@@ -384,6 +425,11 @@
 
             <div id="snakedle-board-wrap">
                 <canvas id="snakedle-canvas" width="420" height="420"></canvas>
+                <div id="generation-overlay" aria-live="polite" aria-busy="true">
+                    <div class="loading-spinner" aria-hidden="true"></div>
+                    <div id="generation-message">Generating map...</div>
+                    <div id="generation-progress">Attempts: 0 / 0</div>
+                </div>
             </div>
 
             <div class="snakedle-panel">
@@ -582,13 +628,18 @@
         const statusLineEl = document.getElementById('status-line');
         const resultsModal = document.getElementById('results-modal');
         const resultsTextEl = document.getElementById('results-text');
+        const generationOverlayEl = document.getElementById('generation-overlay');
+        const generationMessageEl = document.getElementById('generation-message');
+        const generationProgressEl = document.getElementById('generation-progress');
 
         const queueMoves = [];
         const moveCells = [];
         const OPPOSITE = { U: 'D', D: 'U', L: 'R', R: 'L' };
         const AUTO_SUBMIT_DELAY_MS = 120;
-        const FRAME_DELAY_MS = 150;
-        const MAX_GEN_ATTEMPTS = 400;
+        const FRAME_DELAY_MS = 120;
+        const MAX_GEN_ATTEMPTS = 10000;
+        const MAX_GEN_TIME_MS = 3000;
+        const GENERATION_PROGRESS_UPDATE_EVERY = 8;
 
         let randomPuzzleId = randomConfig.seed;
         dailyLabelEl.textContent = `Snakedle Random (Seed ${randomPuzzleId})`;
@@ -604,13 +655,51 @@
         }
         setMoveGridCss(gridSize);
 
-        let puzzle = generateDailyPuzzle(randomPuzzleId);
-        let optimalMoves = puzzle.optimalMoves;
+        let puzzle = null;
+        let optimalMoves = { count: Infinity, moves: [] };
 
         let playbackFrames = [];
         let playbackTimer = null;
         let autoSubmitTimer = null;
         let isSubmitting = false;
+        let isGeneratingPuzzle = false;
+
+        function setGenerationOverlay(active, attempt = 0, reason = 'Generating map...') {
+            generationOverlayEl.style.display = active ? 'flex' : 'none';
+            generationMessageEl.textContent = reason;
+            generationProgressEl.textContent = `Attempts: ${attempt} / ${MAX_GEN_ATTEMPTS}`;
+        }
+
+        function setControlsDisabled(disabled) {
+            document.querySelectorAll('[data-dir]').forEach(btn => {
+                btn.disabled = disabled;
+            });
+            document.getElementById('submit-snakedle').disabled = disabled;
+            document.getElementById('load-random-config').disabled = disabled;
+            document.getElementById('shuffle-seed').disabled = disabled;
+            document.getElementById('full-shuffle').disabled = disabled;
+            document.getElementById('solve-map').disabled = disabled;
+            undoButton.disabled = disabled;
+            clearButton.disabled = disabled;
+        }
+
+        function yieldToUi() {
+            return new Promise(resolve => setTimeout(resolve, 0));
+        }
+
+        async function rebuildPuzzleForCurrentConfig() {
+            isGeneratingPuzzle = true;
+            setControlsDisabled(true);
+            setGenerationOverlay(true, 0, 'Generating map...');
+            try {
+                puzzle = await generateDailyPuzzle(randomPuzzleId);
+                optimalMoves = puzzle.optimalMoves;
+            } finally {
+                isGeneratingPuzzle = false;
+                setGenerationOverlay(false, 0, 'Generating map...');
+                setControlsDisabled(false);
+            }
+        }
 
         function rebuildMoveGrid() {
             moveGridEl.innerHTML = '';
@@ -625,7 +714,7 @@
             }
         }
 
-        function applyConfig(nextConfig, skipHashWrite = false) {
+        async function applyConfig(nextConfig, skipHashWrite = false) {
             const nextHash = buildRandomConfigHash(nextConfig);
             if (!skipHashWrite && window.location.hash.slice(1) !== nextHash) {
                 window.location.hash = nextHash;
@@ -653,14 +742,19 @@
             isSubmitting = false;
             queueMoves.length = 0;
             rebuildMoveGrid();
-            puzzle = generateDailyPuzzle(randomPuzzleId);
-            optimalMoves = puzzle.optimalMoves;
+            await rebuildPuzzleForCurrentConfig();
             refreshMoveGrid();
             refreshPlayback();
         }
-        rebuildMoveGrid();
-        setupRandomConfigUi();
-        syncRandomConfigUi(randomConfig);
+
+        async function initializeGame() {
+            rebuildMoveGrid();
+            setupRandomConfigUi();
+            syncRandomConfigUi(randomConfig);
+            await rebuildPuzzleForCurrentConfig();
+            refreshMoveGrid();
+            refreshPlayback();
+        }
 
         function bindSliderOutput(inputId, outputId) {
             const input = document.getElementById(inputId);
@@ -717,10 +811,11 @@
             return arr;
         }
 
-        function generateDailyPuzzle(day) {
+        async function generateDailyPuzzle(day) {
             const baseSeed = day * 2654435761;
             const allCells = [];
             console.time('Puzzle generation for parameters: ', day, gridSize, fruitCount, wallCount);
+            const generationStartMs = performance.now();
             for (let y = 0; y < gridSize; y++) {
                 for (let x = 0; x < gridSize; x++) {
                     allCells.push(cellKey(x, y));
@@ -743,6 +838,15 @@
             
             // Generate walls, these do matter, we want to make sure the puzzle is possible, so we will generate candidates until one is possible
             for (let attempt = 0; attempt < MAX_GEN_ATTEMPTS; attempt++) {
+                const attemptNumber = attempt + 1;
+                if (attempt % GENERATION_PROGRESS_UPDATE_EVERY === 0) {
+                    setGenerationOverlay(true, attemptNumber, 'Generating map...');
+                    await yieldToUi();
+                }
+                if (performance.now() - generationStartMs > MAX_GEN_TIME_MS) {
+                    console.warn(`Generation timeout after ${MAX_GEN_TIME_MS}ms at attempt ${attemptNumber}. Falling back.`);
+                    break;
+                }
                 if (attempt % 10 === 0) {
                     console.log(`Generation attempt ${attempt}/${MAX_GEN_ATTEMPTS}...`);
                 }
@@ -779,6 +883,8 @@
                          { x: 1, y: 4 }, { x: 2, y: 3 }, { x: 3, y: 3 }, { x: 4, y: 4 }], // mouth
                 snakeStart: [{ x: 0, y: 1 }, { x: 0, y: 0 }],
             }
+            setGenerationOverlay(true, MAX_GEN_ATTEMPTS, 'Using fallback map...');
+            await yieldToUi();
             const fallback_optimal = findOptimalMoves(fallback_candidate);
             return {
                 ...fallback_candidate,
@@ -996,6 +1102,10 @@
         }
 
         function simulateMoves(moves) {
+            if (!puzzle) {
+                return { frames: [], state: 'running', movesUsed: 0, fruitsEaten: 0 };
+            }
+
             const fruitIndex = new Map();
             puzzle.fruits.forEach((fruit, i) => fruitIndex.set(cellKey(fruit.x, fruit.y), i));
             const targetMask = (1 << puzzle.fruits.length) - 1;
@@ -1039,6 +1149,14 @@
 
         function refreshMoveGrid() {
             const simulation = simulateMoves(queueMoves);
+            if (!puzzle) {
+                for (let i = 0; i < moveCells.length; i++) {
+                    const cell = moveCells[i];
+                    cell.textContent = '';
+                    cell.classList.remove('filled', 'crash');
+                }
+                return;
+            }
             const crashIndex = simulation.state === 'dead' ? simulation.movesUsed - 1 : -1;
             for (let i = 0; i < moveCells.length; i++) {
                 const move = queueMoves[i];
@@ -1180,6 +1298,15 @@
                 playbackTimer = null;
             }
 
+            if (!puzzle) {
+                statusLineEl.textContent = isGeneratingPuzzle
+                    ? 'Generating map...'
+                    : 'Map unavailable.';
+                fruitProgressEl.textContent = `Fruits: 0 / ${fruitCount}`;
+                moveProgressEl.textContent = 'Moves: 0 / --';
+                return;
+            }
+
             const simulation = simulateMoves(queueMoves);
             playbackFrames = simulation.frames;
             fruitProgressEl.textContent = `Fruits: ${simulation.fruitsEaten} / ${fruitCount}`;
@@ -1249,6 +1376,7 @@
         }
 
         function addMove(dirKey) {
+            if (isGeneratingPuzzle || !puzzle) return;
             if (playbackTimer) return; // Prevent adding moves during playback
 
             const currentSimulation = simulateMoves(queueMoves);
@@ -1302,6 +1430,10 @@
         }
 
         function submitRun(isAuto = false) {
+            if (isGeneratingPuzzle || !puzzle) {
+                statusLineEl.textContent = 'Please wait for map generation to finish.';
+                return;
+            }
             const isAutoSubmit = isAuto === true;
             if (isSubmitting) {
                 return;
@@ -1475,6 +1607,7 @@
         });
 
         document.getElementById('solve-map').addEventListener('click', () => {
+            if (isGeneratingPuzzle || !puzzle) return;
             if (isSubmitting || playbackTimer) return;
 
             // Ensure optimalMoves is calculated
@@ -1519,8 +1652,7 @@
             }, FRAME_DELAY_MS); // Adjust the interval as needed for animation speed
         });
 
-        refreshMoveGrid();
-        refreshPlayback();
+        initializeGame();
     </script>
 </body>
 
