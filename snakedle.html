@@ -289,14 +289,49 @@
                 height: 52px;
             }
         }
+
+        header h1 {
+            margin-top: 0%;
+            transition: margin-top 0.3s ease;
+        }
+
+        @media screen and (max-width: 400px) {
+            header h1 {
+                margin-top: 12%;
+            }
+        }
+
+        .tutorial-button {
+			width: min(360px, 92vw);
+			padding: 12px 16px;
+			border: none;
+			border-radius: 10px;
+			background-color: #7ddfdf;
+			color: #102334;
+			font-family: 'Futura', sans-serif;
+			font-size: 1.05em;
+			font-weight: 700;
+			letter-spacing: 0.6px;
+			cursor: pointer;
+			transition: transform 0.15s, background-color 0.25s;
+			text-decoration: none;
+			text-align: center;
+			box-shadow: 0 0 14px rgba(125, 223, 223, 0.38);
+		}
+
+		.tutorial-button:hover {
+			transform: scale(1.02);
+			background-color: #a7eded;
+		}
     </style>
 </head>
 
 <body>
     <header>
-        <a href="/games/snakedle/" class="back-button">← Return to Snakedle</a>
-        <h1>🧩 Snakedle</h1>
-        <h2>Daily snake-routing puzzle. Plan out the fastest route to get all fruits, then submit your solution.</h2>
+        <a href="/games/snakedle/" class="back-button">← Return to Menu</a>
+        <h1><b>Snakedle</b></h1>
+        <h2><a class="tutorial-button" href="games/snakedle/snakedle-tutorial.html">Tutorial</a></h2>
+        
     </header>
 
     <main id="snakedle-wrapper">

@@ -394,14 +394,14 @@
 
 <body>
     <header>
-        <a href="/games/snakedle/" class="back-button">← Return to Snakedle</a>
-        <h1>🧩 Snakedle</h1>
+        <a href="/games/snakedle/" class="back-button">← Return to Menu</a>
+        <h1>Custom Snakedle</h1>
         <h2>Play snakedle on any map, refresh the page to generate a random map. Set parameters in the configuration panel to load a reproducible map.</h2>
     </header>
 
     <main id="snakedle-wrapper">
         <div class="snakedle-panel">
-            <div class="snakedle-stat" id="daily-label">Snakedle Random</div>
+            <div class="snakedle-stat" id="daily-label">Custom Snakedle</div>
             <div class="snakedle-stat" id="fruit-progress">Fruits: 0 / --</div>
             <div class="snakedle-stat" id="move-progress">Moves: 0 / --</div>
         </div>
@@ -682,7 +682,7 @@
         const GENERATION_PROGRESS_UPDATE_EVERY = 8;
 
         let randomPuzzleId = randomConfig.seed;
-        dailyLabelEl.textContent = `Snakedle Random (Seed ${randomPuzzleId})`;
+        dailyLabelEl.textContent = `Custom Snakedle (Seed ${randomPuzzleId})`;
         function setMoveGridCss(size) {
             document.documentElement.style.setProperty('--snakedle-grid-size', String(size));
             document.documentElement.style.setProperty(
@@ -768,7 +768,7 @@
             wallCount = randomConfig.wallCount;
             maxMoves = gridSize * gridSize;
             randomPuzzleId = randomConfig.seed;
-            dailyLabelEl.textContent = `Snakedle Random (Seed ${randomPuzzleId})`;
+            dailyLabelEl.textContent = `Custom Snakedle (Seed ${randomPuzzleId})`;
             syncRandomConfigUi(randomConfig);
 
             if (playbackTimer) {
@@ -1496,7 +1496,7 @@
             const usedMoves = simulation.movesUsed;
             const emoji = performanceEmoji(usedMoves, optimalMoves.count);
             const shareUrl = getRandomShareUrl(randomConfig);
-            const shareText = `Snakedle Random (${gridSize}x${gridSize}, seed ${randomConfig.seed}) : ${usedMoves}/${optimalMoves.count} ${emoji}\n${shareUrl}`;
+            const shareText = `Custom Snakedle (${gridSize}x${gridSize}: ${usedMoves}/${optimalMoves.count} ${emoji}\n${shareUrl}`;
             resultsTextEl.textContent = shareText;
             statusLineEl.textContent = 'Submitting... replaying your run.';
             isSubmitting = true;
