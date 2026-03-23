@@ -170,7 +170,7 @@
         
         #move-grid {
             display: grid;
-            grid-template-columns: repeat(5, minmax(0, 1fr));
+            grid-template-columns: repeat(7, minmax(0, 1fr));
             gap: clamp(2px, 0.6vw, 5px);
             margin-top: 6px;
             margin-bottom: 10px;
@@ -680,7 +680,7 @@
 		const moveCells = [];
 		const TUTORIAL_MOVES = [];
 
-		for (let i = 0; i < 25; i++) {
+		for (let i = 0; i < 49; i++) {
 			const cell = document.createElement('div');
 			cell.className = 'move-cell';
 			moveGridEl.appendChild(cell);
@@ -695,7 +695,7 @@
 			return moves;
 		}
 
-		const initialMoveCount = 12;
+		const initialMoveCount = 28;
 		const randomMoves = generateRandomMoves(initialMoveCount);
 		TUTORIAL_MOVES.push(...randomMoves);
 
@@ -717,7 +717,7 @@
 
 		document.getElementById('submit-snakedle').addEventListener('click', () => {
 			const moveCount = TUTORIAL_MOVES.length;
-			const shareText = `Snakedle Tutorial Demo: 12/12 🟦\nhttps://egeeken.github.io/games/snakedle/snakedle-tutorial.html`;
+			const shareText = `Snakedle Tutorial Demo: 28/4 🟥\nhttps://egeeken.github.io/games/snakedle/snakedle-tutorial.html`;
 			resultsTextEl.textContent = shareText;
 			resultsModal.style.display = 'flex';
 		});
