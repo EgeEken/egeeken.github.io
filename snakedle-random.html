@@ -1615,9 +1615,15 @@
             if (keyMap[e.key]) {
                 e.preventDefault();
                 addMove(keyMap[e.key]);
-            } else if (e.key === 'Backspace') {
+            } else if (e.key === 'Backspace' || e.key === 'Z' || e.key === 'z') {
                 e.preventDefault();
                 undoMove();
+            } else if (e.key === 'Escape' || e.key === 'C' || e.key === 'c') {
+                e.preventDefault();
+                clearMoves();
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                submitRun();
             }
         });
 
