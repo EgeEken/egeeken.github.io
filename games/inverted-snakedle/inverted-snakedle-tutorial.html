@@ -297,7 +297,8 @@
 	<main id="snakedle-wrapper">
 		<section id="tutorial-stack">
 			<div class="snakedle-panel">
-				<div class="snakedle-stat" id="tutorial-label">Your goal is to collect as many fruits as possible before you run out of moves</div>
+				<div class="snakedle-stat" id="tutorial-label">This time, your goal is to collect as many fruits as possible before you run out of moves</div>
+				<div class="tutorial-detail">Twist is you won't have enough moves to collect all the fruits!</div>
 			</div>
 
 			<div class="snakedle-panel tutorial-board-wrap">
@@ -322,24 +323,6 @@
 						<button class="snakedle-btn alt" type="button">Clear</button>
 					</div>
 				</div>
-			</div>
-
-			<div class="snakedle-panel">
-				<div class="tutorial-highlight">Inverted rule</div>
-				<div class="tutorial-detail">1- Eating fruit makes you grow</div>
-			</div>
-
-			<div class="snakedle-panel tutorial-board-wrap">
-				<canvas class="snakedle-canvas" id="demo-growth" width="420" height="420"></canvas>
-			</div>
-
-			<div class="snakedle-panel">
-				<div class="tutorial-highlight">Inverted rule</div>
-				<div class="tutorial-detail">2- Hitting a wall or your own tail makes you crash</div>
-			</div>
-
-			<div class="snakedle-panel tutorial-board-wrap">
-				<canvas class="snakedle-canvas" id="demo-crash" width="420" height="420"></canvas>
 			</div>
             
 			<div class="snakedle-panel">
@@ -612,13 +595,21 @@
 					const puzzle = normalizePuzzle(segment.puzzle);
 					const simulation = simulateMoves(puzzle, segment.moves);
 					for (let i = 0; i < simulation.frames.length; i++) {
-						drawBoard(ctx, canvas, puzzle, simulation.frames[i]);
+						const frame = simulation.frames[i];
+
+						// Simulate the snake dying on the last frame
+						if (i === simulation.frames.length - 1) {
+							frame.state = 'dead';
+						}
+
+						drawBoard(ctx, canvas, puzzle, frame);
 						const delay = i === simulation.frames.length - 1
 							? (segment.endPauseMs ?? LOOP_PAUSE_MS)
 							: (segment.frameDurationMs ?? FRAME_DURATION_MS);
 						await sleep(delay);
 					}
 				}
+				
 			}
 		}
 
@@ -630,44 +621,8 @@
 					fruits: [{ x: 1, y: 5 }, { x: 3, y: 5 }, { x: 4, y: 3 }, { x: 5, y: 1 }, { x: 0, y: 3}],
 					walls: ['1,3', '2,3', '3,1', '4,1']
 				},
-				moves: ['R', 'R', 'R', 'R', 'U', 'U', 'U', 'R', 'U', 'U', 'L', 'L', 'L', 'L', 'D', 'L', 'D', 'D', 'D'],
-                endPauseMs: FRAME_DURATION_MS
-			}
-		]);
-
-		runSequenceLoop('demo-growth', [
-			{
-				puzzle: {
-					gridSize: 5,
-					snakeStart: [{ x: 1, y: 0 }, { x: 0, y: 0 }],
-					fruits: [{ x: 1, y: 1 }, { x: 3, y: 1 }, { x: 3, y: 3 }, { x: 1, y: 3 }],
-					walls: []
-				},
-				moves: ['D', 'R', 'R', 'D', 'D', 'L', 'L', 'U', 'U', 'L', 'U'],
-				endPauseMs: FRAME_DURATION_MS
-			}
-		]);
-
-		runSequenceLoop('demo-crash', [
-			{
-				puzzle: {
-					gridSize: 6,
-					snakeStart: [{ x: 1, y: 4 }, { x: 1, y: 5 }],
-					fruits: [{ x: 2, y: 4 }, { x: 3, y: 4 }],
-					walls: ['4,4', '4,3', '4,2', '2,2']
-				},
-				moves: ['R', 'R', 'R', 'R'],
-				endPauseMs: 1000
-			},
-			{
-				puzzle: {
-					gridSize: 6,
-					snakeStart: [{ x: 0, y: 1 }, { x: 0, y: 0 }],
-					fruits: [{ x: 1, y: 1 }, { x: 2, y: 1 }, { x: 3, y: 1 }, { x: 4, y: 1 }, { x: 4, y: 2 }],
-					walls: []
-				},
-				moves: ['R', 'R', 'R', 'R', 'D', 'D', 'L', 'U', 'U'],
-				endPauseMs: 1000
+				moves: ['R', 'R', 'R', 'R', 'U', 'U', 'U', 'R', 'U', 'U', 'L', 'L', 'L', 'L', 'D'],
+                endPauseMs: 1000
 			}
 		]);
 
@@ -679,7 +634,7 @@
 		const moveCells = [];
 		const TUTORIAL_MOVES = [];
 
-		for (let i = 0; i < 49; i++) {
+		for (let i = 0; i < 7; i++) {
 			const cell = document.createElement('div');
 			cell.className = 'move-cell';
 			moveGridEl.appendChild(cell);
@@ -694,7 +649,7 @@
 			return moves;
 		}
 
-		const initialMoveCount = 28;
+		const initialMoveCount = 7;
 		const randomMoves = generateRandomMoves(initialMoveCount);
 		TUTORIAL_MOVES.push(...randomMoves);
 
@@ -716,7 +671,7 @@
 
 		document.getElementById('submit-snakedle').addEventListener('click', () => {
 			const moveCount = TUTORIAL_MOVES.length;
-			const shareText = `Inverted Snakedle Tutorial Demo: 2/4 fruits in 7/7 moves 🟨\nhttps://egeeken.github.io/games/inverted-snakedle/inverted-snakedle-tutorial.html`;
+			const shareText = `Inverted Snakedle Tutorial Demo: 2/4 fruits in 7/7 moves 🟩\nhttps://egeeken.github.io/games/inverted-snakedle/inverted-snakedle-tutorial.html`;
 			resultsTextEl.textContent = shareText;
 			resultsModal.style.display = 'flex';
 		});

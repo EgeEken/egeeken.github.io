@@ -271,6 +271,27 @@
             color: #e8f0f0;
         }
 
+        .link-to-inverted {
+            display: flex;
+            margin-top: 14px;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .link-to-inverted button {
+            border: none;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-family: 'Futura', sans-serif;
+            cursor: pointer;
+        }
+
+        #link-inverted {
+            background: rgb(78, 6, 6);
+            color: #fff;
+            font-weight: 700;
+        }
+
         @media (max-width: 1000px) {
             #snakedle-layout {
                 grid-template-columns: 1fr;
@@ -382,6 +403,9 @@
             <div class="results-actions">
                 <button id="copy-share">Copy Share Text</button>
                 <button id="close-results">Close</button>
+            </div>
+            <div class="link-to-inverted">
+                <button id="link-inverted" onclick="window.location.href='inverted-snakedle.html'">Try the new Inverted version!</button>
             </div>
         </div>
     </div>
