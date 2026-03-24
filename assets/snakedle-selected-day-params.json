@@ -1,0 +1,12 @@
+{
+  "snakedle": {
+    "4": { "mapSize": 8, "fruitCount": 12, "wallCount": 20 },
+    "5": { "mapSize": 9, "fruitCount": 10, "wallCount": 30 },
+    "7": { "mapSize": 8, "fruitCount": 12, "wallCount": 20 }
+  },
+  "invertedSnakedle": {
+    "4": { "mapSize": 8, "fruitCount": 12, "wallCount": 20 },
+    "5": { "mapSize": 9, "fruitCount": 10, "wallCount": 30 },
+    "7": { "mapSize": 8, "fruitCount": 12, "wallCount": 20 }
+  }
+}
