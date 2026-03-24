@@ -870,7 +870,7 @@
                 }
 
                 const budgetRng = mulberry32(((baseSeed ^ 0x9e3779b9) * 1013904223) >>> 0);
-                const maxReduction = Math.floor(optimal.count / 3);
+                const maxReduction = Math.floor(optimal.count / 2);
                 const reduction = maxReduction > 0 ? Math.floor(budgetRng() * (maxReduction + 1)) : 0;
                 const allowedMoves = Math.max(0, optimal.count - reduction);
                 const maxCollectable = reduction === 0
@@ -1007,7 +1007,17 @@
                 frames.push({ body: body.map(c => ({ ...c })), mask, state: 'running' });
             }
 
-            return { frames, state: resultState, movesUsed: moves.length, fruitsEaten: countBits(mask) };
+            const outOfMoves = resultState === 'running' && moves.length >= moveLimit;
+            if (outOfMoves && frames.length > 0) {
+                frames[frames.length - 1].state = 'out_of_moves';
+            }
+            return {
+                frames,
+                state: resultState,
+                movesUsed: moves.length,
+                fruitsEaten: countBits(mask),
+                outOfMoves
+            };
         }
 
         function countBits(num) {
@@ -1145,7 +1155,7 @@
                 ctx.fill();
             }
 
-            if (frame.state === 'dead') {
+            if (frame.state === 'dead' || frame.state === 'out_of_moves') {
                 ctx.fillStyle = 'rgba(224, 85, 85, 0.28)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }

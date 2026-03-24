@@ -124,6 +124,18 @@
             cursor: pointer;
         }
 
+        #solve-map {
+            margin-top: 2px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 10px;
+            background: #5a0e0e;
+            color: #e8f0f0;
+            font-family: 'Futura', sans-serif;
+            cursor: pointer;
+        }
+
 
         .snakedle-panel {
             background: rgba(12, 32, 48, 0.72);
@@ -450,6 +462,7 @@
                     <button id="load-random-config">Load map</button>
                     <button id="shuffle-seed">Shuffle seed</button>
                     <button id="full-shuffle">Full shuffle</button>
+                    <button id="solve-map">Solve map</button>
                 </div>
             </div>
         </section>
@@ -667,6 +680,7 @@
         const OPPOSITE = { U: 'D', D: 'U', L: 'R', R: 'L' };
         const AUTO_SUBMIT_DELAY_MS = 120;
         const FRAME_DELAY_MS = 120;
+        let solveMoves = [];
 
         let randomPuzzleId = randomConfig.seed;
         dailyLabelEl.textContent = `Custom Inverted Snakedle (Seed ${randomPuzzleId})`;
@@ -705,6 +719,7 @@
             document.getElementById('load-random-config').disabled = disabled;
             document.getElementById('shuffle-seed').disabled = disabled;
             document.getElementById('full-shuffle').disabled = disabled;
+            document.getElementById('solve-map').disabled = disabled;
             undoButton.disabled = disabled;
             clearButton.disabled = disabled;
         }
@@ -771,6 +786,7 @@
                 optimalMoves = puzzle.optimalMoves || optimalMoves;
                 moveLimit = puzzle.moveLimit || (gridSize * gridSize);
                 maxCollectableFruits = puzzle.maxCollectableFruits ?? fruitCount;
+                solveMoves = Array.isArray(puzzle.solveMoves) ? puzzle.solveMoves.slice() : [];
                 rebuildMoveGrid();
             }
             refreshMoveGrid();
@@ -786,6 +802,7 @@
                 optimalMoves = puzzle.optimalMoves || optimalMoves;
                 moveLimit = puzzle.moveLimit || (gridSize * gridSize);
                 maxCollectableFruits = puzzle.maxCollectableFruits ?? fruitCount;
+                solveMoves = Array.isArray(puzzle.solveMoves) ? puzzle.solveMoves.slice() : [];
                 rebuildMoveGrid();
             }
             refreshMoveGrid();
@@ -1061,6 +1078,114 @@
             return bestFruits;
         }
 
+        function findBestMovesForLimit(candidate, maxMoves) {
+            const totalCells = gridSize * gridSize;
+            const wallBlocked = new Uint8Array(totalCells);
+            for (const wallKey of candidate.walls) {
+                const wall = parseKey(wallKey);
+                wallBlocked[wall.y * gridSize + wall.x] = 1;
+            }
+
+            const fruitAtCell = new Int16Array(totalCells);
+            fruitAtCell.fill(-1);
+            candidate.fruits.forEach((fruit, i) => {
+                fruitAtCell[fruit.y * gridSize + fruit.x] = i;
+            });
+
+            const nextUp = new Int16Array(totalCells);
+            const nextRight = new Int16Array(totalCells);
+            const nextDown = new Int16Array(totalCells);
+            const nextLeft = new Int16Array(totalCells);
+            nextUp.fill(-1);
+            nextRight.fill(-1);
+            nextDown.fill(-1);
+            nextLeft.fill(-1);
+
+            for (let y = 0; y < gridSize; y++) {
+                for (let x = 0; x < gridSize; x++) {
+                    const idx = y * gridSize + x;
+                    if (y > 0) nextUp[idx] = idx - gridSize;
+                    if (x < gridSize - 1) nextRight[idx] = idx + 1;
+                    if (y < gridSize - 1) nextDown[idx] = idx + gridSize;
+                    if (x > 0) nextLeft[idx] = idx - 1;
+                }
+            }
+
+            const nextByDir = [nextUp, nextRight, nextDown, nextLeft];
+            const dirChars = ['U', 'R', 'D', 'L'];
+            const startBody = candidate.snakeStart.map(c => c.y * gridSize + c.x);
+            const startShape = encodeBodyShapePacked(startBody, gridSize);
+            const startKey = `${0}|${startBody[0]}|${startShape}`;
+
+            const states = [{
+                body: startBody,
+                mask: 0,
+                steps: 0,
+                parent: -1,
+                move: ''
+            }];
+            const queue = [0];
+            let queueIndex = 0;
+
+            const bestStepsByState = new Map();
+            bestStepsByState.set(startKey, 0);
+            let bestStateIndex = 0;
+            let bestFruits = 0;
+            let bestSteps = 0;
+
+            while (queueIndex < queue.length) {
+                const stateIndex = queue[queueIndex++];
+                const state = states[stateIndex];
+                const fruits = countBits(state.mask);
+                if (fruits > bestFruits || (fruits === bestFruits && state.steps < bestSteps)) {
+                    bestFruits = fruits;
+                    bestSteps = state.steps;
+                    bestStateIndex = stateIndex;
+                }
+
+                if (state.steps >= maxMoves) {
+                    continue;
+                }
+
+                for (let dirIndex = 0; dirIndex < 4; dirIndex++) {
+                    const next = advanceStatePacked(state.body, state.mask, dirIndex, nextByDir, wallBlocked, fruitAtCell);
+                    if (!next.valid) {
+                        continue;
+                    }
+
+                    const nextSteps = state.steps + 1;
+                    const nextShape = encodeBodyShapePacked(next.body, gridSize);
+                    const nextKey = `${next.mask}|${next.body[0]}|${nextShape}`;
+                    const recordedSteps = bestStepsByState.get(nextKey);
+                    if (recordedSteps !== undefined && recordedSteps <= nextSteps) {
+                        continue;
+                    }
+
+                    bestStepsByState.set(nextKey, nextSteps);
+                    states.push({
+                        body: next.body,
+                        mask: next.mask,
+                        steps: nextSteps,
+                        parent: stateIndex,
+                        move: dirChars[dirIndex]
+                    });
+                    queue.push(states.length - 1);
+                }
+            }
+
+            const reversed = [];
+            let cursor = bestStateIndex;
+            while (cursor >= 0) {
+                const state = states[cursor];
+                if (state.move) {
+                    reversed.push(state.move);
+                }
+                cursor = state.parent;
+            }
+            reversed.reverse();
+            return { fruits: bestFruits, moves: reversed };
+        }
+
         async function generateDailyPuzzle(day) {
             const baseSeed = day * 2654435761;
             const allCells = [];
@@ -1108,18 +1233,18 @@
                 }
 
                 const budgetRng = mulberry32(((baseSeed ^ 0x9e3779b9) * 1013904223) >>> 0);
-                const maxReduction = Math.floor(optimal.count / 3);
+                const maxReduction = Math.floor(optimal.count / 2);
                 const reduction = maxReduction > 0 ? Math.floor(budgetRng() * (maxReduction + 1)) : 0;
                 const allowedMoves = Math.max(0, optimal.count - reduction);
-                const maxCollectable = reduction === 0
-                    ? fruitCount
-                    : findMaxCollectableFruits(candidate, allowedMoves);
+                const bestRoute = findBestMovesForLimit(candidate, allowedMoves);
+                const maxCollectable = bestRoute.fruits;
 
                 return {
                     ...candidate,
                     optimalMoves: optimal,
                     moveLimit: allowedMoves,
-                    maxCollectableFruits: maxCollectable
+                    maxCollectableFruits: maxCollectable,
+                    solveMoves: bestRoute.moves
                 };
             }
 
@@ -1130,13 +1255,15 @@
             };
             const fallbackOptimal = findOptimalMoves(fallback);
             const fallbackLimit = Number.isFinite(fallbackOptimal.count) ? fallbackOptimal.count : gridSize * gridSize;
-            const fallbackCollectable = Number.isFinite(fallbackOptimal.count) ? fruitCount : findMaxCollectableFruits(fallback, fallbackLimit);
+            const fallbackBestRoute = findBestMovesForLimit(fallback, fallbackLimit);
+            const fallbackCollectable = fallbackBestRoute.fruits;
             await yieldToUi();
             return {
                 ...fallback,
                 optimalMoves: fallbackOptimal,
                 moveLimit: fallbackLimit,
-                maxCollectableFruits: fallbackCollectable
+                maxCollectableFruits: fallbackCollectable,
+                solveMoves: fallbackBestRoute.moves
             };
         }
 
@@ -1247,7 +1374,17 @@
                 frames.push({ body: body.map(c => ({ ...c })), mask, state: 'running' });
             }
 
-            return { frames, state: resultState, movesUsed: moves.length, fruitsEaten: countBits(mask) };
+            const outOfMoves = resultState === 'running' && moves.length >= moveLimit;
+            if (outOfMoves && frames.length > 0) {
+                frames[frames.length - 1].state = 'out_of_moves';
+            }
+            return {
+                frames,
+                state: resultState,
+                movesUsed: moves.length,
+                fruitsEaten: countBits(mask),
+                outOfMoves
+            };
         }
 
         function countBits(num) {
@@ -1385,7 +1522,7 @@
                 ctx.fill();
             }
 
-            if (frame.state === 'dead') {
+            if (frame.state === 'dead' || frame.state === 'out_of_moves') {
                 ctx.fillStyle = 'rgba(224, 85, 85, 0.28)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
@@ -1758,6 +1895,43 @@
             if (e.target === resultsModal) {
                 resultsModal.style.display = 'none';
             }
+        });
+
+        document.getElementById('solve-map').addEventListener('click', () => {
+            if (isGeneratingPuzzle || !puzzle) return;
+            if (isSubmitting || playbackTimer) return;
+            if (!Array.isArray(solveMoves)) return;
+
+            queueMoves.length = 0;
+            statusLineEl.textContent = 'Queueing optimal moves...';
+
+            isSubmitting = true;
+            let moveIndex = 0;
+            playbackFrames = simulateMoves([]).frames;
+            playbackTimer = setInterval(() => {
+                if (moveIndex < solveMoves.length) {
+                    queueMoves.push(solveMoves[moveIndex]);
+                    refreshMoveGrid();
+
+                    const currentCell = moveCells[moveIndex];
+                    if (currentCell) {
+                        currentCell.style.backgroundColor = 'green';
+                    }
+
+                    statusLineEl.textContent = `Queued move ${moveIndex + 1}: ${ARROW[solveMoves[moveIndex]]}`;
+
+                    const simulation = simulateMoves(queueMoves);
+                    playbackFrames = simulation.frames;
+                    drawBoard(playbackFrames[playbackFrames.length - 1]);
+
+                    moveIndex++;
+                } else {
+                    clearInterval(playbackTimer);
+                    playbackTimer = null;
+                    isSubmitting = false;
+                    statusLineEl.textContent = 'Optimal route queued. Ready to submit.';
+                }
+            }, FRAME_DELAY_MS);
         });
 
 
