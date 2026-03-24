@@ -323,12 +323,37 @@
 			transform: scale(1.02);
 			background-color: #a7eded;
 		}
+
+        .calendar-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            background: #273a4d;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35em;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, background-color 0.25s;
+            z-index: 1000;
+        }
+
+        .calendar-button:hover {
+            background-color: #126364;
+            transform: scale(1.06);
+        }
     </style>
 </head>
 
 <body>
     <header>
         <a href="/games/inverted-snakedle/" class="back-button">← Return to Menu</a>
+        <a href="inverted-snakedle-calendar.html" class="calendar-button" aria-label="Open calendar">📅</a>
         <h1><b>Inverted Snakedle</b></h1>
         <h2><a class="tutorial-button" href="games/inverted-snakedle/inverted-snakedle-tutorial.html">Tutorial</a></h2>
         
@@ -392,16 +417,13 @@
             fruitCount: { min: 8, max: 13 },
             wallCount: { min: 10, max: 30 }
         };
-        
-        const SELECTED_DAY_PARAMS = {
-            4: { mapSize: 8, fruitCount: 12, wallCount: 20 },
-            5: { mapSize: 9, fruitCount: 10, wallCount: 30 },
-            7: { mapSize: 8, fruitCount: 12, wallCount: 20 }
-        };
-
+        const SELECTED_DAY_PARAMS_URL = 'assets/snakedle-selected-day-params.json';
         const LAUNCH_DAY_UTC = Date.UTC(2026, 2, 19); // March 19, 2026
-        const dayNumber = getDayNumber(new Date());
-        const dailyParameters = pickConstrainedParameters(dayNumber, DAILY_PARAMETER_LIMITS, SELECTED_DAY_PARAMS);
+        const todayDayNumber = getDayNumber(new Date());
+        const daySelection = resolveRequestedDay(window.location.hash, todayDayNumber);
+        const dayNumber = daySelection.dayNumber;
+        const isAdminPreviewDay = daySelection.isAdminPreviewDay;
+        const dailyParameters = pickConstrainedParameters(dayNumber, DAILY_PARAMETER_LIMITS);
         const GRID_SIZE = dailyParameters.mapSize;
         const CELL_SIZE = 420 / GRID_SIZE;
         const FRUIT_COUNT = dailyParameters.fruitCount;
@@ -458,6 +480,11 @@
         let autoSubmitTimer = null;
         let isSubmitting = false;
         let isGeneratingPuzzle = false;
+        let selectedDayParamsByDay = {
+            4: { mapSize: 8, fruitCount: 12, wallCount: 20 },
+            5: { mapSize: 9, fruitCount: 10, wallCount: 30 },
+            7: { mapSize: 8, fruitCount: 12, wallCount: 20 }
+        };
         let moveLimit = GRID_SIZE * GRID_SIZE;
         let maxCollectableFruits = FRUIT_COUNT;
         let optimalMoves = { count: Infinity, moves: [] };
@@ -482,6 +509,7 @@
         }
 
         async function initializeGame() {
+            await loadSelectedDayParams();
             isGeneratingPuzzle = true;
             setControlsDisabled(true);
             setGenerationOverlay(true, 0, 'Generating daily map...');
@@ -521,6 +549,74 @@
             return Math.max(1, Math.floor((todayParis - LAUNCH_DAY_UTC) / 86400000) + 1);
         }
 
+        function parseDayFromHash(hash) {
+            const token = hash.replace(/^#/, '').trim();
+            if (!token) {
+                return null;
+            }
+            const plainMatch = token.match(/^(\d+)$/);
+            if (plainMatch) {
+                return { dayNumber: Number(plainMatch[1]), isAdmin: false };
+            }
+            const adminMatch = token.match(/^admin-(\d+)$/i);
+            if (adminMatch) {
+                return { dayNumber: Number(adminMatch[1]), isAdmin: true };
+            }
+            return null;
+        }
+
+        function resolveRequestedDay(hash, today) {
+            const parsed = parseDayFromHash(hash);
+            if (!parsed || !Number.isInteger(parsed.dayNumber) || parsed.dayNumber < 1) {
+                return { dayNumber: today, isAdminPreviewDay: false };
+            }
+            if (parsed.dayNumber > today && !parsed.isAdmin) {
+                return { dayNumber: today, isAdminPreviewDay: false };
+            }
+            return {
+                dayNumber: parsed.dayNumber,
+                isAdminPreviewDay: parsed.isAdmin && parsed.dayNumber > today
+            };
+        }
+
+        function normalizeSelectedDayParams(raw) {
+            const source = raw && typeof raw === 'object' && raw.invertedSnakedle && typeof raw.invertedSnakedle === 'object'
+                ? raw.invertedSnakedle
+                : raw;
+            const normalized = {};
+            if (!source || typeof source !== 'object') {
+                return normalized;
+            }
+            Object.entries(source).forEach(([dayKey, params]) => {
+                const day = Number(dayKey);
+                if (!Number.isInteger(day) || day < 1 || !params || typeof params !== 'object') {
+                    return;
+                }
+                const mapSize = Number(params.mapSize);
+                const fruitCount = Number(params.fruitCount);
+                const wallCount = Number(params.wallCount);
+                if (!Number.isFinite(mapSize) || !Number.isFinite(fruitCount) || !Number.isFinite(wallCount)) {
+                    return;
+                }
+                normalized[day] = { mapSize, fruitCount, wallCount };
+            });
+            return normalized;
+        }
+
+        async function loadSelectedDayParams() {
+            try {
+                const response = await fetch(SELECTED_DAY_PARAMS_URL, { cache: 'no-store' });
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch selected day params: ${response.status}`);
+                }
+                const data = await response.json();
+                selectedDayParamsByDay = normalizeSelectedDayParams(data);
+            } catch (error) {
+                console.warn('Could not load selected day params file. Falling back to generated params.', error);
+                selectedDayParamsByDay = {};
+            }
+        }
+
         function isValidParameterSet(mapSize, fruitCount, wallCount) {
             if (mapSize < 7 || mapSize > 10) {
                 return false;
@@ -555,8 +651,8 @@
         }
 
         function pickConstrainedParameters(seed, limits) {
-            if (SELECTED_DAY_PARAMS[seed]) {
-                const params = SELECTED_DAY_PARAMS[seed];
+            if (selectedDayParamsByDay[seed]) {
+                const params = selectedDayParamsByDay[seed];
                 if (isValidParameterSet(params.mapSize, params.fruitCount, params.wallCount)) {
                     return params;
                 } else {
@@ -1364,7 +1460,11 @@
             const usedMoves = simulation.movesUsed;
             const fruitsEaten = simulation.fruitsEaten;
             const emoji = performanceEmoji(fruitsEaten, maxCollectableFruits);
-            const shareText = `Inverted Snakedle Day ${dayNumber}: ${fruitsEaten}/${FRUIT_COUNT} fruits in ${usedMoves}/${moveLimit} moves ${emoji}\nhttps://egeeken.github.io/inverted-snakedle`;
+            const shareHash = isAdminPreviewDay ? `#admin-${dayNumber}` : `#${dayNumber}`;
+            const shareUrl = dayNumber === todayDayNumber && !isAdminPreviewDay
+                ? 'https://egeeken.github.io/inverted-snakedle'
+                : `https://egeeken.github.io/inverted-snakedle${shareHash}`;
+            const shareText = `Inverted Snakedle Day ${dayNumber}: ${fruitsEaten}/${FRUIT_COUNT} fruits in ${usedMoves}/${moveLimit} moves ${emoji}\n${shareUrl}`;
             resultsTextEl.textContent = shareText;
             statusLineEl.textContent = 'Submitting... replaying your run.';
             isSubmitting = true;
@@ -1459,7 +1559,12 @@
             }
         });
 
-        initializeGame();
+        initializeGame().catch(err => {
+            console.error('Failed to initialize Inverted Snakedle:', err);
+            setGenerationOverlay(false, 0, 'Generating daily map...');
+            setControlsDisabled(true);
+            statusLineEl.textContent = 'Could not initialize the daily puzzle.';
+        });
     </script>
 </body>
 
