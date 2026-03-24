@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Ege - Fruitle</title>
+    <style>
+        :root {
+            --snakedle-grid-size: 6;
+        }
+
+        #snakedle-wrapper {
+            width: min(980px, 96%);
+            margin: 20px auto 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            color: #eee;
+        }
+
+        .snakedle-stat {
+            font-family: 'Futura', sans-serif;
+            letter-spacing: 1px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .snakedle-stat#daily-label {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #7ddfdf;
+        }
+
+        #snakedle-layout {
+            width: 100%;
+            display: grid;
+            grid-template-columns: minmax(235px, 235px) minmax(280px, 1fr) minmax(235px, 235px);
+            gap: 150px;
+            align-items: center;
+        }
+
+        .snakedle-panel {
+            background: rgba(12, 32, 48, 0.72);
+            border: 1px solid rgba(125, 223, 223, 0.25);
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 0 15px rgba(12, 32, 48, 0.35);
+        }
+
+        #snakedle-board-wrap {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        #generation-overlay {
+            position: absolute;
+            inset: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: rgba(5, 12, 20, 0.62);
+            backdrop-filter: blur(4px);
+            border-radius: 10px;
+            z-index: 20;
+            color: #fff;
+            font-family: 'Futura', sans-serif;
+            letter-spacing: 0.6px;
+            text-align: center;
+            pointer-events: all;
+        }
+
+        .loading-spinner {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.35);
+            border-top-color: #fff;
+            border-right-color: transparent;
+            animation: snakedle-spin 0.9s linear infinite;
+        }
+
+        #generation-progress {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        @keyframes snakedle-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #snakedle-canvas {
+            width: min(94vw, 672px);
+            height: auto;
+            border: 3px solid #126364;
+            border-radius: 10px;
+            box-shadow: 0 0 25px rgba(18, 99, 100, 0.5);
+            background-color: #0c2030;
+        }
+
+        #dpad-snakedle {
+            display: grid;
+            gap: 8px;
+            justify-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .dpad-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .snakedle-btn {
+            width: clamp(46px, 7vw, 58px);
+            height: clamp(46px, 7vw, 58px);
+            border: none;
+            border-radius: 8px;
+            background-color: #126364;
+            color: #eee;
+            font-size: clamp(1.05em, 1.8vw, 1.25em);
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+            box-shadow: 0 0 8px rgba(18, 99, 100, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            font-weight: 700;
+        }
+
+        .snakedle-btn:active {
+            transform: scale(0.95);
+            background-color: #0d4f50;
+        }
+
+        .snakedle-btn.alt {
+            width: calc(50% - 6px);
+            font-size: 0.9em;
+            height: 42px;
+            margin-top: 6px;
+        }
+
+        .snakedle-btn.pending {
+            background-color: #1e8f90;
+            box-shadow: 0 0 12px rgba(125, 223, 223, 0.65);
+        }
+
+        #send-move {
+            width: clamp(46px, 7vw, 58px);
+            height: clamp(46px, 7vw, 58px);
+            border: none;
+            border-radius: 8px;
+            background: #43b24f;
+            color: #f2fff2;
+            font-size: 1.35em;
+            font-weight: 800;
+            box-shadow: 0 0 10px rgba(67, 178, 79, 0.45);
+            cursor: pointer;
+        }
+
+        #send-move:active {
+            transform: scale(0.95);
+        }
+
+        #move-grid {
+            display: grid;
+            grid-template-columns: repeat(var(--snakedle-grid-size), minmax(0, 1fr));
+            gap: clamp(2px, 0.6vw, 5px);
+            margin-top: 6px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .move-cell {
+            aspect-ratio: 1;
+            min-width: 0;
+            border-radius: 6px;
+            border: 1px solid rgba(187, 221, 221, 0.35);
+            background: rgba(12, 32, 48, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #cbe4e4;
+            font-size: var(--snakedle-move-icon-size, 1.1em);
+            font-family: 'Futura', sans-serif;
+            overflow: hidden;
+            line-height: 1;
+            font-weight: 700;
+        }
+
+        .move-cell.filled {
+            background: rgba(18, 99, 100, 0.85);
+            color: #fff;
+            border-color: rgba(125, 223, 223, 0.8);
+        }
+
+        .move-cell.crash {
+            background: rgba(224, 85, 85, 0.78);
+            border-color: rgba(255, 170, 170, 0.9);
+            color: #fff;
+        }
+
+        #submit-snakedle {
+            width: 100%;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 8px;
+            background-color: #7ddfdf;
+            color: #102334;
+            font-family: 'Futura', sans-serif;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 700;
+            transition: transform 0.15s, background-color 0.25s;
+        }
+
+        #submit-snakedle:hover {
+            transform: scale(1.02);
+            background-color: #a7eded;
+        }
+
+        #status-line {
+            margin-top: 8px;
+            color: #bbd;
+            min-height: 42px;
+            text-align: center;
+            font-size: 0.92em;
+        }
+
+        #results-modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(8, 15, 24, 0.78);
+            z-index: 1200;
+        }
+
+        #results-card {
+            width: min(92vw, 460px);
+            background: #102334;
+            border: 2px solid #126364;
+            border-radius: 12px;
+            padding: 18px;
+            color: #eee;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(8, 15, 24, 0.7);
+        }
+
+        #results-text {
+            white-space: pre-wrap;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0 14px;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .results-actions button {
+            border: none;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-family: 'Futura', sans-serif;
+            cursor: pointer;
+        }
+
+        #copy-share {
+            background: #7ddfdf;
+            color: #102334;
+            font-weight: 700;
+        }
+
+        #close-results {
+            background: #2e4b61;
+            color: #e8f0f0;
+        }
+
+        @media (max-width: 1000px) {
+            #snakedle-layout {
+                grid-template-columns: 1fr;
+                row-gap: 50px;
+                column-gap: 150px;
+            }
+
+            #snakedle-board-wrap {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .snakedle-btn {
+                width: 52px;
+                height: 52px;
+            }
+
+            #send-move {
+                width: 52px;
+                height: 52px;
+            }
+        }
+
+        header h1 {
+            margin-top: 3% !important;
+            transition: margin-top 0.3s ease;
+        }
+
+        @media screen and (max-width: 700px) {
+            header h1 {
+                margin-top: 16% !important;
+            }
+        }
+
+        .tutorial-button {
+			width: min(360px, 92vw);
+			padding: 12px 16px;
+			border: none;
+			border-radius: 10px;
+			background-color: #7ddfdf;
+			color: #102334;
+			font-family: 'Futura', sans-serif;
+			font-size: 1.05em;
+			font-weight: 700;
+			letter-spacing: 0.6px;
+			cursor: pointer;
+			transition: transform 0.15s, background-color 0.25s;
+			text-decoration: none;
+			text-align: center;
+			box-shadow: 0 0 14px rgba(125, 223, 223, 0.38);
+		}
+
+		.tutorial-button:hover {
+			transform: scale(1.02);
+			background-color: #a7eded;
+		}
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="/games/fruitle/" class="back-button">← Return to Menu</a>
+        <h1><b>Fruitle</b></h1>
+        <h2><a class="tutorial-button" href="games/fruitle/fruitle-tutorial.html">Tutorial</a></h2>
+        
+    </header>
+
+    <main id="snakedle-wrapper">
+        <div class="snakedle-panel">
+            <div class="snakedle-stat" id="daily-label">Fruitle Day --</div>
+            <div class="snakedle-stat" id="fruit-progress">Remaining Fruits: --/--</div>
+            <div class="snakedle-stat" id="move-progress">Survived Turns: 0</div>
+        </div>
+
+        <section id="snakedle-layout">
+            <div class="snakedle-panel">
+                <div id="dpad-snakedle">
+                    <button class="snakedle-btn" data-dir="U" aria-label="Up">▴</button>
+                    <div class="dpad-row">
+                        <button class="snakedle-btn" data-dir="L" aria-label="Left">◂</button>
+                        <button class="snakedle-btn" data-dir="D" aria-label="Down">▾</button>
+                        <button class="snakedle-btn" data-dir="R" aria-label="Right">▸</button>
+                        <button id="send-move" aria-label="Send move">✓</button>
+                    </div>
+                    <div class="dpad-row" style="width:100%;">
+                        <button class="snakedle-btn alt" id="undo-move">Undo</button>
+                        <button class="snakedle-btn alt" id="clear-moves">Clear</button>
+                    </div>
+                </div>
+                <div id="status-line">Click a fruit, choose a direction, then press ✓ to send your turn.</div>
+            </div>
+
+            <div id="snakedle-board-wrap">
+                <canvas id="snakedle-canvas" width="420" height="420"></canvas>
+                <div id="generation-overlay" aria-live="polite" aria-busy="true">
+                    <div class="loading-spinner" aria-hidden="true"></div>
+                    <div id="generation-message">Generating map...</div>
+                    <div id="generation-progress">Attempts: 0 / 0</div>
+                </div>
+            </div>
+
+            <div class="snakedle-panel">
+                <div style="text-align:center; margin-bottom:4px;">Turn Queue</div>
+                <div id="move-grid"></div>
+                <button id="submit-snakedle">Share run</button>
+            </div>
+        </section>
+    </main>
+
+    <div id="results-modal" role="dialog" aria-modal="true">
+        <div id="results-card">
+            <h3>Result</h3>
+            <div id="results-text"></div>
+            <div class="results-actions">
+                <button id="copy-share">Copy Share Text</button>
+                <button id="close-results">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/fruitle.js"></script>
+</body>
+
+</html>
