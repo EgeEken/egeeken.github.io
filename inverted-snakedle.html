@@ -390,14 +390,13 @@
         const DAILY_PARAMETER_LIMITS = {
             mapSize: { min: 7, max: 10 },
             fruitCount: { min: 8, max: 13 },
-            wallCount: { min: 10, max: 30 },
-            moveCount: { min: 12, max: 64 }
+            wallCount: { min: 10, max: 30 }
         };
         
         const SELECTED_DAY_PARAMS = {
-            4: { mapSize: 8, fruitCount: 12, wallCount: 20, moveCount: 26 },
-            5: { mapSize: 9, fruitCount: 10, wallCount: 30, moveCount: 30 },
-            7: { mapSize: 8, fruitCount: 12, wallCount: 20, moveCount: 28 }
+            4: { mapSize: 8, fruitCount: 12, wallCount: 20 },
+            5: { mapSize: 9, fruitCount: 10, wallCount: 30 },
+            7: { mapSize: 8, fruitCount: 12, wallCount: 20 }
         };
 
         const LAUNCH_DAY_UTC = Date.UTC(2026, 2, 19); // March 19, 2026
@@ -407,7 +406,9 @@
         const CELL_SIZE = 420 / GRID_SIZE;
         const FRUIT_COUNT = dailyParameters.fruitCount;
         const WALL_COUNT = dailyParameters.wallCount;
-        const MOVE_LIMIT = dailyParameters.moveCount;
+        const MAX_GEN_ATTEMPTS = 10000;
+        const MAX_GEN_TIME_MS = 3000;
+        const GENERATION_PROGRESS_UPDATE_EVERY = 8;
 
         const DIRS = {
             U: { x: 0, y: -1 },
@@ -457,6 +458,9 @@
         let autoSubmitTimer = null;
         let isSubmitting = false;
         let isGeneratingPuzzle = false;
+        let moveLimit = GRID_SIZE * GRID_SIZE;
+        let maxCollectableFruits = FRUIT_COUNT;
+        let optimalMoves = { count: Infinity, moves: [] };
 
         function setGenerationOverlay(active, attempt = 0, reason = 'Generating map...') {
             generationOverlayEl.style.display = active ? 'flex' : 'none';
@@ -483,6 +487,12 @@
             setGenerationOverlay(true, 0, 'Generating daily map...');
             try {
                 puzzle = await generateDailyPuzzle(dayNumber);
+                if (puzzle.optimalMoves && Number.isFinite(puzzle.optimalMoves.count)) {
+                    optimalMoves = puzzle.optimalMoves;
+                }
+                moveLimit = puzzle.moveLimit || GRID_SIZE * GRID_SIZE;
+                maxCollectableFruits = puzzle.maxCollectableFruits ?? FRUIT_COUNT;
+                rebuildMoveGrid(moveLimit);
             } finally {
                 isGeneratingPuzzle = false;
                 setGenerationOverlay(false, 0, 'Generating daily map...');
@@ -493,11 +503,15 @@
             refreshPlayback();
         }
 
-        for (let i = 0; i < MOVE_LIMIT; i++) {
-            const cell = document.createElement('div');
-            cell.className = 'move-cell';
-            moveGridEl.appendChild(cell);
-            moveCells.push(cell);
+        function rebuildMoveGrid(limit) {
+            moveGridEl.innerHTML = '';
+            moveCells.length = 0;
+            for (let i = 0; i < limit; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'move-cell';
+                moveGridEl.appendChild(cell);
+                moveCells.push(cell);
+            }
         }
 
         function getDayNumber(date) {
@@ -507,7 +521,7 @@
             return Math.max(1, Math.floor((todayParis - LAUNCH_DAY_UTC) / 86400000) + 1);
         }
 
-        function isValidParameterSet(mapSize, fruitCount, wallCount, moveCount = 32) {
+        function isValidParameterSet(mapSize, fruitCount, wallCount) {
             if (mapSize < 7 || mapSize > 10) {
                 return false;
             }
@@ -515,9 +529,6 @@
                 return false;
             }
             if (wallCount < 10 || wallCount > 30) {
-                return false;
-            }
-            if (moveCount < 12 || moveCount > 64) {
                 return false;
             }
             if (mapSize + fruitCount > 20) {
@@ -535,10 +546,7 @@
                             continue;
                         }
 
-                        const moveMin = Math.max(12, mapSize * 2);
-                        const moveMax = Math.min(64, mapSize * mapSize);
-                        const moveCount = Math.floor((moveMin + moveMax) / 2);
-                        sets.push({ mapSize, fruitCount, wallCount, moveCount });
+                        sets.push({ mapSize, fruitCount, wallCount });
                     }
                 }
             }
@@ -549,7 +557,7 @@
         function pickConstrainedParameters(seed, limits) {
             if (SELECTED_DAY_PARAMS[seed]) {
                 const params = SELECTED_DAY_PARAMS[seed];
-                if (isValidParameterSet(params.mapSize, params.fruitCount, params.wallCount, params.moveCount)) {
+                if (isValidParameterSet(params.mapSize, params.fruitCount, params.wallCount)) {
                     return params;
                 } else {
                     console.warn(`Selected parameters for day ${seed} are invalid. Falling back to random selection.`);
@@ -600,9 +608,224 @@
             return arr;
         }
 
+        function encodeBodyShapePacked(body, width) {
+            const length = body.length;
+            if (length <= 1) {
+                return (1 << 28) >>> 0;
+            }
+
+            let packed = 0;
+            for (let i = 0; i < length - 1; i++) {
+                const current = body[i];
+                const next = body[i + 1];
+                const diff = next - current;
+
+                let code = 0;
+                if (diff === -width) code = 0;
+                else if (diff === 1) code = 1;
+                else if (diff === width) code = 2;
+                else if (diff === -1) code = 3;
+
+                packed |= (code << (i * 2));
+            }
+
+            return (((length & 0x0f) << 28) | packed) >>> 0;
+        }
+
+        function reconstructMoves(states, stateIndex, lastMove) {
+            const reversed = [lastMove];
+            let cursor = stateIndex;
+            while (cursor >= 0) {
+                const state = states[cursor];
+                if (state.move) {
+                    reversed.push(state.move);
+                }
+                cursor = state.parent;
+            }
+            reversed.reverse();
+            return reversed;
+        }
+
+        function findOptimalMoves(candidate) {
+            const totalCells = GRID_SIZE * GRID_SIZE;
+            const wallBlocked = new Uint8Array(totalCells);
+            for (const wallKey of candidate.walls) {
+                const wall = parseKey(wallKey);
+                wallBlocked[wall.y * GRID_SIZE + wall.x] = 1;
+            }
+
+            const fruitAtCell = new Int16Array(totalCells);
+            fruitAtCell.fill(-1);
+            candidate.fruits.forEach((fruit, i) => {
+                fruitAtCell[fruit.y * GRID_SIZE + fruit.x] = i;
+            });
+
+            const targetMask = (1 << candidate.fruits.length) - 1;
+
+            const nextUp = new Int16Array(totalCells);
+            const nextRight = new Int16Array(totalCells);
+            const nextDown = new Int16Array(totalCells);
+            const nextLeft = new Int16Array(totalCells);
+            nextUp.fill(-1);
+            nextRight.fill(-1);
+            nextDown.fill(-1);
+            nextLeft.fill(-1);
+
+            for (let y = 0; y < GRID_SIZE; y++) {
+                for (let x = 0; x < GRID_SIZE; x++) {
+                    const idx = y * GRID_SIZE + x;
+                    if (y > 0) nextUp[idx] = idx - GRID_SIZE;
+                    if (x < GRID_SIZE - 1) nextRight[idx] = idx + 1;
+                    if (y < GRID_SIZE - 1) nextDown[idx] = idx + GRID_SIZE;
+                    if (x > 0) nextLeft[idx] = idx - 1;
+                }
+            }
+
+            const nextByDir = [nextUp, nextRight, nextDown, nextLeft];
+            const dirChars = ['U', 'R', 'D', 'L'];
+
+            const startBody = candidate.snakeStart.map(c => c.y * GRID_SIZE + c.x);
+            const states = [{
+                body: startBody,
+                mask: 0,
+                steps: 0,
+                parent: -1,
+                move: ''
+            }];
+            const queue = [0];
+            let queueIndex = 0;
+
+            const visitedByHeadMask = new Map();
+            const startHeadMaskKey = (startBody[0] | (0 << 8)) >>> 0;
+            visitedByHeadMask.set(startHeadMaskKey, new Set([encodeBodyShapePacked(startBody, GRID_SIZE)]));
+
+            while (queueIndex < queue.length) {
+                const stateIndex = queue[queueIndex++];
+                const state = states[stateIndex];
+
+                for (let dirIndex = 0; dirIndex < 4; dirIndex++) {
+                    const next = advanceStatePacked(state.body, state.mask, dirIndex, nextByDir, wallBlocked, fruitAtCell);
+                    if (!next.valid) {
+                        continue;
+                    }
+
+                    if (next.mask === targetMask) {
+                        return {
+                            count: state.steps + 1,
+                            moves: reconstructMoves(states, stateIndex, dirChars[dirIndex])
+                        };
+                    }
+
+                    const headMaskKey = (next.body[0] | (next.mask << 8)) >>> 0;
+                    const bodyShapeKey = encodeBodyShapePacked(next.body, GRID_SIZE);
+                    const seenShapes = visitedByHeadMask.get(headMaskKey);
+                    if (!seenShapes) {
+                        visitedByHeadMask.set(headMaskKey, new Set([bodyShapeKey]));
+                    } else if (seenShapes.has(bodyShapeKey)) {
+                        continue;
+                    } else {
+                        seenShapes.add(bodyShapeKey);
+                    }
+
+                    states.push({
+                        body: next.body,
+                        mask: next.mask,
+                        steps: state.steps + 1,
+                        parent: stateIndex,
+                        move: dirChars[dirIndex]
+                    });
+                    queue.push(states.length - 1);
+                }
+            }
+
+            return { count: Infinity, moves: [] };
+        }
+
+        function findMaxCollectableFruits(candidate, maxMoves) {
+            const totalCells = GRID_SIZE * GRID_SIZE;
+            const wallBlocked = new Uint8Array(totalCells);
+            for (const wallKey of candidate.walls) {
+                const wall = parseKey(wallKey);
+                wallBlocked[wall.y * GRID_SIZE + wall.x] = 1;
+            }
+
+            const fruitAtCell = new Int16Array(totalCells);
+            fruitAtCell.fill(-1);
+            candidate.fruits.forEach((fruit, i) => {
+                fruitAtCell[fruit.y * GRID_SIZE + fruit.x] = i;
+            });
+
+            const nextUp = new Int16Array(totalCells);
+            const nextRight = new Int16Array(totalCells);
+            const nextDown = new Int16Array(totalCells);
+            const nextLeft = new Int16Array(totalCells);
+            nextUp.fill(-1);
+            nextRight.fill(-1);
+            nextDown.fill(-1);
+            nextLeft.fill(-1);
+
+            for (let y = 0; y < GRID_SIZE; y++) {
+                for (let x = 0; x < GRID_SIZE; x++) {
+                    const idx = y * GRID_SIZE + x;
+                    if (y > 0) nextUp[idx] = idx - GRID_SIZE;
+                    if (x < GRID_SIZE - 1) nextRight[idx] = idx + 1;
+                    if (y < GRID_SIZE - 1) nextDown[idx] = idx + GRID_SIZE;
+                    if (x > 0) nextLeft[idx] = idx - 1;
+                }
+            }
+
+            const nextByDir = [nextUp, nextRight, nextDown, nextLeft];
+            const startBody = candidate.snakeStart.map(c => c.y * GRID_SIZE + c.x);
+            const startShape = encodeBodyShapePacked(startBody, GRID_SIZE);
+            const startKey = `${0}|${startBody[0]}|${startShape}`;
+
+            const queue = [{
+                body: startBody,
+                mask: 0,
+                steps: 0
+            }];
+            let queueIndex = 0;
+            const bestStepsByState = new Map();
+            bestStepsByState.set(startKey, 0);
+            let bestFruits = 0;
+
+            while (queueIndex < queue.length) {
+                const state = queue[queueIndex++];
+                bestFruits = Math.max(bestFruits, countBits(state.mask));
+                if (state.steps >= maxMoves) {
+                    continue;
+                }
+
+                for (let dirIndex = 0; dirIndex < 4; dirIndex++) {
+                    const next = advanceStatePacked(state.body, state.mask, dirIndex, nextByDir, wallBlocked, fruitAtCell);
+                    if (!next.valid) {
+                        continue;
+                    }
+
+                    const nextSteps = state.steps + 1;
+                    const nextShape = encodeBodyShapePacked(next.body, GRID_SIZE);
+                    const nextKey = `${next.mask}|${next.body[0]}|${nextShape}`;
+                    const recordedSteps = bestStepsByState.get(nextKey);
+                    if (recordedSteps !== undefined && recordedSteps <= nextSteps) {
+                        continue;
+                    }
+
+                    bestStepsByState.set(nextKey, nextSteps);
+                    queue.push({
+                        body: next.body,
+                        mask: next.mask,
+                        steps: nextSteps
+                    });
+                }
+            }
+
+            return bestFruits;
+        }
+
         async function generateDailyPuzzle(day) {
             const baseSeed = day * 2654435761;
             const allCells = [];
+            const generationStartMs = performance.now();
             for (let y = 0; y < GRID_SIZE; y++) {
                 for (let x = 0; x < GRID_SIZE; x++) {
                     allCells.push(cellKey(x, y));
@@ -621,11 +844,62 @@
             const fruitPool = shuffled(openAfterSnake, rng);
             const fruits = fruitPool.slice(0, FRUIT_COUNT).map(parseKey);
 
-            const fruitKeys = new Set(fruits.map(f => cellKey(f.x, f.y)));
-            const wallPool = openAfterSnake.filter(k => !fruitKeys.has(k));
-            const walls = new Set(shuffled(wallPool, rng).slice(0, WALL_COUNT));
+            for (let attempt = 0; attempt < MAX_GEN_ATTEMPTS; attempt++) {
+                const attemptNumber = attempt + 1;
+                if (attempt % GENERATION_PROGRESS_UPDATE_EVERY === 0) {
+                    setGenerationOverlay(true, attemptNumber, 'Generating daily map...');
+                    await yieldToUi();
+                }
+                if (performance.now() - generationStartMs > MAX_GEN_TIME_MS) {
+                    console.warn(`Daily generation timeout after ${MAX_GEN_TIME_MS}ms at attempt ${attemptNumber}. Falling back.`);
+                    break;
+                }
+                const attemptRng = mulberry32(((baseSeed + attempt) * 1013904223) >>> 0);
+                const fruitKeys = new Set(fruits.map(f => cellKey(f.x, f.y)));
+                const wallPool = openAfterSnake.filter(k => !fruitKeys.has(k));
+                const wallSet = new Set(shuffled(wallPool, attemptRng).slice(0, WALL_COUNT));
+
+                const candidate = {
+                    walls: wallSet,
+                    fruits,
+                    snakeStart: [head, tail]
+                };
+                const optimal = findOptimalMoves(candidate);
+                if (!Number.isFinite(optimal.count)) {
+                    continue;
+                }
+
+                const budgetRng = mulberry32(((baseSeed ^ 0x9e3779b9) * 1013904223) >>> 0);
+                const maxReduction = Math.floor(optimal.count / 3);
+                const reduction = maxReduction > 0 ? Math.floor(budgetRng() * (maxReduction + 1)) : 0;
+                const allowedMoves = Math.max(0, optimal.count - reduction);
+                const maxCollectable = reduction === 0
+                    ? FRUIT_COUNT
+                    : findMaxCollectableFruits(candidate, allowedMoves);
+
+                return {
+                    ...candidate,
+                    optimalMoves: optimal,
+                    moveLimit: allowedMoves,
+                    maxCollectableFruits: maxCollectable
+                };
+            }
+
+            const fallbackCandidate = {
+                walls: new Set(),
+                fruits: [{ x: 1, y: 1 }, { x: 4, y: 1 }, { x: 1, y: 4 }, { x: 2, y: 3 }, { x: 3, y: 3 }, { x: 4, y: 4 }],
+                snakeStart: [{ x: 0, y: 1 }, { x: 0, y: 0 }]
+            };
+            const fallbackOptimal = findOptimalMoves(fallbackCandidate);
+            const fallbackLimit = Number.isFinite(fallbackOptimal.count) ? fallbackOptimal.count : GRID_SIZE * GRID_SIZE;
+            const fallbackCollectable = Number.isFinite(fallbackOptimal.count) ? FRUIT_COUNT : findMaxCollectableFruits(fallbackCandidate, fallbackLimit);
             await yieldToUi();
-            return { walls, fruits, snakeStart: [head, tail] };
+            return {
+                ...fallbackCandidate,
+                optimalMoves: fallbackOptimal,
+                moveLimit: fallbackLimit,
+                maxCollectableFruits: fallbackCollectable
+            };
         }
 
         function advanceStatePacked(body, mask, dirIndex, nextByDir, wallBlocked, fruitAtCell) {
@@ -909,7 +1183,7 @@
             const simulation = simulateMoves(queueMoves);
             playbackFrames = simulation.frames;
             fruitProgressEl.textContent = `Fruits: ${simulation.fruitsEaten} / ${FRUIT_COUNT}`;
-            moveProgressEl.textContent = `Moves: ${queueMoves.length} / ${MOVE_LIMIT}`;
+            moveProgressEl.textContent = `Moves: ${queueMoves.length} / ${moveLimit}`;
             drawBoard(playbackFrames[playbackFrames.length - 1]);
             if (autoSubmitTimer) {
                 clearTimeout(autoSubmitTimer);
@@ -923,7 +1197,7 @@
                 statusLineEl.textContent = 'Route crashes. Submit to score this run or edit it.';
             } else if (simulation.state === 'win') {
                 statusLineEl.textContent = 'All visible fruits collected. Submit or refine your route.';
-            } else if (queueMoves.length >= MOVE_LIMIT) {
+            } else if (queueMoves.length >= moveLimit) {
                 statusLineEl.textContent = 'Move limit reached. Submit your run or edit it.';
             } else {
                 const last = queueMoves[queueMoves.length - 1];
@@ -955,8 +1229,12 @@
         }
 
         function getCurrentHeadingDir() {
-            if (queueMoves.length > 0) {
-                return queueMoves[queueMoves.length - 1];
+            return getHeadingDirForMoves(queueMoves);
+        }
+
+        function getHeadingDirForMoves(moves) {
+            if (moves.length > 0) {
+                return moves[moves.length - 1];
             }
             const [head, neck] = puzzle.snakeStart;
             const dx = head.x - neck.x;
@@ -967,19 +1245,58 @@
             return 'U';
         }
 
+        function getFruitIndexMap() {
+            const fruitIndex = new Map();
+            puzzle.fruits.forEach((fruit, i) => fruitIndex.set(cellKey(fruit.x, fruit.y), i));
+            return fruitIndex;
+        }
+
+        function tryReplaceCrashMove(dirKey) {
+            if (queueMoves.length === 0) {
+                return false;
+            }
+
+            const candidateMoves = queueMoves.slice(0, -1);
+            const heading = getHeadingDirForMoves(candidateMoves);
+            if (dirKey === OPPOSITE[heading]) {
+                return false;
+            }
+
+            const simulationBeforeCrashMove = simulateMoves(candidateMoves);
+            if (!simulationBeforeCrashMove.frames.length || simulationBeforeCrashMove.state === 'dead') {
+                return false;
+            }
+
+            const lastFrame = simulationBeforeCrashMove.frames[simulationBeforeCrashMove.frames.length - 1];
+            const body = lastFrame.body.map(c => ({ ...c }));
+            const fruitIndex = getFruitIndexMap();
+            const step = advanceState(body, lastFrame.mask, dirKey, puzzle.walls, fruitIndex);
+            if (!step.valid) {
+                return false;
+            }
+
+            queueMoves.splice(0, queueMoves.length, ...candidateMoves, dirKey);
+            return true;
+        }
+
         function addMove(dirKey) {
             if (isGeneratingPuzzle || !puzzle) return;
             const currentSimulation = simulateMoves(queueMoves);
             if (currentSimulation.state === 'dead') {
-                statusLineEl.textContent = 'Route already crashes. Undo or clear to continue.';
+                if (tryReplaceCrashMove(dirKey)) {
+                    refreshMoveGrid();
+                    refreshPlayback();
+                } else {
+                    statusLineEl.textContent = 'Route already crashes. Undo or clear to continue.';
+                }
                 return;
             }
             if (currentSimulation.state === 'win') {
                 statusLineEl.textContent = 'All fruits are already collected. Submit your run or edit it.';
                 return;
             }
-            if (queueMoves.length >= MOVE_LIMIT) {
-                statusLineEl.textContent = `Move queue is full (${MOVE_LIMIT}). Submit, undo, or clear.`;
+            if (queueMoves.length >= moveLimit) {
+                statusLineEl.textContent = `Move queue is full (${moveLimit}). Submit, undo, or clear.`;
                 return;
             }
             const heading = getCurrentHeadingDir();
@@ -1036,8 +1353,8 @@
 
             const usedMoves = simulation.movesUsed;
             const fruitsEaten = simulation.fruitsEaten;
-            const emoji = performanceEmoji(fruitsEaten, FRUIT_COUNT);
-            const shareText = `Inverted Snakedle Day ${dayNumber}: ${fruitsEaten}/${FRUIT_COUNT} fruits in ${usedMoves}/${MOVE_LIMIT} moves ${emoji}\nhttps://egeeken.github.io/inverted-snakedle`;
+            const emoji = performanceEmoji(fruitsEaten, maxCollectableFruits);
+            const shareText = `Inverted Snakedle Day ${dayNumber}: ${fruitsEaten}/${FRUIT_COUNT} fruits in ${usedMoves}/${moveLimit} moves ${emoji}\nhttps://egeeken.github.io/inverted-snakedle`;
             resultsTextEl.textContent = shareText;
             statusLineEl.textContent = 'Submitting... replaying your run.';
             isSubmitting = true;
@@ -1045,7 +1362,7 @@
                 resultsModal.style.display = 'flex';
                 localStorage.setItem(
                     `inverted-snakedle-${dayNumber}`,
-                    JSON.stringify({ usedMoves, fruitsEaten, fruitCount: FRUIT_COUNT, moveLimit: MOVE_LIMIT, emoji, at: new Date().toISOString() })
+                    JSON.stringify({ usedMoves, fruitsEaten, fruitCount: FRUIT_COUNT, moveLimit: moveLimit, maxCollectableFruits, emoji, at: new Date().toISOString() })
                 );
                 isSubmitting = false;
                 setButtonsDisabledState(false); // Re-enable buttons after submission
