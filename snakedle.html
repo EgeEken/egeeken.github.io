@@ -1140,8 +1140,12 @@
         }
 
         function getCurrentHeadingDir() {
-            if (queueMoves.length > 0) {
-                return queueMoves[queueMoves.length - 1];
+            return getHeadingDirForMoves(queueMoves);
+        }
+
+        function getHeadingDirForMoves(moves) {
+            if (moves.length > 0) {
+                return moves[moves.length - 1];
             }
             const [head, neck] = puzzle.snakeStart;
             const dx = head.x - neck.x;
@@ -1152,11 +1156,50 @@
             return 'U';
         }
 
+        function getFruitIndexMap() {
+            const fruitIndex = new Map();
+            puzzle.fruits.forEach((fruit, i) => fruitIndex.set(cellKey(fruit.x, fruit.y), i));
+            return fruitIndex;
+        }
+
+        function tryReplaceCrashMove(dirKey) {
+            if (queueMoves.length === 0) {
+                return false;
+            }
+
+            const candidateMoves = queueMoves.slice(0, -1);
+            const heading = getHeadingDirForMoves(candidateMoves);
+            if (dirKey === OPPOSITE[heading]) {
+                return false;
+            }
+
+            const simulationBeforeCrashMove = simulateMoves(candidateMoves);
+            if (!simulationBeforeCrashMove.frames.length || simulationBeforeCrashMove.state === 'dead') {
+                return false;
+            }
+
+            const lastFrame = simulationBeforeCrashMove.frames[simulationBeforeCrashMove.frames.length - 1];
+            const body = lastFrame.body.map(c => ({ ...c }));
+            const fruitIndex = getFruitIndexMap();
+            const step = advanceState(body, lastFrame.mask, dirKey, puzzle.walls, fruitIndex);
+            if (!step.valid) {
+                return false;
+            }
+
+            queueMoves.splice(0, queueMoves.length, ...candidateMoves, dirKey);
+            return true;
+        }
+
         function addMove(dirKey) {
             if (isGeneratingPuzzle || !puzzle) return;
             const currentSimulation = simulateMoves(queueMoves);
             if (currentSimulation.state === 'dead') {
-                statusLineEl.textContent = 'Route already crashes. Undo or clear to continue.';
+                if (tryReplaceCrashMove(dirKey)) {
+                    refreshMoveGrid();
+                    refreshPlayback();
+                } else {
+                    statusLineEl.textContent = 'Route already crashes. Undo or clear to continue.';
+                }
                 return;
             }
             if (currentSimulation.state === 'win') {
