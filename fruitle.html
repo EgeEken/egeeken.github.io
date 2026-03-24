@@ -113,6 +113,18 @@
             box-sizing: border-box;
         }
 
+        .dpad-main-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dpad-arrow-stack {
+            display: grid;
+            gap: 8px;
+            justify-items: center;
+        }
+
         .dpad-row {
             display: flex;
             gap: 8px;
@@ -192,11 +204,12 @@
             align-items: center;
             justify-content: center;
             color: #cbe4e4;
-            font-size: var(--snakedle-move-icon-size, 1.1em);
+            font-size: 0.74em;
             font-family: 'Futura', sans-serif;
             overflow: hidden;
             line-height: 1;
             font-weight: 700;
+            letter-spacing: 0.2px;
         }
 
         .move-cell.filled {
@@ -371,11 +384,15 @@
         <section id="snakedle-layout">
             <div class="snakedle-panel">
                 <div id="dpad-snakedle">
-                    <button class="snakedle-btn" data-dir="U" aria-label="Up">▴</button>
-                    <div class="dpad-row">
-                        <button class="snakedle-btn" data-dir="L" aria-label="Left">◂</button>
-                        <button class="snakedle-btn" data-dir="D" aria-label="Down">▾</button>
-                        <button class="snakedle-btn" data-dir="R" aria-label="Right">▸</button>
+                    <div class="dpad-main-row">
+                        <div class="dpad-arrow-stack">
+                            <button class="snakedle-btn" data-dir="U" aria-label="Up">▴</button>
+                            <div class="dpad-row">
+                                <button class="snakedle-btn" data-dir="L" aria-label="Left">◂</button>
+                                <button class="snakedle-btn" data-dir="D" aria-label="Down">▾</button>
+                                <button class="snakedle-btn" data-dir="R" aria-label="Right">▸</button>
+                            </div>
+                        </div>
                         <button id="send-move" aria-label="Send move">✓</button>
                     </div>
                     <div class="dpad-row" style="width:100%;">
