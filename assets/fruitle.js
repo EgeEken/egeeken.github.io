@@ -4,7 +4,7 @@
     const FRUIT_COUNT = 8;
     const WALL_COUNT = 12;
     const MOVE_GRID_CELLS = 48;
-    const LAUNCH_DAY_UTC = Date.UTC(2026, 2, 24);
+    const LAUNCH_DAY_UTC = Date.UTC(2026, 2 /* March */, 24);
     const parsedRatio = Number(new URLSearchParams(window.location.search).get('snakeMoves'));
     const SNAKE_MOVES_PER_TURN = Number.isInteger(parsedRatio) && parsedRatio >= 1 && parsedRatio <= 8 ? parsedRatio : 3;
 
@@ -397,8 +397,10 @@
     document.addEventListener('keydown', (e) => {
         const target = e.target;
         if (target instanceof HTMLElement && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return;
-        const map = { ArrowUp: 'U', ArrowRight: 'R', ArrowDown: 'D', ArrowLeft: 'L', w: 'U', a: 'L', s: 'D', d: 'R', W: 'U', A: 'L', S: 'D', D: 'R' };
-        if (map[e.key]) { e.preventDefault(); pendingMoveDir = map[e.key]; refresh(); return; }
+        const arrowMap = { ArrowUp: 'U', ArrowRight: 'R', ArrowDown: 'D', ArrowLeft: 'L' };
+        const wasdMap = { w: 'U', a: 'L', s: 'D', d: 'R' };
+        const mapped = arrowMap[e.key] || wasdMap[e.key.toLowerCase()];
+        if (mapped) { e.preventDefault(); pendingMoveDir = mapped; refresh(); return; }
         if (e.key === 'Enter') { e.preventDefault(); sendTurn(); return; }
         if (e.key === 'Backspace' || e.key === 'z' || e.key === 'Z') { e.preventDefault(); undoTurn(); return; }
         if (e.key === 'Escape' || e.key === 'c' || e.key === 'C') { e.preventDefault(); clearPending(); return; }
