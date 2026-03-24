@@ -5,7 +5,7 @@
     const WALL_COUNT = 12;
     const MOVE_GRID_CELLS = 48;
     const LAUNCH_DAY_UTC = Date.UTC(2026, 2 /* March */, 24);
-    const SNAKE_MOVE_FRAME_DELAY_MS = 400;
+    const SNAKE_MOVE_DELAY_MS = 400;
     const parsedRatio = Number(new URLSearchParams(window.location.search).get('snakeMoves'));
     const SNAKE_MOVES_PER_TURN = Number.isInteger(parsedRatio) && parsedRatio >= 1 && parsedRatio <= 8 ? parsedRatio : 3;
 
@@ -587,7 +587,7 @@
         const b = lastStateKeys[1];
         const c = lastStateKeys[2];
         const d = lastStateKeys[3];
-        return (a === c && b === d) || (c === d);
+        return a === c && b === d && a !== b;
     }
 
     function setPendingStatus() {
@@ -660,7 +660,7 @@
             }
             snakeMovesDone += 1;
             refresh();
-            await sleep(SNAKE_MOVE_FRAME_DELAY_MS);
+            await sleep(SNAKE_MOVE_DELAY_MS);
 
             if (detectRepeatedTwoStateLoop()) {
                 infiniteByLoop = true;
@@ -796,7 +796,7 @@
         isAnimatingTurn: false,
         lastStateKeys: []
     };
-    lastStateKeys = [stateKey()];
+    lastStateKeys = [];
     const initialPlan = getPlanForCurrentState();
     if (!initialPlan.solvable && aliveCount() > 0) {
         gameOver = true;
