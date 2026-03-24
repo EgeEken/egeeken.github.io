@@ -98,6 +98,18 @@
 			box-sizing: border-box;
 		}
 
+		.dpad-main-row {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.dpad-arrow-stack {
+			display: grid;
+			gap: 8px;
+			justify-items: center;
+		}
+
 		.dpad-row {
 			display: flex;
 			gap: 8px;
@@ -133,6 +145,19 @@
 			font-size: 0.9em;
 			height: 42px;
 			margin-top: 6px;
+		}
+
+		#send-move {
+			width: clamp(46px, 7vw, 58px);
+			height: clamp(46px, 7vw, 58px);
+			border: none;
+			border-radius: 8px;
+			background: #43b24f;
+			color: #f2fff2;
+			font-size: 1.35em;
+			font-weight: 800;
+			box-shadow: 0 0 10px rgba(67, 178, 79, 0.45);
+			cursor: default;
 		}
 
 		#status-line {
@@ -188,11 +213,12 @@
             align-items: center;
             justify-content: center;
             color: #cbe4e4;
-            font-size: 1.1em;
+            font-size: 0.74em;
             font-family: 'Futura', sans-serif;
             overflow: hidden;
             line-height: 1;
             font-weight: 700;
+            letter-spacing: 0.2px;
         }
 
         .move-cell.filled {
@@ -311,11 +337,16 @@
 
 			<div class="snakedle-panel">
 				<div id="dpad-snakedle" aria-hidden="true">
-					<button class="snakedle-btn" type="button">▴</button>
-					<div class="dpad-row">
-						<button class="snakedle-btn" type="button">◂</button>
-						<button class="snakedle-btn" type="button">▾</button>
-						<button class="snakedle-btn" type="button">▸</button>
+					<div class="dpad-main-row">
+						<div class="dpad-arrow-stack">
+							<button class="snakedle-btn" type="button">▴</button>
+							<div class="dpad-row">
+								<button class="snakedle-btn" type="button">◂</button>
+								<button class="snakedle-btn" type="button">▾</button>
+								<button class="snakedle-btn" type="button">▸</button>
+							</div>
+						</div>
+						<button id="send-move" type="button">✓</button>
 					</div>
 					<div class="dpad-row" style="width:100%;">
 						<button class="snakedle-btn alt" type="button">Undo</button>
@@ -326,7 +357,7 @@
 
 			<div class="snakedle-panel">
 				<div class="tutorial-highlight">Controls</div>
-				<div class="tutorial-detail">- Click fruit on map to select it<br>- <b>WASD</b> or <b>Arrow keys</b> picks direction<br>- <b>Enter</b> sends turn (same as ✓ button)<br>- <b>Z</b> or <b>Backspace</b> undoes the previous full turn<br>- <b>C</b> or <b>Escape</b> clears pending direction</div>
+				<div class="tutorial-detail">- Click fruit on map to select it<br>- <b>WASD</b> or <b>Arrow keys</b> picks direction<br>- <b>Enter</b> sends turn (same as ✓ button)<br>- <b>Z</b> or <b>Backspace</b> undoes the previous full turn<br>- <b>C</b> or <b>Escape</b> clears the whole move queue and resets the map</div>
 			</div>
 
 			<div class="snakedle-panel tutorial-board-wrap">
@@ -335,7 +366,7 @@
 
 			<div class="snakedle-panel">
 				<div class="tutorial-highlight">Goal</div>
-				<div class="tutorial-detail">Survive turns, not optimal moves. Share text reports remaining fruits and survived turns.</div>
+				<div class="tutorial-detail">Survive turns, not optimal moves. Share text reports survived turns, and only includes remaining fruits for infinite-run wins.</div>
 			</div>
 
 			<div class="snakedle-panel tutorial-board-wrap">
@@ -344,7 +375,7 @@
             
 			<div class="snakedle-panel">
 				<div class="tutorial-highlight">Scoring and Share</div>
-				<div class="tutorial-detail">This prototype currently uses placeholder performance bands by survived turns (< 5 red, 5-10 orange, 10-15 yellow, 15-20 green, 20-30 blue, 30+ purple) and these values are expected to be tuned later.</div>
+				<div class="tutorial-detail">Performance bands are by survived turns (< 5 red, 5-10 orange, 10-15 yellow, 15-20 green, 20+ blue). Purple is reserved for infinite-run win cases.</div>
 			</div>
 
             <div class="snakedle-panel">
@@ -672,12 +703,11 @@
 		]);
 
 		const ARROW = { U: '▴', D: '▾', L: '◂', R: '▸' };
-		const DIR_ORDER = ['U', 'R', 'D', 'L'];
 		const moveGridEl = document.getElementById('move-grid');
 		const resultsModal = document.getElementById('results-modal');
 		const resultsTextEl = document.getElementById('results-text');
 		const moveCells = [];
-		const TUTORIAL_MOVES = [];
+		const TUTORIAL_MOVES = ['e2-e3', 'd4-c4', 'g7-g6'];
 
 		for (let i = 0; i < 49; i++) {
 			const cell = document.createElement('div');
@@ -686,24 +716,12 @@
 			moveCells.push(cell);
 		}
 
-		function generateRandomMoves(count) {
-			const moves = [];
-			for (let i = 0; i < count; i++) {
-				moves.push(DIR_ORDER[Math.floor(Math.random() * 4)]);
-			}
-			return moves;
-		}
-
-		const initialMoveCount = 28;
-		const randomMoves = generateRandomMoves(initialMoveCount);
-		TUTORIAL_MOVES.push(...randomMoves);
-
 		function updateMoveGridDisplay() {
 			for (let i = 0; i < moveCells.length; i++) {
 				const cell = moveCells[i];
 				const move = TUTORIAL_MOVES[i];
 				if (move) {
-					cell.textContent = ARROW[move];
+					cell.textContent = move;
 					cell.classList.add('filled');
 				} else {
 					cell.textContent = '';
