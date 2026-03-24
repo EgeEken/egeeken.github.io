@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Ege - Inverted Snakedle (Custom)</title>
+    <style>
+        :root {
+            --snakedle-grid-size: 8;
+        }
+
+        #snakedle-wrapper {
+            width: min(980px, 96%);
+            margin: 20px auto 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            color: #eee;
+        }
+
+        .snakedle-stat {
+            font-family: 'Futura', sans-serif;
+            letter-spacing: 1px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .snakedle-stat#daily-label {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #7ddfdf;
+        }
+
+        #snakedle-layout {
+            width: 100%;
+            display: grid;
+            grid-template-columns: minmax(235px, 235px) minmax(280px, 1fr) minmax(235px, 235px);
+            gap: 150px;
+            align-items: center;
+        }
+
+        #random-config {
+            margin-top: 12px;
+            display: grid;
+            gap: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .config-header {
+            text-align: center;
+            margin-bottom: 2px;
+        }
+
+        .config-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            align-items: start;
+            gap: 4px;
+            font-size: 0.9em;
+            min-width: 0;
+        }
+
+        .config-row label {
+            min-width: 0;
+            overflow-wrap: break-word;
+        }
+
+        .config-row input {
+            width: 100%;
+            background: rgba(12, 32, 48, 0.9);
+            border: 1px solid rgba(125, 223, 223, 0.55);
+            border-radius: 6px;
+            color: #e8f0f0;
+            font-family: 'Futura', sans-serif;
+            padding: 4px 6px;
+            box-sizing: border-box;
+        }
+
+        .config-row output {
+            font-weight: 700;
+            color: #d6f5f5;
+            justify-self: end;
+            font-size: 0.95em;
+        }
+
+        #load-random-config {
+            margin-top: 2px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 10px;
+            background: #2e4b61;
+            color: #e8f0f0;
+            font-family: 'Futura', sans-serif;
+            cursor: pointer;
+        }
+
+        
+        #shuffle-seed {
+            margin-top: 2px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 10px;
+            background: #3a245e;
+            color: #e8f0f0;
+            font-family: 'Futura', sans-serif;
+            cursor: pointer;
+        }
+
+        #full-shuffle {
+            margin-top: 2px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 10px;
+            background: #5f0b33;
+            color: #e8f0f0;
+            font-family: 'Futura', sans-serif;
+            cursor: pointer;
+        }
+
+
+        .snakedle-panel {
+            background: rgba(12, 32, 48, 0.72);
+            border: 1px solid rgba(125, 223, 223, 0.25);
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 0 15px rgba(12, 32, 48, 0.35);
+        }
+
+        #snakedle-board-wrap {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        #generation-overlay {
+            position: absolute;
+            inset: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: rgba(5, 12, 20, 0.62);
+            backdrop-filter: blur(4px);
+            border-radius: 10px;
+            z-index: 20;
+            color: #fff;
+            font-family: 'Futura', sans-serif;
+            letter-spacing: 0.6px;
+            text-align: center;
+            pointer-events: all;
+        }
+
+        .loading-spinner {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.35);
+            border-top-color: #fff;
+            border-right-color: transparent;
+            animation: snakedle-spin 0.9s linear infinite;
+        }
+
+        #generation-progress {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        @keyframes snakedle-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #snakedle-canvas {
+            width: min(94vw, 672px);
+            height: auto;
+            border: 3px solid #126364;
+            border-radius: 10px;
+            box-shadow: 0 0 25px rgba(18, 99, 100, 0.5);
+            background-color: #0c2030;
+        }
+
+        #dpad-snakedle {
+            display: grid;
+            gap: 8px;
+            justify-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .dpad-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .snakedle-btn {
+            width: clamp(46px, 7vw, 58px);
+            height: clamp(46px, 7vw, 58px);
+            border: none;
+            border-radius: 8px;
+            background-color: #126364;
+            color: #eee;
+            font-size: clamp(1.05em, 1.8vw, 1.25em);
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+            box-shadow: 0 0 8px rgba(18, 99, 100, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            font-weight: 700;
+        }
+
+        .snakedle-btn:active {
+            transform: scale(0.95);
+            background-color: #0d4f50;
+        }
+
+        .snakedle-btn.alt {
+            width: calc(50% - 6px);
+            font-size: 0.9em;
+            height: 42px;
+            margin-top: 6px;
+        }
+
+        #move-grid {
+            display: grid;
+            grid-template-columns: repeat(var(--snakedle-grid-size), minmax(0, 1fr));
+            gap: clamp(2px, 0.6vw, 5px);
+            margin-top: 6px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .move-cell {
+            aspect-ratio: 1;
+            min-width: 0;
+            border-radius: 6px;
+            border: 1px solid rgba(187, 221, 221, 0.35);
+            background: rgba(12, 32, 48, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #cbe4e4;
+            font-size: var(--snakedle-move-icon-size, 1.1em);
+            font-family: 'Futura', sans-serif;
+            overflow: hidden;
+            line-height: 1;
+            font-weight: 700;
+        }
+
+        .move-cell.filled {
+            background: rgba(18, 99, 100, 0.85);
+            color: #fff;
+            border-color: rgba(125, 223, 223, 0.8);
+        }
+
+        .move-cell.crash {
+            background: rgba(224, 85, 85, 0.78);
+            border-color: rgba(255, 170, 170, 0.9);
+            color: #fff;
+        }
+
+        #submit-snakedle {
+            width: 100%;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 8px;
+            background-color: #7ddfdf;
+            color: #102334;
+            font-family: 'Futura', sans-serif;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 700;
+            transition: transform 0.15s, background-color 0.25s;
+        }
+
+        #submit-snakedle:hover {
+            transform: scale(1.02);
+            background-color: #a7eded;
+        }
+
+        #status-line {
+            margin-top: 8px;
+            color: #bbd;
+            min-height: 22px;
+            text-align: center;
+            font-size: 0.92em;
+        }
+
+        #results-modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(8, 15, 24, 0.78);
+            z-index: 1200;
+        }
+
+        #results-card {
+            width: min(92vw, 460px);
+            background: #102334;
+            border: 2px solid #126364;
+            border-radius: 12px;
+            padding: 18px;
+            color: #eee;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(8, 15, 24, 0.7);
+        }
+
+        #results-text {
+            white-space: pre-wrap;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0 14px;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .results-actions button {
+            border: none;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-family: 'Futura', sans-serif;
+            cursor: pointer;
+        }
+
+        #copy-share {
+            background: #7ddfdf;
+            color: #102334;
+            font-weight: 700;
+        }
+
+        #close-results {
+            background: #2e4b61;
+            color: #e8f0f0;
+        }
+
+        @media (max-width: 880px) {
+            #snakedle-layout {
+                grid-template-columns: 1fr;
+                row-gap: 50px;
+                column-gap: 150px;
+            }
+
+            #snakedle-board-wrap {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .config-row output {
+                justify-self: start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .snakedle-btn {
+                width: 52px;
+                height: 52px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="/games/inverted-snakedle/" class="back-button">← Return to Menu</a>
+        <h1>Custom Inverted Snakedle</h1>
+        <h2>Collect as many fruits as possible before your move limit runs out. Use the configuration panel to load a reproducible map.</h2>
+    </header>
+
+    <main id="snakedle-wrapper">
+        <div class="snakedle-panel">
+            <div class="snakedle-stat" id="daily-label">Custom Inverted Snakedle</div>
+            <div class="snakedle-stat" id="fruit-progress">Fruits: 0 / --</div>
+            <div class="snakedle-stat" id="move-progress">Moves: 0 / --</div>
+        </div>
+
+        <section id="snakedle-layout">
+            <div class="snakedle-panel">
+                <div id="dpad-snakedle">
+                    <button class="snakedle-btn" data-dir="U" aria-label="Up">▴</button>
+                    <div class="dpad-row">
+                        <button class="snakedle-btn" data-dir="L" aria-label="Left">◂</button>
+                        <button class="snakedle-btn" data-dir="D" aria-label="Down">▾</button>
+                        <button class="snakedle-btn" data-dir="R" aria-label="Right">▸</button>
+                    </div>
+                    <div class="dpad-row" style="width:100%;">
+                        <button class="snakedle-btn alt" id="undo-move">Undo</button>
+                        <button class="snakedle-btn alt" id="clear-moves">Clear</button>
+                    </div>
+                </div>
+                <div id="status-line">Use the buttons or arrow keys to queue moves.</div>
+            </div>
+
+            <div id="snakedle-board-wrap">
+                <canvas id="snakedle-canvas" width="420" height="420"></canvas>
+                <div id="generation-overlay" aria-live="polite" aria-busy="true">
+                    <div class="loading-spinner" aria-hidden="true"></div>
+                    <div id="generation-message">Generating map...</div>
+                    <div id="generation-progress">Attempts: 0 / 0</div>
+                </div>
+            </div>
+
+            <div class="snakedle-panel">
+                <div style="text-align:center; margin-bottom:4px;">Move Queue</div>
+                <div id="move-grid"></div>
+                <button id="submit-snakedle">Submit run</button>
+                <div id="random-config">
+                    <div class="config-header">Load specific random map</div>
+                    <div class="config-row">
+                        <label for="cfg-seed" data-config-key="seed">Seed</label>
+                        <input id="cfg-seed" type="range">
+                        <output id="cfg-seed-output" for="cfg-seed"></output>
+                    </div>
+                    <div class="config-row">
+                        <label for="cfg-map-size" data-config-key="mapSize">Map size</label>
+                        <input id="cfg-map-size" type="range">
+                        <output id="cfg-map-size-output" for="cfg-map-size"></output>
+                    </div>
+                    <div class="config-row">
+                        <label for="cfg-fruit-count" data-config-key="fruitCount">Fruit count</label>
+                        <input id="cfg-fruit-count" type="range">
+                        <output id="cfg-fruit-count-output" for="cfg-fruit-count"></output>
+                    </div>
+                    <div class="config-row">
+                        <label for="cfg-wall-count" data-config-key="wallCount">Wall count</label>
+                        <input id="cfg-wall-count" type="range">
+                        <output id="cfg-wall-count-output" for="cfg-wall-count"></output>
+                    </div>
+                    <div class="config-row">
+                        <label for="cfg-move-count" data-config-key="moveCount">Move count</label>
+                        <input id="cfg-move-count" type="range">
+                        <output id="cfg-move-count-output" for="cfg-move-count"></output>
+                    </div>
+                    <button id="load-random-config">Load map</button>
+                    <button id="shuffle-seed">Shuffle seed</button>
+                    <button id="full-shuffle">Full shuffle</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="results-modal" role="dialog" aria-modal="true">
+        <div id="results-card">
+            <h3>Result</h3>
+            <div id="results-text"></div>
+            <div class="results-actions">
+                <button id="copy-share">Copy Share Text</button>
+                <button id="close-results">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const RANDOM_DEFAULTS = {
+            mapSize: 8,
+            fruitCount: 12,
+            wallCount: 20,
+            moveCount: 28
+        };
+        const RANDOM_LIMITS = {
+            seed: { min: 0, max: 100000 },
+            mapSize: { min: 6, max: 10 },
+            fruitCount: { min: 2, max: 13 },
+            wallCount: { min: 0, max: 30 },
+            moveCount: { min: 8, max: 90 }
+        };
+        const RANDOM_CONFIG_FIELDS = [
+            { key: 'seed', inputId: 'cfg-seed', outputId: 'cfg-seed-output', label: 'Seed' },
+            { key: 'mapSize', inputId: 'cfg-map-size', outputId: 'cfg-map-size-output', label: 'Map size' },
+            { key: 'fruitCount', inputId: 'cfg-fruit-count', outputId: 'cfg-fruit-count-output', label: 'Fruit count' },
+            { key: 'wallCount', inputId: 'cfg-wall-count', outputId: 'cfg-wall-count-output', label: 'Wall count' },
+            { key: 'moveCount', inputId: 'cfg-move-count', outputId: 'cfg-move-count-output', label: 'Move count' }
+        ];
+        const SHUFFLE_PARAMETER_LIMITS = {
+            mapSize: { min: 7, max: 10 },
+            fruitCount: { min: 8, max: 13 },
+            wallCount: { min: 10, max: 30 }
+        };
+        
+        function generateRandomSeed() {
+            const min = RANDOM_LIMITS.seed.min;
+            const max = RANDOM_LIMITS.seed.max;
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function clampValue(value, min, max) {
+            return Math.min(max, Math.max(min, value));
+        }
+
+        function isValidParameterSet(mapSize, fruitCount, wallCount) {
+            if (mapSize + fruitCount > 20) {
+                return false;
+            }
+
+            return fruitCount + wallCount <= (mapSize * mapSize) / 2;
+        }
+
+        function getAllConstrainedParameterSets(limits) {
+            const sets = [];
+            for (let mapSize = limits.mapSize.min; mapSize <= limits.mapSize.max; mapSize++) {
+                for (let fruitCount = limits.fruitCount.min; fruitCount <= limits.fruitCount.max; fruitCount++) {
+                    for (let wallCount = limits.wallCount.min; wallCount <= limits.wallCount.max; wallCount++) {
+                        if (!isValidParameterSet(mapSize, fruitCount, wallCount)) {
+                            continue;
+                        }
+
+                        sets.push({ mapSize, fruitCount, wallCount });
+                    }
+                }
+            }
+
+            return sets;
+        }
+
+        function pickConstrainedParameters(seed, limits) {
+            const sets = getAllConstrainedParameterSets(limits);
+            if (sets.length === 0) {
+                throw new Error('No valid parameter sets found for the provided limits.');
+            }
+
+            const rng = mulberry32((seed * 1013904223) >>> 0);
+            return sets[Math.floor(rng() * sets.length)];
+        }
+
+        function parseIntParam(rawValue, fallback, min, max) {
+            const parsed = Number.parseInt(rawValue, 10);
+            if (Number.isNaN(parsed)) {
+                return fallback;
+            }
+            return clampValue(parsed, min, max);
+        }
+
+        function parseRandomConfigFromHash() {
+            const hashParams = new URLSearchParams(window.location.hash.slice(1));
+            return {
+                seed: parseIntParam(
+                    hashParams.get('seed'),
+                    generateRandomSeed(),
+                    RANDOM_LIMITS.seed.min,
+                    RANDOM_LIMITS.seed.max
+                ),
+                mapSize: parseIntParam(
+                    hashParams.get('mapSize'),
+                    RANDOM_DEFAULTS.mapSize,
+                    RANDOM_LIMITS.mapSize.min,
+                    RANDOM_LIMITS.mapSize.max
+                ),
+                fruitCount: parseIntParam(
+                    hashParams.get('fruitCount'),
+                    RANDOM_DEFAULTS.fruitCount,
+                    RANDOM_LIMITS.fruitCount.min,
+                    RANDOM_LIMITS.fruitCount.max
+                ),
+                wallCount: parseIntParam(
+                    hashParams.get('wallCount'),
+                    RANDOM_DEFAULTS.wallCount,
+                    RANDOM_LIMITS.wallCount.min,
+                    RANDOM_LIMITS.wallCount.max
+                ),
+                moveCount: parseIntParam(
+                    hashParams.get('moveCount'),
+                    RANDOM_DEFAULTS.moveCount,
+                    RANDOM_LIMITS.moveCount.min,
+                    RANDOM_LIMITS.moveCount.max
+                )
+            };
+        }
+
+        function buildRandomConfigHash(config) {
+            const hashParams = new URLSearchParams();
+            hashParams.set('seed', String(config.seed));
+            hashParams.set('mapSize', String(config.mapSize));
+            hashParams.set('fruitCount', String(config.fruitCount));
+            hashParams.set('wallCount', String(config.wallCount));
+            hashParams.set('moveCount', String(config.moveCount));
+            return hashParams.toString();
+        }
+
+        function getCanonicalRandomPagePath() {
+            return window.location.pathname.replace(
+                /\/games\/inverted-snakedle\/inverted-snakedle-random\.html$/,
+                '/inverted-snakedle-random.html'
+            );
+        }
+
+        function getRandomShareUrl(config) {
+            return `${window.location.origin}${getCanonicalRandomPagePath()}#${buildRandomConfigHash(config)}`;
+        }
+
+        function setupRandomConfigUi() {
+            RANDOM_CONFIG_FIELDS.forEach(field => {
+                const limits = RANDOM_LIMITS[field.key];
+                const input = document.getElementById(field.inputId);
+                const label = document.querySelector(`label[for="${field.inputId}"]`);
+                if (!limits || !input || !label) {
+                    return;
+                }
+
+                input.min = String(limits.min);
+                input.max = String(limits.max);
+                input.step = '1';
+                label.textContent = `${field.label} (${limits.min}-${limits.max})`;
+            });
+        }
+
+        function syncRandomConfigUi(config) {
+            RANDOM_CONFIG_FIELDS.forEach(field => {
+                const input = document.getElementById(field.inputId);
+                const output = document.getElementById(field.outputId);
+                const value = config[field.key];
+                const valueText = String(value);
+
+                if (input) {
+                    input.value = valueText;
+                }
+                if (output) {
+                    output.value = valueText;
+                    output.textContent = valueText;
+                }
+            });
+        }
+
+        let randomConfig = parseRandomConfigFromHash();
+        let gridSize = randomConfig.mapSize;
+        let cellSize = 420 / gridSize;
+        let fruitCount = randomConfig.fruitCount;
+        let wallCount = randomConfig.wallCount;
+        let moveLimit = randomConfig.moveCount;
+        const LAUNCH_DAY_UTC = Date.UTC(2026, 2, 19); // March 19, 2026
+
+        const DIRS = {
+            U: { x: 0, y: -1 },
+            D: { x: 0, y: 1 },
+            L: { x: -1, y: 0 },
+            R: { x: 1, y: 0 }
+        };
+        const DIR_ORDER = ['U', 'R', 'D', 'L'];
+        const ARROW = { U: '▴', D: '▾', L: '◂', R: '▸' };
+        const MOVE_ICON_MIN_SIZE_EM = 0.7;
+        const MOVE_ICON_BASE_SIZE_EM = 1.2;
+        const MOVE_ICON_REFERENCE_GRID_SIZE = 6;
+        const MOVE_ICON_SIZE_STEP_EM = 0.13;
+
+        const canvas = document.getElementById('snakedle-canvas');
+        const ctx = canvas.getContext('2d');
+        const fruitProgressEl = document.getElementById('fruit-progress');
+        const moveProgressEl = document.getElementById('move-progress');
+        const dailyLabelEl = document.getElementById('daily-label');
+        const moveGridEl = document.getElementById('move-grid');
+        const statusLineEl = document.getElementById('status-line');
+        const resultsModal = document.getElementById('results-modal');
+        const resultsTextEl = document.getElementById('results-text');
+        const generationOverlayEl = document.getElementById('generation-overlay');
+        const generationMessageEl = document.getElementById('generation-message');
+        const generationProgressEl = document.getElementById('generation-progress');
+
+        const queueMoves = [];
+        const moveCells = [];
+        const OPPOSITE = { U: 'D', D: 'U', L: 'R', R: 'L' };
+        const AUTO_SUBMIT_DELAY_MS = 120;
+        const FRAME_DELAY_MS = 120;
+
+        let randomPuzzleId = randomConfig.seed;
+        dailyLabelEl.textContent = `Custom Inverted Snakedle (Seed ${randomPuzzleId})`;
+        function setMoveGridCss(size) {
+            document.documentElement.style.setProperty('--snakedle-grid-size', String(size));
+            document.documentElement.style.setProperty(
+                '--snakedle-move-icon-size',
+                `${Math.max(
+                    MOVE_ICON_MIN_SIZE_EM,
+                    MOVE_ICON_BASE_SIZE_EM - (size - MOVE_ICON_REFERENCE_GRID_SIZE) * MOVE_ICON_SIZE_STEP_EM
+                )}em`
+            );
+        }
+        setMoveGridCss(gridSize);
+
+        let puzzle = null;
+        let playbackFrames = [];
+        let playbackTimer = null;
+        let autoSubmitTimer = null;
+        let isSubmitting = false;
+        let isGeneratingPuzzle = false;
+
+        function setGenerationOverlay(active, attempt = 0, reason = 'Generating map...') {
+            generationOverlayEl.style.display = active ? 'flex' : 'none';
+            generationMessageEl.textContent = reason;
+            generationProgressEl.textContent = `Seed: ${randomPuzzleId}`;
+        }
+
+        function setControlsDisabled(disabled) {
+            document.querySelectorAll('[data-dir]').forEach(btn => {
+                btn.disabled = disabled;
+            });
+            document.getElementById('submit-snakedle').disabled = disabled;
+            document.getElementById('load-random-config').disabled = disabled;
+            document.getElementById('shuffle-seed').disabled = disabled;
+            document.getElementById('full-shuffle').disabled = disabled;
+            undoButton.disabled = disabled;
+            clearButton.disabled = disabled;
+        }
+
+        function yieldToUi() {
+            return new Promise(resolve => setTimeout(resolve, 0));
+        }
+
+        async function rebuildPuzzleForCurrentConfig() {
+            isGeneratingPuzzle = true;
+            setControlsDisabled(true);
+            setGenerationOverlay(true, 0, 'Generating map...');
+            try {
+                puzzle = await generateDailyPuzzle(randomPuzzleId);
+                            } finally {
+                isGeneratingPuzzle = false;
+                setGenerationOverlay(false, 0, 'Generating map...');
+                setControlsDisabled(false);
+            }
+        }
+
+        function rebuildMoveGrid() {
+            moveGridEl.innerHTML = '';
+            moveCells.length = 0;
+            setMoveGridCss(randomConfig.mapSize);
+            const totalMoveCells = randomConfig.moveCount;
+            for (let i = 0; i < totalMoveCells; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'move-cell';
+                moveGridEl.appendChild(cell);
+                moveCells.push(cell);
+            }
+        }
+
+        async function applyConfig(nextConfig, skipHashWrite = false) {
+            const nextHash = buildRandomConfigHash(nextConfig);
+            if (!skipHashWrite && window.location.hash.slice(1) !== nextHash) {
+                window.location.hash = nextHash;
+                return;
+            }
+
+            randomConfig = nextConfig;
+            gridSize = randomConfig.mapSize;
+            cellSize = 420 / gridSize;
+            fruitCount = randomConfig.fruitCount;
+            wallCount = randomConfig.wallCount;
+            moveLimit = randomConfig.moveCount;
+            randomPuzzleId = randomConfig.seed;
+            dailyLabelEl.textContent = `Custom Inverted Snakedle (Seed ${randomPuzzleId})`;
+            syncRandomConfigUi(randomConfig);
+
+            if (playbackTimer) {
+                clearInterval(playbackTimer);
+                playbackTimer = null;
+            }
+            if (autoSubmitTimer) {
+                clearTimeout(autoSubmitTimer);
+                autoSubmitTimer = null;
+            }
+            isSubmitting = false;
+            queueMoves.length = 0;
+            rebuildMoveGrid();
+            await rebuildPuzzleForCurrentConfig();
+            refreshMoveGrid();
+            refreshPlayback();
+        }
+
+        async function initializeGame() {
+            rebuildMoveGrid();
+            setupRandomConfigUi();
+            syncRandomConfigUi(randomConfig);
+            await rebuildPuzzleForCurrentConfig();
+            refreshMoveGrid();
+            refreshPlayback();
+        }
+
+        function bindSliderOutput(inputId, outputId) {
+            const input = document.getElementById(inputId);
+            const output = document.getElementById(outputId);
+            input.addEventListener('input', () => {
+                output.value = input.value;
+                output.textContent = input.value;
+            });
+        }
+
+        bindSliderOutput('cfg-seed', 'cfg-seed-output');
+        bindSliderOutput('cfg-map-size', 'cfg-map-size-output');
+        bindSliderOutput('cfg-fruit-count', 'cfg-fruit-count-output');
+        bindSliderOutput('cfg-wall-count', 'cfg-wall-count-output');
+        bindSliderOutput('cfg-move-count', 'cfg-move-count-output');
+
+        function getDayNumber(date) {
+            const todayUtc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+            return Math.max(1, Math.floor((todayUtc - LAUNCH_DAY_UTC) / 86400000) + 1);
+        }
+
+        function mulberry32(seed) {
+            let t = seed >>> 0;
+            return function () {
+                t += 0x6D2B79F5;
+                let r = Math.imul(t ^ (t >>> 15), 1 | t);
+                r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+                return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+            };
+        }
+
+        function cellKey(x, y) {
+            return `${x},${y}`;
+        }
+
+        function parseKey(key) {
+            const [x, y] = key.split(',').map(Number);
+            return { x, y };
+        }
+
+        function inBounds(x, y) {
+            return x >= 0 && x < gridSize && y >= 0 && y < gridSize;
+        }
+
+        function pickRandom(list, rng) {
+            return list[Math.floor(rng() * list.length)];
+        }
+
+        function shuffled(list, rng) {
+            const arr = list.slice();
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(rng() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        async function generateDailyPuzzle(day) {
+            const baseSeed = day * 2654435761;
+            const allCells = [];
+            for (let y = 0; y < gridSize; y++) {
+                for (let x = 0; x < gridSize; x++) {
+                    allCells.push(cellKey(x, y));
+                }
+            }
+
+            const rng = mulberry32((baseSeed * 1013904223) >>> 0);
+            const headKey = pickRandom(allCells, rng);
+            const head = parseKey(headKey);
+            const neighbors = DIR_ORDER
+                .map(d => ({ x: head.x + DIRS[d].x, y: head.y + DIRS[d].y }))
+                .filter(c => inBounds(c.x, c.y));
+            const tail = pickRandom(neighbors, rng);
+            const snakeStartKeys = new Set([headKey, cellKey(tail.x, tail.y)]);
+
+            const openAfterSnake = allCells.filter(k => !snakeStartKeys.has(k));
+            const fruitPool = shuffled(openAfterSnake, rng);
+            const fruits = fruitPool.slice(0, fruitCount).map(parseKey);
+
+            const fruitKeys = new Set(fruits.map(f => cellKey(f.x, f.y)));
+            const wallPool = openAfterSnake.filter(k => !fruitKeys.has(k));
+            const walls = new Set(shuffled(wallPool, rng).slice(0, wallCount));
+
+            await yieldToUi();
+            return { walls, fruits, snakeStart: [head, tail] };
+        }
+
+        function advanceStatePacked(body, mask, dirIndex, nextByDir, wallBlocked, fruitAtCell) {
+            const nextHead = nextByDir[dirIndex][body[0]];
+            if (nextHead < 0 || wallBlocked[nextHead]) {
+                return { valid: false };
+            }
+
+            const fruitAtHead = fruitAtCell[nextHead];
+            const willEat = fruitAtHead >= 0 && (mask & (1 << fruitAtHead)) === 0;
+            const collisionLimit = willEat ? body.length : body.length - 1;
+            for (let i = 0; i < collisionLimit; i++) {
+                if (body[i] === nextHead) {
+                    return { valid: false };
+                }
+            }
+
+            if (body.length === 2 && nextHead === body[1]) {
+                return { valid: false };
+            }
+
+            const copyLength = willEat ? body.length : body.length - 1;
+            const nextBody = new Array(copyLength + 1);
+            nextBody[0] = nextHead;
+            for (let i = 0; i < copyLength; i++) {
+                nextBody[i + 1] = body[i];
+            }
+
+            let nextMask = mask;
+            if (willEat) {
+                nextMask |= (1 << fruitAtHead);
+            }
+
+            return { valid: true, body: nextBody, mask: nextMask };
+        }
+
+        function encodeState(body, mask) {
+            // return `${mask}|${body.map(c => `${c.x},${c.y}`).join(';')}`;
+
+            const head = body[0];
+            return `${mask}|${head.x},${head.y}`;
+        }
+
+        function advanceState(body, mask, dirKey, walls, fruitIndex) {
+            const dir = DIRS[dirKey];
+            const nextHead = { x: body[0].x + dir.x, y: body[0].y + dir.y };
+            if (!inBounds(nextHead.x, nextHead.y) || walls.has(cellKey(nextHead.x, nextHead.y))) {
+                return { valid: false };
+            }
+
+            const nextHeadKey = cellKey(nextHead.x, nextHead.y);
+            const fruitAtHead = fruitIndex.has(nextHeadKey) ? fruitIndex.get(nextHeadKey) : -1;
+            const willEat = fruitAtHead >= 0 && (mask & (1 << fruitAtHead)) === 0;
+            const collisionBody = willEat ? body : body.slice(0, -1);
+            if (collisionBody.some(c => c.x === nextHead.x && c.y === nextHead.y)) {
+                return { valid: false };
+            }
+
+            // make sure it's invalid if the snake tries to move backward into itself, even if its size is 2 meaning that the tail would move away
+            if (body.length === 2 && nextHead.x === body[1].x && nextHead.y === body[1].y) {
+                return { valid: false };
+            }
+
+            const nextBody = [nextHead, ...body.map(c => ({ x: c.x, y: c.y }))];
+            if (!willEat) {
+                nextBody.pop();
+            }
+
+            let nextMask = mask;
+            if (willEat) {
+                nextMask |= (1 << fruitAtHead);
+            }
+
+            return { valid: true, body: nextBody, mask: nextMask };
+        }
+
+        function simulateMoves(moves) {
+            if (!puzzle) {
+                return { frames: [], state: 'running', movesUsed: 0, fruitsEaten: 0 };
+            }
+
+            const fruitIndex = new Map();
+            puzzle.fruits.forEach((fruit, i) => fruitIndex.set(cellKey(fruit.x, fruit.y), i));
+            const targetMask = (1 << puzzle.fruits.length) - 1;
+
+            let body = puzzle.snakeStart.map(c => ({ x: c.x, y: c.y }));
+            let mask = 0;
+            const frames = [{ body: body.map(c => ({ ...c })), mask, state: 'running' }];
+            let resultState = 'running';
+
+            for (let i = 0; i < moves.length; i++) {
+                const step = advanceState(body, mask, moves[i], puzzle.walls, fruitIndex);
+                if (!step.valid) {
+                    resultState = 'dead';
+                    frames.push({ body: body.map(c => ({ ...c })), mask, state: 'dead' });
+                    return { frames, state: resultState, movesUsed: i + 1, fruitsEaten: countBits(mask) };
+                }
+                body = step.body;
+                mask = step.mask;
+
+                if (mask === targetMask) {
+                    resultState = 'win';
+                    frames.push({ body: body.map(c => ({ ...c })), mask, state: 'win' });
+                    return { frames, state: resultState, movesUsed: i + 1, fruitsEaten: puzzle.fruits.length };
+                }
+
+                frames.push({ body: body.map(c => ({ ...c })), mask, state: 'running' });
+            }
+
+            return { frames, state: resultState, movesUsed: moves.length, fruitsEaten: countBits(mask) };
+        }
+
+        function countBits(num) {
+            let n = num;
+            let count = 0;
+            while (n) {
+                count += n & 1;
+                n >>= 1;
+            }
+            return count;
+        }
+
+        function refreshMoveGrid() {
+            const simulation = simulateMoves(queueMoves);
+            if (!puzzle) {
+                for (let i = 0; i < moveCells.length; i++) {
+                    const cell = moveCells[i];
+                    cell.textContent = '';
+                    cell.classList.remove('filled', 'crash');
+                }
+                return;
+            }
+            const crashIndex = simulation.state === 'dead' ? simulation.movesUsed - 1 : -1;
+            for (let i = 0; i < moveCells.length; i++) {
+                const move = queueMoves[i];
+                const cell = moveCells[i];
+                if (move) {
+                    cell.textContent = ARROW[move];
+                    cell.classList.add('filled');
+                    cell.classList.toggle('crash', i === crashIndex);
+                } else {
+                    cell.textContent = '';
+                    cell.classList.remove('filled', 'crash');
+                }
+            }
+        }
+
+        function drawBoard(frame) {
+            ctx.fillStyle = '#0c2030';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.strokeStyle = 'rgba(125, 223, 223, 0.18)';
+            ctx.lineWidth = 1;
+            for (let c = 0; c <= gridSize; c++) {
+                ctx.beginPath();
+                ctx.moveTo(c * cellSize, 0);
+                ctx.lineTo(c * cellSize, canvas.height);
+                ctx.stroke();
+            }
+            for (let r = 0; r <= gridSize; r++) {
+                ctx.beginPath();
+                ctx.moveTo(0, r * cellSize);
+                ctx.lineTo(canvas.width, r * cellSize);
+                ctx.stroke();
+            }
+
+            for (const key of puzzle.walls) {
+                const { x, y } = parseKey(key);
+                const px = x * cellSize;
+                const py = y * cellSize;
+                ctx.fillStyle = '#24384a';
+                ctx.fillRect(px + 6, py + 6, cellSize - 12, cellSize - 12);
+                ctx.strokeStyle = '#3e5a71';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(px + 6, py + 6, cellSize - 12, cellSize - 12);
+            }
+
+            const collectedMask = frame.mask;
+            puzzle.fruits.forEach((fruit, index) => {
+                if ((collectedMask & (1 << index)) !== 0) {
+                    return;
+                }
+                const fx = fruit.x * cellSize + cellSize / 2;
+                const fy = fruit.y * cellSize + cellSize / 2;
+                const fr = cellSize * 0.22;
+                ctx.fillStyle = '#e05555';
+                ctx.beginPath();
+                ctx.arc(fx, fy, fr, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#ff9999';
+                ctx.beginPath();
+                ctx.arc(fx - fr * 0.35, fy - fr * 0.35, fr * 0.28, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            for (let i = frame.body.length - 1; i >= 0; i--) {
+                const segment = frame.body[i];
+                const x = segment.x * cellSize;
+                const y = segment.y * cellSize;
+                const pad = 6;
+                const size = cellSize - pad * 2;
+                const radius = 12;
+                ctx.fillStyle = i === 0 ? '#7ddfdf' : '#126364';
+                ctx.strokeStyle = '#0a4a4a';
+                ctx.lineWidth = 2;
+
+                roundRect(ctx, x + pad, y + pad, size, size, radius);
+                ctx.fill();
+                ctx.stroke();
+            }
+
+            if (frame.body.length > 0) {
+                const head = frame.body[0];
+                const neck = frame.body[1];
+                let dx = 1;
+                let dy = 0;
+                if (neck) {
+                    dx = head.x - neck.x;
+                    dy = head.y - neck.y;
+                }
+
+                const headX = head.x * cellSize;
+                const headY = head.y * cellSize;
+                const eyeR = cellSize * 0.11;
+
+                let eye1 = [headX + cellSize * 0.28, headY + cellSize * 0.3];
+                let eye2 = [headX + cellSize * 0.72, headY + cellSize * 0.3];
+                if (dx > 0) {
+                    eye1 = [headX + cellSize * 0.68, headY + cellSize * 0.3];
+                    eye2 = [headX + cellSize * 0.68, headY + cellSize * 0.7];
+                } else if (dx < 0) {
+                    eye1 = [headX + cellSize * 0.32, headY + cellSize * 0.3];
+                    eye2 = [headX + cellSize * 0.32, headY + cellSize * 0.7];
+                } else if (dy > 0) {
+                    eye1 = [headX + cellSize * 0.3, headY + cellSize * 0.68];
+                    eye2 = [headX + cellSize * 0.7, headY + cellSize * 0.68];
+                }
+
+                ctx.fillStyle = '#042223';
+                ctx.beginPath();
+                ctx.arc(eye1[0], eye1[1], eyeR, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(eye2[0], eye2[1], eyeR, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            if (frame.state === 'dead') {
+                ctx.fillStyle = 'rgba(224, 85, 85, 0.28)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        function roundRect(context, x, y, w, h, r) {
+            context.beginPath();
+            context.moveTo(x + r, y);
+            context.lineTo(x + w - r, y);
+            context.quadraticCurveTo(x + w, y, x + w, y + r);
+            context.lineTo(x + w, y + h - r);
+            context.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            context.lineTo(x + r, y + h);
+            context.quadraticCurveTo(x, y + h, x, y + h - r);
+            context.lineTo(x, y + r);
+            context.quadraticCurveTo(x, y, x + r, y);
+            context.closePath();
+        }
+
+        function refreshPlayback() {
+            if (playbackTimer) {
+                clearInterval(playbackTimer);
+                playbackTimer = null;
+            }
+
+            if (!puzzle) {
+                statusLineEl.textContent = isGeneratingPuzzle
+                    ? 'Generating map...'
+                    : 'Map unavailable.';
+                fruitProgressEl.textContent = `Fruits: 0 / ${fruitCount}`;
+                moveProgressEl.textContent = 'Moves: 0 / --';
+                return;
+            }
+
+            const simulation = simulateMoves(queueMoves);
+            playbackFrames = simulation.frames;
+            fruitProgressEl.textContent = `Fruits: ${simulation.fruitsEaten} / ${fruitCount}`;
+            moveProgressEl.textContent = `Moves: ${queueMoves.length} / ${moveLimit}`;
+            drawBoard(playbackFrames[playbackFrames.length - 1]);
+            if (autoSubmitTimer) {
+                clearTimeout(autoSubmitTimer);
+                autoSubmitTimer = null;
+            }
+            if (queueMoves.length === 0) {
+                statusLineEl.textContent = 'Use the buttons or arrow keys to queue moves.';
+                return;
+            }
+            if (simulation.state === 'dead') {
+                statusLineEl.textContent = 'Route crashes. Submit to score this run or edit it.';
+            } else if (simulation.state === 'win') {
+                statusLineEl.textContent = 'All visible fruits collected. Submit or refine your route.';
+            } else if (queueMoves.length >= moveLimit) {
+                statusLineEl.textContent = 'Move limit reached. Submit your run or edit it.';
+            } else {
+                const last = queueMoves[queueMoves.length - 1];
+                statusLineEl.textContent = `Queued move ${queueMoves.length}: ${ARROW[last]}`;
+            }
+        }
+
+        function playSubmissionAnimation(simulation, onDone) {
+            if (playbackTimer) {
+                clearInterval(playbackTimer);
+                playbackTimer = null;
+            }
+            playbackFrames = simulation.frames;
+            let frameIndex = 0;
+            drawBoard(playbackFrames[frameIndex]);
+            if (playbackFrames.length <= 1) {
+                onDone();
+                isSubmitting = false; // Ensure isSubmitting is reset
+                setButtonsDisabledState(false); // Re-enable buttons
+                return;
+            }
+            playbackTimer = setInterval(() => {
+                frameIndex += 1;
+                drawBoard(playbackFrames[frameIndex]);
+                if (frameIndex >= playbackFrames.length - 1) {
+                    clearInterval(playbackTimer);
+                    playbackTimer = null;
+                    onDone();
+                    isSubmitting = false; // Ensure isSubmitting is reset
+                    setButtonsDisabledState(false); // Re-enable buttons
+                }
+            }, FRAME_DELAY_MS);
+        }
+
+        function getCurrentHeadingDir() {
+            if (queueMoves.length > 0) {
+                return queueMoves[queueMoves.length - 1];
+            }
+            const [head, neck] = puzzle.snakeStart;
+            const dx = head.x - neck.x;
+            const dy = head.y - neck.y;
+            if (dx === 1) return 'R';
+            if (dx === -1) return 'L';
+            if (dy === 1) return 'D';
+            return 'U';
+        }
+
+        function addMove(dirKey) {
+            if (isGeneratingPuzzle || !puzzle) return;
+            if (playbackTimer) return; // Prevent adding moves during playback
+
+            const currentSimulation = simulateMoves(queueMoves);
+            if (currentSimulation.state === 'dead') {
+                statusLineEl.textContent = 'Route already crashes. Undo or clear to continue.';
+                return;
+            }
+            if (currentSimulation.state === 'win') {
+                statusLineEl.textContent = 'All fruits are already collected. Submit your run or edit it.';
+                return;
+            }
+            if (queueMoves.length >= moveLimit) {
+                statusLineEl.textContent = `Move queue is full (${moveLimit}). Submit, undo, or clear.`;
+                return;
+            }
+            const heading = getCurrentHeadingDir();
+            if (dirKey === OPPOSITE[heading]) {
+                statusLineEl.textContent = 'Cannot reverse directly into the snake.';
+                return;
+            }
+            queueMoves.push(dirKey);
+            refreshMoveGrid();
+            refreshPlayback();
+        }
+
+        function undoMove() {
+            if (playbackTimer || queueMoves.length === 0) return; // Prevent undo during playback
+
+            queueMoves.pop();
+            refreshMoveGrid();
+            refreshPlayback();
+        }
+
+        function clearMoves() {
+            if (playbackTimer) return; // Prevent clearing during playback
+
+            queueMoves.length = 0;
+            refreshMoveGrid();
+            refreshPlayback();
+        }
+
+        function performanceEmoji(fruits, total) {
+            if (fruits >= total) return '🟦';
+            if (fruits >= Math.ceil(total * 0.75)) return '🟩';
+            if (fruits >= Math.ceil(total * 0.5)) return '🟨';
+            if (fruits >= Math.ceil(total * 0.25)) return '🟧';
+            return '🟥';
+        }
+
+        function submitRun() {
+            if (isGeneratingPuzzle || !puzzle) {
+                statusLineEl.textContent = 'Please wait for map generation to finish.';
+                return;
+            }
+            if (isSubmitting) {
+                return;
+            }
+            if (queueMoves.length === 0) {
+                statusLineEl.textContent = 'Queue at least one move before submitting.';
+                return;
+            }
+            if (autoSubmitTimer) {
+                clearTimeout(autoSubmitTimer);
+                autoSubmitTimer = null;
+            }
+            const simulation = simulateMoves(queueMoves);
+
+            setButtonsDisabledState(true); // Disable buttons during submission
+
+            const usedMoves = simulation.movesUsed;
+            const fruitsEaten = simulation.fruitsEaten;
+            const emoji = performanceEmoji(fruitsEaten, fruitCount);
+            const shareUrl = getRandomShareUrl(randomConfig);
+            const shareText = `Custom Inverted Snakedle (${gridSize}x${gridSize}): ${fruitsEaten}/${fruitCount} fruits in ${usedMoves}/${moveLimit} moves ${emoji}\n${shareUrl}`;
+            resultsTextEl.textContent = shareText;
+            statusLineEl.textContent = 'Submitting... replaying your run.';
+            isSubmitting = true;
+            playSubmissionAnimation(simulation, () => {
+                resultsModal.style.display = 'flex';
+                localStorage.setItem(
+                    `inverted-snakedle-random-last`,
+                    JSON.stringify({ usedMoves, fruitsEaten, fruitCount, moveLimit, emoji, at: new Date().toISOString() })
+                );
+                isSubmitting = false;
+                setButtonsDisabledState(false); // Re-enable buttons after submission
+            });
+        }
+
+        // Disable undo and clear buttons during submission or animations
+        const undoButton = document.getElementById('undo-move');
+        const clearButton = document.getElementById('clear-moves');
+
+        function setButtonsDisabledState(disabled) {
+            undoButton.disabled = disabled;
+            clearButton.disabled = disabled;
+        }
+
+        document.querySelectorAll('[data-dir]').forEach(btn => {
+            btn.addEventListener('click', () => addMove(btn.dataset.dir));
+        });
+
+        undoButton.addEventListener('click', undoMove);
+        clearButton.addEventListener('click', clearMoves);
+        document.getElementById('submit-snakedle').addEventListener('click', () => submitRun());
+        document.getElementById('load-random-config').addEventListener('click', () => {
+            const nextConfig = {
+                seed: parseIntParam(
+                    document.getElementById('cfg-seed').value,
+                    randomConfig.seed,
+                    RANDOM_LIMITS.seed.min,
+                    RANDOM_LIMITS.seed.max
+                ),
+                mapSize: parseIntParam(
+                    document.getElementById('cfg-map-size').value,
+                    randomConfig.mapSize,
+                    RANDOM_LIMITS.mapSize.min,
+                    RANDOM_LIMITS.mapSize.max
+                ),
+                fruitCount: parseIntParam(
+                    document.getElementById('cfg-fruit-count').value,
+                    randomConfig.fruitCount,
+                    RANDOM_LIMITS.fruitCount.min,
+                    RANDOM_LIMITS.fruitCount.max
+                ),
+                wallCount: parseIntParam(
+                    document.getElementById('cfg-wall-count').value,
+                    randomConfig.wallCount,
+                    RANDOM_LIMITS.wallCount.min,
+                    RANDOM_LIMITS.wallCount.max
+                ),
+                moveCount: parseIntParam(
+                    document.getElementById('cfg-move-count').value,
+                    randomConfig.moveCount,
+                    RANDOM_LIMITS.moveCount.min,
+                    RANDOM_LIMITS.moveCount.max
+                )
+            };
+
+            applyConfig(nextConfig);
+        });
+        document.getElementById('shuffle-seed').addEventListener('click', () => {
+            const randomSeed = Math.floor(Math.random() * 100000);
+            document.getElementById('cfg-seed').value = randomSeed;
+            document.getElementById('cfg-seed-output').value = randomSeed;
+            document.getElementById('cfg-seed-output').textContent = randomSeed;
+        });
+
+        document.getElementById('full-shuffle').addEventListener('click', () => {
+            const randomSeed = Math.floor(Math.random() * 100000);
+            const shuffledParameters = pickConstrainedParameters(randomSeed, SHUFFLE_PARAMETER_LIMITS);
+            const randomMapSize = shuffledParameters.mapSize;
+            const randomFruitCount = shuffledParameters.fruitCount;
+            const randomWallCount = shuffledParameters.wallCount;
+            const randomMoveCount = clampValue(randomMapSize * 3 + Math.floor(Math.random() * 8), RANDOM_LIMITS.moveCount.min, RANDOM_LIMITS.moveCount.max);
+
+            document.getElementById('cfg-seed').value = randomSeed;
+            document.getElementById('cfg-seed-output').value = randomSeed;
+            document.getElementById('cfg-seed-output').textContent = randomSeed;
+            document.getElementById('cfg-map-size').value = randomMapSize;
+            document.getElementById('cfg-map-size-output').value = randomMapSize;
+            document.getElementById('cfg-map-size-output').textContent = randomMapSize;
+            document.getElementById('cfg-fruit-count').value = randomFruitCount;
+            document.getElementById('cfg-fruit-count-output').value = randomFruitCount;
+            document.getElementById('cfg-fruit-count-output').textContent = randomFruitCount;
+            document.getElementById('cfg-wall-count').value = randomWallCount;
+            document.getElementById('cfg-wall-count-output').value = randomWallCount;
+            document.getElementById('cfg-wall-count-output').textContent = randomWallCount;
+            document.getElementById('cfg-move-count').value = randomMoveCount;
+            document.getElementById('cfg-move-count-output').value = randomMoveCount;
+            document.getElementById('cfg-move-count-output').textContent = randomMoveCount;
+        });
+
+        window.addEventListener('hashchange', () => {
+            const nextConfig = parseRandomConfigFromHash();
+            applyConfig(nextConfig, true);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            const target = e.target;
+            if (
+                target instanceof HTMLElement &&
+                (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
+            ) {
+                return;
+            }
+            const keyMap = {
+                ArrowUp: 'U',
+                ArrowDown: 'D',
+                ArrowLeft: 'L',
+                ArrowRight: 'R',
+                w: 'U',
+                W: 'U',
+                s: 'D',
+                S: 'D',
+                a: 'L',
+                A: 'L',
+                d: 'R',
+                D: 'R'
+            };
+            if (keyMap[e.key]) {
+                e.preventDefault();
+                addMove(keyMap[e.key]);
+            } else if (e.key === 'Backspace' || e.key === 'Z' || e.key === 'z') {
+                e.preventDefault();
+                undoMove();
+            } else if (e.key === 'Escape' || e.key === 'C' || e.key === 'c') {
+                e.preventDefault();
+                clearMoves();
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                submitRun();
+            }
+        });
+
+        document.getElementById('copy-share').addEventListener('click', async () => {
+            const text = resultsTextEl.textContent;
+            try {
+                await navigator.clipboard.writeText(text);
+                statusLineEl.textContent = 'Share text copied to clipboard.';
+            } catch (err) {
+                const temp = document.createElement('textarea');
+                temp.value = text;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+                statusLineEl.textContent = 'Share text copied to clipboard.';
+            }
+        });
+
+        document.getElementById('close-results').addEventListener('click', () => {
+            resultsModal.style.display = 'none';
+        });
+
+        resultsModal.addEventListener('click', (e) => {
+            if (e.target === resultsModal) {
+                resultsModal.style.display = 'none';
+            }
+        });
+
+
+
+
+        initializeGame();
+    </script>
+</body>
+
+</html>
