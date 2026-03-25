@@ -495,10 +495,12 @@
         let maxCollectableFruits = FRUIT_COUNT;
         let optimalMoves = { count: Infinity, moves: [] };
 
-        function setGenerationOverlay(active, attempt = 0, reason = 'Generating map...') {
+        function setGenerationOverlay(active, generationStartMs = null, reason = 'Generating map...') {
             generationOverlayEl.style.display = active ? 'flex' : 'none';
             generationMessageEl.textContent = reason;
-            generationProgressEl.textContent = `Attempts: ${attempt} / ${MAX_GEN_ATTEMPTS}`;
+            const elapsedMs = generationStartMs === null ? 0 : Math.max(0, performance.now() - generationStartMs);
+            const clampedElapsedMs = Math.min(elapsedMs, MAX_GEN_TIME_MS);
+            generationProgressEl.textContent = `Time: ${(clampedElapsedMs / 1000).toFixed(2)}s / ${(MAX_GEN_TIME_MS / 1000).toFixed(2)}s`;
         }
 
         function setControlsDisabled(disabled) {
@@ -518,7 +520,7 @@
             await Promise.all([loadSelectedDayParams(), loadPreloadedDailies()]);
             isGeneratingPuzzle = true;
             setControlsDisabled(true);
-            setGenerationOverlay(true, 0, 'Generating daily map...');
+            setGenerationOverlay(true, performance.now(), 'Generating daily map...');
             try {
                 puzzle = await generateDailyPuzzle(dayNumber);
                 if (puzzle.optimalMoves && Number.isFinite(puzzle.optimalMoves.count)) {
@@ -529,7 +531,7 @@
                 rebuildMoveGrid(moveLimit);
             } finally {
                 isGeneratingPuzzle = false;
-                setGenerationOverlay(false, 0, 'Generating daily map...');
+                setGenerationOverlay(false, null, 'Generating daily map...');
                 setControlsDisabled(false);
             }
 
@@ -1233,7 +1235,7 @@
             for (let attempt = 0; attempt < MAX_GEN_ATTEMPTS; attempt++) {
                 const attemptNumber = attempt + 1;
                 if (attempt % GENERATION_PROGRESS_UPDATE_EVERY === 0) {
-                    setGenerationOverlay(true, attemptNumber, 'Generating daily map...');
+                    setGenerationOverlay(true, generationStartMs, 'Generating daily map...');
                     await yieldToUi();
                 }
                 if (performance.now() - generationStartMs > MAX_GEN_TIME_MS) {
@@ -1858,7 +1860,7 @@
 
         initializeGame().catch(err => {
             console.error('Failed to initialize Inverted Snakedle:', err);
-            setGenerationOverlay(false, 0, 'Generating daily map...');
+            setGenerationOverlay(false, null, 'Generating daily map...');
             setControlsDisabled(true);
             statusLineEl.textContent = 'Could not initialize the daily puzzle.';
         });

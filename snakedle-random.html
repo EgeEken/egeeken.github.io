@@ -705,10 +705,12 @@
         let isSubmitting = false;
         let isGeneratingPuzzle = false;
 
-        function setGenerationOverlay(active, attempt = 0, reason = 'Generating map...') {
+        function setGenerationOverlay(active, generationStartMs = null, reason = 'Generating map...') {
             generationOverlayEl.style.display = active ? 'flex' : 'none';
             generationMessageEl.textContent = reason;
-            generationProgressEl.textContent = `Attempts: ${attempt} / ${MAX_GEN_ATTEMPTS}`;
+            const elapsedMs = generationStartMs === null ? 0 : Math.max(0, performance.now() - generationStartMs);
+            const clampedElapsedMs = Math.min(elapsedMs, MAX_GEN_TIME_MS);
+            generationProgressEl.textContent = `Time: ${(clampedElapsedMs / 1000).toFixed(2)}s / ${(MAX_GEN_TIME_MS / 1000).toFixed(2)}s`;
         }
 
         function setControlsDisabled(disabled) {
@@ -731,13 +733,13 @@
         async function rebuildPuzzleForCurrentConfig() {
             isGeneratingPuzzle = true;
             setControlsDisabled(true);
-            setGenerationOverlay(true, 0, 'Generating map...');
+            setGenerationOverlay(true, performance.now(), 'Generating map...');
             try {
                 puzzle = await generateDailyPuzzle(randomPuzzleId);
                 optimalMoves = puzzle.optimalMoves;
             } finally {
                 isGeneratingPuzzle = false;
-                setGenerationOverlay(false, 0, 'Generating map...');
+                setGenerationOverlay(false, null, 'Generating map...');
                 setControlsDisabled(false);
             }
         }
@@ -881,7 +883,7 @@
             for (let attempt = 0; attempt < MAX_GEN_ATTEMPTS; attempt++) {
                 const attemptNumber = attempt + 1;
                 if (attempt % GENERATION_PROGRESS_UPDATE_EVERY === 0) {
-                    setGenerationOverlay(true, attemptNumber, 'Generating map...');
+                    setGenerationOverlay(true, generationStartMs, 'Generating map...');
                     await yieldToUi();
                 }
                 if (performance.now() - generationStartMs > MAX_GEN_TIME_MS) {
@@ -924,7 +926,7 @@
                          { x: 1, y: 4 }, { x: 2, y: 3 }, { x: 3, y: 3 }, { x: 4, y: 4 }], // mouth
                 snakeStart: [{ x: 0, y: 1 }, { x: 0, y: 0 }],
             }
-            setGenerationOverlay(true, MAX_GEN_ATTEMPTS, 'Using fallback map...');
+            setGenerationOverlay(true, generationStartMs, 'Using fallback map...');
             await yieldToUi();
             const fallback_optimal = findOptimalMoves(fallback_candidate, MAX_SEARCH);
             return {
