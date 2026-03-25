@@ -419,13 +419,15 @@
         };
         const SELECTED_DAY_PARAMS_URL = 'assets/snakedle-selected-day-params.json';
         const PRELOADED_DAILIES_URL = 'assets/preloaded_dailies.json';
-        const PRELOADED_GAME_KEY = 'invertedSnakedle';
+        const PRELOADED_MAP_GAME_KEY = 'snakedle';
+        const PRELOADED_META_GAME_KEY = 'invertedSnakedle';
         let selectedDayParamsByDay = {
             4: { mapSize: 8, fruitCount: 12, wallCount: 20 },
             5: { mapSize: 9, fruitCount: 10, wallCount: 30 },
             7: { mapSize: 8, fruitCount: 12, wallCount: 20 }
         };
-        let preloadedDailiesByDay = {};
+        let preloadedMapByDay = {};
+        let preloadedMetaByDay = {};
         const LAUNCH_DAY_UTC = Date.UTC(2026, 2, 19); // March 19, 2026
         const todayDayNumber = getDayNumber(new Date());
         const daySelection = resolveRequestedDay(window.location.hash, todayDayNumber);
@@ -673,7 +675,25 @@
             return normalized;
         }
 
-        function normalizePreloadedDailyEntry(entry) {
+        function normalizeOptimalMoveCount(entry, mapState) {
+            const source = entry && entry.optimalMoves && typeof entry.optimalMoves === 'object'
+                ? entry.optimalMoves
+                : mapState && mapState.optimalMoves && typeof mapState.optimalMoves === 'object'
+                    ? mapState.optimalMoves
+                    : null;
+
+            if (source && Number.isFinite(Number(source.count))) {
+                return Number(source.count);
+            }
+
+            if (entry && Number.isFinite(Number(entry.optimalMoveCount))) {
+                return Number(entry.optimalMoveCount);
+            }
+
+            return null;
+        }
+
+        function normalizePreloadedMapEntry(entry) {
             if (!entry || typeof entry !== 'object') {
                 return null;
             }
@@ -688,20 +708,15 @@
                 return null;
             }
 
-            const optimalMovesSource = entry.optimalMoves && typeof entry.optimalMoves === 'object'
-                ? entry.optimalMoves
-                : mapState.optimalMoves;
-            if (!optimalMovesSource || typeof optimalMovesSource !== 'object') {
-                return null;
-            }
-            const optimalCount = Number(optimalMovesSource.count);
-            const optimalMoveList = normalizeMoveList(optimalMovesSource.moves);
-            if (!Number.isFinite(optimalCount) || !optimalMoveList) {
+            const optimalCount = normalizeOptimalMoveCount(entry, mapState);
+            if (!Number.isFinite(optimalCount)) {
                 return null;
             }
 
-            const moveLimitValue = Number(entry.moveLimit);
-            const maxCollectableValue = Number(entry.maxCollectableFruits);
+            const optimalMovesSource = entry.optimalMoves && typeof entry.optimalMoves === 'object'
+                ? entry.optimalMoves
+                : mapState.optimalMoves;
+            const optimalMoveList = normalizeMoveList(optimalMovesSource.moves);
 
             return {
                 snakeStart,
@@ -709,16 +724,14 @@
                 walls,
                 optimalMoves: {
                     count: optimalCount,
-                    moves: optimalMoveList
-                },
-                moveLimit: Number.isFinite(moveLimitValue) ? moveLimitValue : null,
-                maxCollectableFruits: Number.isFinite(maxCollectableValue) ? maxCollectableValue : null
+                    moves: optimalMoveList || []
+                }
             };
         }
 
-        function normalizePreloadedDailies(raw) {
-            const source = raw && typeof raw === 'object' && raw[PRELOADED_GAME_KEY] && typeof raw[PRELOADED_GAME_KEY] === 'object'
-                ? raw[PRELOADED_GAME_KEY]
+        function normalizePreloadedMapByDay(raw) {
+            const source = raw && typeof raw === 'object' && raw[PRELOADED_MAP_GAME_KEY] && typeof raw[PRELOADED_MAP_GAME_KEY] === 'object'
+                ? raw[PRELOADED_MAP_GAME_KEY]
                 : raw;
             const normalized = {};
             if (!source || typeof source !== 'object') {
@@ -730,7 +743,54 @@
                 if (!Number.isInteger(day) || day < 1) {
                     return;
                 }
-                const normalizedEntry = normalizePreloadedDailyEntry(entry);
+                const normalizedEntry = normalizePreloadedMapEntry(entry);
+                if (!normalizedEntry) {
+                    return;
+                }
+                normalized[day] = normalizedEntry;
+            });
+
+            return normalized;
+        }
+
+        function normalizePreloadedMetaEntry(entry) {
+            if (!entry || typeof entry !== 'object') {
+                return null;
+            }
+
+            const moveLimitValue = Number(entry.moveLimit);
+            const maxCollectableValue = Number(entry.maxCollectableFruits);
+            const optimalCount = normalizeOptimalMoveCount(entry, entry.mapState);
+
+            const hasMoveLimit = Number.isFinite(moveLimitValue);
+            const hasMaxCollectable = Number.isFinite(maxCollectableValue);
+            const hasOptimalCount = Number.isFinite(optimalCount);
+            if (!hasMoveLimit && !hasMaxCollectable && !hasOptimalCount) {
+                return null;
+            }
+
+            return {
+                moveLimit: hasMoveLimit ? moveLimitValue : null,
+                maxCollectableFruits: hasMaxCollectable ? maxCollectableValue : null,
+                optimalMoveCount: hasOptimalCount ? optimalCount : null
+            };
+        }
+
+        function normalizePreloadedMetaByDay(raw) {
+            const source = raw && typeof raw === 'object' && raw[PRELOADED_META_GAME_KEY] && typeof raw[PRELOADED_META_GAME_KEY] === 'object'
+                ? raw[PRELOADED_META_GAME_KEY]
+                : null;
+            const normalized = {};
+            if (!source || typeof source !== 'object') {
+                return normalized;
+            }
+
+            Object.entries(source).forEach(([dayKey, entry]) => {
+                const day = Number(dayKey);
+                if (!Number.isInteger(day) || day < 1) {
+                    return;
+                }
+                const normalizedEntry = normalizePreloadedMetaEntry(entry);
                 if (!normalizedEntry) {
                     return;
                 }
@@ -747,33 +807,52 @@
                     throw new Error(`Failed to fetch preloaded dailies: ${response.status}`);
                 }
                 const data = await response.json();
-                preloadedDailiesByDay = normalizePreloadedDailies(data);
+                preloadedMapByDay = normalizePreloadedMapByDay(data);
+                preloadedMetaByDay = normalizePreloadedMetaByDay(data);
             } catch (error) {
                 console.info('No preloaded dailies found. Using generated daily maps.', error);
-                preloadedDailiesByDay = {};
+                preloadedMapByDay = {};
+                preloadedMetaByDay = {};
             }
         }
 
         function getPreloadedPuzzle(day) {
-            const preloaded = preloadedDailiesByDay[day];
-            if (!preloaded) {
+            const preloadedMap = preloadedMapByDay[day];
+            if (!preloadedMap) {
                 return null;
             }
 
-            const safeMoveLimit = Number.isFinite(preloaded.moveLimit)
-                ? preloaded.moveLimit
-                : preloaded.optimalMoves.count;
-            const safeMaxCollectable = Number.isFinite(preloaded.maxCollectableFruits)
-                ? preloaded.maxCollectableFruits
-                : FRUIT_COUNT;
+            const preloadedMeta = preloadedMetaByDay[day] || {};
+            const mapWallsSet = new Set(preloadedMap.walls.map(wall => cellKey(wall.x, wall.y)));
+            const mapFruitsList = preloadedMap.fruits.map(fruit => ({ x: fruit.x, y: fruit.y }));
+            const mapSnakeStartList = preloadedMap.snakeStart.map(segment => ({ x: segment.x, y: segment.y }));
+
+            const safeMoveLimit = Number.isFinite(preloadedMeta.moveLimit)
+                ? preloadedMeta.moveLimit
+                : preloadedMap.optimalMoves.count;
+            const safeMaxCollectable = Number.isFinite(preloadedMeta.maxCollectableFruits)
+                ? preloadedMeta.maxCollectableFruits
+                : findMaxCollectableFruits(
+                    {
+                        walls: mapWallsSet,
+                        fruits: mapFruitsList,
+                        snakeStart: mapSnakeStartList
+                    },
+                    safeMoveLimit,
+                    MAX_SEARCH
+                );
+            const effectiveOptimalCount = Number.isFinite(preloadedMeta.optimalMoveCount)
+                ? preloadedMeta.optimalMoveCount
+                : preloadedMap.optimalMoves.count;
+
 
             return {
-                walls: new Set(preloaded.walls.map(wall => cellKey(wall.x, wall.y))),
-                fruits: preloaded.fruits.map(fruit => ({ x: fruit.x, y: fruit.y })),
-                snakeStart: preloaded.snakeStart.map(segment => ({ x: segment.x, y: segment.y })),
+                walls: mapWallsSet,
+                fruits: mapFruitsList,
+                snakeStart: mapSnakeStartList,
                 optimalMoves: {
-                    count: preloaded.optimalMoves.count,
-                    moves: preloaded.optimalMoves.moves.slice()
+                    count: effectiveOptimalCount,
+                    moves: []
                 },
                 moveLimit: safeMoveLimit,
                 maxCollectableFruits: safeMaxCollectable
@@ -786,25 +865,16 @@
             }
 
             const exportPayload = {
-                [PRELOADED_GAME_KEY]: {
+                [PRELOADED_META_GAME_KEY]: {
                     [day]: {
                         dayNumber: day,
-                        mapState: {
-                            snakeStart: dailyPuzzle.snakeStart.map(segment => ({ x: segment.x, y: segment.y })),
-                            fruits: dailyPuzzle.fruits.map(fruit => ({ x: fruit.x, y: fruit.y })),
-                            walls: [...dailyPuzzle.walls].map(key => parseKey(key))
-                        },
-                        optimalMoves: {
-                            count: dailyPuzzle.optimalMoves.count,
-                            moves: dailyPuzzle.optimalMoves.moves.slice()
-                        },
                         moveLimit: dailyPuzzle.moveLimit,
                         maxCollectableFruits: dailyPuzzle.maxCollectableFruits
                     }
                 }
             };
 
-            //console.log(`[Preload Export][${PRELOADED_GAME_KEY}] Day ${day}`);
+            //console.log(`[Preload Export][${PRELOADED_META_GAME_KEY}] Day ${day}`);
             //console.log(JSON.stringify(exportPayload, null, 2));
         }
 
@@ -1657,10 +1727,11 @@
         }
 
         function performanceEmoji(fruits, total) {
-            if (fruits >= total) return '🟦';
-            if (fruits >= Math.ceil(total * 0.75)) return '🟩';
-            if (fruits >= Math.ceil(total * 0.5)) return '🟨';
-            if (fruits >= Math.ceil(total * 0.25)) return '🟧';
+            if (fruits > total) return '🟪'; //normally impossible, just in case
+            if (fruits == total) return '🟦';
+            if (fruits >= total-1) return '🟩';
+            if (fruits >= total-2) return '🟨';
+            if (fruits >= total-3) return '🟧';
             return '🟥';
         }
         function submitRun(isAuto = false) {

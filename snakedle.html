@@ -688,6 +688,24 @@
             return normalized;
         }
 
+        function normalizeOptimalMoveCount(entry, mapState) {
+            const source = entry && entry.optimalMoves && typeof entry.optimalMoves === 'object'
+                ? entry.optimalMoves
+                : mapState && mapState.optimalMoves && typeof mapState.optimalMoves === 'object'
+                    ? mapState.optimalMoves
+                    : null;
+
+            if (source && Number.isFinite(Number(source.count))) {
+                return Number(source.count);
+            }
+
+            if (entry && Number.isFinite(Number(entry.optimalMoveCount))) {
+                return Number(entry.optimalMoveCount);
+            }
+
+            return null;
+        }
+
         function normalizePreloadedDailyEntry(entry) {
             if (!entry || typeof entry !== 'object') {
                 return null;
@@ -703,17 +721,15 @@
                 return null;
             }
 
+            const optimalCount = normalizeOptimalMoveCount(entry, mapState);
+            if (!Number.isFinite(optimalCount)) {
+                return null;
+            }
+
             const optimalMovesSource = entry.optimalMoves && typeof entry.optimalMoves === 'object'
                 ? entry.optimalMoves
                 : mapState.optimalMoves;
-            if (!optimalMovesSource || typeof optimalMovesSource !== 'object') {
-                return null;
-            }
-            const optimalCount = Number(optimalMovesSource.count);
             const optimalMoveList = normalizeMoveList(optimalMovesSource.moves);
-            if (!Number.isFinite(optimalCount) || !optimalMoveList) {
-                return null;
-            }
 
             return {
                 snakeStart,
@@ -721,7 +737,7 @@
                 walls,
                 optimalMoves: {
                     count: optimalCount,
-                    moves: optimalMoveList
+                    moves: optimalMoveList || []
                 }
             };
         }
@@ -796,8 +812,7 @@
                             walls: [...dailyPuzzle.walls].map(key => parseKey(key))
                         },
                         optimalMoves: {
-                            count: dailyPuzzle.optimalMoves.count,
-                            moves: dailyPuzzle.optimalMoves.moves.slice()
+                            count: dailyPuzzle.optimalMoves.count
                         }
                     }
                 }
