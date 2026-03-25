@@ -373,7 +373,7 @@
 
 <body>
     <header>
-        <a href="/games/snakedle/" class="back-button">← Return to Menu</a>
+        <a id="back-nav-button" href="/games/snakedle/" class="back-button">← Return to Menu</a>
         <a href="snakedle-calendar.html" class="calendar-button" aria-label="Open calendar">📅</a>
         <h1><b>Snakedle</b></h1>
         <h2><a class="tutorial-button" href="games/snakedle/snakedle-tutorial.html">Tutorial</a></h2>
@@ -491,12 +491,39 @@
         const generationOverlayEl = document.getElementById('generation-overlay');
         const generationMessageEl = document.getElementById('generation-message');
         const generationProgressEl = document.getElementById('generation-progress');
+        const backNavButtonEl = document.getElementById('back-nav-button');
 
         const queueMoves = [];
         const moveCells = [];
         const OPPOSITE = { U: 'D', D: 'U', L: 'R', R: 'L' };
         const FRAME_DURATION_MS = 120;
         const AUTO_SUBMIT_DELAY_MS = 120;
+
+        function updateBackButtonForHash(hash) {
+            if (!backNavButtonEl) return;
+
+            const token = String(hash || '').replace(/^#/, '').trim();
+            const isAdminDayHash = /^admin-(\d+)$/i.test(token);
+            const isRegularDayHash = /^(\d+)$/.test(token);
+
+            if (isAdminDayHash) {
+                backNavButtonEl.href = 'snakedle-admin-calendar.html';
+                backNavButtonEl.textContent = '← Return to Admin Calendar';
+                return;
+            }
+
+            if (isRegularDayHash) {
+                backNavButtonEl.href = 'snakedle-calendar.html';
+                backNavButtonEl.textContent = '← Return to Calendar';
+                return;
+            }
+
+            backNavButtonEl.href = '/games/snakedle/';
+            backNavButtonEl.textContent = '← Return to Menu';
+        }
+
+        updateBackButtonForHash(window.location.hash);
+        window.addEventListener('hashchange', () => updateBackButtonForHash(window.location.hash));
 
         dailyLabelEl.textContent = `Snakedle Day ${dayNumber}`;
         document.documentElement.style.setProperty('--snakedle-grid-size', String(GRID_SIZE));
