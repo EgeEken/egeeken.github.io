@@ -418,11 +418,14 @@
             wallCount: { min: 10, max: 30 }
         };
         const SELECTED_DAY_PARAMS_URL = 'assets/snakedle-selected-day-params.json';
+        const PRELOADED_DAILIES_URL = 'assets/preloaded_dailies.json';
+        const PRELOADED_GAME_KEY = 'invertedSnakedle';
         let selectedDayParamsByDay = {
             4: { mapSize: 8, fruitCount: 12, wallCount: 20 },
             5: { mapSize: 9, fruitCount: 10, wallCount: 30 },
             7: { mapSize: 8, fruitCount: 12, wallCount: 20 }
         };
+        let preloadedDailiesByDay = {};
         const LAUNCH_DAY_UTC = Date.UTC(2026, 2, 19); // March 19, 2026
         const todayDayNumber = getDayNumber(new Date());
         const daySelection = resolveRequestedDay(window.location.hash, todayDayNumber);
@@ -510,7 +513,7 @@
         }
 
         async function initializeGame() {
-            await loadSelectedDayParams();
+            await Promise.all([loadSelectedDayParams(), loadPreloadedDailies()]);
             isGeneratingPuzzle = true;
             setControlsDisabled(true);
             setGenerationOverlay(true, 0, 'Generating daily map...');
@@ -602,6 +605,207 @@
                 normalized[day] = { mapSize, fruitCount, wallCount };
             });
             return normalized;
+        }
+
+        function normalizeGridPoint(value) {
+            if (Array.isArray(value) && value.length >= 2) {
+                const x = Number(value[0]);
+                const y = Number(value[1]);
+                if (Number.isInteger(x) && Number.isInteger(y)) {
+                    return { x, y };
+                }
+            }
+
+            if (typeof value === 'string') {
+                const match = value.trim().match(/^(\d+)\s*,\s*(\d+)$/);
+                if (match) {
+                    return { x: Number(match[1]), y: Number(match[2]) };
+                }
+            }
+
+            if (value && typeof value === 'object') {
+                const x = Number(value.x);
+                const y = Number(value.y);
+                if (Number.isInteger(x) && Number.isInteger(y)) {
+                    return { x, y };
+                }
+            }
+
+            return null;
+        }
+
+        function normalizePointList(value) {
+            if (!Array.isArray(value)) {
+                return null;
+            }
+
+            const normalized = [];
+            for (const item of value) {
+                const point = normalizeGridPoint(item);
+                if (!point || !inBounds(point.x, point.y)) {
+                    return null;
+                }
+                normalized.push(point);
+            }
+
+            return normalized;
+        }
+
+        function normalizeMoveList(value) {
+            if (typeof value === 'string') {
+                return value.split('').filter(move => DIRS[move]);
+            }
+            if (!Array.isArray(value)) {
+                return null;
+            }
+
+            const normalized = [];
+            for (const item of value) {
+                if (typeof item !== 'string') {
+                    return null;
+                }
+                const move = item.toUpperCase();
+                if (!DIRS[move]) {
+                    return null;
+                }
+                normalized.push(move);
+            }
+            return normalized;
+        }
+
+        function normalizePreloadedDailyEntry(entry) {
+            if (!entry || typeof entry !== 'object') {
+                return null;
+            }
+
+            const mapState = entry.mapState && typeof entry.mapState === 'object'
+                ? entry.mapState
+                : entry;
+            const snakeStart = normalizePointList(mapState.snakeStart);
+            const fruits = normalizePointList(mapState.fruits);
+            const walls = normalizePointList(mapState.walls || []);
+            if (!snakeStart || snakeStart.length < 2 || !fruits || !walls) {
+                return null;
+            }
+
+            const optimalMovesSource = entry.optimalMoves && typeof entry.optimalMoves === 'object'
+                ? entry.optimalMoves
+                : mapState.optimalMoves;
+            if (!optimalMovesSource || typeof optimalMovesSource !== 'object') {
+                return null;
+            }
+            const optimalCount = Number(optimalMovesSource.count);
+            const optimalMoveList = normalizeMoveList(optimalMovesSource.moves);
+            if (!Number.isFinite(optimalCount) || !optimalMoveList) {
+                return null;
+            }
+
+            const moveLimitValue = Number(entry.moveLimit);
+            const maxCollectableValue = Number(entry.maxCollectableFruits);
+
+            return {
+                snakeStart,
+                fruits,
+                walls,
+                optimalMoves: {
+                    count: optimalCount,
+                    moves: optimalMoveList
+                },
+                moveLimit: Number.isFinite(moveLimitValue) ? moveLimitValue : null,
+                maxCollectableFruits: Number.isFinite(maxCollectableValue) ? maxCollectableValue : null
+            };
+        }
+
+        function normalizePreloadedDailies(raw) {
+            const source = raw && typeof raw === 'object' && raw[PRELOADED_GAME_KEY] && typeof raw[PRELOADED_GAME_KEY] === 'object'
+                ? raw[PRELOADED_GAME_KEY]
+                : raw;
+            const normalized = {};
+            if (!source || typeof source !== 'object') {
+                return normalized;
+            }
+
+            Object.entries(source).forEach(([dayKey, entry]) => {
+                const day = Number(dayKey);
+                if (!Number.isInteger(day) || day < 1) {
+                    return;
+                }
+                const normalizedEntry = normalizePreloadedDailyEntry(entry);
+                if (!normalizedEntry) {
+                    return;
+                }
+                normalized[day] = normalizedEntry;
+            });
+
+            return normalized;
+        }
+
+        async function loadPreloadedDailies() {
+            try {
+                const response = await fetch(PRELOADED_DAILIES_URL);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch preloaded dailies: ${response.status}`);
+                }
+                const data = await response.json();
+                preloadedDailiesByDay = normalizePreloadedDailies(data);
+            } catch (error) {
+                console.info('No preloaded dailies found. Using generated daily maps.', error);
+                preloadedDailiesByDay = {};
+            }
+        }
+
+        function getPreloadedPuzzle(day) {
+            const preloaded = preloadedDailiesByDay[day];
+            if (!preloaded) {
+                return null;
+            }
+
+            const safeMoveLimit = Number.isFinite(preloaded.moveLimit)
+                ? preloaded.moveLimit
+                : preloaded.optimalMoves.count;
+            const safeMaxCollectable = Number.isFinite(preloaded.maxCollectableFruits)
+                ? preloaded.maxCollectableFruits
+                : FRUIT_COUNT;
+
+            return {
+                walls: new Set(preloaded.walls.map(wall => cellKey(wall.x, wall.y))),
+                fruits: preloaded.fruits.map(fruit => ({ x: fruit.x, y: fruit.y })),
+                snakeStart: preloaded.snakeStart.map(segment => ({ x: segment.x, y: segment.y })),
+                optimalMoves: {
+                    count: preloaded.optimalMoves.count,
+                    moves: preloaded.optimalMoves.moves.slice()
+                },
+                moveLimit: safeMoveLimit,
+                maxCollectableFruits: safeMaxCollectable
+            };
+        }
+
+        function logPreloadedDailyExport(day, dailyPuzzle) {
+            if (!dailyPuzzle || !dailyPuzzle.optimalMoves) {
+                return;
+            }
+
+            const exportPayload = {
+                [PRELOADED_GAME_KEY]: {
+                    [day]: {
+                        dayNumber: day,
+                        mapState: {
+                            snakeStart: dailyPuzzle.snakeStart.map(segment => ({ x: segment.x, y: segment.y })),
+                            fruits: dailyPuzzle.fruits.map(fruit => ({ x: fruit.x, y: fruit.y })),
+                            walls: [...dailyPuzzle.walls].map(key => parseKey(key))
+                        },
+                        optimalMoves: {
+                            count: dailyPuzzle.optimalMoves.count,
+                            moves: dailyPuzzle.optimalMoves.moves.slice()
+                        },
+                        moveLimit: dailyPuzzle.moveLimit,
+                        maxCollectableFruits: dailyPuzzle.maxCollectableFruits
+                    }
+                }
+            };
+
+            //console.log(`[Preload Export][${PRELOADED_GAME_KEY}] Day ${day}`);
+            //console.log(JSON.stringify(exportPayload, null, 2));
         }
 
         async function loadSelectedDayParams() {
@@ -800,7 +1004,7 @@
             while (queueIndex < queue.length && searchCount < maxSearch) {
                 searchCount++;
                 if (searchCount % 50000 === 0) {
-                    console.log(`Searched ${searchCount} / ${maxSearch} states so far...`);
+                    //console.log(`Searched ${searchCount} / ${maxSearch} states so far...`);
                 }
                 const stateIndex = queue[queueIndex++];
                 const state = states[stateIndex];
@@ -895,7 +1099,7 @@
             while (queueIndex < queue.length && searchCount < maxSearch) {
                 searchCount++;
                 if (searchCount % 50000 === 0) {
-                    console.log(`Searched ${searchCount} / ${maxSearch} states for max fruits...`);
+                    //console.log(`Searched ${searchCount} / ${maxSearch} states for max fruits...`);
                 }
                 const state = queue[queueIndex++];
                 bestFruits = Math.max(bestFruits, countBits(state.mask));
@@ -930,6 +1134,11 @@
         }
 
         async function generateDailyPuzzle(day) {
+            const preloadedPuzzle = getPreloadedPuzzle(day);
+            if (preloadedPuzzle) {
+                return preloadedPuzzle;
+            }
+
             const baseSeed = day * 2654435761;
             const allCells = [];
             const generationStartMs = performance.now();
@@ -984,12 +1193,14 @@
                     ? FRUIT_COUNT
                     : findMaxCollectableFruits(candidate, allowedMoves, MAX_SEARCH);
 
-                return {
+                const dailyPuzzle = {
                     ...candidate,
                     optimalMoves: optimal,
                     moveLimit: allowedMoves,
                     maxCollectableFruits: maxCollectable
                 };
+                logPreloadedDailyExport(day, dailyPuzzle);
+                return dailyPuzzle;
             }
 
             const fallbackCandidate = {
@@ -1003,12 +1214,14 @@
                 ? FRUIT_COUNT
                 : findMaxCollectableFruits(fallbackCandidate, fallbackLimit, MAX_SEARCH);
             await yieldToUi();
-            return {
+            const fallbackPuzzle = {
                 ...fallbackCandidate,
                 optimalMoves: fallbackOptimal,
                 moveLimit: fallbackLimit,
                 maxCollectableFruits: fallbackCollectable
             };
+            logPreloadedDailyExport(day, fallbackPuzzle);
+            return fallbackPuzzle;
         }
 
         function advanceStatePacked(body, mask, dirIndex, nextByDir, wallBlocked, fruitAtCell) {
