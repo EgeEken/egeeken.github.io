@@ -434,7 +434,8 @@
         const FRUIT_COUNT = dailyParameters.fruitCount;
         const WALL_COUNT = dailyParameters.wallCount;
         const MAX_GEN_ATTEMPTS = 10000;
-        const MAX_GEN_TIME_MS = 3000;
+        const MAX_GEN_TIME_MS = 5000;
+        const MAX_SEARCH = 500000;
         const GENERATION_PROGRESS_UPDATE_EVERY = 8;
 
         const DIRS = {
@@ -492,7 +493,7 @@
         function setGenerationOverlay(active, attempt = 0, reason = 'Generating map...') {
             generationOverlayEl.style.display = active ? 'flex' : 'none';
             generationMessageEl.textContent = reason;
-            generationProgressEl.textContent = `Day: ${dayNumber}`;
+            generationProgressEl.textContent = `Attempts: ${attempt} / ${MAX_GEN_ATTEMPTS}`;
         }
 
         function setControlsDisabled(disabled) {
@@ -742,7 +743,7 @@
             return reversed;
         }
 
-        function findOptimalMoves(candidate) {
+        function findOptimalMoves(candidate, maxSearch = MAX_SEARCH) {
             const totalCells = GRID_SIZE * GRID_SIZE;
             const wallBlocked = new Uint8Array(totalCells);
             for (const wallKey of candidate.walls) {
@@ -794,8 +795,13 @@
             const visitedByHeadMask = new Map();
             const startHeadMaskKey = (startBody[0] | (0 << 8)) >>> 0;
             visitedByHeadMask.set(startHeadMaskKey, new Set([encodeBodyShapePacked(startBody, GRID_SIZE)]));
+            let searchCount = 0;
 
-            while (queueIndex < queue.length) {
+            while (queueIndex < queue.length && searchCount < maxSearch) {
+                searchCount++;
+                if (searchCount % 50000 === 0) {
+                    console.log(`Searched ${searchCount} / ${maxSearch} states so far...`);
+                }
                 const stateIndex = queue[queueIndex++];
                 const state = states[stateIndex];
 
@@ -837,7 +843,7 @@
             return { count: Infinity, moves: [] };
         }
 
-        function findMaxCollectableFruits(candidate, maxMoves) {
+        function findMaxCollectableFruits(candidate, maxMoves, maxSearch = MAX_SEARCH) {
             const totalCells = GRID_SIZE * GRID_SIZE;
             const wallBlocked = new Uint8Array(totalCells);
             for (const wallKey of candidate.walls) {
@@ -884,8 +890,13 @@
             const bestStepsByState = new Map();
             bestStepsByState.set(startKey, 0);
             let bestFruits = 0;
+            let searchCount = 0;
 
-            while (queueIndex < queue.length) {
+            while (queueIndex < queue.length && searchCount < maxSearch) {
+                searchCount++;
+                if (searchCount % 50000 === 0) {
+                    console.log(`Searched ${searchCount} / ${maxSearch} states for max fruits...`);
+                }
                 const state = queue[queueIndex++];
                 bestFruits = Math.max(bestFruits, countBits(state.mask));
                 if (state.steps >= maxMoves) {
@@ -960,7 +971,7 @@
                     fruits,
                     snakeStart: [head, tail]
                 };
-                const optimal = findOptimalMoves(candidate);
+                const optimal = findOptimalMoves(candidate, MAX_SEARCH);
                 if (!Number.isFinite(optimal.count)) {
                     continue;
                 }
@@ -971,7 +982,7 @@
                 const allowedMoves = Math.max(0, optimal.count - reduction);
                 const maxCollectable = reduction === 0
                     ? FRUIT_COUNT
-                    : findMaxCollectableFruits(candidate, allowedMoves);
+                    : findMaxCollectableFruits(candidate, allowedMoves, MAX_SEARCH);
 
                 return {
                     ...candidate,
@@ -986,9 +997,11 @@
                 fruits: [{ x: 1, y: 1 }, { x: 4, y: 1 }, { x: 1, y: 4 }, { x: 2, y: 3 }, { x: 3, y: 3 }, { x: 4, y: 4 }],
                 snakeStart: [{ x: 0, y: 1 }, { x: 0, y: 0 }]
             };
-            const fallbackOptimal = findOptimalMoves(fallbackCandidate);
+            const fallbackOptimal = findOptimalMoves(fallbackCandidate, MAX_SEARCH);
             const fallbackLimit = Number.isFinite(fallbackOptimal.count) ? fallbackOptimal.count : GRID_SIZE * GRID_SIZE;
-            const fallbackCollectable = Number.isFinite(fallbackOptimal.count) ? FRUIT_COUNT : findMaxCollectableFruits(fallbackCandidate, fallbackLimit);
+            const fallbackCollectable = Number.isFinite(fallbackOptimal.count)
+                ? FRUIT_COUNT
+                : findMaxCollectableFruits(fallbackCandidate, fallbackLimit, MAX_SEARCH);
             await yieldToUi();
             return {
                 ...fallbackCandidate,

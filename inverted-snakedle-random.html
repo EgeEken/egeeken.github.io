@@ -680,6 +680,10 @@
         const OPPOSITE = { U: 'D', D: 'U', L: 'R', R: 'L' };
         const AUTO_SUBMIT_DELAY_MS = 120;
         const FRAME_DELAY_MS = 120;
+        const MAX_GEN_ATTEMPTS = 10000;
+        const MAX_SEARCH = 500000;
+        const MAX_GEN_TIME_MS = 3000;
+        const GENERATION_PROGRESS_UPDATE_EVERY = 8;
         let solveMoves = [];
 
         let randomPuzzleId = randomConfig.seed;
@@ -706,9 +710,7 @@
         function setGenerationOverlay(active, attempt = 0, reason = 'Generating map...') {
             generationOverlayEl.style.display = active ? 'flex' : 'none';
             generationMessageEl.textContent = reason;
-            generationProgressEl.textContent = active
-                ? `Seed: ${randomPuzzleId} • Attempt ${attempt}`
-                : `Seed: ${randomPuzzleId}`;
+            generationProgressEl.textContent = `Attempts: ${attempt} / ${MAX_GEN_ATTEMPTS}`;
         }
 
         function setControlsDisabled(disabled) {
@@ -902,7 +904,7 @@
             return reversed;
         }
 
-        function findOptimalMoves(candidate) {
+        function findOptimalMoves(candidate, maxSearch = MAX_SEARCH) {
             const totalCells = gridSize * gridSize;
             const wallBlocked = new Uint8Array(totalCells);
             for (const wallKey of candidate.walls) {
@@ -954,8 +956,13 @@
             const visitedByHeadMask = new Map();
             const startHeadMaskKey = (startBody[0] | (0 << 8)) >>> 0;
             visitedByHeadMask.set(startHeadMaskKey, new Set([encodeBodyShapePacked(startBody, gridSize)]));
+            let searchCount = 0;
 
-            while (queueIndex < queue.length) {
+            while (queueIndex < queue.length && searchCount < maxSearch) {
+                searchCount++;
+                if (searchCount % 50000 === 0) {
+                    console.log(`Searched ${searchCount} / ${maxSearch} states so far...`);
+                }
                 const stateIndex = queue[queueIndex++];
                 const state = states[stateIndex];
 
@@ -997,7 +1004,7 @@
             return { count: Infinity, moves: [] };
         }
 
-        function findMaxCollectableFruits(candidate, maxMoves) {
+        function findMaxCollectableFruits(candidate, maxMoves, maxSearch = MAX_SEARCH) {
             const totalCells = gridSize * gridSize;
             const wallBlocked = new Uint8Array(totalCells);
             for (const wallKey of candidate.walls) {
@@ -1044,8 +1051,13 @@
             const bestStepsByState = new Map();
             bestStepsByState.set(startKey, 0);
             let bestFruits = 0;
+            let searchCount = 0;
 
-            while (queueIndex < queue.length) {
+            while (queueIndex < queue.length && searchCount < maxSearch) {
+                searchCount++;
+                if (searchCount % 50000 === 0) {
+                    console.log(`Searched ${searchCount} / ${maxSearch} states for max fruits...`);
+                }
                 const state = queue[queueIndex++];
                 bestFruits = Math.max(bestFruits, countBits(state.mask));
                 if (state.steps >= maxMoves) {
@@ -1078,7 +1090,7 @@
             return bestFruits;
         }
 
-        function findBestMovesForLimit(candidate, maxMoves) {
+        function findBestMovesForLimit(candidate, maxMoves, maxSearch = MAX_SEARCH) {
             const totalCells = gridSize * gridSize;
             const wallBlocked = new Uint8Array(totalCells);
             for (const wallKey of candidate.walls) {
@@ -1132,8 +1144,13 @@
             let bestStateIndex = 0;
             let bestFruits = 0;
             let bestSteps = 0;
+            let searchCount = 0;
 
-            while (queueIndex < queue.length) {
+            while (queueIndex < queue.length && searchCount < maxSearch) {
+                searchCount++;
+                if (searchCount % 50000 === 0) {
+                    console.log(`Searched ${searchCount} / ${maxSearch} states for best route...`);
+                }
                 const stateIndex = queue[queueIndex++];
                 const state = states[stateIndex];
                 const fruits = countBits(state.mask);
@@ -1209,12 +1226,14 @@
             const fruitPool = shuffled(openAfterSnake, rng);
             const fruits = fruitPool.slice(0, fruitCount).map(parseKey);
 
-            for (let attempt = 0; attempt < 10000; attempt++) {
-                if (attempt % 8 === 0) {
-                    setGenerationOverlay(true, attempt + 1, 'Generating map...');
+            for (let attempt = 0; attempt < MAX_GEN_ATTEMPTS; attempt++) {
+                const attemptNumber = attempt + 1;
+                if (attempt % GENERATION_PROGRESS_UPDATE_EVERY === 0) {
+                    setGenerationOverlay(true, attemptNumber, 'Generating map...');
                     await yieldToUi();
                 }
-                if (performance.now() - generationStartMs > 3000) {
+                if (performance.now() - generationStartMs > MAX_GEN_TIME_MS) {
+                    console.warn(`Generation timeout after ${MAX_GEN_TIME_MS}ms at attempt ${attemptNumber}. Falling back.`);
                     break;
                 }
 
@@ -1227,7 +1246,7 @@
                     fruits,
                     snakeStart: [head, tail]
                 };
-                const optimal = findOptimalMoves(candidate);
+                const optimal = findOptimalMoves(candidate, MAX_SEARCH);
                 if (!Number.isFinite(optimal.count)) {
                     continue;
                 }
@@ -1236,7 +1255,7 @@
                 const maxReduction = Math.floor(optimal.count / 2);
                 const reduction = maxReduction > 0 ? Math.floor(budgetRng() * (maxReduction + 1)) : 0;
                 const allowedMoves = Math.max(0, optimal.count - reduction);
-                const bestRoute = findBestMovesForLimit(candidate, allowedMoves);
+                const bestRoute = findBestMovesForLimit(candidate, allowedMoves, MAX_SEARCH);
                 const maxCollectable = bestRoute.fruits;
 
                 return {
@@ -1253,9 +1272,10 @@
                 fruits: [{ x: 1, y: 1 }, { x: 4, y: 1 }, { x: 1, y: 4 }, { x: 2, y: 3 }, { x: 3, y: 3 }, { x: 4, y: 4 }],
                 snakeStart: [{ x: 0, y: 1 }, { x: 0, y: 0 }]
             };
-            const fallbackOptimal = findOptimalMoves(fallback);
+            setGenerationOverlay(true, MAX_GEN_ATTEMPTS, 'Using fallback map...');
+            const fallbackOptimal = findOptimalMoves(fallback, MAX_SEARCH);
             const fallbackLimit = Number.isFinite(fallbackOptimal.count) ? fallbackOptimal.count : gridSize * gridSize;
-            const fallbackBestRoute = findBestMovesForLimit(fallback, fallbackLimit);
+            const fallbackBestRoute = findBestMovesForLimit(fallback, fallbackLimit, MAX_SEARCH);
             const fallbackCollectable = fallbackBestRoute.fruits;
             await yieldToUi();
             return {

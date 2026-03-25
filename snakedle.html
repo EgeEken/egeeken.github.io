@@ -459,7 +459,8 @@
         const WALL_COUNT = dailyParameters.wallCount;
         const MAX_MOVES = GRID_SIZE * GRID_SIZE;
         const MAX_GEN_ATTEMPTS = 10000;
-        const MAX_GEN_TIME_MS = 3000;
+        const MAX_GEN_TIME_MS = 5000;
+        const MAX_SEARCH = 500000;
         const GENERATION_PROGRESS_UPDATE_EVERY = 8;
 
         const DIRS = {
@@ -773,7 +774,7 @@
                     fruits,
                     snakeStart: [head, tail]
                 };
-                const optimal = findOptimalMoves(candidate);
+                const optimal = findOptimalMoves(candidate, MAX_SEARCH);
                 if (Number.isFinite(optimal.count) && optimal.count <= MAX_MOVES) {
                     return { ...candidate, optimalMoves: optimal };
                 }
@@ -788,14 +789,14 @@
             }
             setGenerationOverlay(true, MAX_GEN_ATTEMPTS, 'Using fallback map...');
             await yieldToUi();
-            const fallback_optimal = findOptimalMoves(fallback_candidate);
+            const fallback_optimal = findOptimalMoves(fallback_candidate, MAX_SEARCH);
             return {
                 ...fallback_candidate,
                 optimalMoves: fallback_optimal
             };
         }
 
-        function findOptimalMoves(candidate) {
+        function findOptimalMoves(candidate, maxSearch = MAX_SEARCH) {
             const totalCells = GRID_SIZE * GRID_SIZE;
             const wallBlocked = new Uint8Array(totalCells);
             for (const wallKey of candidate.walls) {
@@ -847,8 +848,13 @@
             const visitedByHeadMask = new Map();
             const startHeadMaskKey = (startBody[0] | (0 << 8)) >>> 0;
             visitedByHeadMask.set(startHeadMaskKey, new Set([encodeBodyShapePacked(startBody, GRID_SIZE)]));
+            let searchCount = 0;
 
-            while (queueIndex < queue.length) {
+            while (queueIndex < queue.length && searchCount < maxSearch) {
+                searchCount++;
+                if (searchCount % 50000 === 0) {
+                    console.log(`Searched ${searchCount} / ${maxSearch} states so far...`);
+                }
                 const stateIndex = queue[queueIndex++];
                 const state = states[stateIndex];
 
