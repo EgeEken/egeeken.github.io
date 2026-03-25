@@ -581,8 +581,8 @@
         }
 
         function normalizeSelectedDayParams(raw) {
-            const source = raw && typeof raw === 'object' && raw.invertedSnakedle && typeof raw.invertedSnakedle === 'object'
-                ? raw.invertedSnakedle
+            const source = raw && typeof raw === 'object' && raw.snakedle && typeof raw.snakedle === 'object'
+                ? raw.snakedle
                 : raw;
             const normalized = {};
             if (!source || typeof source !== 'object') {
