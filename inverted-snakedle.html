@@ -353,7 +353,7 @@
 <body>
     <header>
         <a id="back-nav-button" href="/games/inverted-snakedle/" class="back-button">← Return to Menu</a>
-        <a href="inverted-snakedle-calendar.html" class="calendar-button" aria-label="Open calendar">📅</a>
+        <a id="calendar-nav-button" href="inverted-snakedle-calendar.html" class="calendar-button" aria-label="Open calendar">📅</a>
         <h1><b>Inverted Snakedle</b></h1>
         <h2><a class="tutorial-button" href="games/inverted-snakedle/inverted-snakedle-tutorial.html">Tutorial</a></h2>
         
@@ -439,7 +439,7 @@
         const FRUIT_COUNT = dailyParameters.fruitCount;
         const WALL_COUNT = dailyParameters.wallCount;
         const MAX_GEN_ATTEMPTS = 10000;
-        const MAX_GEN_TIME_MS = 5000;
+        const MAX_GEN_TIME_MS = 10000;
         const MAX_SEARCH = 500000;
         const GENERATION_PROGRESS_UPDATE_EVERY = 8;
 
@@ -469,6 +469,7 @@
         const generationMessageEl = document.getElementById('generation-message');
         const generationProgressEl = document.getElementById('generation-progress');
         const backNavButtonEl = document.getElementById('back-nav-button');
+        const calendarNavButtonEl = document.getElementById('calendar-nav-button');
 
         const queueMoves = [];
         const moveCells = [];
@@ -486,17 +487,26 @@
             if (isAdminDayHash) {
                 backNavButtonEl.href = 'inverted-snakedle-admin-calendar.html';
                 backNavButtonEl.textContent = '← Return to Admin Calendar';
+                if (calendarNavButtonEl) {
+                    calendarNavButtonEl.href = 'inverted-snakedle-admin-calendar.html';
+                }
                 return;
             }
 
             if (isRegularDayHash) {
                 backNavButtonEl.href = 'inverted-snakedle-calendar.html';
                 backNavButtonEl.textContent = '← Return to Calendar';
+                if (calendarNavButtonEl) {
+                    calendarNavButtonEl.href = 'inverted-snakedle-calendar.html';
+                }
                 return;
             }
 
             backNavButtonEl.href = '/games/inverted-snakedle/';
             backNavButtonEl.textContent = '← Return to Menu';
+            if (calendarNavButtonEl) {
+                calendarNavButtonEl.href = 'inverted-snakedle-calendar.html';
+            }
         }
 
         updateBackButtonForHash(window.location.hash);

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Ege - Snakedle</title>
+    <title>Ege - Snakedle (Hard Mode)</title>
     <style>
         :root {
             --snakedle-grid-size: 6;
@@ -375,7 +375,7 @@
     <header>
         <a id="back-nav-button" href="/games/snakedle/" class="back-button">← Return to Menu</a>
         <a id="calendar-nav-button" href="snakedle-calendar.html" class="calendar-button" aria-label="Open calendar">📅</a>
-        <h1><b>Snakedle</b></h1>
+        <h1><b>Snakedle (Hard Mode)</b></h1>
         <h2><a class="tutorial-button" href="games/snakedle/snakedle-tutorial.html">Tutorial</a></h2>
         
     </header>
@@ -401,7 +401,7 @@
                         <button class="snakedle-btn alt" id="clear-moves">Clear</button>
                     </div>
                 </div>
-                <div id="status-line">Use the buttons or arrow keys to queue moves.</div>
+                <div id="status-line">Use the buttons or arrow keys to queue your full run.</div>
             </div>
 
             <div id="snakedle-board-wrap">
@@ -430,7 +430,7 @@
                 <button id="close-results">Close</button>
             </div>
             <div class="link-to-inverted">
-                <button id="link-inverted" onclick="window.location.href='inverted-snakedle.html' + window.location.hash">Try the new Inverted version!</button>
+                <button id="link-easy" onclick="window.location.href='snakedle.html' + window.location.hash">Try easy mode!</button>
             </div>
         </div>
     </div>
@@ -444,6 +444,7 @@
         const SELECTED_DAY_PARAMS_URL = 'assets/snakedle-selected-day-params.json';
         const PRELOADED_DAILIES_URL = 'assets/preloaded_dailies.json';
         const PRELOADED_GAME_KEY = 'snakedle';
+        const IS_HARD_MODE = true;
         let selectedDayParamsByDay = {
             4: { mapSize: 8, fruitCount: 12, wallCount: 20 },
             5: { mapSize: 9, fruitCount: 10, wallCount: 30 },
@@ -498,7 +499,6 @@
         const moveCells = [];
         const OPPOSITE = { U: 'D', D: 'U', L: 'R', R: 'L' };
         const FRAME_DURATION_MS = 120;
-        const AUTO_SUBMIT_DELAY_MS = 120;
 
         function updateBackButtonForHash(hash) {
             if (!backNavButtonEl) return;
@@ -535,7 +535,7 @@
         updateBackButtonForHash(window.location.hash);
         window.addEventListener('hashchange', () => updateBackButtonForHash(window.location.hash));
 
-        dailyLabelEl.textContent = `Snakedle Day ${dayNumber}`;
+        dailyLabelEl.textContent = `Snakedle Hard Day ${dayNumber}`;
         document.documentElement.style.setProperty('--snakedle-grid-size', String(GRID_SIZE));
         document.documentElement.style.setProperty(
             '--snakedle-move-icon-size',
@@ -550,9 +550,10 @@
 
         let playbackFrames = [];
         let playbackTimer = null;
-        let autoSubmitTimer = null;
         let isSubmitting = false;
         let isGeneratingPuzzle = false;
+        let hasSubmittedRun = false;
+        let revealOptimalMoveCount = false;
 
         function setGenerationOverlay(active, generationStartMs = null, reason = 'Generating map...') {
             generationOverlayEl.style.display = active ? 'flex' : 'none';
@@ -1306,26 +1307,23 @@
         }
 
         function refreshMoveGrid() {
-            const simulation = simulateMoves(queueMoves);
             if (!puzzle) {
                 for (let i = 0; i < moveCells.length; i++) {
                     const cell = moveCells[i];
                     cell.textContent = '';
-                    cell.classList.remove('filled', 'crash');
+                    cell.classList.remove('filled');
                 }
                 return;
             }
-            const crashIndex = simulation.state === 'dead' ? simulation.movesUsed - 1 : -1;
             for (let i = 0; i < moveCells.length; i++) {
                 const move = queueMoves[i];
                 const cell = moveCells[i];
                 if (move) {
                     cell.textContent = ARROW[move];
                     cell.classList.add('filled');
-                    cell.classList.toggle('crash', i === crashIndex);
                 } else {
                     cell.textContent = '';
-                    cell.classList.remove('filled', 'crash');
+                    cell.classList.remove('filled');
                 }
             }
         }
@@ -1465,32 +1463,19 @@
                 return;
             }
 
-            const simulation = simulateMoves(queueMoves);
-            playbackFrames = simulation.frames;
-            fruitProgressEl.textContent = `Fruits: ${simulation.fruitsEaten} / ${FRUIT_COUNT}`;
-            moveProgressEl.textContent = `Moves: ${queueMoves.length} / ${optimalMoves.count}`;
-            drawBoard(playbackFrames[playbackFrames.length - 1]);
-            if (autoSubmitTimer) {
-                clearTimeout(autoSubmitTimer);
-                autoSubmitTimer = null;
-            }
+            fruitProgressEl.textContent = `Fruits: ? / ${FRUIT_COUNT}`;
+            moveProgressEl.textContent = `Moves: ${queueMoves.length} / ${revealOptimalMoveCount ? optimalMoves.count : '??'}`;
+            drawBoard({
+                body: puzzle.snakeStart.map(c => ({ ...c })),
+                mask: 0,
+                state: 'running'
+            });
             if (queueMoves.length === 0) {
-                statusLineEl.textContent = 'Use the buttons or arrow keys to queue moves.';
+                statusLineEl.textContent = 'Use the buttons or arrow keys to queue your full run.';
                 return;
             }
-            if (simulation.state === 'dead') {
-                statusLineEl.textContent = 'Route crashes. Undo or clear and try again.';
-            } else if (simulation.state === 'win') {
-                if (simulation.movesUsed <= optimalMoves.count && !isSubmitting) {
-                    statusLineEl.textContent = 'Perfect route found! Auto-submitting...';
-                    autoSubmitTimer = setTimeout(() => submitRun(true), AUTO_SUBMIT_DELAY_MS);
-                    return;
-                }
-                statusLineEl.textContent = 'All fruits collected. Submit to watch the full replay.';
-            } else {
-                const last = queueMoves[queueMoves.length - 1];
-                statusLineEl.textContent = `Queued move ${queueMoves.length}: ${ARROW[last]}`;
-            }
+            const last = queueMoves[queueMoves.length - 1];
+            statusLineEl.textContent = `Queued move ${queueMoves.length}: ${ARROW[last]}`;
         }
 
         function playSubmissionAnimation(simulation, onDone) {
@@ -1539,50 +1524,8 @@
             return fruitIndex;
         }
 
-        function tryReplaceCrashMove(dirKey) {
-            if (queueMoves.length === 0) {
-                return false;
-            }
-
-            const candidateMoves = queueMoves.slice(0, -1);
-            const heading = getHeadingDirForMoves(candidateMoves);
-            if (dirKey === OPPOSITE[heading]) {
-                return false;
-            }
-
-            const simulationBeforeCrashMove = simulateMoves(candidateMoves);
-            if (!simulationBeforeCrashMove.frames.length || simulationBeforeCrashMove.state === 'dead') {
-                return false;
-            }
-
-            const lastFrame = simulationBeforeCrashMove.frames[simulationBeforeCrashMove.frames.length - 1];
-            const body = lastFrame.body.map(c => ({ ...c }));
-            const fruitIndex = getFruitIndexMap();
-            const step = advanceState(body, lastFrame.mask, dirKey, puzzle.walls, fruitIndex);
-            if (!step.valid) {
-                return false;
-            }
-
-            queueMoves.splice(0, queueMoves.length, ...candidateMoves, dirKey);
-            return true;
-        }
-
         function addMove(dirKey) {
-            if (isGeneratingPuzzle || !puzzle) return;
-            const currentSimulation = simulateMoves(queueMoves);
-            if (currentSimulation.state === 'dead') {
-                if (tryReplaceCrashMove(dirKey)) {
-                    refreshMoveGrid();
-                    refreshPlayback();
-                } else {
-                    statusLineEl.textContent = 'Route already crashes. Undo or clear to continue.';
-                }
-                return;
-            }
-            if (currentSimulation.state === 'win') {
-                statusLineEl.textContent = 'All fruits are already collected. Submit your run or edit it.';
-                return;
-            }
+            if (isGeneratingPuzzle || !puzzle || hasSubmittedRun || isSubmitting) return;
             if (queueMoves.length >= MAX_MOVES) {
                 statusLineEl.textContent = `Move queue is full (${MAX_MOVES}). Submit, undo, or clear.`;
                 return;
@@ -1598,6 +1541,9 @@
         }
 
         function undoMove() {
+            if (hasSubmittedRun || isSubmitting) {
+                return;
+            }
             if (queueMoves.length === 0) {
                 return;
             }
@@ -1607,6 +1553,9 @@
         }
 
         function clearMoves() {
+            if (hasSubmittedRun || isSubmitting) {
+                return;
+            }
             queueMoves.length = 0;
             refreshMoveGrid();
             refreshPlayback();
@@ -1622,48 +1571,59 @@
             if (off_by <= 6) return '🟧';
             return '🟥';
         }
-        function submitRun(isAuto = false) {
+        function submitRun() {
             if (isGeneratingPuzzle || !puzzle) {
                 statusLineEl.textContent = 'Please wait for map generation to finish.';
                 return;
             }
-            const isAutoSubmit = isAuto === true;
-            if (isSubmitting) {
+            if (isSubmitting || hasSubmittedRun) {
                 return;
             }
-            if (autoSubmitTimer) {
-                clearTimeout(autoSubmitTimer);
-                autoSubmitTimer = null;
+            if (queueMoves.length === 0) {
+                statusLineEl.textContent = 'Queue at least one move before submitting.';
+                return;
             }
             const simulation = simulateMoves(queueMoves);
-            if (simulation.state !== 'win') {
-                statusLineEl.textContent = 'You need a valid route that collects all ' + FRUIT_COUNT + ' fruits before submitting.';
-                return;
-            }
-            if (isAutoSubmit && simulation.movesUsed !== optimalMoves.count) {
-                return;
-            }
+            revealOptimalMoveCount = true;
+            refreshPlayback();
 
             setButtonsDisabledState(true); // Disable buttons during submission
 
             const usedMoves = simulation.movesUsed;
-            const emoji = performanceEmoji(usedMoves, optimalMoves.count);
+            const succeeded = simulation.state === 'win';
+            const failedByCrash = simulation.state === 'dead';
+            const emoji = succeeded ? performanceEmoji(usedMoves, optimalMoves.count) : (failedByCrash ? '💥' : '❌');
             const shareHash = isAdminPreviewDay ? `#admin-${dayNumber}` : `#${dayNumber}`;
             const shareUrl = dayNumber === todayDayNumber && !isAdminPreviewDay
-                ? 'https://egeeken.github.io/snakedle'
-                : `https://egeeken.github.io/snakedle${shareHash}`;
-            const shareText = `Snakedle Day ${dayNumber} : ${usedMoves}/${optimalMoves.count} ${emoji}\n${shareUrl}`;
+                ? 'https://egeeken.github.io/snakedle-hard'
+                : `https://egeeken.github.io/snakedle-hard${shareHash}`;
+            const scoreLine = succeeded
+                ? `${usedMoves}/${optimalMoves.count} ${emoji}`
+                : `X/${optimalMoves.count} ${emoji}`;
+            const shareText = `Snakedle Hard Day ${dayNumber} : ${scoreLine}\n${shareUrl}`;
             resultsTextEl.textContent = shareText;
-            statusLineEl.textContent = 'Submitting... replaying your run.';
+            statusLineEl.textContent = failedByCrash
+                ? 'Submitted. Your route crashed — challenge failed.'
+                : (succeeded
+                    ? 'Submitted. Replaying your run.'
+                    : 'Submitted. Not all fruits were collected — challenge failed.');
             isSubmitting = true;
             playSubmissionAnimation(simulation, () => {
                 resultsModal.style.display = 'flex';
                 localStorage.setItem(
-                    `snakedle-${dayNumber}`,
-                    JSON.stringify({ usedMoves, optimalMoves, emoji, at: new Date().toISOString() })
+                    `snakedle-hard-${dayNumber}`,
+                    JSON.stringify({
+                        usedMoves,
+                        optimalMoves,
+                        emoji,
+                        result: succeeded ? 'win' : (failedByCrash ? 'crash' : 'incomplete'),
+                        at: new Date().toISOString()
+                    })
                 );
                 isSubmitting = false;
-                setButtonsDisabledState(false); // Re-enable buttons after submission
+                hasSubmittedRun = true;
+                setButtonsDisabledState(true);
+                statusLineEl.textContent = 'Run locked. Refresh the page to try again.';
             });
         }
 
@@ -1672,8 +1632,12 @@
         const clearButton = document.getElementById('clear-moves');
 
         function setButtonsDisabledState(disabled) {
+            document.querySelectorAll('[data-dir]').forEach(btn => {
+                btn.disabled = disabled;
+            });
             undoButton.disabled = disabled;
             clearButton.disabled = disabled;
+            document.getElementById('submit-snakedle').disabled = disabled;
         }
 
         document.querySelectorAll('[data-dir]').forEach(btn => {
@@ -1748,7 +1712,7 @@
         });
 
         initializeGame().catch(err => {
-            console.error('Failed to initialize Snakedle:', err);
+            console.error('Failed to initialize Snakedle Hard:', err);
             setGenerationOverlay(false, null, 'Generating daily map...');
             setControlsDisabled(true);
             statusLineEl.textContent = 'Could not initialize the daily puzzle.';
