@@ -536,7 +536,7 @@
         updateBackButtonForHash(window.location.hash);
         window.addEventListener('hashchange', () => updateBackButtonForHash(window.location.hash));
 
-        dailyLabelEl.textContent = `Snakedle Hard Day ${dayNumber}`;
+        dailyLabelEl.textContent = `Snakedle (Hard Mode) Day ${dayNumber}`;
         document.documentElement.style.setProperty('--snakedle-grid-size', String(GRID_SIZE));
         document.documentElement.style.setProperty(
             '--snakedle-move-icon-size',
