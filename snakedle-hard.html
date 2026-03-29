@@ -1599,9 +1599,9 @@
                 ? SHARE_BASE_URL
                 : `${SHARE_BASE_URL}${shareHash}`;
             const scoreLine = succeeded
-                ? `${usedMoves}/${optimalMoves.count} ${emoji}`
-                : `X/${optimalMoves.count} ${emoji}`;
-            const shareText = `Snakedle Hard Day ${dayNumber} : ${scoreLine}\n${shareUrl}`;
+                ? `??/?? ${emoji}`
+                : `X/?? ${emoji}`;
+            const shareText = `Snakedle (Hard Mode) Day ${dayNumber} : ${scoreLine}\n${shareUrl}`;
             resultsTextEl.textContent = shareText;
             statusLineEl.textContent = failedByCrash
                 ? 'Submitted. Your route crashed — challenge failed.'
@@ -1713,7 +1713,7 @@
         });
 
         initializeGame().catch(err => {
-            console.error('Failed to initialize Snakedle Hard:', err);
+            console.error('Failed to initialize Snakedle (Hard Mode):', err);
             setGenerationOverlay(false, null, 'Generating daily map...');
             setControlsDisabled(true);
             statusLineEl.textContent = 'Could not initialize the daily puzzle.';
