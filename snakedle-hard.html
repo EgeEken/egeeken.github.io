@@ -271,14 +271,14 @@
             color: #e8f0f0;
         }
 
-        .link-to-inverted {
+        .link-to-easy {
             display: flex;
             margin-top: 14px;
             gap: 10px;
             justify-content: center;
         }
         
-        .link-to-inverted button {
+        .link-to-easy button {
             border: none;
             border-radius: 8px;
             padding: 10px 14px;
@@ -286,7 +286,7 @@
             cursor: pointer;
         }
 
-        #link-inverted {
+        #link-easy {
             background: rgb(78, 6, 6);
             color: #fff;
             font-weight: 700;
@@ -429,7 +429,7 @@
                 <button id="copy-share">Copy Share Text</button>
                 <button id="close-results">Close</button>
             </div>
-            <div class="link-to-inverted">
+            <div class="link-to-easy">
                 <button id="link-easy" onclick="window.location.href='snakedle.html' + window.location.hash">Try easy mode!</button>
             </div>
         </div>
@@ -444,6 +444,7 @@
         const SELECTED_DAY_PARAMS_URL = 'assets/snakedle-selected-day-params.json';
         const PRELOADED_DAILIES_URL = 'assets/preloaded_dailies.json';
         const PRELOADED_GAME_KEY = 'snakedle';
+        const SHARE_BASE_URL = `${window.location.origin}${window.location.pathname.replace(/\.html$/, '')}`;
         const IS_HARD_MODE = true;
         let selectedDayParamsByDay = {
             4: { mapSize: 8, fruitCount: 12, wallCount: 20 },
@@ -1595,8 +1596,8 @@
             const emoji = succeeded ? performanceEmoji(usedMoves, optimalMoves.count) : (failedByCrash ? '💥' : '❌');
             const shareHash = isAdminPreviewDay ? `#admin-${dayNumber}` : `#${dayNumber}`;
             const shareUrl = dayNumber === todayDayNumber && !isAdminPreviewDay
-                ? 'https://egeeken.github.io/snakedle-hard'
-                : `https://egeeken.github.io/snakedle-hard${shareHash}`;
+                ? SHARE_BASE_URL
+                : `${SHARE_BASE_URL}${shareHash}`;
             const scoreLine = succeeded
                 ? `${usedMoves}/${optimalMoves.count} ${emoji}`
                 : `X/${optimalMoves.count} ${emoji}`;
