@@ -1,8 +1,39 @@
 {
   "snakedle": {
-    "4": { "mapSize": 8, "fruitCount": 12, "wallCount": 20 },
-    "5": { "mapSize": 9, "fruitCount": 10, "wallCount": 30 },
-    "7": { "mapSize": 8, "fruitCount": 12, "wallCount": 20 },
-    "20": { "mapSize": 8, "fruitCount": 12, "wallCount": 20 }
+    "4": {
+      "mapSize": 8,
+      "fruitCount": 12,
+      "wallCount": 20
+    },
+    "5": {
+      "mapSize": 9,
+      "fruitCount": 10,
+      "wallCount": 30
+    },
+    "7": {
+      "mapSize": 8,
+      "fruitCount": 12,
+      "wallCount": 20
+    },
+    "20": {
+      "mapSize": 8,
+      "fruitCount": 12,
+      "wallCount": 20
+    },
+    "46": {
+      "mapSize": 9,
+      "fruitCount": 9,
+      "wallCount": 11
+    },
+    "57": {
+      "mapSize": 9,
+      "fruitCount": 10,
+      "wallCount": 11
+    },
+    "96": {
+      "mapSize": 10,
+      "fruitCount": 8,
+      "wallCount": 10
+    }
   }
 }
