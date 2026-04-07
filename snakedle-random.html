@@ -1750,7 +1750,45 @@
             }, FRAME_DELAY_MS); // Adjust the interval as needed for animation speed
         });
 
-        initializeGame();
+        function buildSnakedleRandomDebugSnapshot() {
+            if (!puzzle) {
+                return null;
+            }
+
+            return {
+                randomConfig: {
+                    seed: randomConfig.seed,
+                    mapSize: randomConfig.mapSize,
+                    fruitCount: randomConfig.fruitCount,
+                    wallCount: randomConfig.wallCount
+                },
+                puzzle: {
+                    snakeStart: puzzle.snakeStart.map(segment => ({ x: segment.x, y: segment.y })),
+                    fruits: puzzle.fruits.map(fruit => ({ x: fruit.x, y: fruit.y })),
+                    walls: [...puzzle.walls].map(key => parseKey(key)),
+                    optimalMoves: {
+                        count: Number.isFinite(puzzle.optimalMoves?.count) ? puzzle.optimalMoves.count : null
+                    }
+                }
+            };
+        }
+
+        const initializePromise = initializeGame();
+
+        window.__snakedleRandomDebug = {
+            waitUntilReady: async () => {
+                await initializePromise;
+                return buildSnakedleRandomDebugSnapshot();
+            },
+            getSnapshot: buildSnakedleRandomDebugSnapshot
+        };
+
+        initializePromise.catch(err => {
+            console.error('Failed to initialize Custom Snakedle:', err);
+            setGenerationOverlay(false, null, 'Generating map...');
+            setControlsDisabled(true);
+            statusLineEl.textContent = 'Could not initialize the custom puzzle.';
+        });
     </script>
 </body>
 

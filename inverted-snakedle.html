@@ -433,11 +433,12 @@
         const daySelection = resolveRequestedDay(window.location.hash, todayDayNumber);
         const dayNumber = daySelection.dayNumber;
         const isAdminPreviewDay = daySelection.isAdminPreviewDay;
-        const dailyParameters = pickConstrainedParameters(dayNumber, DAILY_PARAMETER_LIMITS);
-        const GRID_SIZE = dailyParameters.mapSize;
-        const CELL_SIZE = 420 / GRID_SIZE;
-        const FRUIT_COUNT = dailyParameters.fruitCount;
-        const WALL_COUNT = dailyParameters.wallCount;
+        const queryDailyParameterOverride = parseDailyParameterOverride(window.location.search);
+        let dailyParameters = queryDailyParameterOverride || pickConstrainedParameters(dayNumber, DAILY_PARAMETER_LIMITS);
+        let GRID_SIZE = dailyParameters.mapSize;
+        let CELL_SIZE = 420 / GRID_SIZE;
+        let FRUIT_COUNT = dailyParameters.fruitCount;
+        let WALL_COUNT = dailyParameters.wallCount;
         const MAX_GEN_ATTEMPTS = 10000;
         const MAX_GEN_TIME_MS = 10000;
         const MAX_SEARCH = 500000;
@@ -477,6 +478,39 @@
         const FRAME_DURATION_MS = 120;
         const AUTO_SUBMIT_DELAY_MS = 120;
 
+        function parseDailyParameterOverride(search) {
+            const params = new URLSearchParams(search || '');
+            const mapSize = Number(params.get('mapSize'));
+            const fruitCount = Number(params.get('fruitCount'));
+            const wallCount = Number(params.get('wallCount'));
+
+            if (!Number.isFinite(mapSize) || !Number.isFinite(fruitCount) || !Number.isFinite(wallCount)) {
+                return null;
+            }
+
+            if (!isValidParameterSet(mapSize, fruitCount, wallCount)) {
+                return null;
+            }
+
+            return { mapSize, fruitCount, wallCount };
+        }
+
+        function applyDailyParameters(params) {
+            GRID_SIZE = params.mapSize;
+            FRUIT_COUNT = params.fruitCount;
+            WALL_COUNT = params.wallCount;
+            CELL_SIZE = 420 / GRID_SIZE;
+
+            document.documentElement.style.setProperty('--snakedle-grid-size', String(GRID_SIZE));
+            document.documentElement.style.setProperty(
+                '--snakedle-move-icon-size',
+                `${Math.max(
+                    MOVE_ICON_MIN_SIZE_EM,
+                    MOVE_ICON_BASE_SIZE_EM - (GRID_SIZE - MOVE_ICON_REFERENCE_GRID_SIZE) * MOVE_ICON_SIZE_STEP_EM
+                )}em`
+            );
+        }
+
         function updateBackButtonForHash(hash) {
             if (!backNavButtonEl) return;
 
@@ -513,14 +547,7 @@
         window.addEventListener('hashchange', () => updateBackButtonForHash(window.location.hash));
 
         dailyLabelEl.textContent = `Inverted Snakedle Day ${dayNumber}`;
-        document.documentElement.style.setProperty('--snakedle-grid-size', String(GRID_SIZE));
-        document.documentElement.style.setProperty(
-            '--snakedle-move-icon-size',
-            `${Math.max(
-                MOVE_ICON_MIN_SIZE_EM,
-                MOVE_ICON_BASE_SIZE_EM - (GRID_SIZE - MOVE_ICON_REFERENCE_GRID_SIZE) * MOVE_ICON_SIZE_STEP_EM
-            )}em`
-        );
+        applyDailyParameters(dailyParameters);
 
         let puzzle = null;
         let playbackFrames = [];
@@ -555,6 +582,15 @@
 
         async function initializeGame() {
             await Promise.all([loadSelectedDayParams(), loadPreloadedDailies()]);
+            dailyParameters = pickConstrainedParameters(dayNumber, DAILY_PARAMETER_LIMITS);
+            if (queryDailyParameterOverride) {
+                dailyParameters = queryDailyParameterOverride;
+            }
+            applyDailyParameters(dailyParameters);
+            moveLimit = GRID_SIZE * GRID_SIZE;
+            maxCollectableFruits = FRUIT_COUNT;
+            rebuildMoveGrid(moveLimit);
+
             isGeneratingPuzzle = true;
             setControlsDisabled(true);
             setGenerationOverlay(true, performance.now(), 'Generating daily map...');
@@ -1895,7 +1931,36 @@
             }
         });
 
-        initializeGame().catch(err => {
+        function buildInvertedSnakedleDebugSnapshot() {
+            if (!puzzle) {
+                return null;
+            }
+
+            return {
+                dayNumber,
+                isAdminPreviewDay,
+                parameters: {
+                    mapSize: GRID_SIZE,
+                    fruitCount: FRUIT_COUNT,
+                    wallCount: WALL_COUNT
+                },
+                moveLimit,
+                maxCollectableFruits,
+                optimalMoveCount: Number.isFinite(optimalMoves?.count) ? optimalMoves.count : null
+            };
+        }
+
+        const initializePromise = initializeGame();
+
+        window.__invertedSnakedleDebug = {
+            waitUntilReady: async () => {
+                await initializePromise;
+                return buildInvertedSnakedleDebugSnapshot();
+            },
+            getSnapshot: buildInvertedSnakedleDebugSnapshot
+        };
+
+        initializePromise.catch(err => {
             console.error('Failed to initialize Inverted Snakedle:', err);
             setGenerationOverlay(false, null, 'Generating daily map...');
             setControlsDisabled(true);

@@ -447,7 +447,8 @@
         let selectedDayParamsByDay = {
             4: { mapSize: 8, fruitCount: 12, wallCount: 20 },
             5: { mapSize: 9, fruitCount: 10, wallCount: 30 },
-            7: { mapSize: 8, fruitCount: 12, wallCount: 20 }
+            7: { mapSize: 8, fruitCount: 12, wallCount: 20 },
+            20: { mapSize: 8, fruitCount: 12, wallCount: 20 },
         };
         let preloadedDailiesByDay = {};
         const LAUNCH_DAY_UTC = Date.UTC(2026, 2, 19); // March 19, 2026
@@ -455,12 +456,13 @@
         const daySelection = resolveRequestedDay(window.location.hash, todayDayNumber);
         const dayNumber = daySelection.dayNumber;
         const isAdminPreviewDay = daySelection.isAdminPreviewDay;
-        const dailyParameters = pickConstrainedParameters(dayNumber, DAILY_PARAMETER_LIMITS);
-        const GRID_SIZE = dailyParameters.mapSize;
-        const CELL_SIZE = 420 / GRID_SIZE;
-        const FRUIT_COUNT = dailyParameters.fruitCount;
-        const WALL_COUNT = dailyParameters.wallCount;
-        const MAX_MOVES = GRID_SIZE * GRID_SIZE;
+        const queryDailyParameterOverride = parseDailyParameterOverride(window.location.search);
+        let dailyParameters = queryDailyParameterOverride || pickConstrainedParameters(dayNumber, DAILY_PARAMETER_LIMITS);
+        let GRID_SIZE = dailyParameters.mapSize;
+        let CELL_SIZE = 420 / GRID_SIZE;
+        let FRUIT_COUNT = dailyParameters.fruitCount;
+        let WALL_COUNT = dailyParameters.wallCount;
+        let MAX_MOVES = GRID_SIZE * GRID_SIZE;
         const MAX_GEN_ATTEMPTS = 10000;
         const MAX_GEN_TIME_MS = 10000;
         const MAX_SEARCH = 500000;
@@ -500,6 +502,40 @@
         const FRAME_DURATION_MS = 120;
         const AUTO_SUBMIT_DELAY_MS = 120;
 
+        function parseDailyParameterOverride(search) {
+            const params = new URLSearchParams(search || '');
+            const mapSize = Number(params.get('mapSize'));
+            const fruitCount = Number(params.get('fruitCount'));
+            const wallCount = Number(params.get('wallCount'));
+
+            if (!Number.isFinite(mapSize) || !Number.isFinite(fruitCount) || !Number.isFinite(wallCount)) {
+                return null;
+            }
+
+            if (!isValidParameterSet(mapSize, fruitCount, wallCount)) {
+                return null;
+            }
+
+            return { mapSize, fruitCount, wallCount };
+        }
+
+        function applyDailyParameters(params) {
+            GRID_SIZE = params.mapSize;
+            FRUIT_COUNT = params.fruitCount;
+            WALL_COUNT = params.wallCount;
+            CELL_SIZE = 420 / GRID_SIZE;
+            MAX_MOVES = GRID_SIZE * GRID_SIZE;
+
+            document.documentElement.style.setProperty('--snakedle-grid-size', String(GRID_SIZE));
+            document.documentElement.style.setProperty(
+                '--snakedle-move-icon-size',
+                `${Math.max(
+                    MOVE_ICON_MIN_SIZE_EM,
+                    MOVE_ICON_BASE_SIZE_EM - (GRID_SIZE - MOVE_ICON_REFERENCE_GRID_SIZE) * MOVE_ICON_SIZE_STEP_EM
+                )}em`
+            );
+        }
+
         function updateBackButtonForHash(hash) {
             if (!backNavButtonEl) return;
 
@@ -536,14 +572,7 @@
         window.addEventListener('hashchange', () => updateBackButtonForHash(window.location.hash));
 
         dailyLabelEl.textContent = `Snakedle Day ${dayNumber}`;
-        document.documentElement.style.setProperty('--snakedle-grid-size', String(GRID_SIZE));
-        document.documentElement.style.setProperty(
-            '--snakedle-move-icon-size',
-            `${Math.max(
-                MOVE_ICON_MIN_SIZE_EM,
-                MOVE_ICON_BASE_SIZE_EM - (GRID_SIZE - MOVE_ICON_REFERENCE_GRID_SIZE) * MOVE_ICON_SIZE_STEP_EM
-            )}em`
-        );
+        applyDailyParameters(dailyParameters);
 
         let puzzle = null;
         let optimalMoves = { count: Infinity, moves: [] };
@@ -577,6 +606,13 @@
 
         async function initializeGame() {
             await Promise.all([loadSelectedDayParams(), loadPreloadedDailies()]);
+            dailyParameters = pickConstrainedParameters(dayNumber, DAILY_PARAMETER_LIMITS);
+            if (queryDailyParameterOverride) {
+                dailyParameters = queryDailyParameterOverride;
+            }
+            applyDailyParameters(dailyParameters);
+            rebuildMoveGrid(MAX_MOVES);
+
             isGeneratingPuzzle = true;
             setControlsDisabled(true);
             setGenerationOverlay(true, performance.now(), 'Generating daily map...');
@@ -593,11 +629,15 @@
             refreshPlayback();
         }
 
-        for (let i = 0; i < MAX_MOVES; i++) {
-            const cell = document.createElement('div');
-            cell.className = 'move-cell';
-            moveGridEl.appendChild(cell);
-            moveCells.push(cell);
+        function rebuildMoveGrid(limit) {
+            moveGridEl.innerHTML = '';
+            moveCells.length = 0;
+            for (let i = 0; i < limit; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'move-cell';
+                moveGridEl.appendChild(cell);
+                moveCells.push(cell);
+            }
         }
 
         function getDayNumber(date) {
@@ -1747,7 +1787,41 @@
             }
         });
 
-        initializeGame().catch(err => {
+        function buildSnakedleDebugSnapshot() {
+            if (!puzzle) {
+                return null;
+            }
+
+            return {
+                dayNumber,
+                isAdminPreviewDay,
+                parameters: {
+                    mapSize: GRID_SIZE,
+                    fruitCount: FRUIT_COUNT,
+                    wallCount: WALL_COUNT
+                },
+                puzzle: {
+                    snakeStart: puzzle.snakeStart.map(segment => ({ x: segment.x, y: segment.y })),
+                    fruits: puzzle.fruits.map(fruit => ({ x: fruit.x, y: fruit.y })),
+                    walls: [...puzzle.walls].map(key => parseKey(key)),
+                    optimalMoves: {
+                        count: Number.isFinite(puzzle.optimalMoves?.count) ? puzzle.optimalMoves.count : null
+                    }
+                }
+            };
+        }
+
+        const initializePromise = initializeGame();
+
+        window.__snakedleDebug = {
+            waitUntilReady: async () => {
+                await initializePromise;
+                return buildSnakedleDebugSnapshot();
+            },
+            getSnapshot: buildSnakedleDebugSnapshot
+        };
+
+        initializePromise.catch(err => {
             console.error('Failed to initialize Snakedle:', err);
             setGenerationOverlay(false, null, 'Generating daily map...');
             setControlsDisabled(true);
