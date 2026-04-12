@@ -20,6 +20,11 @@
       "fruitCount": 12,
       "wallCount": 20
     },
+    "25": {
+      "mapSize": 8,
+      "fruitCount": 10,
+      "wallCount": 17
+    },
     "46": {
       "mapSize": 9,
       "fruitCount": 9,
