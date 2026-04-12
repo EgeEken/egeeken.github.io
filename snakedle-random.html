@@ -50,6 +50,18 @@
             box-sizing: border-box;
         }
 
+        body.day-params-preview header {
+            display: none;
+        }
+
+        body.day-params-preview #snakedle-wrapper {
+            margin-top: 12px;
+        }
+
+        body.day-params-preview #random-config {
+            display: none;
+        }
+
         .config-header {
             text-align: center;
             margin-bottom: 2px;
@@ -479,6 +491,18 @@
     </div>
 
     <script>
+        function parseRandomPageMode() {
+            const searchParams = new URLSearchParams(window.location.search);
+            return {
+                isDayParamsPreview: searchParams.get('previewMode') === 'day-params'
+            };
+        }
+
+        const randomPageMode = parseRandomPageMode();
+        if (randomPageMode.isDayParamsPreview) {
+            document.body.classList.add('day-params-preview');
+        }
+
         const RANDOM_DEFAULTS = {
             mapSize: 8,
             fruitCount: 12,
@@ -638,6 +662,15 @@
             });
         }
 
+        function updateDailyLabel() {
+            if (randomPageMode.isDayParamsPreview) {
+                dailyLabelEl.textContent = `Preview Day ${randomPuzzleId}`;
+                return;
+            }
+
+            dailyLabelEl.textContent = `Custom Snakedle (Seed ${randomPuzzleId})`;
+        }
+
         let randomConfig = parseRandomConfigFromHash();
         let gridSize = randomConfig.mapSize;
         let cellSize = 420 / gridSize;
@@ -683,7 +716,7 @@
         const GENERATION_PROGRESS_UPDATE_EVERY = 8;
 
         let randomPuzzleId = randomConfig.seed;
-        dailyLabelEl.textContent = `Custom Snakedle (Seed ${randomPuzzleId})`;
+        updateDailyLabel();
         function setMoveGridCss(size) {
             document.documentElement.style.setProperty('--snakedle-grid-size', String(size));
             document.documentElement.style.setProperty(
@@ -771,7 +804,7 @@
             wallCount = randomConfig.wallCount;
             maxMoves = gridSize * gridSize;
             randomPuzzleId = randomConfig.seed;
-            dailyLabelEl.textContent = `Custom Snakedle (Seed ${randomPuzzleId})`;
+            updateDailyLabel();
             syncRandomConfigUi(randomConfig);
 
             if (playbackTimer) {
