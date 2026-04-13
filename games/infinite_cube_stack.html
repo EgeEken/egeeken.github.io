@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infinite Cube Stack</title>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #07090f;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color: #d4dcff;
+    }
+    #gl {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    #hud {
+      position: fixed;
+      left: 14px;
+      top: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(8, 12, 20, 0.55);
+      backdrop-filter: blur(4px);
+      line-height: 1.35;
+      font-size: 13px;
+      pointer-events: none;
+      user-select: none;
+    }
+    #hud b { color: #ffffff; }
+  </style>
+</head>
+<body>
+  <canvas id="gl"></canvas>
+  <div id="hud"><b>Infinite Cube Stack</b><br>Scroll to zoom (up = in, down = out)</div>
+
+  <script id="vs" type="x-shader/x-vertex">
+    attribute vec2 coord;
+    varying vec2 vCoord;
+    void main() {
+      vCoord = coord;
+      gl_Position = vec4(coord, 0.0, 1.0);
+    }
+  </script>
+
+  <script id="fs" type="x-shader/x-fragment">
+    precision highp float;
+
+    varying vec2 vCoord;
+
+    uniform vec2 uResolution;
+    uniform vec3 uCameraPos;
+    uniform vec3 uCameraForward;
+    uniform vec3 uCameraRight;
+    uniform vec3 uCameraUp;
+    uniform vec3 uLightPos;
+    uniform vec3 uCenterLineA;
+    uniform vec3 uBaseColor;
+    uniform vec3 uBackground;
+    uniform float uInvRate;
+    uniform float uTime;
+
+    const float EPS = 0.0009;
+    const float MAX_DIST = 90.0;
+    const int MAX_STEPS = 54;
+    const int MAX_SHADOW_STEPS = 16;
+    const int DOWN_LEVELS = 4;
+    const int UP_LEVELS = 10;
+
+    float boxSDF(vec3 p, vec3 b) {
+      vec3 q = abs(p) - b;
+      return length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0);
+    }
+
+    vec2 sceneSDF(vec3 p) {
+      float bestDist = 1e9;
+      float bestLevel = 0.0;
+      for (int j = -DOWN_LEVELS; j <= UP_LEVELS; ++j) {
+        float fj = float(j);
+        float cubeSize = pow(uInvRate, fj);
+        vec3 center = uCenterLineA * (1.0 - cubeSize);
+        float d = boxSDF(p - center, vec3(0.5 * cubeSize));
+        if (d < bestDist) {
+          bestDist = d;
+          bestLevel = fj;
+        }
+      }
+      return vec2(bestDist, bestLevel);
+    }
+
+    vec3 estimateNormal(vec3 p) {
+      vec2 e = vec2(EPS, 0.0);
+      return normalize(vec3(
+        sceneSDF(p + e.xyy).x - sceneSDF(p - e.xyy).x,
+        sceneSDF(p + e.yxy).x - sceneSDF(p - e.yxy).x,
+        sceneSDF(p + e.yyx).x - sceneSDF(p - e.yyx).x
+      ));
+    }
+
+    float softShadow(vec3 ro, vec3 rd, float maxT) {
+      float res = 1.0;
+      float t = 0.02;
+      for (int i = 0; i < MAX_SHADOW_STEPS; ++i) {
+        if (t >= maxT) break;
+        float h = sceneSDF(ro + rd * t).x;
+        if (h < 0.0007) return 0.0;
+        res = min(res, 18.0 * h / t);
+        t += clamp(h, 0.018, 0.6);
+      }
+      return clamp(res, 0.0, 1.0);
+    }
+
+    vec3 shade(vec3 ro, vec3 rd, vec3 hitPos, float level) {
+      vec3 n = estimateNormal(hitPos);
+      vec3 lightVec = uLightPos - hitPos;
+      float lightDist = max(length(lightVec), 0.001);
+      vec3 l = lightVec / lightDist;
+      float shadow = softShadow(hitPos + n * 0.0045, l, lightDist);
+
+      float diffuse = max(dot(n, l), 0.0);
+      vec3 h = normalize(l - rd);
+      float spec = pow(max(dot(n, h), 0.0), 20.0) * 0.18;
+      float fresnel = pow(1.0 - max(dot(n, -rd), 0.0), 3.0) * 0.18;
+
+      float tint = 0.45 + 0.55 * sin(level * 0.38 + 0.6);
+      vec3 matte = mix(uBaseColor * 0.82, uBaseColor * 1.12, tint);
+
+      vec3 ambient = matte * vec3(0.14, 0.17, 0.23);
+      vec3 lit = matte * (0.86 * diffuse + 0.1) + vec3(spec + fresnel);
+      vec3 color = ambient + lit * shadow;
+
+      float fog = exp(-0.008 * lightDist * lightDist);
+      return mix(uBackground, color, clamp(fog, 0.0, 1.0));
+    }
+
+    void main() {
+      vec2 uv = vec2(vCoord.x * (uResolution.x / uResolution.y), vCoord.y);
+      vec3 rd = normalize(uCameraForward + uv.x * uCameraRight + uv.y * uCameraUp);
+      vec3 ro = uCameraPos;
+
+      float travel = 0.0;
+      float level = 0.0;
+      bool hit = false;
+      for (int i = 0; i < MAX_STEPS; ++i) {
+        vec3 p = ro + rd * travel;
+        vec2 distLevel = sceneSDF(p);
+        if (distLevel.x < EPS) {
+          level = distLevel.y;
+          hit = true;
+          break;
+        }
+        travel += clamp(distLevel.x, 0.001, 1.2);
+        if (travel > MAX_DIST) break;
+      }
+
+      vec3 color;
+      if (hit) {
+        vec3 hitPos = ro + rd * travel;
+        color = shade(ro, rd, hitPos, level);
+      } else {
+        float skyMix = 0.5 + 0.5 * rd.y;
+        color = mix(uBackground * vec3(0.43, 0.5, 0.66), uBackground * 1.2, skyMix);
+      }
+
+      color += 0.012 * sin(vec3(0.0, 1.3, 2.1) + uTime * 0.1 + vCoord.xyx * 9.0);
+      gl_FragColor = vec4(pow(max(color, 0.0), vec3(0.92)), 1.0);
+    }
+  </script>
+
+  <script>
+    let R_RATE = 5;
+    let ZOOM_SPEED = 1;
+    let ROTATION_SPEED = 1;
+    let AUTO_ZOOM = false;
+
+    const AUTO_ZOOM_RATE = 0.22;
+    const CAMERA_RADIUS = 2.2;
+    const CAMERA_HEIGHT = 0.68;
+    const SCROLL_IMPULSE = 0.0018;
+    const ZOOM_DAMPING = 5.0;
+    const ROTATION_OFFSET = Math.PI * 0.18;
+    const URL_PARAMS = new URLSearchParams(window.location.search);
+
+    if (URL_PARAMS.has('rRate')) R_RATE = Number(URL_PARAMS.get('rRate')) || R_RATE;
+    if (URL_PARAMS.has('zoomSpeed')) ZOOM_SPEED = Number(URL_PARAMS.get('zoomSpeed')) || ZOOM_SPEED;
+    if (URL_PARAMS.has('rotationSpeed')) ROTATION_SPEED = Number(URL_PARAMS.get('rotationSpeed')) || ROTATION_SPEED;
+    if (URL_PARAMS.has('autoZoom')) AUTO_ZOOM = URL_PARAMS.get('autoZoom') !== '0' && URL_PARAMS.get('autoZoom') !== 'false';
+    const START_LEVEL = URL_PARAMS.has('startLevel') ? (Number(URL_PARAMS.get('startLevel')) || 0) : 0;
+
+    const canvas = document.getElementById('gl');
+    const hud = document.getElementById('hud');
+    const gl = canvas.getContext('webgl', { antialias: false, depth: false, stencil: false, alpha: false }) || canvas.getContext('experimental-webgl');
+    if (!gl) {
+      throw new Error('WebGL is required to render this scene.');
+    }
+
+    function compileShader(type, src) {
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, src);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        throw new Error(gl.getShaderInfoLog(shader));
+      }
+      return shader;
+    }
+
+    function createProgram(vsSource, fsSource) {
+      const program = gl.createProgram();
+      gl.attachShader(program, compileShader(gl.VERTEX_SHADER, vsSource));
+      gl.attachShader(program, compileShader(gl.FRAGMENT_SHADER, fsSource));
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        throw new Error(gl.getProgramInfoLog(program));
+      }
+      return program;
+    }
+
+    const program = createProgram(document.getElementById('vs').textContent, document.getElementById('fs').textContent);
+    gl.useProgram(program);
+
+    const quad = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, quad);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+      -1, -1,
+       1, -1,
+      -1,  1,
+       1,  1
+    ]), gl.STATIC_DRAW);
+
+    const coordLoc = gl.getAttribLocation(program, 'coord');
+    gl.enableVertexAttribArray(coordLoc);
+    gl.vertexAttribPointer(coordLoc, 2, gl.FLOAT, false, 0, 0);
+
+    const uniforms = {
+      resolution: gl.getUniformLocation(program, 'uResolution'),
+      cameraPos: gl.getUniformLocation(program, 'uCameraPos'),
+      cameraForward: gl.getUniformLocation(program, 'uCameraForward'),
+      cameraRight: gl.getUniformLocation(program, 'uCameraRight'),
+      cameraUp: gl.getUniformLocation(program, 'uCameraUp'),
+      lightPos: gl.getUniformLocation(program, 'uLightPos'),
+      centerLineA: gl.getUniformLocation(program, 'uCenterLineA'),
+      invRate: gl.getUniformLocation(program, 'uInvRate'),
+      baseColor: gl.getUniformLocation(program, 'uBaseColor'),
+      background: gl.getUniformLocation(program, 'uBackground'),
+      time: gl.getUniformLocation(program, 'uTime')
+    };
+
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = Math.floor(canvas.clientWidth * dpr);
+      const h = Math.floor(canvas.clientHeight * dpr);
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+      }
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+
+    function normalize(v) {
+      const len = Math.hypot(v[0], v[1], v[2]) || 1;
+      return [v[0] / len, v[1] / len, v[2] / len];
+    }
+
+    function sub(a, b) {
+      return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+    }
+
+    function add(a, b) {
+      return [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+    }
+
+    function mul(a, s) {
+      return [a[0] * s, a[1] * s, a[2] * s];
+    }
+
+    function cross(a, b) {
+      return [
+        a[1] * b[2] - a[2] * b[1],
+        a[2] * b[0] - a[0] * b[2],
+        a[0] * b[1] - a[1] * b[0]
+      ];
+    }
+
+    function safeRate() {
+      return Math.max(R_RATE, 1.01);
+    }
+
+    function getCenterLineA(rate) {
+      const inv = 1 / rate;
+      const d = [-0.25, 0.5 + 0.5 * inv, -0.25];
+      const scale = rate / (rate - 1);
+      return [d[0] * scale, d[1] * scale, d[2] * scale];
+    }
+
+    function centerAtRelative(levelRel, invRate, centerA) {
+      const size = Math.pow(invRate, levelRel);
+      return mul(centerA, 1 - size);
+    }
+
+    let zoomLevel = START_LEVEL;
+    let zoomVelocity = 0;
+    let previousTime = 0;
+
+    const initialRate = safeRate();
+    const initialInvRate = 1 / initialRate;
+    const initialA = getCenterLineA(initialRate);
+    const initialTarget = centerAtRelative(0, initialInvRate, initialA);
+    const initialCam = [
+      initialTarget[0] + Math.cos(ROTATION_OFFSET) * CAMERA_RADIUS,
+      initialTarget[1] + CAMERA_HEIGHT,
+      initialTarget[2] + Math.sin(ROTATION_OFFSET) * CAMERA_RADIUS
+    ];
+    const initialForward = normalize(sub(initialTarget, initialCam));
+    const lightPos = add(add(initialCam, mul(initialForward, -4.1)), [0.8, 1.4, -0.6]);
+
+    window.addEventListener('resize', resize);
+    window.addEventListener('wheel', (event) => {
+      event.preventDefault();
+      zoomVelocity += (-event.deltaY) * SCROLL_IMPULSE * ZOOM_SPEED;
+    }, { passive: false });
+
+    function render(timeMs) {
+      resize();
+
+      const time = timeMs * 0.001;
+      const dt = Math.min(0.05, Math.max(0.001, time - previousTime || 0.016));
+      previousTime = time;
+
+      if (AUTO_ZOOM) {
+        zoomVelocity += -AUTO_ZOOM_RATE * ZOOM_SPEED * dt;
+      }
+
+      zoomVelocity *= Math.exp(-ZOOM_DAMPING * dt);
+      zoomLevel += zoomVelocity * dt * 60.0;
+
+      const rate = safeRate();
+      const invRate = 1 / rate;
+      const centerA = getCenterLineA(rate);
+      const baseLevel = Math.floor(zoomLevel);
+      const levelRel = zoomLevel - baseLevel;
+
+      const target = centerAtRelative(levelRel, invRate, centerA);
+      const angle = -Math.PI * 2 * ROTATION_SPEED * zoomLevel + ROTATION_OFFSET;
+
+      const camPos = [
+        target[0] + Math.cos(angle) * CAMERA_RADIUS,
+        target[1] + CAMERA_HEIGHT + 0.18 * Math.sin(angle * 0.7),
+        target[2] + Math.sin(angle) * CAMERA_RADIUS
+      ];
+
+      const forward = normalize(sub(target, camPos));
+      let right = normalize(cross(forward, [0, 1, 0]));
+      if (Math.hypot(right[0], right[1], right[2]) < 0.0001) {
+        right = [1, 0, 0];
+      }
+      const up = normalize(cross(right, forward));
+
+      gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
+      gl.uniform3f(uniforms.cameraPos, camPos[0], camPos[1], camPos[2]);
+      gl.uniform3f(uniforms.cameraForward, forward[0], forward[1], forward[2]);
+      gl.uniform3f(uniforms.cameraRight, right[0], right[1], right[2]);
+      gl.uniform3f(uniforms.cameraUp, up[0], up[1], up[2]);
+      gl.uniform3f(uniforms.lightPos, lightPos[0], lightPos[1], lightPos[2]);
+      gl.uniform3f(uniforms.centerLineA, centerA[0], centerA[1], centerA[2]);
+      gl.uniform1f(uniforms.invRate, invRate);
+      gl.uniform3f(uniforms.baseColor, 0.84, 0.88, 0.94);
+      gl.uniform3f(uniforms.background, 0.07, 0.11, 0.18);
+      gl.uniform1f(uniforms.time, time);
+
+      hud.innerHTML = `<b>Infinite Cube Stack</b><br>Level: ${zoomLevel.toFixed(2)}<br>R_RATE: ${R_RATE} | ZOOM_SPEED: ${ZOOM_SPEED} | ROTATION_SPEED: ${ROTATION_SPEED}<br>AUTO_ZOOM: ${AUTO_ZOOM}`;
+
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      requestAnimationFrame(render);
+    }
+
+    resize();
+    requestAnimationFrame(render);
+  </script>
+</body>
+</html>
