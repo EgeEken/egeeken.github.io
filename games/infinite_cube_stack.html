@@ -19,25 +19,145 @@
       height: 100%;
       display: block;
     }
-    #hud {
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: #273a4d;
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-size: 1em;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s, transform 0.2s;
+      z-index: 1002;
+    }
+    .back-button:hover {
+      background-color: #126364;
+      transform: translateX(-3px);
+    }
+    #menu-toggle {
+      position: fixed;
+      right: 14px;
+      top: 12px;
+      z-index: 1003;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      background: rgba(8, 12, 20, 0.78);
+      color: #d4dcff;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    #menu {
       position: fixed;
       left: 14px;
-      top: 12px;
-      padding: 10px 12px;
+      top: 68px;
+      width: min(350px, calc(100vw - 28px));
+      padding: 12px;
       border-radius: 10px;
-      background: rgba(8, 12, 20, 0.55);
+      background: rgba(8, 12, 20, 0.65);
       backdrop-filter: blur(4px);
       line-height: 1.35;
       font-size: 13px;
-      pointer-events: none;
+      z-index: 1001;
+      border: 1px solid rgba(255, 255, 255, 0.12);
       user-select: none;
     }
-    #hud b { color: #ffffff; }
+    #menu h2 {
+      margin: 0 0 10px;
+      font-size: 15px;
+      color: #ffffff;
+      font-weight: 600;
+    }
+    .menu-row {
+      margin: 8px 0;
+      display: grid;
+      gap: 4px;
+    }
+    .menu-row label {
+      font-size: 12px;
+      color: #c8d4ff;
+    }
+    .value-row {
+      display: grid;
+      grid-template-columns: 1fr 74px;
+      gap: 8px;
+      align-items: center;
+    }
+    .value-row input[type="range"] {
+      width: 100%;
+    }
+    .value-row input[type="number"] {
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.24);
+      color: #e8eeff;
+      padding: 4px 6px;
+      box-sizing: border-box;
+    }
+    #auto-zoom-btn {
+      margin-top: 8px;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+      background: rgba(39, 58, 77, 0.9);
+      color: #fff;
+      padding: 8px 10px;
+      cursor: pointer;
+    }
+    #auto-zoom-btn.active {
+      background: rgba(18, 99, 100, 0.95);
+    }
+    #stats {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #d8e0ff;
+    }
   </style>
 </head>
 <body>
   <canvas id="gl"></canvas>
-  <div id="hud"><b>Infinite Cube Stack</b><br>Scroll to zoom (up = in, down = out)</div>
+
+  <a id="return-button" href="../games.html" class="back-button">← Return to Games</a>
+  <button id="menu-toggle" type="button">Hide menu (Esc)</button>
+
+  <div id="menu">
+    <h2>Infinite Cube Stack</h2>
+
+    <div class="menu-row">
+      <label id="r-rate-label">Recursion rate (1.1 - 10)</label>
+      <div class="value-row">
+        <input id="r-rate-range" type="range" min="1.1" max="10" step="0.1" aria-labelledby="r-rate-label">
+        <input id="r-rate-number" type="number" min="1.1" max="10" step="0.1" aria-labelledby="r-rate-label">
+      </div>
+    </div>
+
+    <div class="menu-row">
+      <label id="zoom-speed-label">Zoom speed (0.1 - 5)</label>
+      <div class="value-row">
+        <input id="zoom-speed-range" type="range" min="0.1" max="5" step="0.1" aria-labelledby="zoom-speed-label">
+        <input id="zoom-speed-number" type="number" min="0.1" max="5" step="0.1" aria-labelledby="zoom-speed-label">
+      </div>
+    </div>
+
+    <div class="menu-row">
+      <label id="camera-angle-label">Camera angle (-1.5 to 1.5)</label>
+      <div class="value-row">
+        <input id="camera-angle-range" type="range" min="-1.5" max="1.5" step="0.01" aria-labelledby="camera-angle-label">
+        <input id="camera-angle-number" type="number" min="-1.5" max="1.5" step="0.01" aria-labelledby="camera-angle-label">
+      </div>
+    </div>
+
+    <button id="auto-zoom-btn" type="button" aria-pressed="false">Auto zoom: OFF</button>
+
+    <div id="stats">
+      <div>Level: <span id="level-value">0.00</span></div>
+      <div>FPS: <span id="fps-value">0.0</span></div>
+    </div>
+  </div>
 
   <script id="vs" type="x-shader/x-vertex">
     attribute vec2 coord;
@@ -63,6 +183,7 @@
     uniform vec3 uBaseColor;
     uniform vec3 uBackground;
     uniform float uInvRate;
+    uniform float uLevelBase;
     uniform float uTime;
 
     const float EPS = 0.0009;
@@ -78,16 +199,20 @@
     }
 
     vec2 sceneSDF(vec3 p) {
+      float worldScale = pow(1.0 / uInvRate, uLevelBase);
+      vec3 pLocal = uCenterLineA + (p - uCenterLineA) * worldScale;
+
       float bestDist = 1e9;
       float bestLevel = 0.0;
       for (int j = -DOWN_LEVELS; j <= UP_LEVELS; ++j) {
         float fj = float(j);
         float cubeSize = pow(uInvRate, fj);
         vec3 center = uCenterLineA * (1.0 - cubeSize);
-        float d = boxSDF(p - center, vec3(0.5 * cubeSize));
+        float dLocal = boxSDF(pLocal - center, vec3(0.5 * cubeSize));
+        float d = dLocal / worldScale;
         if (d < bestDist) {
           bestDist = d;
-          bestLevel = fj;
+          bestLevel = fj + uLevelBase;
         }
       }
       return vec2(bestDist, bestLevel);
@@ -173,27 +298,74 @@
   </script>
 
   <script>
+    const RATE_LIMITS = { min: 1.1, max: 10, step: 0.1 };
+    const ZOOM_SPEED_LIMITS = { min: 0.1, max: 5, step: 0.1 };
+    const CAMERA_ANGLE_LIMITS = { min: -1.5, max: 1.5, step: 0.01 };
+
     let R_RATE = 5;
     let ZOOM_SPEED = 1;
-    let ROTATION_SPEED = 1;
+    let CAMERA_ANGLE = 0.2;
     let AUTO_ZOOM = false;
 
+    const ROTATION_SPEED = 1;
     const AUTO_ZOOM_RATE = 0.22;
     const CAMERA_RADIUS = 2.2;
     const CAMERA_HEIGHT = 0.68;
     const SCROLL_IMPULSE = 0.0018;
     const ZOOM_DAMPING = 5.0;
     const ROTATION_OFFSET = Math.PI * 0.18;
-    const URL_PARAMS = new URLSearchParams(window.location.search);
 
-    if (URL_PARAMS.has('rRate')) R_RATE = Number(URL_PARAMS.get('rRate')) || R_RATE;
-    if (URL_PARAMS.has('zoomSpeed')) ZOOM_SPEED = Number(URL_PARAMS.get('zoomSpeed')) || ZOOM_SPEED;
-    if (URL_PARAMS.has('rotationSpeed')) ROTATION_SPEED = Number(URL_PARAMS.get('rotationSpeed')) || ROTATION_SPEED;
-    if (URL_PARAMS.has('autoZoom')) AUTO_ZOOM = URL_PARAMS.get('autoZoom') !== '0' && URL_PARAMS.get('autoZoom') !== 'false';
-    const START_LEVEL = URL_PARAMS.has('startLevel') ? (Number(URL_PARAMS.get('startLevel')) || 0) : 0;
+    function clamp(v, min, max) {
+      return Math.min(max, Math.max(min, v));
+    }
+
+    function parseFloatParam(value, fallback, limits) {
+      if (value === null || value === '') {
+        return fallback;
+      }
+      const parsed = Number(value);
+      if (!Number.isFinite(parsed)) {
+        return fallback;
+      }
+      return clamp(parsed, limits.min, limits.max);
+    }
+
+    function parseBoolParam(value, fallback) {
+      if (value === null) return fallback;
+      const normalized = String(value).toLowerCase();
+      return !(normalized === '0' || normalized === 'false' || normalized === 'off');
+    }
+
+    function parseConfigFromHash() {
+      const hashParams = new URLSearchParams(window.location.hash.slice(1));
+      return {
+        rRate: parseFloatParam(hashParams.get('rRate'), R_RATE, RATE_LIMITS),
+        zoomSpeed: parseFloatParam(hashParams.get('zoomSpeed'), ZOOM_SPEED, ZOOM_SPEED_LIMITS),
+        cameraAngle: parseFloatParam(hashParams.get('cameraAngle'), CAMERA_ANGLE, CAMERA_ANGLE_LIMITS),
+        autoZoom: parseBoolParam(hashParams.get('autoZoom'), AUTO_ZOOM),
+        startLevel: Number.isFinite(Number(hashParams.get('startLevel'))) ? Number(hashParams.get('startLevel')) : 0
+      };
+    }
+
+    function formatValue(value, decimals) {
+      return Number(value.toFixed(decimals)).toString();
+    }
 
     const canvas = document.getElementById('gl');
-    const hud = document.getElementById('hud');
+    const menu = document.getElementById('menu');
+    const returnButton = document.getElementById('return-button');
+    const menuToggleButton = document.getElementById('menu-toggle');
+    const levelValueEl = document.getElementById('level-value');
+    const fpsValueEl = document.getElementById('fps-value');
+
+    const rRateRange = document.getElementById('r-rate-range');
+    const rRateNumber = document.getElementById('r-rate-number');
+    const zoomSpeedRange = document.getElementById('zoom-speed-range');
+    const zoomSpeedNumber = document.getElementById('zoom-speed-number');
+    const cameraAngleRange = document.getElementById('camera-angle-range');
+    const cameraAngleNumber = document.getElementById('camera-angle-number');
+    const autoZoomButton = document.getElementById('auto-zoom-btn');
+
     const gl = canvas.getContext('webgl', { antialias: false, depth: false, stencil: false, alpha: false }) || canvas.getContext('experimental-webgl');
     if (!gl) {
       throw new Error('WebGL is required to render this scene.');
@@ -245,6 +417,7 @@
       lightPos: gl.getUniformLocation(program, 'uLightPos'),
       centerLineA: gl.getUniformLocation(program, 'uCenterLineA'),
       invRate: gl.getUniformLocation(program, 'uInvRate'),
+      levelBase: gl.getUniformLocation(program, 'uLevelBase'),
       baseColor: gl.getUniformLocation(program, 'uBaseColor'),
       background: gl.getUniformLocation(program, 'uBackground'),
       time: gl.getUniformLocation(program, 'uTime')
@@ -302,21 +475,121 @@
       return mul(centerA, 1 - size);
     }
 
-    let zoomLevel = START_LEVEL;
+    const hashConfig = parseConfigFromHash();
+    R_RATE = hashConfig.rRate;
+    ZOOM_SPEED = hashConfig.zoomSpeed;
+    CAMERA_ANGLE = hashConfig.cameraAngle;
+    AUTO_ZOOM = hashConfig.autoZoom;
+
+    let zoomLevel = hashConfig.startLevel;
     let zoomVelocity = 0;
     let previousTime = 0;
+    let smoothedFps = 0;
+    let menuVisible = true;
 
-    const initialRate = safeRate();
-    const initialInvRate = 1 / initialRate;
-    const initialA = getCenterLineA(initialRate);
-    const initialTarget = centerAtRelative(0, initialInvRate, initialA);
-    const initialCam = [
-      initialTarget[0] + Math.cos(ROTATION_OFFSET) * CAMERA_RADIUS,
-      initialTarget[1] + CAMERA_HEIGHT,
-      initialTarget[2] + Math.sin(ROTATION_OFFSET) * CAMERA_RADIUS
-    ];
-    const initialForward = normalize(sub(initialTarget, initialCam));
-    const lightPos = add(add(initialCam, mul(initialForward, -4.1)), [0.8, 1.4, -0.6]);
+    function writeHash() {
+      const hashParams = new URLSearchParams();
+      hashParams.set('rRate', formatValue(R_RATE, 2));
+      hashParams.set('zoomSpeed', formatValue(ZOOM_SPEED, 2));
+      hashParams.set('cameraAngle', formatValue(CAMERA_ANGLE, 2));
+      hashParams.set('autoZoom', AUTO_ZOOM ? '1' : '0');
+      if (Math.abs(zoomLevel) > 0.0001) {
+        hashParams.set('startLevel', formatValue(zoomLevel, 2));
+      }
+      const nextHash = hashParams.toString();
+      if (window.location.hash.slice(1) !== nextHash) {
+        history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${nextHash}`);
+      }
+    }
+
+    function setAutoZoomButton() {
+      autoZoomButton.classList.toggle('active', AUTO_ZOOM);
+      autoZoomButton.setAttribute('aria-pressed', AUTO_ZOOM ? 'true' : 'false');
+      autoZoomButton.textContent = `Auto zoom: ${AUTO_ZOOM ? 'ON' : 'OFF'}`;
+    }
+
+    function syncUiFromState() {
+      rRateRange.value = String(R_RATE);
+      rRateNumber.value = formatValue(R_RATE, 2);
+      zoomSpeedRange.value = String(ZOOM_SPEED);
+      zoomSpeedNumber.value = formatValue(ZOOM_SPEED, 2);
+      cameraAngleRange.value = String(CAMERA_ANGLE);
+      cameraAngleNumber.value = formatValue(CAMERA_ANGLE, 2);
+      setAutoZoomButton();
+    }
+
+    function applyValueFromInput(inputValue, limits) {
+      return clamp(Number(inputValue), limits.min, limits.max);
+    }
+
+    function bindSyncedControl(rangeInput, numberInput, limits, onChange) {
+      const apply = (rawValue) => {
+        const parsed = Number(rawValue);
+        if (!Number.isFinite(parsed)) {
+          return;
+        }
+        const value = applyValueFromInput(parsed, limits);
+        rangeInput.value = String(value);
+        numberInput.value = formatValue(value, 2);
+        onChange(value);
+      };
+
+      rangeInput.addEventListener('input', (event) => apply(event.target.value));
+      numberInput.addEventListener('input', (event) => apply(event.target.value));
+      numberInput.addEventListener('change', (event) => apply(event.target.value));
+    }
+
+    bindSyncedControl(rRateRange, rRateNumber, RATE_LIMITS, (value) => {
+      R_RATE = value;
+      writeHash();
+    });
+
+    bindSyncedControl(zoomSpeedRange, zoomSpeedNumber, ZOOM_SPEED_LIMITS, (value) => {
+      ZOOM_SPEED = value;
+      writeHash();
+    });
+
+    bindSyncedControl(cameraAngleRange, cameraAngleNumber, CAMERA_ANGLE_LIMITS, (value) => {
+      CAMERA_ANGLE = value;
+      writeHash();
+    });
+
+    autoZoomButton.addEventListener('click', () => {
+      AUTO_ZOOM = !AUTO_ZOOM;
+      setAutoZoomButton();
+      writeHash();
+    });
+
+    function setMenuVisible(visible) {
+      menuVisible = visible;
+      menu.style.display = menuVisible ? 'block' : 'none';
+      returnButton.style.display = menuVisible ? 'inline-block' : 'none';
+      menuToggleButton.textContent = menuVisible ? 'Hide menu (Esc)' : 'Show menu (Esc)';
+    }
+
+    menuToggleButton.addEventListener('click', () => {
+      setMenuVisible(!menuVisible);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setMenuVisible(!menuVisible);
+      }
+    });
+
+    window.addEventListener('hashchange', () => {
+      const nextConfig = parseConfigFromHash();
+      R_RATE = nextConfig.rRate;
+      ZOOM_SPEED = nextConfig.zoomSpeed;
+      CAMERA_ANGLE = nextConfig.cameraAngle;
+      AUTO_ZOOM = nextConfig.autoZoom;
+      if (Number.isFinite(nextConfig.startLevel)) {
+        zoomLevel = nextConfig.startLevel;
+        zoomVelocity = 0;
+      }
+      syncUiFromState();
+    });
 
     window.addEventListener('resize', resize);
     window.addEventListener('wheel', (event) => {
@@ -331,6 +604,9 @@
       const dt = Math.min(0.05, Math.max(0.001, time - previousTime || 0.016));
       previousTime = time;
 
+      const fps = 1 / dt;
+      smoothedFps = smoothedFps === 0 ? fps : (smoothedFps * 0.92 + fps * 0.08);
+
       if (AUTO_ZOOM) {
         zoomVelocity += -AUTO_ZOOM_RATE * ZOOM_SPEED * dt;
       }
@@ -341,24 +617,31 @@
       const rate = safeRate();
       const invRate = 1 / rate;
       const centerA = getCenterLineA(rate);
+
       const baseLevel = Math.floor(zoomLevel);
       const levelRel = zoomLevel - baseLevel;
+      const zoomScaleRel = Math.pow(invRate, levelRel);
 
       const target = centerAtRelative(levelRel, invRate, centerA);
       const angle = -Math.PI * 2 * ROTATION_SPEED * zoomLevel + ROTATION_OFFSET;
 
+      const camRadius = CAMERA_RADIUS * zoomScaleRel;
+      const camHeight = CAMERA_HEIGHT * zoomScaleRel;
       const camPos = [
-        target[0] + Math.cos(angle) * CAMERA_RADIUS,
-        target[1] + CAMERA_HEIGHT + 0.18 * Math.sin(angle * 0.7),
-        target[2] + Math.sin(angle) * CAMERA_RADIUS
+        target[0] + Math.cos(angle) * camRadius,
+        target[1] + camHeight + 0.18 * zoomScaleRel * Math.sin(angle * 0.7),
+        target[2] + Math.sin(angle) * camRadius
       ];
 
-      const forward = normalize(sub(target, camPos));
+      const lookTarget = [target[0], target[1] + CAMERA_ANGLE * zoomScaleRel, target[2]];
+      const forward = normalize(sub(lookTarget, camPos));
       let right = normalize(cross(forward, [0, 1, 0]));
       if (Math.hypot(right[0], right[1], right[2]) < 0.0001) {
         right = [1, 0, 0];
       }
       const up = normalize(cross(right, forward));
+
+      const lightPos = add(add(camPos, mul(forward, -4.1 * zoomScaleRel)), [0.8 * zoomScaleRel, 1.4 * zoomScaleRel, -0.6 * zoomScaleRel]);
 
       gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
       gl.uniform3f(uniforms.cameraPos, camPos[0], camPos[1], camPos[2]);
@@ -368,16 +651,21 @@
       gl.uniform3f(uniforms.lightPos, lightPos[0], lightPos[1], lightPos[2]);
       gl.uniform3f(uniforms.centerLineA, centerA[0], centerA[1], centerA[2]);
       gl.uniform1f(uniforms.invRate, invRate);
+      gl.uniform1f(uniforms.levelBase, baseLevel);
       gl.uniform3f(uniforms.baseColor, 0.84, 0.88, 0.94);
       gl.uniform3f(uniforms.background, 0.07, 0.11, 0.18);
       gl.uniform1f(uniforms.time, time);
 
-      hud.innerHTML = `<b>Infinite Cube Stack</b><br>Level: ${zoomLevel.toFixed(2)}<br>R_RATE: ${R_RATE} | ZOOM_SPEED: ${ZOOM_SPEED} | ROTATION_SPEED: ${ROTATION_SPEED}<br>AUTO_ZOOM: ${AUTO_ZOOM}`;
+      levelValueEl.textContent = zoomLevel.toFixed(2);
+      fpsValueEl.textContent = smoothedFps.toFixed(1);
 
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       requestAnimationFrame(render);
     }
 
+    syncUiFromState();
+    setMenuVisible(true);
+    writeHash();
     resize();
     requestAnimationFrame(render);
   </script>
