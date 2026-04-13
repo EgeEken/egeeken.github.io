@@ -108,8 +108,11 @@
       padding: 8px 10px;
       cursor: pointer;
     }
-    #auto-zoom-btn.active {
+    #auto-zoom-btn.in {
       background: rgba(18, 99, 100, 0.95);
+    }
+    #auto-zoom-btn.out {
+      background: rgba(109, 73, 31, 0.95);
     }
     #stats {
       margin-top: 10px;
@@ -128,18 +131,26 @@
     <h2>Infinite Cube Stack</h2>
 
     <div class="menu-row">
-      <label id="r-rate-label">Recursion rate (1.1 - 10)</label>
+      <label id="r-rate-label">Recursion rate (2 - 10)</label>
       <div class="value-row">
-        <input id="r-rate-range" type="range" min="1.1" max="10" step="0.1" aria-labelledby="r-rate-label">
-        <input id="r-rate-number" type="number" min="1.1" max="10" step="0.1" aria-labelledby="r-rate-label">
+        <input id="r-rate-range" type="range" min="2" max="10" step="0.1" aria-labelledby="r-rate-label">
+        <input id="r-rate-number" type="number" min="2" max="10" step="0.1" aria-labelledby="r-rate-label">
       </div>
     </div>
 
     <div class="menu-row">
-      <label id="zoom-speed-label">Zoom speed (0.1 - 5)</label>
+      <label id="zoom-speed-label">Zoom speed (0.00 - 1)</label>
       <div class="value-row">
-        <input id="zoom-speed-range" type="range" min="0.1" max="5" step="0.1" aria-labelledby="zoom-speed-label">
-        <input id="zoom-speed-number" type="number" min="0.1" max="5" step="0.1" aria-labelledby="zoom-speed-label">
+        <input id="zoom-speed-range" type="range" min="0.00" max="1" step="0.01" aria-labelledby="zoom-speed-label">
+        <input id="zoom-speed-number" type="number" min="0.00" max="1" step="0.01" aria-labelledby="zoom-speed-label">
+      </div>
+    </div>
+
+    <div class="menu-row">
+      <label id="rotation-speed-label">Rotation speed (0.00 - 5)</label>
+      <div class="value-row">
+        <input id="rotation-speed-range" type="range" min="0.00" max="5" step="0.01" aria-labelledby="rotation-speed-label">
+        <input id="rotation-speed-number" type="number" min="0.00" max="5" step="0.01" aria-labelledby="rotation-speed-label">
       </div>
     </div>
 
@@ -148,6 +159,38 @@
       <div class="value-row">
         <input id="camera-angle-range" type="range" min="-1.5" max="1.5" step="0.01" aria-labelledby="camera-angle-label">
         <input id="camera-angle-number" type="number" min="-1.5" max="1.5" step="0.01" aria-labelledby="camera-angle-label">
+      </div>
+    </div>
+
+    <div class="menu-row">
+      <label id="camera-distance-label">Camera distance (0.8 - 6)</label>
+      <div class="value-row">
+        <input id="camera-distance-range" type="range" min="0.8" max="6" step="0.1" aria-labelledby="camera-distance-label">
+        <input id="camera-distance-number" type="number" min="0.8" max="6" step="0.1" aria-labelledby="camera-distance-label">
+      </div>
+    </div>
+
+    <div class="menu-row">
+      <label id="auto-zoom-rate-label">Auto zoom rate (0 - 2)</label>
+      <div class="value-row">
+        <input id="auto-zoom-rate-range" type="range" min="0" max="2" step="0.01" aria-labelledby="auto-zoom-rate-label">
+        <input id="auto-zoom-rate-number" type="number" min="0" max="2" step="0.01" aria-labelledby="auto-zoom-rate-label">
+      </div>
+    </div>
+
+    <div class="menu-row">
+      <label id="light-yaw-label">Light yaw (-180 to 180)</label>
+      <div class="value-row">
+        <input id="light-yaw-range" type="range" min="-180" max="180" step="1" aria-labelledby="light-yaw-label">
+        <input id="light-yaw-number" type="number" min="-180" max="180" step="1" aria-labelledby="light-yaw-label">
+      </div>
+    </div>
+
+    <div class="menu-row">
+      <label id="light-pitch-label">Light pitch (-89 to 89)</label>
+      <div class="value-row">
+        <input id="light-pitch-range" type="range" min="-89" max="89" step="1" aria-labelledby="light-pitch-label">
+        <input id="light-pitch-number" type="number" min="-89" max="89" step="1" aria-labelledby="light-pitch-label">
       </div>
     </div>
 
@@ -184,6 +227,7 @@
     uniform vec3 uBackground;
     uniform float uInvRate;
     uniform float uLevelBase;
+    uniform float uInvWorldScaleContinuous;
     uniform float uTime;
 
     const float EPS = 0.0009;
@@ -199,7 +243,8 @@
     }
 
     vec2 sceneSDF(vec3 p) {
-      float worldScale = pow(1.0 / uInvRate, uLevelBase);
+      float invWorldScale = clamp(pow(uInvRate, uLevelBase), 1e-12, 1e12);
+      float worldScale = 1.0 / invWorldScale;
       vec3 pLocal = uCenterLineA + (p - uCenterLineA) * worldScale;
 
       float bestDist = 1e9;
@@ -209,7 +254,7 @@
         float cubeSize = pow(uInvRate, fj);
         vec3 center = uCenterLineA * (1.0 - cubeSize);
         float dLocal = boxSDF(pLocal - center, vec3(0.5 * cubeSize));
-        float d = dLocal / worldScale;
+        float d = dLocal * invWorldScale;
         if (d < bestDist) {
           bestDist = d;
           bestLevel = fj + uLevelBase;
@@ -218,8 +263,8 @@
       return vec2(bestDist, bestLevel);
     }
 
-    vec3 estimateNormal(vec3 p) {
-      vec2 e = vec2(EPS, 0.0);
+    vec3 estimateNormal(vec3 p, float eps) {
+      vec2 e = vec2(eps, 0.0);
       return normalize(vec3(
         sceneSDF(p + e.xyy).x - sceneSDF(p - e.xyy).x,
         sceneSDF(p + e.yxy).x - sceneSDF(p - e.yxy).x,
@@ -227,25 +272,28 @@
       ));
     }
 
-    float softShadow(vec3 ro, vec3 rd, float maxT) {
+    float softShadow(vec3 ro, vec3 rd, float maxT, float distScale) {
       float res = 1.0;
-      float t = 0.02;
+      float t = 0.02 * distScale;
+      float minHit = 0.0007 * distScale;
+      float minStep = 0.018 * distScale;
+      float maxStep = 0.6 * distScale;
       for (int i = 0; i < MAX_SHADOW_STEPS; ++i) {
         if (t >= maxT) break;
         float h = sceneSDF(ro + rd * t).x;
-        if (h < 0.0007) return 0.0;
-        res = min(res, 18.0 * h / t);
-        t += clamp(h, 0.018, 0.6);
+        if (h < minHit) return 0.0;
+        res = min(res, 18.0 * h / max(t, 1e-9 * distScale));
+        t += clamp(h, minStep, maxStep);
       }
       return clamp(res, 0.0, 1.0);
     }
 
-    vec3 shade(vec3 ro, vec3 rd, vec3 hitPos, float level) {
-      vec3 n = estimateNormal(hitPos);
+    vec3 shade(vec3 ro, vec3 rd, vec3 hitPos, float level, float invWorldScale) {
+      vec3 n = estimateNormal(hitPos, EPS * invWorldScale);
       vec3 lightVec = uLightPos - hitPos;
       float lightDist = max(length(lightVec), 0.001);
       vec3 l = lightVec / lightDist;
-      float shadow = softShadow(hitPos + n * 0.0045, l, lightDist);
+      float shadow = softShadow(hitPos + n * (0.0045 * invWorldScale), l, lightDist, invWorldScale);
 
       float diffuse = max(dot(n, l), 0.0);
       vec3 h = normalize(l - rd);
@@ -259,7 +307,8 @@
       vec3 lit = matte * (0.86 * diffuse + 0.1) + vec3(spec + fresnel);
       vec3 color = ambient + lit * shadow;
 
-      float fog = exp(-0.008 * lightDist * lightDist);
+      float localLightDist = lightDist / max(invWorldScale, 1e-12);
+      float fog = exp(-0.008 * localLightDist * localLightDist);
       return mix(uBackground, color, clamp(fog, 0.0, 1.0));
     }
 
@@ -267,6 +316,11 @@
       vec2 uv = vec2(vCoord.x * (uResolution.x / uResolution.y), vCoord.y);
       vec3 rd = normalize(uCameraForward + uv.x * uCameraRight + uv.y * uCameraUp);
       vec3 ro = uCameraPos;
+      float invWorldScaleContinuous = clamp(uInvWorldScaleContinuous, 1e-12, 1e12);
+      float hitEps = EPS * invWorldScaleContinuous;
+      float minStep = 0.001 * invWorldScaleContinuous;
+      float maxStep = 1.2 * invWorldScaleContinuous;
+      float maxDist = MAX_DIST * invWorldScaleContinuous;
 
       float travel = 0.0;
       float level = 0.0;
@@ -274,19 +328,19 @@
       for (int i = 0; i < MAX_STEPS; ++i) {
         vec3 p = ro + rd * travel;
         vec2 distLevel = sceneSDF(p);
-        if (distLevel.x < EPS) {
+        if (distLevel.x < hitEps) {
           level = distLevel.y;
           hit = true;
           break;
         }
-        travel += clamp(distLevel.x, 0.001, 1.2);
-        if (travel > MAX_DIST) break;
+        travel += clamp(distLevel.x, minStep, maxStep);
+        if (travel > maxDist) break;
       }
 
       vec3 color;
       if (hit) {
         vec3 hitPos = ro + rd * travel;
-        color = shade(ro, rd, hitPos, level);
+        color = shade(ro, rd, hitPos, level, invWorldScaleContinuous);
       } else {
         float skyMix = 0.5 + 0.5 * rd.y;
         color = mix(uBackground * vec3(0.43, 0.5, 0.66), uBackground * 1.2, skyMix);
@@ -298,22 +352,30 @@
   </script>
 
   <script>
-    const RATE_LIMITS = { min: 1.1, max: 10, step: 0.1 };
-    const ZOOM_SPEED_LIMITS = { min: 0.1, max: 5, step: 0.1 };
+    const RATE_LIMITS = { min: 2, max: 10, step: 0.1 };
+    const ZOOM_SPEED_LIMITS = { min: 0.00, max: 1, step: 0.01 };
+    const ROTATION_SPEED_LIMITS = { min: 0.00, max: 5, step: 0.01 };
     const CAMERA_ANGLE_LIMITS = { min: -1.5, max: 1.5, step: 0.01 };
+    const CAMERA_DISTANCE_LIMITS = { min: 0.8, max: 6, step: 0.1 };
+    const AUTO_ZOOM_RATE_LIMITS = { min: 0.00, max: 2, step: 0.01 };
+    const LIGHT_YAW_LIMITS = { min: -180, max: 180, step: 1 };
+    const LIGHT_PITCH_LIMITS = { min: -89, max: 89, step: 1 };
 
     let R_RATE = 5;
-    let ZOOM_SPEED = 1;
+    let ZOOM_SPEED = 0.1;
+    let ROTATION_SPEED = 0.5;
     let CAMERA_ANGLE = 0.2;
-    let AUTO_ZOOM = false;
+    let CAMERA_DISTANCE = 2.2;
+    let AUTO_ZOOM_RATE = 0.1;
+    let LIGHT_YAW = -120;
+    let LIGHT_PITCH = 45;
+    let AUTO_ZOOM_MODE = 'off';
 
-    const ROTATION_SPEED = 1;
-    const AUTO_ZOOM_RATE = 0.22;
-    const CAMERA_RADIUS = 2.2;
-    const CAMERA_HEIGHT = 0.68;
+    const CAMERA_HEIGHT_FACTOR = 0.309;
     const SCROLL_IMPULSE = 0.0018;
     const ZOOM_DAMPING = 5.0;
     const ROTATION_OFFSET = Math.PI * 0.18;
+    const AUTO_ZOOM_MODES = ['off', 'in', 'out'];
 
     function clamp(v, min, max) {
       return Math.min(max, Math.max(min, v));
@@ -336,13 +398,33 @@
       return !(normalized === '0' || normalized === 'false' || normalized === 'off');
     }
 
+    function parseAutoZoomModeParam(value, fallback) {
+      if (value === null || value === '') {
+        return fallback;
+      }
+      const normalized = String(value).toLowerCase();
+      if (AUTO_ZOOM_MODES.includes(normalized)) {
+        return normalized;
+      }
+      return fallback;
+    }
+
     function parseConfigFromHash() {
       const hashParams = new URLSearchParams(window.location.hash.slice(1));
+      let autoZoomMode = parseAutoZoomModeParam(hashParams.get('autoZoomMode'), AUTO_ZOOM_MODE);
+      if (!hashParams.has('autoZoomMode') && hashParams.has('autoZoom')) {
+        autoZoomMode = parseBoolParam(hashParams.get('autoZoom'), false) ? 'in' : 'off';
+      }
       return {
         rRate: parseFloatParam(hashParams.get('rRate'), R_RATE, RATE_LIMITS),
         zoomSpeed: parseFloatParam(hashParams.get('zoomSpeed'), ZOOM_SPEED, ZOOM_SPEED_LIMITS),
         cameraAngle: parseFloatParam(hashParams.get('cameraAngle'), CAMERA_ANGLE, CAMERA_ANGLE_LIMITS),
-        autoZoom: parseBoolParam(hashParams.get('autoZoom'), AUTO_ZOOM),
+        rotationSpeed: parseFloatParam(hashParams.get('rotationSpeed'), ROTATION_SPEED, ROTATION_SPEED_LIMITS),
+        cameraDistance: parseFloatParam(hashParams.get('cameraDistance'), CAMERA_DISTANCE, CAMERA_DISTANCE_LIMITS),
+        autoZoomRate: parseFloatParam(hashParams.get('autoZoomRate'), AUTO_ZOOM_RATE, AUTO_ZOOM_RATE_LIMITS),
+        lightYaw: parseFloatParam(hashParams.get('lightYaw'), LIGHT_YAW, LIGHT_YAW_LIMITS),
+        lightPitch: parseFloatParam(hashParams.get('lightPitch'), LIGHT_PITCH, LIGHT_PITCH_LIMITS),
+        autoZoomMode,
         startLevel: Number.isFinite(Number(hashParams.get('startLevel'))) ? Number(hashParams.get('startLevel')) : 0
       };
     }
@@ -364,6 +446,16 @@
     const zoomSpeedNumber = document.getElementById('zoom-speed-number');
     const cameraAngleRange = document.getElementById('camera-angle-range');
     const cameraAngleNumber = document.getElementById('camera-angle-number');
+    const rotationSpeedRange = document.getElementById('rotation-speed-range');
+    const rotationSpeedNumber = document.getElementById('rotation-speed-number');
+    const cameraDistanceRange = document.getElementById('camera-distance-range');
+    const cameraDistanceNumber = document.getElementById('camera-distance-number');
+    const autoZoomRateRange = document.getElementById('auto-zoom-rate-range');
+    const autoZoomRateNumber = document.getElementById('auto-zoom-rate-number');
+    const lightYawRange = document.getElementById('light-yaw-range');
+    const lightYawNumber = document.getElementById('light-yaw-number');
+    const lightPitchRange = document.getElementById('light-pitch-range');
+    const lightPitchNumber = document.getElementById('light-pitch-number');
     const autoZoomButton = document.getElementById('auto-zoom-btn');
 
     const gl = canvas.getContext('webgl', { antialias: false, depth: false, stencil: false, alpha: false }) || canvas.getContext('experimental-webgl');
@@ -418,6 +510,7 @@
       centerLineA: gl.getUniformLocation(program, 'uCenterLineA'),
       invRate: gl.getUniformLocation(program, 'uInvRate'),
       levelBase: gl.getUniformLocation(program, 'uLevelBase'),
+      invWorldScaleContinuous: gl.getUniformLocation(program, 'uInvWorldScaleContinuous'),
       baseColor: gl.getUniformLocation(program, 'uBaseColor'),
       background: gl.getUniformLocation(program, 'uBackground'),
       time: gl.getUniformLocation(program, 'uTime')
@@ -479,7 +572,12 @@
     R_RATE = hashConfig.rRate;
     ZOOM_SPEED = hashConfig.zoomSpeed;
     CAMERA_ANGLE = hashConfig.cameraAngle;
-    AUTO_ZOOM = hashConfig.autoZoom;
+    ROTATION_SPEED = hashConfig.rotationSpeed;
+    CAMERA_DISTANCE = hashConfig.cameraDistance;
+    AUTO_ZOOM_RATE = hashConfig.autoZoomRate;
+    LIGHT_YAW = hashConfig.lightYaw;
+    LIGHT_PITCH = hashConfig.lightPitch;
+    AUTO_ZOOM_MODE = hashConfig.autoZoomMode;
 
     let zoomLevel = hashConfig.startLevel;
     let zoomVelocity = 0;
@@ -492,7 +590,12 @@
       hashParams.set('rRate', formatValue(R_RATE, 2));
       hashParams.set('zoomSpeed', formatValue(ZOOM_SPEED, 2));
       hashParams.set('cameraAngle', formatValue(CAMERA_ANGLE, 2));
-      hashParams.set('autoZoom', AUTO_ZOOM ? '1' : '0');
+      hashParams.set('rotationSpeed', formatValue(ROTATION_SPEED, 2));
+      hashParams.set('cameraDistance', formatValue(CAMERA_DISTANCE, 2));
+      hashParams.set('autoZoomRate', formatValue(AUTO_ZOOM_RATE, 2));
+      hashParams.set('lightYaw', formatValue(LIGHT_YAW, 2));
+      hashParams.set('lightPitch', formatValue(LIGHT_PITCH, 2));
+      hashParams.set('autoZoomMode', AUTO_ZOOM_MODE);
       if (Math.abs(zoomLevel) > 0.0001) {
         hashParams.set('startLevel', formatValue(zoomLevel, 2));
       }
@@ -503,9 +606,13 @@
     }
 
     function setAutoZoomButton() {
-      autoZoomButton.classList.toggle('active', AUTO_ZOOM);
-      autoZoomButton.setAttribute('aria-pressed', AUTO_ZOOM ? 'true' : 'false');
-      autoZoomButton.textContent = `Auto zoom: ${AUTO_ZOOM ? 'ON' : 'OFF'}`;
+      autoZoomButton.classList.remove('in', 'out');
+      if (AUTO_ZOOM_MODE !== 'off') {
+        autoZoomButton.classList.add(AUTO_ZOOM_MODE);
+      }
+      autoZoomButton.setAttribute('aria-pressed', AUTO_ZOOM_MODE === 'off' ? 'false' : 'true');
+      const autoZoomText = AUTO_ZOOM_MODE === 'in' ? 'OUT' : (AUTO_ZOOM_MODE === 'out' ? 'IN' : 'OFF');
+      autoZoomButton.textContent = `Auto zoom: ${autoZoomText}`;
     }
 
     function syncUiFromState() {
@@ -515,7 +622,21 @@
       zoomSpeedNumber.value = formatValue(ZOOM_SPEED, 2);
       cameraAngleRange.value = String(CAMERA_ANGLE);
       cameraAngleNumber.value = formatValue(CAMERA_ANGLE, 2);
+      rotationSpeedRange.value = String(ROTATION_SPEED);
+      rotationSpeedNumber.value = formatValue(ROTATION_SPEED, 2);
+      cameraDistanceRange.value = String(CAMERA_DISTANCE);
+      cameraDistanceNumber.value = formatValue(CAMERA_DISTANCE, 2);
+      autoZoomRateRange.value = String(AUTO_ZOOM_RATE);
+      autoZoomRateNumber.value = formatValue(AUTO_ZOOM_RATE, 2);
+      lightYawRange.value = String(LIGHT_YAW);
+      lightYawNumber.value = formatValue(LIGHT_YAW, 2);
+      lightPitchRange.value = String(LIGHT_PITCH);
+      lightPitchNumber.value = formatValue(LIGHT_PITCH, 2);
       setAutoZoomButton();
+    }
+
+    function toRadians(deg) {
+      return deg * Math.PI / 180;
     }
 
     function applyValueFromInput(inputValue, limits) {
@@ -554,8 +675,35 @@
       writeHash();
     });
 
+    bindSyncedControl(rotationSpeedRange, rotationSpeedNumber, ROTATION_SPEED_LIMITS, (value) => {
+      ROTATION_SPEED = value;
+      writeHash();
+    });
+
+    bindSyncedControl(cameraDistanceRange, cameraDistanceNumber, CAMERA_DISTANCE_LIMITS, (value) => {
+      CAMERA_DISTANCE = value;
+      writeHash();
+    });
+
+    bindSyncedControl(autoZoomRateRange, autoZoomRateNumber, AUTO_ZOOM_RATE_LIMITS, (value) => {
+      AUTO_ZOOM_RATE = value;
+      writeHash();
+    });
+
+    bindSyncedControl(lightYawRange, lightYawNumber, LIGHT_YAW_LIMITS, (value) => {
+      LIGHT_YAW = value;
+      writeHash();
+    });
+
+    bindSyncedControl(lightPitchRange, lightPitchNumber, LIGHT_PITCH_LIMITS, (value) => {
+      LIGHT_PITCH = value;
+      writeHash();
+    });
+
     autoZoomButton.addEventListener('click', () => {
-      AUTO_ZOOM = !AUTO_ZOOM;
+      const modeIndex = AUTO_ZOOM_MODES.indexOf(AUTO_ZOOM_MODE);
+      const nextIndex = (modeIndex + 1) % AUTO_ZOOM_MODES.length;
+      AUTO_ZOOM_MODE = AUTO_ZOOM_MODES[nextIndex];
       setAutoZoomButton();
       writeHash();
     });
@@ -583,7 +731,12 @@
       R_RATE = nextConfig.rRate;
       ZOOM_SPEED = nextConfig.zoomSpeed;
       CAMERA_ANGLE = nextConfig.cameraAngle;
-      AUTO_ZOOM = nextConfig.autoZoom;
+      ROTATION_SPEED = nextConfig.rotationSpeed;
+      CAMERA_DISTANCE = nextConfig.cameraDistance;
+      AUTO_ZOOM_RATE = nextConfig.autoZoomRate;
+      LIGHT_YAW = nextConfig.lightYaw;
+      LIGHT_PITCH = nextConfig.lightPitch;
+      AUTO_ZOOM_MODE = nextConfig.autoZoomMode;
       if (Number.isFinite(nextConfig.startLevel)) {
         zoomLevel = nextConfig.startLevel;
         zoomVelocity = 0;
@@ -607,8 +760,10 @@
       const fps = 1 / dt;
       smoothedFps = smoothedFps === 0 ? fps : (smoothedFps * 0.92 + fps * 0.08);
 
-      if (AUTO_ZOOM) {
+      if (AUTO_ZOOM_MODE === 'in') {
         zoomVelocity += -AUTO_ZOOM_RATE * ZOOM_SPEED * dt;
+      } else if (AUTO_ZOOM_MODE === 'out') {
+        zoomVelocity += AUTO_ZOOM_RATE * ZOOM_SPEED * dt;
       }
 
       zoomVelocity *= Math.exp(-ZOOM_DAMPING * dt);
@@ -619,21 +774,20 @@
       const centerA = getCenterLineA(rate);
 
       const baseLevel = Math.floor(zoomLevel);
-      const levelRel = zoomLevel - baseLevel;
-      const zoomScaleRel = Math.pow(invRate, levelRel);
+      const zoomScale = Math.pow(invRate, zoomLevel);
 
-      const target = centerAtRelative(levelRel, invRate, centerA);
+      const target = centerAtRelative(zoomLevel, invRate, centerA);
       const angle = -Math.PI * 2 * ROTATION_SPEED * zoomLevel + ROTATION_OFFSET;
 
-      const camRadius = CAMERA_RADIUS * zoomScaleRel;
-      const camHeight = CAMERA_HEIGHT * zoomScaleRel;
+      const camRadius = CAMERA_DISTANCE * zoomScale;
+      const camHeight = CAMERA_DISTANCE * CAMERA_HEIGHT_FACTOR * zoomScale;
       const camPos = [
         target[0] + Math.cos(angle) * camRadius,
-        target[1] + camHeight + 0.18 * zoomScaleRel * Math.sin(angle * 0.7),
+        target[1] + camHeight + 0.18 * zoomScale * Math.sin(angle * 0.7),
         target[2] + Math.sin(angle) * camRadius
       ];
 
-      const lookTarget = [target[0], target[1] + CAMERA_ANGLE * zoomScaleRel, target[2]];
+      const lookTarget = [target[0], target[1] + CAMERA_ANGLE * zoomScale, target[2]];
       const forward = normalize(sub(lookTarget, camPos));
       let right = normalize(cross(forward, [0, 1, 0]));
       if (Math.hypot(right[0], right[1], right[2]) < 0.0001) {
@@ -641,7 +795,14 @@
       }
       const up = normalize(cross(right, forward));
 
-      const lightPos = add(add(camPos, mul(forward, -4.1 * zoomScaleRel)), [0.8 * zoomScaleRel, 1.4 * zoomScaleRel, -0.6 * zoomScaleRel]);
+      const lightYawRad = toRadians(LIGHT_YAW);
+      const lightPitchRad = toRadians(LIGHT_PITCH);
+      const lightDir = [
+        Math.cos(lightPitchRad) * Math.cos(lightYawRad),
+        Math.sin(lightPitchRad),
+        Math.cos(lightPitchRad) * Math.sin(lightYawRad)
+      ];
+      const lightPos = add(target, mul(lightDir, 5.1 * zoomScale));
 
       gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
       gl.uniform3f(uniforms.cameraPos, camPos[0], camPos[1], camPos[2]);
@@ -652,6 +813,7 @@
       gl.uniform3f(uniforms.centerLineA, centerA[0], centerA[1], centerA[2]);
       gl.uniform1f(uniforms.invRate, invRate);
       gl.uniform1f(uniforms.levelBase, baseLevel);
+      gl.uniform1f(uniforms.invWorldScaleContinuous, zoomScale);
       gl.uniform3f(uniforms.baseColor, 0.84, 0.88, 0.94);
       gl.uniform3f(uniforms.background, 0.07, 0.11, 0.18);
       gl.uniform1f(uniforms.time, time);
