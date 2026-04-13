@@ -360,6 +360,7 @@
     const AUTO_ZOOM_RATE_LIMITS = { min: 0.00, max: 2, step: 0.01 };
     const LIGHT_YAW_LIMITS = { min: -180, max: 180, step: 1 };
     const LIGHT_PITCH_LIMITS = { min: -89, max: 89, step: 1 };
+    const LEVEL_LIMITS = { min: -13, max: 5.5 };
 
     let R_RATE = 5;
     let ZOOM_SPEED = 0.1;
@@ -412,6 +413,7 @@
     function parseConfigFromHash() {
       const hashParams = new URLSearchParams(window.location.hash.slice(1));
       let autoZoomMode = parseAutoZoomModeParam(hashParams.get('autoZoomMode'), AUTO_ZOOM_MODE);
+      const parsedStartLevel = Number(hashParams.get('startLevel'));
       if (!hashParams.has('autoZoomMode') && hashParams.has('autoZoom')) {
         autoZoomMode = parseBoolParam(hashParams.get('autoZoom'), false) ? 'in' : 'off';
       }
@@ -425,7 +427,7 @@
         lightYaw: parseFloatParam(hashParams.get('lightYaw'), LIGHT_YAW, LIGHT_YAW_LIMITS),
         lightPitch: parseFloatParam(hashParams.get('lightPitch'), LIGHT_PITCH, LIGHT_PITCH_LIMITS),
         autoZoomMode,
-        startLevel: Number.isFinite(Number(hashParams.get('startLevel'))) ? Number(hashParams.get('startLevel')) : 0
+        startLevel: Number.isFinite(parsedStartLevel) ? clamp(parsedStartLevel, LEVEL_LIMITS.min, LEVEL_LIMITS.max) : 0
       };
     }
 
@@ -766,8 +768,26 @@
         zoomVelocity += AUTO_ZOOM_RATE * ZOOM_SPEED * dt;
       }
 
+      if (zoomLevel <= LEVEL_LIMITS.min && zoomVelocity < 0) {
+        zoomVelocity = 0;
+      } else if (zoomLevel >= LEVEL_LIMITS.max && zoomVelocity > 0) {
+        zoomVelocity = 0;
+      }
+
       zoomVelocity *= Math.exp(-ZOOM_DAMPING * dt);
       zoomLevel += zoomVelocity * dt * 60.0;
+
+      if (zoomLevel < LEVEL_LIMITS.min) {
+        zoomLevel = LEVEL_LIMITS.min;
+        if (zoomVelocity < 0) {
+          zoomVelocity = 0;
+        }
+      } else if (zoomLevel > LEVEL_LIMITS.max) {
+        zoomLevel = LEVEL_LIMITS.max;
+        if (zoomVelocity > 0) {
+          zoomVelocity = 0;
+        }
+      }
 
       const rate = safeRate();
       const invRate = 1 / rate;
