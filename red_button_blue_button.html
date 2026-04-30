@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ege - Red vs Blue Button Question Analysis</title>
+    <title>Ege - Red vs Blue</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" href="assets/favicon.png" type="image/png">
     <style>
@@ -140,16 +140,20 @@
         }
 
         .plain-toggle {
-            background: linear-gradient(135deg, #37495c, #23313f);
+            background: linear-gradient(135deg, #3d352f, #29201a);
             color: #f2f7f7;
         }
 
         .plain-toggle:hover {
-            background: linear-gradient(135deg, #415569, #2d3d4d);
+            background: linear-gradient(135deg, #4d413c, #302620);
         }
 
         .plain-toggle.active {
-            background: linear-gradient(135deg, #446b6d, #1d5052);
+            background: linear-gradient(135deg, #343e3f, #1b2626);
+        }
+
+        .plain-toggle.active:hover {
+            background: linear-gradient(135deg, #3f494a, #222e2e);
         }
 
         .mode-button {
@@ -157,15 +161,19 @@
         }
 
         .mode-button.mode-threshold {
-            background: linear-gradient(135deg, #496c6d, #214f52);
+            background: linear-gradient(135deg, #577151, #3b5b32);
         }
 
         .mode-button.mode-votes {
             background: linear-gradient(135deg, #6a4a6b, #3b2940);
         }
 
-        .mode-button:hover:not(:disabled) {
-            background: linear-gradient(135deg, #5a6d79, #30424d);
+        .mode-button.mode-votes:hover:not(:disabled) {
+            background: linear-gradient(135deg, #765177, #4d3753);
+        }
+        
+        .mode-button.mode-threshold:hover:not(:disabled) {
+            background: linear-gradient(135deg, #688162, #48693f);
         }
 
         .mode-button:disabled {
@@ -1241,7 +1249,7 @@
                     title: 'Framing 2',
                     blue: `You kill yourself unless at least ${blueCount} people also try to kill themselves.`,
                     abstain: `You refuse to kill yourself.`,
-                    red: `You kill yourself unless at least ${redCount} people also try to kill themselves.`
+                    red: `You refuse to kill yourself.`
                 };
             }
 
@@ -1249,9 +1257,9 @@
                 const populationText = fmtPeople(POPULATION);
                 return {
                     title: 'Framing 3',
-                    blue: `You risk your life under a system that threatens to harm ${populationText} people.`,
+                    blue: `You risk your life under a system that put ${populationText} people in this position.`,
                     abstain: `You refuse to contribute your vote to the system.`,
-                    red: `You risk people's lives under a system that threatens to harm ${populationText} people.`
+                    red: `You risk people's lives under a system that put ${populationText} people in this position.`
                 };
             }
 
@@ -1299,23 +1307,7 @@
                 const redPotential = fmtPeople(getFramingCountForSide('red'));
                 const sharedPotential = fmtPeople(getSharedFramingNumber());
 
-                els.blueMeta.innerHTML = `
-                    <strong>Framing 1:</strong> save up to ${sharedPotential} people.<br>
-                    <strong>Framing 2:</strong> self-risk threshold ${bluePotential}.<br>
-                    <strong>Framing 3:</strong> system threatens ${fmtPeople(POPULATION)} people.
-                `;
-                els.redMeta.innerHTML = `
-                    <strong>Framing 1:</strong> kill up to ${sharedPotential} people.<br>
-                    <strong>Framing 2:</strong> self-risk threshold ${redPotential}.<br>
-                    <strong>Framing 3:</strong> system threatens ${fmtPeople(POPULATION)} people.
-                `;
-
                 if (state.abstainAllowed) {
-                    els.abstainMeta.innerHTML = `
-                        <strong>Framing 1:</strong> remain silent as ${sharedPotential} people are threatened.<br>
-                        <strong>Framing 2:</strong> abstain from self-risk.<br>
-                        <strong>Framing 3:</strong> refuse to contribute.
-                    `;
                 } else {
                     els.abstainMeta.textContent = '';
                 }
@@ -1340,9 +1332,9 @@
                     ? (state.resolutionMode === 'threshold' ? 'Threshold Pass' : 'More Votes Wins')
                     : 'Threshold Pass (locked)';
                 els.resolutionDetail.textContent =
-                    `Blue threshold: ${state.blueThreshold}% (${bluePass ? 'passed' : 'failed'}). ` +
-                    `Red threshold: ${state.redThreshold}% (${redPass ? 'passed' : 'failed'}). ` +
-                    `Priority: ${state.bluePriority ? 'Blue' : 'Red'}. Mode: ${modeLabel}. ` +
+                    `Blue threshold: ${state.blueThreshold}% (${bluePass ? 'passed' : 'failed'}).\n` +
+                    `Red threshold: ${state.redThreshold}% (${redPass ? 'passed' : 'failed'}).\n` +
+                    `Priority: ${state.bluePriority ? 'Blue' : 'Red'}.\nMode: ${modeLabel}. ` +
                     outcome.reason;
             }
 
