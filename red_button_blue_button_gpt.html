@@ -1,0 +1,1564 @@
+\
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ege - Red vs Blue Button Question Analysis</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        :root {
+            --panel-bg: rgba(12, 32, 48, 0.72);
+            --panel-border: rgba(125, 223, 223, 0.22);
+            --text-main: #eef4f4;
+            --text-muted: #c9d7d7;
+            --ink: #102334;
+            --blue: #126364;
+            --blue-bright: #7ddfdf;
+            --blue-soft: #a7eded;
+            --red: #8a2020;
+            --red-bright: #d95e5e;
+            --gray: #5f6a73;
+            --gray-bright: #8b949b;
+            --shadow: 0 0 15px rgba(12, 32, 48, 0.35);
+            --choice-btn-size: clamp(62px, 8vw, 92px);
+            --choice-btn-size-abstain: clamp(54px, 6.3vw, 74px);
+            --control-radius: 12px;
+            --line-gap: 16px;
+            --track-height: 18px;
+            --track-radius: 999px;
+        }
+
+        body {
+            color: var(--text-main);
+        }
+
+        header {
+            position: relative;
+            padding: 18px 0 22px;
+            overflow: hidden;
+        }
+
+        header h1 {
+            margin-top: 58px;
+            margin-bottom: 12px;
+            width: min(1100px, 92%);
+        }
+
+        header h2 {
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 18px;
+            max-width: 1100px;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #273a4d;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 1em;
+            font-family: 'Futura', sans-serif;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            transition: background-color 0.3s, transform 0.2s;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            background-color: #126364;
+            transform: translateX(-3px);
+        }
+
+        .rbb-header-controls {
+            width: min(1200px, 94%);
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin: 0 auto;
+            align-items: stretch;
+        }
+
+        .toggle-card {
+            background: rgba(8, 20, 30, 0.32);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 10px 12px 12px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-height: 112px;
+        }
+
+        .toggle-card.disabled {
+            opacity: 0.55;
+            filter: grayscale(0.22);
+        }
+
+        .toggle-button {
+            border: none;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-family: 'Futura', sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            transition: transform 0.15s ease, background-color 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+            min-height: 52px;
+            color: #fff;
+            box-shadow: 0 0 12px rgba(0,0,0,0.16);
+        }
+
+        .toggle-button:hover {
+            transform: scale(1.02);
+        }
+
+        .toggle-button:disabled {
+            cursor: not-allowed;
+        }
+
+        .priority-button.blue-on {
+            background: linear-gradient(135deg, #156e6f, #0f4e51);
+            box-shadow: 0 0 14px rgba(18, 99, 100, 0.34);
+        }
+
+        .priority-button.blue-on:hover {
+            background: linear-gradient(135deg, #1b7f81, #126364);
+        }
+
+        .priority-button.red-on {
+            background: linear-gradient(135deg, #a13030, #711818);
+            box-shadow: 0 0 14px rgba(141, 30, 30, 0.28);
+        }
+
+        .priority-button.red-on:hover {
+            background: linear-gradient(135deg, #b83c3c, #8a2020);
+        }
+
+        .plain-toggle {
+            background: linear-gradient(135deg, #37495c, #23313f);
+            color: #f2f7f7;
+        }
+
+        .plain-toggle:hover {
+            background: linear-gradient(135deg, #415569, #2d3d4d);
+        }
+
+        .plain-toggle.active {
+            background: linear-gradient(135deg, #446b6d, #1d5052);
+        }
+
+        .mode-button {
+            background: linear-gradient(135deg, #44525d, #26343f);
+        }
+
+        .mode-button.mode-threshold {
+            background: linear-gradient(135deg, #496c6d, #214f52);
+        }
+
+        .mode-button.mode-votes {
+            background: linear-gradient(135deg, #6a4a6b, #3b2940);
+        }
+
+        .mode-button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #5a6d79, #30424d);
+        }
+
+        .mode-button:disabled {
+            opacity: 0.45;
+        }
+
+        .toggle-label {
+            font-size: 0.88em;
+            color: #d8e4e4;
+            line-height: 1.35;
+            min-height: 3.1em;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .toggle-label.hidden {
+            visibility: hidden;
+        }
+
+        .toggle-sub {
+            display: inline-block;
+            color: #a8c5c5;
+            font-size: 0.92em;
+            margin-top: 2px;
+        }
+
+        #rbb-app {
+            width: min(1200px, 95%);
+            margin: 18px auto 42px;
+            display: grid;
+            gap: 18px;
+        }
+
+        .panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            padding: 16px;
+        }
+
+        .panel h3 {
+            margin: 0 0 12px;
+            font-size: 1.15em;
+            letter-spacing: 0.4px;
+        }
+
+        .intro-note {
+            color: var(--text-muted);
+            line-height: 1.55;
+            margin: 0 0 2px;
+            font-size: 0.97em;
+        }
+
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .rule-card {
+            background: rgba(8, 20, 30, 0.34);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 12px;
+            padding: 14px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .rule-card.single {
+            grid-column: 1 / -1;
+        }
+
+        .rule-topline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .rule-topline .rule-title {
+            font-weight: 700;
+            font-size: 1em;
+            letter-spacing: 0.2px;
+        }
+
+        .value-pill {
+            min-width: 72px;
+            text-align: center;
+            border-radius: 999px;
+            padding: 7px 12px;
+            background: rgba(255,255,255,0.08);
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+        }
+
+        .slider-shell {
+            position: relative;
+            width: 100%;
+            padding-top: 10px;
+            padding-bottom: 2px;
+        }
+
+        .slider-track {
+            position: relative;
+            height: var(--track-height);
+            border-radius: var(--track-radius);
+            background: linear-gradient(90deg, #126364 0%, #126364 50%, #8d8d8d 50%, #8d8d8d 100%);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+            overflow: hidden;
+        }
+
+        .slider-track::before {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            border-radius: inherit;
+            background: rgba(255,255,255,0.03);
+            pointer-events: none;
+        }
+
+        .slider-labels {
+            position: relative;
+            height: 24px;
+            margin-bottom: 7px;
+            font-size: 0.9em;
+            font-weight: 700;
+            letter-spacing: 0.25px;
+        }
+
+        .slider-label {
+            position: absolute;
+            top: 0;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            pointer-events: none;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+        }
+
+        .slider-label.blue {
+            color: #8de1e1;
+        }
+
+        .slider-label.red {
+            color: #ff9797;
+        }
+
+        .slider-label.gray {
+            color: #d5d5d5;
+        }
+
+        .range-group {
+            position: relative;
+            height: 38px;
+            margin-top: 2px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            background: transparent;
+            position: absolute;
+            inset: 0;
+            margin: 0;
+            pointer-events: auto;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.88);
+            box-shadow: 0 0 10px rgba(0,0,0,0.24);
+            cursor: pointer;
+            margin-top: -6px;
+            transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.08);
+            filter: brightness(1.06);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.88);
+            box-shadow: 0 0 10px rgba(0,0,0,0.24);
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+        }
+
+        .range-blue::-webkit-slider-thumb {
+            background: #126364;
+        }
+        .range-blue::-moz-range-thumb {
+            background: #126364;
+        }
+
+        .range-red::-webkit-slider-thumb {
+            background: #8a2020;
+        }
+        .range-red::-moz-range-thumb {
+            background: #8a2020;
+        }
+
+        .range-gray::-webkit-slider-thumb {
+            background: #5f6a73;
+        }
+        .range-gray::-moz-range-thumb {
+            background: #5f6a73;
+        }
+
+        .range-blue,
+        .range-red,
+        .range-gray {
+            z-index: 2;
+        }
+
+        .dual-note {
+            color: var(--text-muted);
+            font-size: 0.92em;
+            line-height: 1.4;
+            min-height: 2.2em;
+            margin-top: -2px;
+        }
+
+        .distribution-summary {
+            display: grid;
+            gap: 10px;
+            background: rgba(8, 20, 30, 0.34);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 12px 14px;
+        }
+
+        .distribution-summary strong {
+            font-size: 1.02em;
+        }
+
+        .result-line {
+            font-size: 1.06em;
+            line-height: 1.5;
+        }
+
+        .result-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        .result-pill.blue {
+            background: rgba(18, 99, 100, 0.28);
+            color: #a9f1f1;
+            box-shadow: inset 0 0 0 1px rgba(125, 223, 223, 0.15);
+        }
+
+        .result-pill.red {
+            background: rgba(138, 32, 32, 0.28);
+            color: #ffb4b4;
+            box-shadow: inset 0 0 0 1px rgba(255, 160, 160, 0.14);
+        }
+
+        .result-pill.gray {
+            background: rgba(95, 106, 115, 0.32);
+            color: #f0f0f0;
+        }
+
+        .choice-section {
+            display: grid;
+            gap: 14px;
+        }
+
+        .choice-grid {
+            display: grid;
+            gap: 14px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .choice-grid.has-abstain {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .choice-column {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 14px 12px 12px;
+            display: grid;
+            gap: 12px;
+            align-items: start;
+            transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
+            min-height: 420px;
+        }
+
+        .choice-column:hover {
+            background: rgba(255,255,255,0.11);
+            border-color: rgba(255,255,255,0.14);
+            transform: translateY(-1px);
+            box-shadow: 0 0 16px rgba(0,0,0,0.12);
+        }
+
+        .choice-column.active {
+            background: rgba(255,255,255,0.14);
+            border-color: rgba(255,255,255,0.22);
+            box-shadow: 0 0 18px rgba(0,0,0,0.16);
+        }
+
+        .choice-top {
+            display: grid;
+            justify-items: center;
+            gap: 10px;
+        }
+
+        .choice-button {
+            width: var(--choice-btn-size);
+            height: var(--choice-btn-size);
+            border-radius: 50%;
+            border: none;
+            color: #fff;
+            font-size: clamp(1.7em, 2.3vw, 2.3em);
+            cursor: pointer;
+            box-shadow: 0 0 14px rgba(0,0,0,0.22);
+            transition: transform 0.16s ease, filter 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+            display: grid;
+            place-items: center;
+            line-height: 1;
+            font-weight: 700;
+        }
+
+        .choice-button:hover {
+            transform: scale(1.07);
+            filter: brightness(1.07);
+            box-shadow: 0 0 18px rgba(0,0,0,0.25);
+        }
+
+        .choice-button:active {
+            transform: scale(0.98);
+        }
+
+        .choice-button.blue {
+            background: linear-gradient(135deg, #126364, #0b4b4c);
+        }
+
+        .choice-button.blue:hover {
+            background: linear-gradient(135deg, #1a7677, #135a5c);
+        }
+
+        .choice-button.red {
+            background: linear-gradient(135deg, #8a2020, #6a1616);
+        }
+
+        .choice-button.red:hover {
+            background: linear-gradient(135deg, #a53030, #821f1f);
+        }
+
+        .choice-button.gray {
+            background: linear-gradient(135deg, #5f6a73, #47515a);
+        }
+
+        .choice-button.gray:hover {
+            background: linear-gradient(135deg, #74808a, #575f67);
+        }
+
+        .choice-button[disabled] {
+            cursor: not-allowed;
+            opacity: 0.5;
+            filter: grayscale(0.2);
+            transform: none;
+        }
+
+        .choice-label {
+            font-size: 1.08em;
+            font-weight: 700;
+            text-align: center;
+            min-height: 1.6em;
+        }
+
+        .choice-blurb {
+            color: var(--text-muted);
+            line-height: 1.45;
+            font-size: 0.94em;
+            display: grid;
+            gap: 10px;
+        }
+
+        .framing {
+            background: rgba(8, 20, 30, 0.34);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            padding: 10px 11px;
+            min-height: 76px;
+        }
+
+        .framing-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #e8f5f5;
+        }
+
+        .framing-text {
+            color: #d0dddd;
+            line-height: 1.45;
+        }
+
+        .choice-column .meta-line {
+            color: #bfd0d0;
+            font-size: 0.91em;
+            line-height: 1.4;
+            margin-top: -2px;
+        }
+
+        .choice-column .meta-line strong {
+            color: #eef6f6;
+        }
+
+        .hidden-column {
+            display: none !important;
+        }
+
+        .footer-note {
+            color: #c9d7d7;
+            font-size: 0.93em;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        #share-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 15, 24, 0.78);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1200;
+            padding: 18px;
+        }
+
+        #share-card {
+            width: min(94vw, 560px);
+            background: #102334;
+            border: 2px solid #126364;
+            border-radius: 14px;
+            padding: 18px;
+            color: #eee;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(8, 15, 24, 0.7);
+        }
+
+        #share-card h3 {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        #share-text {
+            white-space: pre-wrap;
+            text-align: left;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 12px;
+            margin: 12px 0 14px;
+            min-height: 160px;
+            color: #e9f2f2;
+            line-height: 1.45;
+        }
+
+        .share-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .share-actions button {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-family: 'Futura', sans-serif;
+            cursor: pointer;
+            transition: transform 0.15s ease, background-color 0.2s ease;
+        }
+
+        .share-actions button:hover {
+            transform: scale(1.02);
+        }
+
+        #copy-share {
+            background: #7ddfdf;
+            color: #102334;
+            font-weight: 700;
+        }
+
+        #close-share {
+            background: #2e4b61;
+            color: #e8f0f0;
+        }
+
+        .share-mini {
+            color: #b8c9c9;
+            font-size: 0.92em;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+
+        .sliders-wrap {
+            display: grid;
+            gap: 16px;
+        }
+
+        .grid-note {
+            color: #bfd0d0;
+            font-size: 0.92em;
+            line-height: 1.45;
+        }
+
+        @media (max-width: 1000px) {
+            .rbb-header-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .rules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .choice-grid,
+            .choice-grid.has-abstain {
+                grid-template-columns: 1fr;
+            }
+
+            .choice-column {
+                min-height: auto;
+            }
+
+            header h1 {
+                margin-top: 110px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            header h1 {
+                margin-top: 124px;
+            }
+
+            .choice-button {
+                width: var(--choice-btn-size-abstain);
+                height: var(--choice-btn-size-abstain);
+            }
+
+            .toggle-card {
+                min-height: 120px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .panel {
+                padding: 13px;
+            }
+
+            .toggle-button {
+                min-height: 48px;
+                padding: 11px 12px;
+            }
+
+            .toggle-label {
+                min-height: 4.1em;
+            }
+
+            .value-pill {
+                min-width: 64px;
+                padding: 6px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a class="back-button" href="index.html">← Return to Menu</a>
+        <h1><b>Red vs Blue Button Question Analysis</b></h1>
+        <h2>Visible parameters for a dilemma that is usually described only through the hidden assumptions around it.</h2>
+
+        <div class="rbb-header-controls" aria-label="Rule toggles">
+            <div class="toggle-card" id="priority-card">
+                <button id="priority-toggle" class="toggle-button priority-button blue-on" type="button" aria-pressed="true">
+                    Blue Priority
+                </button>
+                <div id="priority-help" class="toggle-label">
+                    Blue wins any unresolved case. Turn this off to make red the default priority.
+                </div>
+            </div>
+
+            <div class="toggle-card">
+                <button id="abstain-toggle" class="toggle-button plain-toggle" type="button" aria-pressed="false">
+                    Abstaining Allowed
+                </button>
+                <div class="toggle-label">
+                    When enabled, a gray middle band appears in the vote slider and the third rule button unlocks.
+                </div>
+            </div>
+
+            <div class="toggle-card" id="mode-card">
+                <button id="mode-toggle" class="toggle-button mode-button mode-threshold" type="button" aria-pressed="false" disabled>
+                    Threshold Pass
+                </button>
+                <div id="mode-help" class="toggle-label hidden">
+                    If Threshold Pass is selected, in the event that both sides reach the threshold, the priority side wins by default. If More Votes Wins is selected, in that same event the higher number of votes will win.
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="rbb-app">
+        <section class="panel">
+            <h3>Thresholds and vote distribution</h3>
+            <p class="intro-note">The thresholds define how much support each button needs. The vote slider below shows the distribution being tested against those rules.</p>
+
+            <div class="sliders-wrap">
+                <div class="rule-card single" id="threshold-card-single">
+                    <div class="rule-topline">
+                        <div class="rule-title">Threshold Slider</div>
+                        <div class="value-pill" id="threshold-single-pill">50%</div>
+                    </div>
+                    <div class="slider-shell">
+                        <div class="slider-track" id="threshold-single-track"></div>
+                        <div class="range-group">
+                            <input id="threshold-single" class="range-gray" type="range" min="0" max="100" step="1" value="50" aria-label="Threshold slider" />
+                        </div>
+                    </div>
+                    <div class="dual-note">With abstention disabled, both buttons share the same threshold.</div>
+                </div>
+
+                <div class="rules-grid hidden-column" id="threshold-card-dual">
+                    <div class="rule-card">
+                        <div class="rule-topline">
+                            <div class="rule-title">Blue Threshold</div>
+                            <div class="value-pill" id="blue-threshold-pill">50%</div>
+                        </div>
+                        <div class="slider-shell">
+                            <div class="slider-track" id="blue-threshold-track"></div>
+                            <div class="range-group">
+                                <input id="blue-threshold" class="range-blue" type="range" min="0" max="100" step="1" value="50" aria-label="Blue threshold slider" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rule-card">
+                        <div class="rule-topline">
+                            <div class="rule-title">Red Threshold</div>
+                            <div class="value-pill" id="red-threshold-pill">50%</div>
+                        </div>
+                        <div class="slider-shell">
+                            <div class="slider-track" id="red-threshold-track"></div>
+                            <div class="range-group">
+                                <input id="red-threshold" class="range-red" type="range" min="0" max="100" step="1" value="50" aria-label="Red threshold slider" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rule-card single">
+                    <div class="rule-topline">
+                        <div class="rule-title">Vote Slider</div>
+                        <div class="value-pill" id="vote-summary-pill">Blue 50% / Red 50%</div>
+                    </div>
+
+                    <div class="slider-shell">
+                        <div class="slider-labels" id="vote-labels">
+                            <span class="slider-label blue" id="vote-blue-label" style="left:50%;">Blue 50%</span>
+                            <span class="slider-label gray" id="vote-gray-label" style="left:50%; display:none;">Abstain 0%</span>
+                            <span class="slider-label red" id="vote-red-label" style="left:50%;">Red 50%</span>
+                        </div>
+                        <div class="slider-track" id="vote-track"></div>
+                        <div class="range-group" id="vote-range-group">
+                            <input id="vote-single" class="range-gray" type="range" min="0" max="100" step="1" value="50" aria-label="Vote distribution slider" />
+                            <input id="vote-blue" class="range-blue hidden-column" type="range" min="0" max="100" step="1" value="50" aria-label="Blue vote share slider" />
+                            <input id="vote-red" class="range-red hidden-column" type="range" min="0" max="100" step="1" value="50" aria-label="Red vote share slider" />
+                        </div>
+                    </div>
+
+                    <div class="distribution-summary">
+                        <div class="result-line" id="outcome-line">With this voting distribution: <span class="result-pill blue">Blue wins</span> → 0 people die</div>
+                        <div class="grid-note" id="distribution-detail">Blue 50% · Red 50%</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel choice-section">
+            <h3>Pressing the buttons</h3>
+            <p class="intro-note">These columns are generated from small framing functions. Add another function to the framing list in the script and it will appear automatically.</p>
+
+            <div class="choice-grid" id="choice-grid">
+                <div class="choice-column" data-choice="blue">
+                    <div class="choice-top">
+                        <button class="choice-button blue" id="blue-choice" type="button" aria-label="Choose blue button">🔵</button>
+                        <div class="choice-label">Blue Button</div>
+                        <div class="meta-line" id="blue-meta"></div>
+                    </div>
+                    <div class="choice-blurb" id="blue-framings"></div>
+                </div>
+
+                <div class="choice-column hidden-column" data-choice="abstain" id="abstain-column">
+                    <div class="choice-top">
+                        <button class="choice-button gray" id="abstain-choice" type="button" aria-label="Choose abstain button">⚪</button>
+                        <div class="choice-label">Abstain</div>
+                        <div class="meta-line" id="abstain-meta"></div>
+                    </div>
+                    <div class="choice-blurb" id="abstain-framings"></div>
+                </div>
+
+                <div class="choice-column" data-choice="red">
+                    <div class="choice-top">
+                        <button class="choice-button red" id="red-choice" type="button" aria-label="Choose red button">🔴</button>
+                        <div class="choice-label">Red Button</div>
+                        <div class="meta-line" id="red-meta"></div>
+                    </div>
+                    <div class="choice-blurb" id="red-framings"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h3>How the current rules resolve</h3>
+            <div class="distribution-summary">
+                <div class="result-line" id="resolution-summary"></div>
+                <div class="grid-note" id="resolution-detail"></div>
+            </div>
+            <p class="footer-note">The values are recalculated live from the visible parameters. The population constant is the number you specified in your prompt.</p>
+        </section>
+    </main>
+
+    <div id="share-modal" role="dialog" aria-modal="true" aria-labelledby="share-title">
+        <div id="share-card">
+            <h3 id="share-title">Share this ruleset</h3>
+            <div class="share-mini" id="share-subtitle">Copy the text below.</div>
+            <div id="share-text"></div>
+            <div class="share-actions">
+                <button id="copy-share" type="button">Copy Share Text</button>
+                <button id="close-share" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (() => {
+            const POPULATION = 8290264355;
+
+            const state = {
+                bluePriority: true,
+                abstainAllowed: false,
+                resolutionMode: 'threshold', // 'threshold' | 'votes'
+                blueThreshold: 50,
+                redThreshold: 50,
+                singleVoteBlue: 50,
+                voteBlueShare: 50,
+                voteRedShare: 50,
+                selectedChoice: null
+            };
+
+            const els = {
+                priorityToggle: document.getElementById('priority-toggle'),
+                priorityHelp: document.getElementById('priority-help'),
+                abstainToggle: document.getElementById('abstain-toggle'),
+                modeToggle: document.getElementById('mode-toggle'),
+                modeHelp: document.getElementById('mode-help'),
+                modeCard: document.getElementById('mode-card'),
+                choiceGrid: document.getElementById('choice-grid'),
+                abstainColumn: document.getElementById('abstain-column'),
+
+                thresholdSingleCard: document.getElementById('threshold-card-single'),
+                thresholdDualCard: document.getElementById('threshold-card-dual'),
+                thresholdSingle: document.getElementById('threshold-single'),
+                thresholdSingleTrack: document.getElementById('threshold-single-track'),
+                thresholdSinglePill: document.getElementById('threshold-single-pill'),
+                blueThreshold: document.getElementById('blue-threshold'),
+                redThreshold: document.getElementById('red-threshold'),
+                blueThresholdTrack: document.getElementById('blue-threshold-track'),
+                redThresholdTrack: document.getElementById('red-threshold-track'),
+                blueThresholdPill: document.getElementById('blue-threshold-pill'),
+                redThresholdPill: document.getElementById('red-threshold-pill'),
+
+                voteSingle: document.getElementById('vote-single'),
+                voteBlue: document.getElementById('vote-blue'),
+                voteRed: document.getElementById('vote-red'),
+                voteTrack: document.getElementById('vote-track'),
+                voteBlueLabel: document.getElementById('vote-blue-label'),
+                voteRedLabel: document.getElementById('vote-red-label'),
+                voteGrayLabel: document.getElementById('vote-gray-label'),
+                voteSummaryPill: document.getElementById('vote-summary-pill'),
+                distributionDetail: document.getElementById('distribution-detail'),
+                outcomeLine: document.getElementById('outcome-line'),
+
+                blueChoice: document.getElementById('blue-choice'),
+                redChoice: document.getElementById('red-choice'),
+                abstainChoice: document.getElementById('abstain-choice'),
+                blueColumn: document.querySelector('.choice-column[data-choice="blue"]'),
+                redColumn: document.querySelector('.choice-column[data-choice="red"]'),
+                blueFramings: document.getElementById('blue-framings'),
+                redFramings: document.getElementById('red-framings'),
+                abstainFramings: document.getElementById('abstain-framings'),
+                blueMeta: document.getElementById('blue-meta'),
+                redMeta: document.getElementById('red-meta'),
+                abstainMeta: document.getElementById('abstain-meta'),
+
+                resolutionSummary: document.getElementById('resolution-summary'),
+                resolutionDetail: document.getElementById('resolution-detail'),
+
+                shareModal: document.getElementById('share-modal'),
+                shareText: document.getElementById('share-text'),
+                shareSubtitle: document.getElementById('share-subtitle'),
+                copyShare: document.getElementById('copy-share'),
+                closeShare: document.getElementById('close-share')
+            };
+
+            const fmtInt = new Intl.NumberFormat('en-US');
+            const fmtPct = value => `${Math.round(value)}%`;
+            const fmtPeople = value => fmtInt.format(Math.max(0, Math.round(value)));
+
+            function clamp(value, min, max) {
+                return Math.max(min, Math.min(max, value));
+            }
+
+            function pctFromPopulation(percent) {
+                return Math.round((POPULATION * percent) / 100);
+            }
+
+            function setButtonAppearance() {
+                els.priorityToggle.textContent = state.bluePriority ? 'Blue Priority' : 'Red Priority';
+                els.priorityToggle.classList.toggle('blue-on', state.bluePriority);
+                els.priorityToggle.classList.toggle('red-on', !state.bluePriority);
+                els.priorityToggle.setAttribute('aria-pressed', String(state.bluePriority));
+
+                els.abstainToggle.textContent = state.abstainAllowed ? 'Abstaining Allowed' : 'Abstaining Off';
+                els.abstainToggle.classList.toggle('active', state.abstainAllowed);
+                els.abstainToggle.setAttribute('aria-pressed', String(state.abstainAllowed));
+
+                els.modeToggle.disabled = !state.abstainAllowed;
+                els.modeToggle.classList.toggle('mode-threshold', state.resolutionMode === 'threshold');
+                els.modeToggle.classList.toggle('mode-votes', state.resolutionMode === 'votes');
+                els.modeToggle.textContent = state.resolutionMode === 'threshold' ? 'Threshold Pass' : 'More Votes Wins';
+                els.modeToggle.setAttribute('aria-pressed', String(state.resolutionMode === 'votes'));
+                els.modeCard.classList.toggle('disabled', !state.abstainAllowed);
+
+                els.modeHelp.classList.toggle('hidden', !state.abstainAllowed);
+
+                els.abstainColumn.classList.toggle('hidden-column', !state.abstainAllowed);
+                els.choiceGrid.classList.toggle('has-abstain', state.abstainAllowed);
+
+                document.documentElement.style.setProperty(
+                    '--choice-btn-size',
+                    state.abstainAllowed ? 'var(--choice-btn-size-abstain)' : 'clamp(62px, 8vw, 92px)'
+                );
+            }
+
+            function syncThresholdControls() {
+                if (state.abstainAllowed) {
+                    els.thresholdSingleCard.classList.add('hidden-column');
+                    els.thresholdDualCard.classList.remove('hidden-column');
+
+                    els.blueThreshold.value = String(state.blueThreshold);
+                    els.redThreshold.value = String(state.redThreshold);
+
+                    els.blueThresholdPill.textContent = `${state.blueThreshold}%`;
+                    els.redThresholdPill.textContent = `${state.redThreshold}%`;
+
+                    updateDualThresholdTracks();
+                } else {
+                    els.thresholdSingleCard.classList.remove('hidden-column');
+                    els.thresholdDualCard.classList.add('hidden-column');
+
+                    const sharedThreshold = clamp(Math.round((state.blueThreshold + state.redThreshold) / 2), 0, 100);
+                    state.blueThreshold = sharedThreshold;
+                    state.redThreshold = sharedThreshold;
+
+                    els.thresholdSingle.value = String(sharedThreshold);
+                    els.thresholdSinglePill.textContent = `${sharedThreshold}%`;
+                    updateSingleThresholdTrack(sharedThreshold);
+                }
+            }
+
+            function syncVoteControls() {
+                if (state.abstainAllowed) {
+                    els.voteSingle.classList.add('hidden-column');
+                    els.voteBlue.classList.remove('hidden-column');
+                    els.voteRed.classList.remove('hidden-column');
+
+                    const blueShare = clamp(state.voteBlueShare, 0, 100);
+                    const redShare = clamp(state.voteRedShare, 0, 100);
+                    let fixedBlue = blueShare;
+                    let fixedRed = redShare;
+                    if (fixedBlue + fixedRed > 100) {
+                        if (fixedBlue > fixedRed) {
+                            fixedRed = 100 - fixedBlue;
+                        } else {
+                            fixedBlue = 100 - fixedRed;
+                        }
+                    }
+
+                    state.voteBlueShare = fixedBlue;
+                    state.voteRedShare = fixedRed;
+
+                    const blueBoundary = fixedBlue;
+                    const redBoundary = 100 - fixedRed;
+
+                    els.voteBlue.min = '0';
+                    els.voteBlue.max = String(Math.max(0, redBoundary));
+                    els.voteRed.min = String(Math.min(100, blueBoundary));
+                    els.voteRed.max = '100';
+
+                    els.voteBlue.value = String(blueBoundary);
+                    els.voteRed.value = String(redBoundary);
+
+                    updateVoteLabelsAndTrack();
+                } else {
+                    els.voteSingle.classList.remove('hidden-column');
+                    els.voteBlue.classList.add('hidden-column');
+                    els.voteRed.classList.add('hidden-column');
+
+                    const blueShare = clamp(state.singleVoteBlue, 0, 100);
+                    state.voteBlueShare = blueShare;
+                    state.voteRedShare = 100 - blueShare;
+
+                    els.voteSingle.value = String(blueShare);
+                    updateSingleVoteTrack(blueShare);
+                    updateVoteLabelsAndTrack();
+                }
+            }
+
+            function updateSingleThresholdTrack(value) {
+                const percent = clamp(value, 0, 100);
+                els.thresholdSingleTrack.style.background = `linear-gradient(90deg, #126364 0%, #126364 ${percent}%, #7b858d ${percent}%, #7b858d 100%)`;
+            }
+
+            function updateDualThresholdTracks() {
+                const blue = clamp(state.blueThreshold, 0, 100);
+                const red = clamp(state.redThreshold, 0, 100);
+                els.blueThresholdTrack.style.background = `linear-gradient(90deg, #126364 0%, #126364 ${blue}%, #6f7a83 ${blue}%, #6f7a83 100%)`;
+                els.redThresholdTrack.style.background = `linear-gradient(90deg, #6f7a83 0%, #6f7a83 ${100 - red}%, #8a2020 ${100 - red}%, #8a2020 100%)`;
+            }
+
+            function updateSingleVoteTrack(blueShare) {
+                const blue = clamp(blueShare, 0, 100);
+                const red = 100 - blue;
+                els.voteTrack.style.background = `linear-gradient(90deg, #126364 0%, #126364 ${blue}%, #8a2020 ${blue}%, #8a2020 100%)`;
+                els.voteBlueLabel.style.display = 'block';
+                els.voteRedLabel.style.display = 'block';
+                els.voteGrayLabel.style.display = 'none';
+                els.voteBlueLabel.style.left = `${blue / 2}%`;
+                els.voteRedLabel.style.left = `${blue + red / 2}%`;
+                els.voteBlueLabel.textContent = `Blue ${blue}%`;
+                els.voteRedLabel.textContent = `Red ${red}%`;
+                els.voteSummaryPill.textContent = `Blue ${blue}% / Red ${red}%`;
+                els.distributionDetail.textContent = `Blue ${blue}% · Red ${red}%`;
+            }
+
+            function updateVoteLabelsAndTrack() {
+                if (state.abstainAllowed) {
+                    const blue = clamp(state.voteBlueShare, 0, 100);
+                    const red = clamp(state.voteRedShare, 0, 100);
+                    const abstain = clamp(100 - blue - red, 0, 100);
+
+                    const blueBoundary = blue;
+                    const redBoundary = 100 - red;
+                    const center = (blueBoundary + redBoundary) / 2;
+
+                    els.voteTrack.style.background = `linear-gradient(90deg,
+                        #126364 0%,
+                        #126364 ${blueBoundary}%,
+                        #7b858d ${blueBoundary}%,
+                        #7b858d ${redBoundary}%,
+                        #8a2020 ${redBoundary}%,
+                        #8a2020 100%)`;
+
+                    els.voteBlueLabel.style.display = 'block';
+                    els.voteRedLabel.style.display = 'block';
+                    els.voteGrayLabel.style.display = 'block';
+                    els.voteBlueLabel.textContent = `Blue ${blue}%`;
+                    els.voteRedLabel.textContent = `Red ${red}%`;
+                    els.voteGrayLabel.textContent = `Abstain ${abstain}%`;
+                    els.voteBlueLabel.style.left = `${blueBoundary / 2}%`;
+                    els.voteRedLabel.style.left = `${100 - (red / 2)}%`;
+                    els.voteGrayLabel.style.left = `${center}%`;
+                    els.voteSummaryPill.textContent = `Blue ${blue}% / Abstain ${abstain}% / Red ${red}%`;
+                    els.distributionDetail.textContent = `Blue ${blue}% · Abstain ${abstain}% · Red ${red}%`;
+                } else {
+                    updateSingleVoteTrack(state.singleVoteBlue);
+                }
+            }
+
+            function getVotingShares() {
+                if (state.abstainAllowed) {
+                    const blue = clamp(Math.round(state.voteBlueShare), 0, 100);
+                    const red = clamp(Math.round(state.voteRedShare), 0, 100);
+                    const abstain = clamp(100 - blue - red, 0, 100);
+                    return { blue, red, abstain };
+                }
+                const blue = clamp(Math.round(state.singleVoteBlue), 0, 100);
+                return { blue, red: 100 - blue, abstain: 0 };
+            }
+
+            function resolveWinner() {
+                const votes = getVotingShares();
+                const bluePass = votes.blue >= state.blueThreshold;
+                const redPass = votes.red >= state.redThreshold;
+
+                let winner;
+                let reason;
+
+                if (bluePass && !redPass) {
+                    winner = 'blue';
+                    reason = 'Blue reached its threshold while red did not.';
+                } else if (redPass && !bluePass) {
+                    winner = 'red';
+                    reason = 'Red reached its threshold while blue did not.';
+                } else if (bluePass && redPass) {
+                    if (state.resolutionMode === 'votes') {
+                        if (votes.blue > votes.red) {
+                            winner = 'blue';
+                            reason = 'Both thresholds passed, and blue had more votes.';
+                        } else if (votes.red > votes.blue) {
+                            winner = 'red';
+                            reason = 'Both thresholds passed, and red had more votes.';
+                        } else {
+                            winner = state.bluePriority ? 'blue' : 'red';
+                            reason = 'Both thresholds passed and the vote was tied, so priority decided it.';
+                        }
+                    } else {
+                        winner = state.bluePriority ? 'blue' : 'red';
+                        reason = 'Both thresholds passed, so priority decided it.';
+                    }
+                } else {
+                    winner = state.bluePriority ? 'blue' : 'red';
+                    reason = 'Neither threshold passed, so priority decided it.';
+                }
+
+                const deaths = winner === 'red' ? pctFromPopulation(votes.blue) : 0;
+                return { winner, reason, deaths, votes, bluePass, redPass };
+            }
+
+            function getSharedFramingNumber() {
+                const blueThresholdPortion = state.blueThreshold / 100;
+                const redThresholdPortion = state.redThreshold / 100;
+
+                if (state.resolutionMode === 'votes') {
+                    return POPULATION * Math.max(0.5, blueThresholdPortion);
+                }
+
+                return state.bluePriority
+                    ? POPULATION * blueThresholdPortion
+                    : POPULATION * (1 - redThresholdPortion);
+            }
+
+            function getFramingCountForSide(side) {
+                const threshold = side === 'blue' ? state.blueThreshold : state.redThreshold;
+                return pctFromPopulation(threshold);
+            }
+
+            function framingOne(ctx) {
+                const shared = fmtPeople(getSharedFramingNumber());
+                return {
+                    title: 'Framing 1',
+                    blue: `You risk your life to save up to ${shared} people.`,
+                    abstain: `You sit in silence as red threatens to kill up to ${shared} people.`,
+                    red: `You vote to kill up to ${shared} people.`
+                };
+            }
+
+            function framingTwo(ctx) {
+                const blueCount = fmtPeople(getFramingCountForSide('blue'));
+                const redCount = fmtPeople(getFramingCountForSide('red'));
+                return {
+                    title: 'Framing 2',
+                    blue: `You kill yourself unless at least ${blueCount} people also try to kill themselves.`,
+                    abstain: `You refuse to kill yourself.`,
+                    red: `You kill yourself unless at least ${redCount} people also try to kill themselves.`
+                };
+            }
+
+            function framingThree(ctx) {
+                const populationText = fmtPeople(POPULATION);
+                return {
+                    title: 'Framing 3',
+                    blue: `You risk your life under a system that threatens to harm ${populationText} people.`,
+                    abstain: `You refuse to contribute your vote to the system.`,
+                    red: `You risk people's lives under a system that threatens to harm ${populationText} people.`
+                };
+            }
+
+            const framingGenerators = [framingOne, framingTwo, framingThree];
+
+            function renderFramings() {
+                const context = {
+                    population: POPULATION,
+                    blueThreshold: state.blueThreshold,
+                    redThreshold: state.redThreshold,
+                    abstainAllowed: state.abstainAllowed,
+                    priority: state.bluePriority ? 'blue' : 'red',
+                    resolutionMode: state.resolutionMode,
+                    votes: getVotingShares()
+                };
+
+                const results = framingGenerators.map(fn => fn(context));
+
+                els.blueFramings.innerHTML = results.map(item => `
+                    <div class="framing">
+                        <div class="framing-title">${item.title}</div>
+                        <div class="framing-text">${item.blue}</div>
+                    </div>
+                `).join('');
+
+                els.redFramings.innerHTML = results.map(item => `
+                    <div class="framing">
+                        <div class="framing-title">${item.title}</div>
+                        <div class="framing-text">${item.red}</div>
+                    </div>
+                `).join('');
+
+                if (state.abstainAllowed) {
+                    els.abstainFramings.innerHTML = results.map(item => `
+                        <div class="framing">
+                            <div class="framing-title">${item.title}</div>
+                            <div class="framing-text">${item.abstain}</div>
+                        </div>
+                    `).join('');
+                } else {
+                    els.abstainFramings.innerHTML = '';
+                }
+
+                const bluePotential = fmtPeople(getFramingCountForSide('blue'));
+                const redPotential = fmtPeople(getFramingCountForSide('red'));
+                const sharedPotential = fmtPeople(getSharedFramingNumber());
+
+                els.blueMeta.innerHTML = `
+                    <strong>Framing 1:</strong> save up to ${sharedPotential} people.<br>
+                    <strong>Framing 2:</strong> self-risk threshold ${bluePotential}.<br>
+                    <strong>Framing 3:</strong> system threatens ${fmtPeople(POPULATION)} people.
+                `;
+                els.redMeta.innerHTML = `
+                    <strong>Framing 1:</strong> kill up to ${sharedPotential} people.<br>
+                    <strong>Framing 2:</strong> self-risk threshold ${redPotential}.<br>
+                    <strong>Framing 3:</strong> system threatens ${fmtPeople(POPULATION)} people.
+                `;
+
+                if (state.abstainAllowed) {
+                    els.abstainMeta.innerHTML = `
+                        <strong>Framing 1:</strong> remain silent as ${sharedPotential} people are threatened.<br>
+                        <strong>Framing 2:</strong> abstain from self-risk.<br>
+                        <strong>Framing 3:</strong> refuse to contribute.
+                    `;
+                } else {
+                    els.abstainMeta.textContent = '';
+                }
+            }
+
+            function renderResolution() {
+                const outcome = resolveWinner();
+                const winnerLabel = outcome.winner === 'blue'
+                    ? '<span class="result-pill blue">Blue wins</span>'
+                    : '<span class="result-pill red">Red wins</span>';
+
+                els.outcomeLine.innerHTML = `With this voting distribution: ${winnerLabel} → ${fmtPeople(outcome.deaths)} people die`;
+
+                const voteText = state.abstainAllowed
+                    ? `Blue ${outcome.votes.blue}% · Abstain ${outcome.votes.abstain}% · Red ${outcome.votes.red}%`
+                    : `Blue ${outcome.votes.blue}% · Red ${outcome.votes.red}%`;
+                els.distributionDetail.textContent = voteText;
+
+                els.resolutionSummary.innerHTML = `
+                    <span class="result-pill ${outcome.winner === 'blue' ? 'blue' : 'red'}">
+                        ${outcome.winner === 'blue' ? 'Blue wins' : 'Red wins'}
+                    </span>
+                    ${outcome.deaths === 0 ? 'No deaths under the selected winner.' : `${fmtPeople(outcome.deaths)} people die under the selected winner.`}
+                `;
+
+                const bluePass = outcome.votes.blue >= state.blueThreshold;
+                const redPass = outcome.votes.red >= state.redThreshold;
+                const modeLabel = state.abstainAllowed
+                    ? (state.resolutionMode === 'threshold' ? 'Threshold Pass' : 'More Votes Wins')
+                    : 'Threshold Pass (locked)';
+                els.resolutionDetail.textContent =
+                    `Blue threshold: ${state.blueThreshold}% (${bluePass ? 'passed' : 'failed'}). ` +
+                    `Red threshold: ${state.redThreshold}% (${redPass ? 'passed' : 'failed'}). ` +
+                    `Priority: ${state.bluePriority ? 'Blue' : 'Red'}. Mode: ${modeLabel}. ` +
+                    outcome.reason;
+            }
+
+            function renderChoiceHighlights() {
+                document.querySelectorAll('.choice-column').forEach(column => column.classList.remove('active'));
+                if (state.selectedChoice) {
+                    const target = document.querySelector(`.choice-column[data-choice="${state.selectedChoice}"]`);
+                    if (target) {
+                        target.classList.add('active');
+                    }
+                }
+            }
+
+            function buildShareText(choice) {
+                const outcome = resolveWinner();
+                const votes = getVotingShares();
+
+                const lines = [
+                    'With these rules:',
+                    `- 🔵 Blue button: if ${state.blueThreshold}% press blue, no one dies`,
+                    `- 🔴 Red button: if ${state.redThreshold}% press red, everyone who picked blue dies`,
+                ];
+
+                if (state.abstainAllowed) {
+                    lines.push(`- ⚪ Abstention: Allowed ✅`);
+                } else {
+                    lines.push(`- ⚪ Abstention: Not allowed ❌`);
+                }
+
+                lines.push(`- = On tie: ${state.bluePriority ? 'Blue wins 🔷' : 'Red wins 🔻'}`);
+
+                if (state.abstainAllowed) {
+                    lines.push(`- ⚖️ If both thresholds pass: ${state.resolutionMode === 'votes' ? 'More votes wins ➕' : 'Threshold pass = priority wins'}`);
+                }
+
+                lines.push('');
+                lines.push(`Selected: ${choice === 'blue' ? '🔵 Blue button' : choice === 'red' ? '🔴 Red button' : '⚪ Abstain'}`);
+                lines.push(
+                    `Distribution: Blue ${votes.blue}%` +
+                    (state.abstainAllowed ? ` · Abstain ${votes.abstain}% · Red ${votes.red}%` : ` · Red ${votes.red}%`)
+                );
+                lines.push(`Outcome: ${outcome.winner === 'blue' ? 'Blue wins' : 'Red wins'} — ${fmtPeople(outcome.deaths)} people die`);
+
+                return lines.join('\n');
+            }
+
+            function openShareModal(choice) {
+                state.selectedChoice = choice;
+                renderChoiceHighlights();
+                const text = buildShareText(choice);
+                els.shareText.textContent = text;
+                els.shareModal.style.display = 'flex';
+            }
+
+            function closeShareModal() {
+                els.shareModal.style.display = 'none';
+            }
+
+            async function copyShareText() {
+                const text = els.shareText.textContent || '';
+                try {
+                    await navigator.clipboard.writeText(text);
+                } catch (err) {
+                    const temp = document.createElement('textarea');
+                    temp.value = text;
+                    document.body.appendChild(temp);
+                    temp.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(temp);
+                }
+                els.shareSubtitle.textContent = 'Copied to clipboard.';
+            }
+
+            function syncAll() {
+                setButtonAppearance();
+                syncThresholdControls();
+                syncVoteControls();
+                renderFramings();
+                renderResolution();
+                renderChoiceHighlights();
+                if (state.abstainAllowed) {
+                    els.voteBlue.classList.remove('hidden-column');
+                    els.voteRed.classList.remove('hidden-column');
+                    els.voteSingle.classList.add('hidden-column');
+                } else {
+                    els.voteSingle.classList.remove('hidden-column');
+                    els.voteBlue.classList.add('hidden-column');
+                    els.voteRed.classList.add('hidden-column');
+                }
+                els.voteSingle.classList.toggle('hidden-column', state.abstainAllowed);
+            }
+
+            function initEvents() {
+                els.priorityToggle.addEventListener('click', () => {
+                    state.bluePriority = !state.bluePriority;
+                    syncAll();
+                });
+
+                els.abstainToggle.addEventListener('click', () => {
+                    state.abstainAllowed = !state.abstainAllowed;
+                    if (state.abstainAllowed) {
+                        state.resolutionMode = state.resolutionMode || 'threshold';
+                        state.voteBlueShare = clamp(state.singleVoteBlue, 0, 100);
+                        state.voteRedShare = clamp(100 - state.singleVoteBlue, 0, 100);
+                    } else {
+                        state.singleVoteBlue = clamp(state.voteBlueShare, 0, 100);
+                    }
+                    syncAll();
+                });
+
+                els.modeToggle.addEventListener('click', () => {
+                    if (!state.abstainAllowed) return;
+                    state.resolutionMode = state.resolutionMode === 'threshold' ? 'votes' : 'threshold';
+                    syncAll();
+                });
+
+                els.thresholdSingle.addEventListener('input', () => {
+                    const value = clamp(Number(els.thresholdSingle.value), 0, 100);
+                    state.blueThreshold = value;
+                    state.redThreshold = value;
+                    syncAll();
+                });
+
+                els.blueThreshold.addEventListener('input', () => {
+                    state.blueThreshold = clamp(Number(els.blueThreshold.value), 0, 100);
+                    syncAll();
+                });
+
+                els.redThreshold.addEventListener('input', () => {
+                    state.redThreshold = clamp(Number(els.redThreshold.value), 0, 100);
+                    syncAll();
+                });
+
+                els.voteSingle.addEventListener('input', () => {
+                    state.singleVoteBlue = clamp(Number(els.voteSingle.value), 0, 100);
+                    syncAll();
+                });
+
+                els.voteBlue.addEventListener('input', () => {
+                    const blueBoundary = clamp(Number(els.voteBlue.value), 0, 100);
+                    const maxBlue = 100 - clamp(state.voteRedShare, 0, 100);
+                    state.voteBlueShare = Math.min(blueBoundary, maxBlue);
+                    if (state.voteBlueShare + state.voteRedShare > 100) {
+                        state.voteRedShare = 100 - state.voteBlueShare;
+                    }
+                    syncAll();
+                });
+
+                els.voteRed.addEventListener('input', () => {
+                    const redBoundary = clamp(Number(els.voteRed.value), 0, 100);
+                    const proposedRedShare = 100 - redBoundary;
+                    state.voteRedShare = clamp(proposedRedShare, 0, 100);
+                    if (state.voteBlueShare + state.voteRedShare > 100) {
+                        state.voteBlueShare = 100 - state.voteRedShare;
+                    }
+                    syncAll();
+                });
+
+                els.blueChoice.addEventListener('click', () => openShareModal('blue'));
+                els.redChoice.addEventListener('click', () => openShareModal('red'));
+                els.abstainChoice.addEventListener('click', () => {
+                    if (!state.abstainAllowed) return;
+                    openShareModal('abstain');
+                });
+
+                els.shareModal.addEventListener('click', (e) => {
+                    if (e.target === els.shareModal) {
+                        closeShareModal();
+                    }
+                });
+
+                els.copyShare.addEventListener('click', copyShareText);
+                els.closeShare.addEventListener('click', closeShareModal);
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        closeShareModal();
+                    }
+                });
+            }
+
+            function init() {
+                // Synchronize the hidden/visible slider layout with the initial state.
+                if (state.abstainAllowed) {
+                    state.voteBlueShare = 30;
+                    state.voteRedShare = 40;
+                }
+                syncAll();
+                initEvents();
+
+                // Keep the threshold and vote tracks visually correct on load.
+                updateSingleThresholdTrack(state.blueThreshold);
+                updateDualThresholdTracks();
+                updateSingleVoteTrack(state.singleVoteBlue);
+                updateVoteLabelsAndTrack();
+                renderFramings();
+                renderResolution();
+            }
+
+            init();
+        })();
+    </script>
+</body>
+</html>
