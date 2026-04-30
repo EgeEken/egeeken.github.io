@@ -31,6 +31,8 @@
 
         body {
             color: var(--text-main);
+            align-items: stretch;
+            width: 100%;
         }
 
         header {
@@ -76,7 +78,7 @@
         .rbb-header-controls {
             width: min(1200px, 94%);
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 12px;
             margin: 0 auto;
             align-items: stretch;
@@ -156,6 +158,24 @@
             background: linear-gradient(135deg, #3f494a, #222e2e);
         }
 
+        .threat-button.blue-only {
+            background: linear-gradient(135deg, #1a3a57, #11283b);
+            box-shadow: 0 0 14px rgba(18, 40, 66, 0.35);
+        }
+
+        .threat-button.blue-only:hover {
+            background: linear-gradient(135deg, #214364, #153149);
+        }
+
+        .threat-button.all-nonred {
+            background: linear-gradient(135deg, #4b3c5c, #2f243a);
+            box-shadow: 0 0 14px rgba(55, 42, 74, 0.35);
+        }
+
+        .threat-button.all-nonred:hover {
+            background: linear-gradient(135deg, #564368, #382a46);
+        }
+
         .mode-button {
             background: linear-gradient(135deg, #44525d, #26343f);
         }
@@ -187,6 +207,7 @@
             min-height: 3.1em;
             display: flex;
             align-items: flex-start;
+            justify-content: center;
         }
 
         .toggle-label.hidden {
@@ -201,10 +222,17 @@
         }
 
         #rbb-app {
-            width: min(1200px, 95%);
-            margin: 18px auto 42px;
+            width: min(1200px, 90%);
+            margin: 18px auto 42px auto;
             display: grid;
             gap: 18px;
+            justify-items: center;
+        }
+
+        #rbb-app > section.panel {
+            width: 100%;
+            max-width: none;
+            display: block;
         }
 
         .panel {
@@ -333,6 +361,18 @@
             margin-top: 2px;
         }
 
+        #vote-dual-grid {
+            margin-top: 12px;
+        }
+
+        #vote-distribution-card .slider-shell {
+            pointer-events: none;
+        }
+
+        #vote-distribution-card.interactive .slider-shell {
+            pointer-events: auto;
+        }
+
         input[type="range"] {
             -webkit-appearance: none;
             appearance: none;
@@ -397,14 +437,6 @@
         .range-red,
         .range-gray {
             z-index: 2;
-        }
-
-        .dual-note {
-            color: var(--text-muted);
-            font-size: 0.92em;
-            line-height: 1.4;
-            min-height: 2.2em;
-            margin-top: -2px;
         }
 
         .distribution-summary {
@@ -699,6 +731,11 @@
             line-height: 1.45;
         }
 
+        #distribution-detail,
+        #resolution-detail {
+            white-space: pre-line;
+        }
+
         @media (max-width: 1000px) {
             .rbb-header-controls {
                 grid-template-columns: 1fr;
@@ -778,8 +815,8 @@
                 <button id="abstain-toggle" class="toggle-button plain-toggle" type="button" aria-pressed="false">
                     Abstaining Allowed
                 </button>
-                <div class="toggle-label">
-                    When enabled, a gray middle band appears in the vote slider and the third rule button unlocks.
+                <div class="toggle-label" id="abstain-help">
+                    Abstaining is the choice of not voting for either side.
                 </div>
             </div>
 
@@ -789,6 +826,15 @@
                 </button>
                 <div id="mode-help" class="toggle-label hidden">
                     If Threshold Pass is selected, in the event that both sides reach the threshold, the priority side wins by default. If More Votes Wins is selected, in that same event the higher number of votes will win.
+                </div>
+            </div>
+
+            <div class="toggle-card" id="threat-card">
+                <button id="threat-toggle" class="toggle-button threat-button blue-only" type="button" aria-pressed="false" disabled>
+                    Red Targets Blue Only
+                </button>
+                <div id="threat-help" class="toggle-label hidden">
+                    If red wins, only blue voters are killed.
                 </div>
             </div>
         </div>
@@ -810,7 +856,6 @@
                             <input id="threshold-single" class="range-gray" type="range" min="0" max="100" step="1" value="50" aria-label="Threshold slider" />
                         </div>
                     </div>
-                    <div class="dual-note">With abstention disabled, both buttons share the same threshold.</div>
                 </div>
 
                 <div class="rules-grid hidden-column" id="threshold-card-dual">
@@ -841,9 +886,43 @@
                     </div>
                 </div>
 
-                <div class="rule-card single">
+                <div class="rule-card single" id="vote-input-card">
                     <div class="rule-topline">
                         <div class="rule-title">Vote Slider</div>
+                    </div>
+
+                    <div class="rules-grid hidden-column" id="vote-dual-grid">
+                        <div class="rule-card">
+                            <div class="rule-topline">
+                                <div class="rule-title">Blue Votes</div>
+                                <div class="value-pill" id="vote-blue-pill">50%</div>
+                            </div>
+                            <div class="slider-shell">
+                                <div class="slider-track" id="vote-blue-track"></div>
+                                <div class="range-group">
+                                    <input id="vote-blue" class="range-blue" type="range" min="0" max="100" step="1" value="50" aria-label="Blue vote share slider" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rule-card">
+                            <div class="rule-topline">
+                                <div class="rule-title">Red Votes</div>
+                                <div class="value-pill" id="vote-red-pill">50%</div>
+                            </div>
+                            <div class="slider-shell">
+                                <div class="slider-track" id="vote-red-track"></div>
+                                <div class="range-group">
+                                    <input id="vote-red" class="range-red" type="range" min="0" max="100" step="1" value="50" aria-label="Red vote share slider" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rule-card single" id="vote-distribution-card">
+                    <div class="rule-topline">
+                        <div class="rule-title">Vote Distribution</div>
                         <div class="value-pill" id="vote-summary-pill">Blue 50% / Red 50%</div>
                     </div>
 
@@ -854,10 +933,8 @@
                             <span class="slider-label red" id="vote-red-label" style="left:50%;">Red 50%</span>
                         </div>
                         <div class="slider-track" id="vote-track"></div>
-                        <div class="range-group" id="vote-range-group">
+                        <div class="range-group" id="vote-single-shell">
                             <input id="vote-single" class="range-gray" type="range" min="0" max="100" step="1" value="50" aria-label="Vote distribution slider" />
-                            <input id="vote-blue" class="range-blue hidden-column" type="range" min="0" max="100" step="1" value="50" aria-label="Blue vote share slider" />
-                            <input id="vote-red" class="range-red hidden-column" type="range" min="0" max="100" step="1" value="50" aria-label="Red vote share slider" />
                         </div>
                     </div>
 
@@ -926,6 +1003,7 @@
                 bluePriority: true,
                 abstainAllowed: false,
                 resolutionMode: 'threshold', // 'threshold' | 'votes'
+                redTargetsAll: false,
                 blueThreshold: 50,
                 redThreshold: 50,
                 singleVoteBlue: 50,
@@ -938,9 +1016,13 @@
                 priorityToggle: document.getElementById('priority-toggle'),
                 priorityHelp: document.getElementById('priority-help'),
                 abstainToggle: document.getElementById('abstain-toggle'),
+                abstainHelp: document.getElementById('abstain-help'),
                 modeToggle: document.getElementById('mode-toggle'),
                 modeHelp: document.getElementById('mode-help'),
                 modeCard: document.getElementById('mode-card'),
+                threatToggle: document.getElementById('threat-toggle'),
+                threatHelp: document.getElementById('threat-help'),
+                threatCard: document.getElementById('threat-card'),
                 choiceGrid: document.getElementById('choice-grid'),
                 abstainColumn: document.getElementById('abstain-column'),
 
@@ -956,9 +1038,17 @@
                 blueThresholdPill: document.getElementById('blue-threshold-pill'),
                 redThresholdPill: document.getElementById('red-threshold-pill'),
 
+                voteInputCard: document.getElementById('vote-input-card'),
+                voteDistributionCard: document.getElementById('vote-distribution-card'),
                 voteSingle: document.getElementById('vote-single'),
                 voteBlue: document.getElementById('vote-blue'),
                 voteRed: document.getElementById('vote-red'),
+                voteSingleShell: document.getElementById('vote-single-shell'),
+                voteDualGrid: document.getElementById('vote-dual-grid'),
+                voteBlueTrack: document.getElementById('vote-blue-track'),
+                voteRedTrack: document.getElementById('vote-red-track'),
+                voteBluePill: document.getElementById('vote-blue-pill'),
+                voteRedPill: document.getElementById('vote-red-pill'),
                 voteTrack: document.getElementById('vote-track'),
                 voteBlueLabel: document.getElementById('vote-blue-label'),
                 voteRedLabel: document.getElementById('vote-red-label'),
@@ -1006,10 +1096,16 @@
                 els.priorityToggle.classList.toggle('blue-on', state.bluePriority);
                 els.priorityToggle.classList.toggle('red-on', !state.bluePriority);
                 els.priorityToggle.setAttribute('aria-pressed', String(state.bluePriority));
+                els.priorityHelp.textContent = state.bluePriority
+                    ? 'Blue wins in case of Tie.'
+                    : 'Red wins in case of Tie.';
 
                 els.abstainToggle.textContent = state.abstainAllowed ? 'Abstaining Allowed' : 'Abstaining Off';
                 els.abstainToggle.classList.toggle('active', state.abstainAllowed);
                 els.abstainToggle.setAttribute('aria-pressed', String(state.abstainAllowed));
+                els.abstainHelp.textContent = state.abstainAllowed
+                    ? 'You can refuse to press a button.'
+                    : 'You have to vote either red or blue.';
 
                 els.modeToggle.disabled = !state.abstainAllowed;
                 els.modeToggle.classList.toggle('mode-threshold', state.resolutionMode === 'threshold');
@@ -1018,7 +1114,23 @@
                 els.modeToggle.setAttribute('aria-pressed', String(state.resolutionMode === 'votes'));
                 els.modeCard.classList.toggle('disabled', !state.abstainAllowed);
 
+                els.modeHelp.textContent = state.resolutionMode === 'threshold'
+                    ? 'If both buttons pass threshold: Tie.'
+                    : 'If both buttons pass threshold: The one with more votes wins.';
                 els.modeHelp.classList.toggle('hidden', !state.abstainAllowed);
+
+                els.threatToggle.disabled = !state.abstainAllowed;
+                els.threatToggle.classList.toggle('blue-only', !state.redTargetsAll);
+                els.threatToggle.classList.toggle('all-nonred', state.redTargetsAll);
+                els.threatToggle.textContent = state.redTargetsAll
+                    ? 'Red Targets All Non-Red'
+                    : 'Red Targets Blue Only';
+                els.threatToggle.setAttribute('aria-pressed', String(state.redTargetsAll));
+                els.threatCard.classList.toggle('disabled', !state.abstainAllowed);
+                els.threatHelp.textContent = state.redTargetsAll
+                    ? 'If red wins, every non-red (blue + abstain) is killed.'
+                    : 'If red wins, only blue voters are killed.';
+                els.threatHelp.classList.toggle('hidden', !state.abstainAllowed);
 
                 els.abstainColumn.classList.toggle('hidden-column', !state.abstainAllowed);
                 els.choiceGrid.classList.toggle('has-abstain', state.abstainAllowed);
@@ -1035,7 +1147,7 @@
                     els.thresholdDualCard.classList.remove('hidden-column');
 
                     els.blueThreshold.value = String(state.blueThreshold);
-                    els.redThreshold.value = String(state.redThreshold);
+                    els.redThreshold.value = String(100 - state.redThreshold);
 
                     els.blueThresholdPill.textContent = `${state.blueThreshold}%`;
                     els.redThresholdPill.textContent = `${state.redThreshold}%`;
@@ -1045,60 +1157,49 @@
                     els.thresholdSingleCard.classList.remove('hidden-column');
                     els.thresholdDualCard.classList.add('hidden-column');
 
-                    const sharedThreshold = clamp(Math.round((state.blueThreshold + state.redThreshold) / 2), 0, 100);
-                    state.blueThreshold = sharedThreshold;
-                    state.redThreshold = sharedThreshold;
+                    const blueThreshold = clamp(Math.round(state.blueThreshold), 0, 100);
+                    const redThreshold = clamp(100 - blueThreshold, 0, 100);
+                    state.blueThreshold = blueThreshold;
+                    state.redThreshold = redThreshold;
 
-                    els.thresholdSingle.value = String(sharedThreshold);
-                    els.thresholdSinglePill.textContent = `${sharedThreshold}%`;
-                    updateSingleThresholdTrack(sharedThreshold);
+                    els.thresholdSingle.value = String(blueThreshold);
+                    els.thresholdSinglePill.textContent = `${blueThreshold}%`;
+                    updateSingleThresholdTrack(blueThreshold);
                 }
             }
 
             function syncVoteControls() {
                 if (state.abstainAllowed) {
-                    els.voteSingle.classList.add('hidden-column');
-                    els.voteBlue.classList.remove('hidden-column');
-                    els.voteRed.classList.remove('hidden-column');
+                    els.voteInputCard.classList.remove('hidden-column');
+                    els.voteDualGrid.classList.remove('hidden-column');
+                    els.voteSingleShell.classList.add('hidden-column');
+                    els.voteDistributionCard.classList.remove('interactive');
 
-                    const blueShare = clamp(state.voteBlueShare, 0, 100);
-                    const redShare = clamp(state.voteRedShare, 0, 100);
-                    let fixedBlue = blueShare;
-                    let fixedRed = redShare;
-                    if (fixedBlue + fixedRed > 100) {
-                        if (fixedBlue > fixedRed) {
-                            fixedRed = 100 - fixedBlue;
-                        } else {
-                            fixedBlue = 100 - fixedRed;
-                        }
-                    }
+                    const fixedBlue = clamp(state.voteBlueShare, 0, 100);
+                    const fixedRed = clamp(state.voteRedShare, 0, 100);
+                    const effectiveRed = Math.max(0, Math.min(fixedRed, 100 - fixedBlue));
 
                     state.voteBlueShare = fixedBlue;
-                    state.voteRedShare = fixedRed;
+                    state.voteRedShare = effectiveRed;
 
-                    const blueBoundary = fixedBlue;
-                    const redBoundary = 100 - fixedRed;
+                    els.voteBlue.value = String(fixedBlue);
+                    els.voteRed.value = String(100 - effectiveRed);
+                    els.voteBluePill.textContent = `${fixedBlue}%`;
+                    els.voteRedPill.textContent = `${effectiveRed}%`;
 
-                    els.voteBlue.min = '0';
-                    els.voteBlue.max = String(Math.max(0, redBoundary));
-                    els.voteRed.min = String(Math.min(100, blueBoundary));
-                    els.voteRed.max = '100';
-
-                    els.voteBlue.value = String(blueBoundary);
-                    els.voteRed.value = String(redBoundary);
-
+                    updateVoteInputTracks(fixedBlue, effectiveRed);
                     updateVoteLabelsAndTrack();
                 } else {
-                    els.voteSingle.classList.remove('hidden-column');
-                    els.voteBlue.classList.add('hidden-column');
-                    els.voteRed.classList.add('hidden-column');
+                    els.voteInputCard.classList.add('hidden-column');
+                    els.voteDualGrid.classList.add('hidden-column');
+                    els.voteSingleShell.classList.remove('hidden-column');
+                    els.voteDistributionCard.classList.add('interactive');
 
                     const blueShare = clamp(state.singleVoteBlue, 0, 100);
                     state.voteBlueShare = blueShare;
                     state.voteRedShare = 100 - blueShare;
 
                     els.voteSingle.value = String(blueShare);
-                    updateSingleVoteTrack(blueShare);
                     updateVoteLabelsAndTrack();
                 }
             }
@@ -1118,7 +1219,8 @@
             function updateSingleVoteTrack(blueShare) {
                 const blue = clamp(blueShare, 0, 100);
                 const red = 100 - blue;
-                els.voteTrack.style.background = `linear-gradient(90deg, #126364 0%, #126364 ${blue}%, #8a2020 ${blue}%, #8a2020 100%)`;
+                const distributionGradient = `linear-gradient(90deg, #126364 0%, #126364 ${blue}%, #8a2020 ${blue}%, #8a2020 100%)`;
+                els.voteTrack.style.background = distributionGradient;
                 els.voteBlueLabel.style.display = 'block';
                 els.voteRedLabel.style.display = 'block';
                 els.voteGrayLabel.style.display = 'none';
@@ -1130,15 +1232,21 @@
                 els.distributionDetail.textContent = `Blue ${blue}% · Red ${red}%`;
             }
 
+            function updateVoteInputTracks(blueShare, redShare) {
+                const blue = clamp(blueShare, 0, 100);
+                const red = clamp(redShare, 0, 100);
+                els.voteBlueTrack.style.background = `linear-gradient(90deg, #126364 0%, #126364 ${blue}%, #6f7a83 ${blue}%, #6f7a83 100%)`;
+                els.voteRedTrack.style.background = `linear-gradient(90deg, #6f7a83 0%, #6f7a83 ${100 - red}%, #8a2020 ${100 - red}%, #8a2020 100%)`;
+            }
+
             function updateVoteLabelsAndTrack() {
                 if (state.abstainAllowed) {
                     const blue = clamp(state.voteBlueShare, 0, 100);
                     const red = clamp(state.voteRedShare, 0, 100);
                     const abstain = clamp(100 - blue - red, 0, 100);
-
                     const blueBoundary = blue;
                     const redBoundary = 100 - red;
-                    const center = (blueBoundary + redBoundary) / 2;
+                    const center = blue + (abstain / 2);
 
                     els.voteTrack.style.background = `linear-gradient(90deg,
                         #126364 0%,
@@ -1167,7 +1275,7 @@
             function getVotingShares() {
                 if (state.abstainAllowed) {
                     const blue = clamp(Math.round(state.voteBlueShare), 0, 100);
-                    const red = clamp(Math.round(state.voteRedShare), 0, 100);
+                    const red = Math.max(0, Math.min(clamp(Math.round(state.voteRedShare), 0, 100), 100 - blue));
                     const abstain = clamp(100 - blue - red, 0, 100);
                     return { blue, red, abstain };
                 }
@@ -1199,18 +1307,20 @@
                             reason = 'Both thresholds passed, and red had more votes.';
                         } else {
                             winner = state.bluePriority ? 'blue' : 'red';
-                            reason = 'Both thresholds passed and the vote was tied, so priority decided it.';
+                            reason = `Both thresholds passed and the vote was tied, so the ${winner} priority decided it.`;
                         }
                     } else {
                         winner = state.bluePriority ? 'blue' : 'red';
-                        reason = 'Both thresholds passed, so priority decided it.';
+                        reason = `Both thresholds passed, so the ${winner} priority decided it.`;
                     }
                 } else {
                     winner = state.bluePriority ? 'blue' : 'red';
-                    reason = 'Neither threshold passed, so priority decided it.';
+                    reason = `Neither threshold passed, so the ${winner} priority decided it.`;
                 }
 
-                const deaths = winner === 'red' ? pctFromPopulation(votes.blue) : 0;
+                const nonRedShare = 100 - votes.red;
+                const threatenedShare = state.redTargetsAll ? nonRedShare : votes.blue;
+                const deaths = winner === 'red' ? pctFromPopulation(threatenedShare) : 0;
                 return { winner, reason, deaths, votes, bluePass, redPass };
             }
 
@@ -1245,11 +1355,14 @@
             function framingTwo(ctx) {
                 const blueCount = fmtPeople(getFramingCountForSide('blue'));
                 const redCount = fmtPeople(getFramingCountForSide('red'));
+                const abstainCount = fmtPeople(POPULATION - getFramingCountForSide('blue') - getFramingCountForSide('red'));
                 return {
                     title: 'Framing 2',
                     blue: `You kill yourself unless at least ${blueCount} people also try to kill themselves.`,
-                    abstain: `You refuse to kill yourself.`,
-                    red: `You refuse to kill yourself.`
+                    abstain: state.redTargetsAll ? `You kill yourself for no reason whatsoever unless ${blueCount} people also try to kill themselves but in a more useful way.` : `You refuse to kill yourself`,
+                    // red: `You refuse to kill yourself.`
+                    // if abstaining is allowed and red only targets blue, there's no reason to pick red, 
+                    red: state.abstainAllowed && !state.redTargetsAll ? `You refuse to kill yourself but also want to kill up to ${blueCount} people for no reason.` : `You refuse to kill yourself`
                 };
             }
 
@@ -1257,13 +1370,57 @@
                 const populationText = fmtPeople(POPULATION);
                 return {
                     title: 'Framing 3',
-                    blue: `You risk your life under a system that put ${populationText} people in this position.`,
+                    blue: state.abstainAllowed ? `You vote, giving legitimacy to the system that put ${populationText} people in this position.` :  `You risk your life under a system that put ${populationText} people in this position.`,
                     abstain: `You refuse to contribute your vote to the system.`,
-                    red: `You risk people's lives under a system that put ${populationText} people in this position.`
+                    red: state.abstainAllowed ? `You vote, giving legitimacy to the system that put ${populationText} people in this position.` : `You risk other people's lives under a system that put ${populationText} people in this position.`
                 };
             }
 
-            const framingGenerators = [framingOne, framingTwo, framingThree];
+            function framingFour(ctx) {
+                const populationText = fmtPeople(POPULATION);
+                return {
+                    title: 'Framing 4',
+                    blue: state.bluePriority ? `Everyone else are morons, if just ${state.blueThreshold}% of the population picked blue then no one would die, there's no reason to pick red.` : `Everyone else are morons, if everyone just picked blue then no one would die, there's no reason to pick red.`,
+                    abstain: state.redTargetsAll ? `Everyone else are morons, if everyone just abstained then no on-.. wait... shit everyone would die, you're a moron` : `Everyone else are morons, if everyone just abstained then no one would die, there's no reason to pick either button.`,
+                    red: "Everyone else are morons, if everyone just picked red then no one would die, there's no reason to pick blue"
+                };
+            }
+
+            const framingGenerators = [framingOne, framingTwo, framingThree, framingFour];
+
+            function syncFramingHeights() {
+                const columns = [
+                    els.blueFramings,
+                    state.abstainAllowed ? els.abstainFramings : null,
+                    els.redFramings
+                ].filter(Boolean);
+
+                if (!columns.length) {
+                    return;
+                }
+
+                const rowCount = Math.max(...columns.map(column => column.children.length));
+
+                for (let i = 0; i < rowCount; i += 1) {
+                    columns.forEach(column => {
+                        const card = column.children[i];
+                        if (card) {
+                            card.style.minHeight = 'auto';
+                        }
+                    });
+                }
+
+                for (let i = 0; i < rowCount; i += 1) {
+                    const rowCards = columns.map(column => column.children[i]).filter(Boolean);
+                    if (!rowCards.length) {
+                        continue;
+                    }
+                    const maxHeight = Math.max(...rowCards.map(card => card.getBoundingClientRect().height));
+                    rowCards.forEach(card => {
+                        card.style.minHeight = `${Math.ceil(maxHeight)}px`;
+                    });
+                }
+            }
 
             function renderFramings() {
                 const context = {
@@ -1307,10 +1464,11 @@
                 const redPotential = fmtPeople(getFramingCountForSide('red'));
                 const sharedPotential = fmtPeople(getSharedFramingNumber());
 
-                if (state.abstainAllowed) {
-                } else {
+                if (!state.abstainAllowed) {
                     els.abstainMeta.textContent = '';
                 }
+
+                requestAnimationFrame(syncFramingHeights);
             }
 
             function renderResolution() {
@@ -1321,21 +1479,29 @@
 
                 els.outcomeLine.innerHTML = `With this voting distribution: ${winnerLabel} → ${fmtPeople(outcome.deaths)} people die`;
 
-                const voteText = state.abstainAllowed
-                    ? `Blue ${outcome.votes.blue}% · Abstain ${outcome.votes.abstain}% · Red ${outcome.votes.red}%`
-                    : `Blue ${outcome.votes.blue}% · Red ${outcome.votes.red}%`;
-                els.distributionDetail.textContent = voteText;
-
                 const bluePass = outcome.votes.blue >= state.blueThreshold;
                 const redPass = outcome.votes.red >= state.redThreshold;
-                const modeLabel = state.abstainAllowed
-                    ? (state.resolutionMode === 'threshold' ? 'Threshold Pass' : 'More Votes Wins')
-                    : 'Threshold Pass (locked)';
-                els.resolutionDetail.textContent =
-                    `Blue threshold: ${state.blueThreshold}% (${bluePass ? 'passed' : 'failed'}).\n` +
-                    `Red threshold: ${state.redThreshold}% (${redPass ? 'passed' : 'failed'}).\n` +
-                    `Priority: ${state.bluePriority ? 'Blue' : 'Red'}.\nMode: ${modeLabel}. ` +
-                    outcome.reason;
+                const blueComparator = bluePass ? '>=' : '<';
+                const redComparator = redPass ? '>=' : '<';
+
+                const distributionLines = [
+                    `Blue ${outcome.votes.blue}% ${blueComparator} ${state.blueThreshold}% (${bluePass ? 'passed' : 'failed'})`,
+                    state.abstainAllowed ? `Abstain ${outcome.votes.abstain}%` : null,
+                    `Red ${outcome.votes.red}% ${redComparator} ${state.redThreshold}% (${redPass ? 'passed' : 'failed'})`
+                ].filter(Boolean);
+
+                els.distributionDetail.textContent = distributionLines.join('\n');
+
+                const detailLines = [
+                    `Priority: ${state.bluePriority ? 'Blue' : 'Red'}`
+                ];
+
+                if (state.abstainAllowed) {
+                    detailLines.push(`Mode: ${state.resolutionMode === 'threshold' ? 'Threshold Pass' : 'More Votes Wins'}`);
+                }
+
+                detailLines.push(outcome.reason);
+                els.resolutionDetail.textContent = detailLines.join('\n');
             }
 
             function renderChoiceHighlights() {
@@ -1355,7 +1521,9 @@
                 const lines = [
                     'With these rules:',
                     `- 🔵 Blue button: if ${state.blueThreshold}% press blue, no one dies`,
-                    `- 🔴 Red button: if ${state.redThreshold}% press red, everyone who picked blue dies`,
+                    state.redTargetsAll
+                        ? `- 🔴 Red button: if ${state.redThreshold}% press red, everyone who did not pick red dies`
+                        : `- 🔴 Red button: if ${state.redThreshold}% press red, everyone who picked blue dies`,
                 ];
 
                 if (state.abstainAllowed) {
@@ -1371,7 +1539,13 @@
                 }
 
                 lines.push('');
-                lines.push(`I Selected: ${choice === 'blue' ? '🔵 Blue button' : choice === 'red' ? '🔴 Red button' : '⚪ Abstain'}`);
+                // lines.push(`I Selected: ${choice === 'blue' ? '🔵 Blue button' : choice === 'red' ? '🔴 Red button' : '⚪ Abstain'}`);
+                // that but it should add "Putting myself at risk" at the end if they picked blue, or also if they abstained while the rule "red targets all non-red" is on
+                lines.push(`I Selected: ${
+                    choice === 'blue' ? '🔵 Blue button (putting myself at risk)' :
+                    choice === 'red' ? '🔴 Red button' :
+                    `⚪ Abstain${state.redTargetsAll ? ' (putting myself at risk)' : ''}`
+                }`);
                 lines.push('Try it out: https://egeeken.github.io/red_button_blue_button_gpt.html');
                 return lines.join('\n');
             }
@@ -1410,16 +1584,6 @@
                 renderFramings();
                 renderResolution();
                 renderChoiceHighlights();
-                if (state.abstainAllowed) {
-                    els.voteBlue.classList.remove('hidden-column');
-                    els.voteRed.classList.remove('hidden-column');
-                    els.voteSingle.classList.add('hidden-column');
-                } else {
-                    els.voteSingle.classList.remove('hidden-column');
-                    els.voteBlue.classList.add('hidden-column');
-                    els.voteRed.classList.add('hidden-column');
-                }
-                els.voteSingle.classList.toggle('hidden-column', state.abstainAllowed);
             }
 
             function initEvents() {
@@ -1436,6 +1600,7 @@
                         state.voteRedShare = clamp(100 - state.singleVoteBlue, 0, 100);
                     } else {
                         state.singleVoteBlue = clamp(state.voteBlueShare, 0, 100);
+                        state.resolutionMode = 'threshold';
                     }
                     syncAll();
                 });
@@ -1446,10 +1611,16 @@
                     syncAll();
                 });
 
+                els.threatToggle.addEventListener('click', () => {
+                    if (!state.abstainAllowed) return;
+                    state.redTargetsAll = !state.redTargetsAll;
+                    syncAll();
+                });
+
                 els.thresholdSingle.addEventListener('input', () => {
                     const value = clamp(Number(els.thresholdSingle.value), 0, 100);
                     state.blueThreshold = value;
-                    state.redThreshold = value;
+                    state.redThreshold = clamp(100 - value, 0, 100);
                     syncAll();
                 });
 
@@ -1459,7 +1630,7 @@
                 });
 
                 els.redThreshold.addEventListener('input', () => {
-                    state.redThreshold = clamp(Number(els.redThreshold.value), 0, 100);
+                    state.redThreshold = clamp(100 - Number(els.redThreshold.value), 0, 100);
                     syncAll();
                 });
 
@@ -1469,9 +1640,8 @@
                 });
 
                 els.voteBlue.addEventListener('input', () => {
-                    const blueBoundary = clamp(Number(els.voteBlue.value), 0, 100);
-                    const maxBlue = 100 - clamp(state.voteRedShare, 0, 100);
-                    state.voteBlueShare = Math.min(blueBoundary, maxBlue);
+                    const proposedBlue = clamp(Number(els.voteBlue.value), 0, 100);
+                    state.voteBlueShare = proposedBlue;
                     if (state.voteBlueShare + state.voteRedShare > 100) {
                         state.voteRedShare = 100 - state.voteBlueShare;
                     }
@@ -1479,12 +1649,8 @@
                 });
 
                 els.voteRed.addEventListener('input', () => {
-                    const redBoundary = clamp(Number(els.voteRed.value), 0, 100);
-                    const proposedRedShare = 100 - redBoundary;
-                    state.voteRedShare = clamp(proposedRedShare, 0, 100);
-                    if (state.voteBlueShare + state.voteRedShare > 100) {
-                        state.voteBlueShare = 100 - state.voteRedShare;
-                    }
+                    const proposedRedShare = clamp(100 - Number(els.voteRed.value), 0, 100);
+                    state.voteRedShare = proposedRedShare;
                     syncAll();
                 });
 
@@ -1509,6 +1675,8 @@
                         closeShareModal();
                     }
                 });
+
+                window.addEventListener('resize', syncFramingHeights);
             }
 
             function init() {
