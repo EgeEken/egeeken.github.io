@@ -886,6 +886,9 @@
                     </div>
                 </div>
 
+                
+            <h3>Simulate potential votes</h3>
+
                 <div class="rule-card single" id="vote-input-card">
                     <div class="rule-topline">
                         <div class="rule-title">Vote Slider</div>
@@ -1002,7 +1005,7 @@
             const state = {
                 bluePriority: true,
                 abstainAllowed: false,
-                resolutionMode: 'threshold', // 'threshold' | 'votes'
+                resolutionMode: 'votes', // 'threshold' | 'votes'
                 redTargetsAll: false,
                 blueThreshold: 50,
                 redThreshold: 50,
@@ -1474,10 +1477,10 @@
             function renderResolution() {
                 const outcome = resolveWinner();
                 const winnerLabel = outcome.winner === 'blue'
-                    ? '<span class="result-pill blue">Blue wins</span>'
-                    : '<span class="result-pill red">Red wins</span>';
+                    ? '<span class="result-pill blue">Blue would win</span>'
+                    : '<span class="result-pill red">Red would win</span>';
 
-                els.outcomeLine.innerHTML = `With this voting distribution: ${winnerLabel} → ${fmtPeople(outcome.deaths)} people die`;
+                els.outcomeLine.innerHTML = `With this ruleset, if people voted this way: ${winnerLabel} → ${fmtPeople(outcome.deaths)} people would die`;
 
                 const bluePass = outcome.votes.blue >= state.blueThreshold;
                 const redPass = outcome.votes.red >= state.redThreshold;
@@ -1519,12 +1522,20 @@
                 const votes = getVotingShares();
 
                 const lines = [
-                    'With these rules:',
-                    `- 🔵 Blue button: if ${state.blueThreshold}% press blue, no one dies`,
-                    state.redTargetsAll
-                        ? `- 🔴 Red button: if ${state.redThreshold}% press red, everyone who did not pick red dies`
-                        : `- 🔴 Red button: if ${state.redThreshold}% press red, everyone who picked blue dies`,
+                    `I pressed the ${
+                        choice === 'blue' ? '🔵 Blue button (putting myself at risk)' :
+                        choice === 'red' ? '🔴 Red button' :
+                        `⚪ Abstain${state.redTargetsAll ? ' (putting myself at risk)' : ''}`
+                    }`,
                 ];
+                lines.push(``);
+
+                lines.push('With this ruleset:');
+                lines.push(`- 🔵 Blue button: if at least ${state.blueThreshold}% press blue, no one dies`);
+                lines.push(state.redTargetsAll
+                    ? `- 🔴 Red button: if at least ${state.redThreshold}% press red, everyone who did not pick red dies`
+                    : `- 🔴 Red button: if at least ${state.redThreshold}% press red, everyone who picked blue dies`
+                );
 
                 if (state.abstainAllowed) {
                     lines.push(`- ⚪ Abstention: Allowed ✅`);
@@ -1532,20 +1543,16 @@
                     lines.push(`- ⚪ Abstention: Not allowed ❌`);
                 }
 
-                lines.push(`- = On tie: ${state.bluePriority ? 'Blue wins 🔷' : 'Red wins 🔻'}`);
+                lines.push(`- 🟰 On tie: ${state.bluePriority ? 'Blue wins 🔷' : 'Red wins 🔻'}`);
 
                 if (state.abstainAllowed) {
-                    lines.push(`- ⚖️ If both thresholds pass: ${state.resolutionMode === 'votes' ? 'More votes wins ➕' : 'Threshold pass = priority wins'}`);
+                    lines.push(`- ⚖️ If both thresholds pass: ${state.resolutionMode === 'votes' ? 'More votes wins ➕' : 'Threshold pass 🟰 priority wins'}`);
                 }
 
                 lines.push('');
                 // lines.push(`I Selected: ${choice === 'blue' ? '🔵 Blue button' : choice === 'red' ? '🔴 Red button' : '⚪ Abstain'}`);
                 // that but it should add "Putting myself at risk" at the end if they picked blue, or also if they abstained while the rule "red targets all non-red" is on
-                lines.push(`I Selected: ${
-                    choice === 'blue' ? '🔵 Blue button (putting myself at risk)' :
-                    choice === 'red' ? '🔴 Red button' :
-                    `⚪ Abstain${state.redTargetsAll ? ' (putting myself at risk)' : ''}`
-                }`);
+
                 lines.push('Try it out: https://egeeken.github.io/red_button_blue_button.html');
                 return lines.join('\n');
             }
@@ -1595,12 +1602,12 @@
                 els.abstainToggle.addEventListener('click', () => {
                     state.abstainAllowed = !state.abstainAllowed;
                     if (state.abstainAllowed) {
-                        state.resolutionMode = state.resolutionMode || 'threshold';
+                        // state.resolutionMode = state.resolutionMode || 'votes';
                         state.voteBlueShare = clamp(state.singleVoteBlue, 0, 100);
                         state.voteRedShare = clamp(100 - state.singleVoteBlue, 0, 100);
                     } else {
                         state.singleVoteBlue = clamp(state.voteBlueShare, 0, 100);
-                        state.resolutionMode = 'threshold';
+                        // state.resolutionMode = 'votes';
                     }
                     syncAll();
                 });
