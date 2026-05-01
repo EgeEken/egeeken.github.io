@@ -1517,6 +1517,17 @@
                 }
             }
 
+            function final_text_condition(threshold, color) {
+                const percent = fmtPct(threshold);
+                if (threshold === 0) {
+                    return `at least one person presses ${color}`;
+                } else if (threshold === 100) {
+                    return `every single person presses ${color}`;
+                } else {
+                    return `at least ${percent} press ${color}`;
+                }
+            }
+
             function buildShareText(choice) {
                 const outcome = resolveWinner();
                 const votes = getVotingShares();
@@ -1531,10 +1542,11 @@
                 lines.push(``);
 
                 lines.push('With this ruleset:');
-                lines.push(`- 🔵 Blue button: if at least ${state.blueThreshold}% press blue, no one dies`);
+                // 
+                lines.push(`- 🔵 Blue button: if ${final_text_condition(state.blueThreshold, 'blue')}, no one dies`);
                 lines.push(state.redTargetsAll
-                    ? `- 🔴 Red button: if at least ${state.redThreshold}% press red, everyone who did not pick red dies`
-                    : `- 🔴 Red button: if at least ${state.redThreshold}% press red, everyone who picked blue dies`
+                    ? `- 🔴 Red button: if ${final_text_condition(state.redThreshold, 'red')}, everyone who did not pick red dies`
+                    : `- 🔴 Red button: if ${final_text_condition(state.redThreshold, 'red')}, everyone who picked blue dies`
                 );
 
                 if (state.abstainAllowed) {
