@@ -1381,7 +1381,7 @@
                 return {
                     title: 'Framing 4',
                     blue: state.bluePriority ? `Everyone else are morons, if just ${state.blueThreshold}% of the population picked blue then no one would die, there's no reason to pick red.` : `Everyone else are morons, if everyone just picked blue then no one would die, there's no reason to pick red.`,
-                    abstain: state.redTargetsAll ? `Everyone else are morons, if everyone just abstained then no on-.. wait... shit everyone would die, you're a moron` : `Everyone else are morons, if everyone just abstained then no one would die, there's no reason to pick either button.`,
+                    abstain: state.redTargetsAll && (!state.bluePriority || state.redThreshold == 0)? `Everyone else are morons, if everyone just abstained then no on-.. wait... shit everyone would die, you're a moron` : `Everyone else are morons, if everyone just abstained then no one would die, there's no reason to pick either button.`,
                     red: "Everyone else are morons, if everyone just picked red then no one would die, there's no reason to pick blue"
                 };
             }
