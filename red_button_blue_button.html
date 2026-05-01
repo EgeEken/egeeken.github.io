@@ -1532,11 +1532,13 @@
                 const outcome = resolveWinner();
                 const votes = getVotingShares();
 
+                
+
                 const lines = [
-                    `I pressed the ${
-                        choice === 'blue' ? '🔵 Blue button (putting myself at risk)' :
-                        choice === 'red' ? '🔴 Red button' :
-                        `⚪ Abstain${state.redTargetsAll ? ' (putting myself at risk)' : ''}`
+                    `${
+                        choice === 'blue' ? 'I pressed the 🔵 Blue button (putting myself at risk)' :
+                        choice === 'red' ? 'I pressed the 🔴 Red button' :
+                        `I ⚪ Abstained ${state.redTargetsAll ? ' (putting myself at risk)' : ''}`
                     }`,
                 ];
                 lines.push(``);
