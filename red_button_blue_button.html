@@ -1332,7 +1332,7 @@
                 const redThresholdPortion = state.redThreshold / 100;
 
                 if (state.resolutionMode === 'votes') {
-                    return POPULATION * Math.max(0.5, blueThresholdPortion);
+                    return POPULATION * blueThresholdPortion;
                 }
 
                 return state.bluePriority
