@@ -110,6 +110,54 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  const moreSections = document.querySelectorAll(".recommendation-more");
+
+  moreSections.forEach(section => {
+    const item = section.previousElementSibling;
+    const toggle = section.querySelector(".recommendation-more-toggle");
+    const content = section.querySelector(".recommendation-more-content");
+    let hideTimer = null;
+    if (!toggle || !content) return;
+
+    const setHovering = () => {
+      if (hideTimer) {
+        clearTimeout(hideTimer);
+        hideTimer = null;
+      }
+      section.classList.add("hovering");
+    };
+
+    const scheduleHide = () => {
+      if (section.classList.contains("expanded")) return;
+      if (hideTimer) clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        section.classList.remove("hovering");
+      }, 3000);
+    };
+
+    if (item && item.classList.contains("recommendation-item")) {
+      item.addEventListener("mouseenter", setHovering);
+      item.addEventListener("mouseleave", scheduleHide);
+    }
+
+    section.addEventListener("mouseenter", setHovering);
+    section.addEventListener("mouseleave", scheduleHide);
+
+    toggle.addEventListener("click", () => {
+      const isExpanded = section.classList.toggle("expanded");
+      toggle.setAttribute("aria-expanded", String(isExpanded));
+      content.setAttribute("aria-hidden", String(!isExpanded));
+      toggle.textContent = isExpanded ? "Hide more from this composer" : "More from this composer";
+      if (!isExpanded) {
+        scheduleHide();
+      } else {
+        setHovering();
+      }
+    });
+  });
+});
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;

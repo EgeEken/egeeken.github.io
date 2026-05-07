@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <title>Ege - Classical Music Recommendations</title>
+</head>
+
+<body>
+    <header>
+        <a href="recommendations.html" class="back-button">← Return to Recommendations</a>
+        <h1>Classical Music Recommendations</h1>
+        <h2>One recommendation for each composer, organized by era.</h2>
+    </header>
+
+    <div class="recommendation-era">
+        <h2>BAROQUE</h2>
+    </div>
+
+    <div class="recommendation-item">
+        <h2>Bach</h2>
+        <h3>Concerto for 2 Violins in D Minor</h3>
+        <div class="recommendation-player">
+            <iframe
+                src="https://www.youtube.com/embed/MIeMQpFLbrg"
+                title="J.S. Bach: Concerto for 2 Violins in D Minor, BWV 1043: I. Vivace"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+            ></iframe>
+        </div>
+    </div>
+
+    <div class="recommendation-more" data-composer="bach">
+        <button class="recommendation-more-toggle" type="button" aria-expanded="false">
+            More from this composer
+        </button>
+        <div class="recommendation-more-content" aria-hidden="true">
+            <div class="recommendation-extra">
+                <h4>Extra picks coming soon</h4>
+                <p>Share the titles and links you want embedded here.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="recommendation-item">
+        <h2>Vivaldi</h2>
+        <h3>La Stravaganza</h3>
+        <div class="recommendation-player">
+            <iframe
+                src="https://www.youtube.com/embed/QP73569coeo"
+                title="Antonio Vivaldi - La Stravaganza"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+            ></iframe>
+        </div>
+    </div>
+
+    <div class="recommendation-era">
+        <h2>CLASSICAL</h2>
+    </div>
+
+    <div class="recommendation-item">
+        <h2>Mozart</h2>
+        <h3>Divertimento in D major</h3>
+        <div class="recommendation-player">
+            <iframe
+                src="https://www.youtube.com/embed/7FRYoBy7iT8"
+                title="Mozart - Divertimento in D major, K. 136 (1772)"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+            ></iframe>
+        </div>
+    </div>
+
+    <div class="recommendation-more" data-composer="mozart">
+        <button class="recommendation-more-toggle" type="button" aria-expanded="false">
+            More from this composer
+        </button>
+        <div class="recommendation-more-content" aria-hidden="true">
+            <div class="recommendation-extra">
+                <div class="recommendation-extra-item">
+                    <h4>Symphony 25</h4>
+                    <div class="recommendation-player">
+                        <iframe
+                            src="https://www.youtube.com/embed/GIHQivoISco"
+                            title="Mozart - Symphony No. 25 in G Minor, K. 183"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen
+                        ></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="script.js"></script>
+</body>
+
+</html>
