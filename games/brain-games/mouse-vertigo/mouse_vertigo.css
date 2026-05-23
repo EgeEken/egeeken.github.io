@@ -25,6 +25,22 @@ body {
     width: min(92vw, 560px);
 }
 
+#timer-bar {
+    height: 6px;
+    margin-top: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid #164b4c;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+#timer-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: #e05555;
+    transition: width 0.1s linear;
+}
+
 .vertigo-stat {
     margin: 6px 0;
     font-size: 1.02em;
@@ -215,6 +231,10 @@ body {
     width: 50%;
     height: 50%;
     background: #f5c24a;
+    background-image:
+        radial-gradient(circle at 30% 65%, #111 0 3px, transparent 3px),
+        radial-gradient(circle at 60% 35%, #111 0 3px, transparent 3px),
+        radial-gradient(circle at 78% 70%, #111 0 3px, transparent 3px);
     clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.35);
     z-index: 1;

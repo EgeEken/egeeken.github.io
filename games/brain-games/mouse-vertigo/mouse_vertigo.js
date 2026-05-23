@@ -4,7 +4,7 @@ const isCustomMode = MODE === 'custom';
 const MOVE_ANIMATION_MS = 300;
 const INPUT_BUFFER_MS = 100;
 const MOVE_PER_SECOND = 1000 / MOVE_ANIMATION_MS;
-const START_ROTATION_DELAY_MS = 2000;
+const START_ROTATION_DELAY_MS = 0;
 const ROTATION_EXTRA_WAIT_MS = 2000;
 const ROTATION_BASE_DURATION_MS = 450;
 const ROTATION_DURATION_RANGE_MS = 350;
@@ -13,6 +13,7 @@ const gridEl = document.getElementById('maze-grid');
 const rotationFrameEl = document.getElementById('maze-rotation-frame');
 const statusLineEl = document.getElementById('status-line');
 const timerDisplayEl = document.getElementById('timer-display');
+const timerBarFillEl = document.getElementById('timer-bar-fill');
 const restartButtonEl = document.getElementById('restart-button');
 const levelLabelEl = document.getElementById('level-label');
 
@@ -71,6 +72,7 @@ let rotationHoldTimeout = null;
 let rotationTransitionTimeout = null;
 let timerInterval = null;
 let timerEndAt = 0;
+let timerTotalSeconds = 0;
 
 const mouseEl = createMouseElement();
 const cheeseEl = document.createElement('div');
@@ -346,10 +348,25 @@ function updateTimerDisplay(seconds) {
     }
     const clamped = Math.max(0, seconds);
     timerDisplayEl.textContent = `Time: ${clamped.toFixed(1)}s`;
+    updateTimerFill(clamped);
+}
+
+function updateTimerFill(seconds) {
+    if (!timerBarFillEl) {
+        return;
+    }
+    if (timerTotalSeconds <= 0) {
+        timerBarFillEl.style.width = seconds <= 0 ? '100%' : '0%';
+        return;
+    }
+    const progress = 1 - (seconds / timerTotalSeconds);
+    const percent = Math.max(0, Math.min(1, progress)) * 100;
+    timerBarFillEl.style.width = `${percent.toFixed(1)}%`;
 }
 
 function startTimer(seconds) {
     clearTimer();
+    timerTotalSeconds = Math.max(0, seconds);
     timerEndAt = Date.now() + (seconds * 1000);
     updateTimerDisplay(seconds);
     timerInterval = setInterval(() => {
