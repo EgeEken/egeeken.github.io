@@ -16,6 +16,7 @@ const timerDisplayEl = document.getElementById('timer-display');
 const timerBarFillEl = document.getElementById('timer-bar-fill');
 const restartButtonEl = document.getElementById('restart-button');
 const levelLabelEl = document.getElementById('level-label');
+const startLevelToggleEl = document.getElementById('start-level-10-toggle');
 
 const resultsModal = document.getElementById('results-modal');
 const resultsTextEl = document.getElementById('results-text');
@@ -48,7 +49,11 @@ const KEY_TO_DIR = {
     ArrowRight: 'R'
 };
 
-let level = 1;
+const DEFAULT_START_LEVEL = 1;
+const ALT_START_LEVEL = 10;
+
+let level = DEFAULT_START_LEVEL;
+let startingLevel = DEFAULT_START_LEVEL;
 let mazeSize = 6;
 let rotationTimeMin = 1;
 let rotationIntensityMin = 30;
@@ -84,6 +89,17 @@ function readNumber(input, fallback) {
     }
     const value = Number(input.value);
     return Number.isFinite(value) ? value : fallback;
+}
+
+function getStartLevel() {
+    return startLevelToggleEl && startLevelToggleEl.checked ? ALT_START_LEVEL : DEFAULT_START_LEVEL;
+}
+
+function applyStartLevel() {
+    startingLevel = getStartLevel();
+    if (!isCustomMode) {
+        level = startingLevel;
+    }
 }
 
 function getPresetConfig(presetLevel) {
@@ -535,9 +551,7 @@ function onKeyDown(event) {
 
 function resetGame() {
     closeResults();
-    if (!isCustomMode) {
-        level = 1;
-    }
+    applyStartLevel();
     startLevel();
 }
 
@@ -755,6 +769,9 @@ document.querySelectorAll('#dpad-vertigo .vertigo-btn').forEach((button) => {
 });
 
 restartButtonEl.addEventListener('click', resetGame);
+if (startLevelToggleEl) {
+    startLevelToggleEl.addEventListener('change', resetGame);
+}
 document.addEventListener('keydown', onKeyDown);
 window.addEventListener('resize', () => {
     if (mousePos) {
@@ -770,4 +787,5 @@ if (copyShareButtonEl) {
 }
 
 updateControlLabels();
+applyStartLevel();
 startLevel();

@@ -6,6 +6,7 @@ const statusLineEl = document.getElementById('status-line');
 const strikeDisplayEl = document.getElementById('strike-display');
 const restartButtonEl = document.getElementById('restart-button');
 const levelLabelEl = document.getElementById('level-label');
+const startLevelToggleEl = document.getElementById('start-level-10-toggle');
 
 const resultsModal = document.getElementById('results-modal');
 const resultsTextEl = document.getElementById('results-text');
@@ -26,7 +27,11 @@ const strikeLimitValueEl = document.getElementById('strike-limit-value');
 
 const RESTART_REVEAL_DELAY_MS = 200;
 
-let level = 1;
+const DEFAULT_START_LEVEL = 1;
+const ALT_START_LEVEL = 10;
+
+let level = DEFAULT_START_LEVEL;
+let startLevel = DEFAULT_START_LEVEL;
 let gridSize = 3;
 let highlightCount = 3;
 let revealTimeMs = 1000;
@@ -58,6 +63,17 @@ function getStandardConfig(targetLevel) {
         revealTimeMs: 1000,
         strikeLimit: 3
     };
+}
+
+function getStartLevel() {
+    return startLevelToggleEl && startLevelToggleEl.checked ? ALT_START_LEVEL : DEFAULT_START_LEVEL;
+}
+
+function applyStartLevel() {
+    startLevel = getStartLevel();
+    if (!isCustomMode) {
+        level = startLevel;
+    }
 }
 
 function getCustomConfig() {
@@ -313,7 +329,7 @@ function showResults() {
 
     const shareUrl = window.location.href.split('#')[0];
     const modeLabel = 'Memory Tiles';
-    const scoreLabel = `Score: ${level-1}`;
+    const scoreLabel = `Score: ${level - startLevel}`;
     const shareText = `${modeLabel} - ${scoreLabel}\n${shareUrl}`;
 
     resultsTextEl.textContent = shareText;
@@ -353,9 +369,7 @@ function copyShareText() {
 }
 
 function resetGame() {
-    if (!isCustomMode) {
-        level = 1;
-    }
+    applyStartLevel();
     closeResults();
     startRound();
 }
@@ -379,6 +393,9 @@ if (isCustomMode) {
 }
 
 restartButtonEl.addEventListener('click', resetGame);
+if (startLevelToggleEl) {
+    startLevelToggleEl.addEventListener('change', resetGame);
+}
 if (closeResultsButtonEl) {
     closeResultsButtonEl.addEventListener('click', closeResults);
 }
@@ -387,4 +404,5 @@ if (copyShareButtonEl) {
 }
 
 updateControlLabels();
+applyStartLevel();
 startRound();
