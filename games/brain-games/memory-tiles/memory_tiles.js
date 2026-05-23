@@ -327,7 +327,8 @@ function showResults() {
         return;
     }
 
-    const shareUrl = window.location.href.split('#')[0];
+    //const shareUrl = window.location.href.split('#')[0];
+    const shareUrl = 'https://egeeken.github.io/memory-tiles';
     const modeLabel = 'Memory Tiles';
     const scoreLabel = `Score: ${level - startLevel}`;
     const shareText = `${modeLabel} - ${scoreLabel}\n${shareUrl}`;
