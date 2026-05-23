@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="mouse_vertigo.css">
+    <link rel="icon" href="../../../assets/favicon.png" type="image/png">
+    <title>Ege - Mouse Vertigo</title>
+</head>
+
+<body data-mode="standard">
+    <header>
+        <a href="./" class="back-button">← Return to Menu</a>
+        <h1>Mouse Vertigo</h1>
+        <h2>Guide the mouse to the cheese while the maze spins.</h2>
+    </header>
+
+    <main id="vertigo-wrapper">
+        <div class="vertigo-panel" id="level-panel">
+            <div class="vertigo-stat blue" id="level-label">Level 1</div>
+            <div class="vertigo-stat" id="high-score">Ege's highest score: 20</div>
+        </div>
+
+        <div id="maze-area">
+            <div id="maze-rotation-frame">
+                <div id="maze-marker" aria-hidden="true"></div>
+                <div id="maze-grid" aria-live="polite"></div>
+            </div>
+        </div>
+
+        <div class="vertigo-panel" id="status-panel">
+            <div id="status-line">Get ready...</div>
+            <div class="vertigo-stat" id="timer-display">Time: --</div>
+            <div id="dpad-vertigo">
+                <button class="vertigo-btn" data-dir="U" aria-label="Up">▴</button>
+                <div class="dpad-row">
+                    <button class="vertigo-btn" data-dir="L" aria-label="Left">◂</button>
+                    <button class="vertigo-btn" data-dir="D" aria-label="Down">▾</button>
+                    <button class="vertigo-btn" data-dir="R" aria-label="Right">▸</button>
+                </div>
+            </div>
+            <button class="vertigo-button" id="restart-button">Restart</button>
+        </div>
+    </main>
+
+    <div id="results-modal" role="dialog" aria-modal="true">
+        <div id="results-card">
+            <h3>Result</h3>
+            <div id="results-text"></div>
+            <div class="results-actions">
+                <button id="copy-share">Copy Share Text</button>
+                <button id="close-results">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="mouse_vertigo.js"></script>
+</body>
+
+</html>

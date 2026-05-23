@@ -1,0 +1,421 @@
+body {
+    color: #e8f0f0;
+}
+
+#vertigo-wrapper {
+    width: min(96vw, 980px);
+    margin: 18px auto 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.vertigo-panel {
+    width: min(92vw, 620px);
+    background: rgba(16, 35, 52, 0.88);
+    border: 2px solid #126364;
+    border-radius: 12px;
+    padding: 14px 18px;
+    text-align: center;
+    box-shadow: 0 0 18px rgba(8, 15, 24, 0.4);
+}
+
+#level-panel {
+    width: min(92vw, 560px);
+}
+
+.vertigo-stat {
+    margin: 6px 0;
+    font-size: 1.02em;
+}
+
+.vertigo-stat.blue {
+    color: #7ddfdf;
+    font-weight: 700;
+}
+
+#maze-area {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 0 6px;
+}
+
+#maze-marker {
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-bottom: 22px solid #e05555;
+    transform: translate(-50%, -60%);
+    filter: drop-shadow(0 0 10px rgba(224, 85, 85, 0.6));
+    z-index: 0;
+    pointer-events: none;
+}
+
+#maze-rotation-frame {
+    width: min(84vw, 420px);
+    aspect-ratio: 1 / 1;
+    background: #102334;
+    border: 2px solid #126364;
+    border-radius: 12px;
+    padding: 10px;
+    box-sizing: border-box;
+    box-shadow: 0 0 18px rgba(8, 15, 24, 0.4);
+    position: relative;
+    overflow: visible;
+    transform: rotate(0deg);
+    transform-origin: center;
+    transition: transform 0.6s ease-in-out;
+    will-change: transform;
+    z-index: 1;
+}
+
+#maze-grid {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    gap: 0;
+    position: relative;
+    z-index: 2;
+}
+
+.maze-cell {
+    position: relative;
+    background: #0c2030;
+    border: 1px solid rgba(15, 30, 42, 0.9);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.maze-cell.wall-top {
+    border-top: 3px solid #7a8b96;
+}
+
+.maze-cell.wall-right {
+    border-right: 3px solid #7a8b96;
+}
+
+.maze-cell.wall-bottom {
+    border-bottom: 3px solid #7a8b96;
+}
+
+.maze-cell.wall-left {
+    border-left: 3px solid #7a8b96;
+}
+
+.mouse {
+    position: absolute;
+    background: #b8bcc0;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.mouse .eye {
+    position: absolute;
+    width: 16%;
+    height: 16%;
+    background: #111;
+    border-radius: 50%;
+    top: 34%;
+}
+
+.mouse .eye.left {
+    left: 28%;
+}
+
+.mouse .eye.right {
+    right: 28%;
+}
+
+.mouse.face-up .eye {
+    top: 26%;
+}
+
+.mouse.face-down .eye {
+    top: 56%;
+}
+
+.mouse.face-left .eye.left {
+    left: 18%;
+}
+
+.mouse.face-left .eye.right {
+    left: 38%;
+    right: auto;
+}
+
+.mouse.face-right .eye.left {
+    left: auto;
+    right: 38%;
+}
+
+.mouse.face-right .eye.right {
+    right: 18%;
+}
+
+.mouse.dead .eye {
+    background: transparent;
+}
+
+.mouse.dead .eye::before,
+.mouse.dead .eye::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 16px;
+    background: #111;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.mouse.dead .eye::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.mouse.happy .eye {
+    width: 18%;
+    height: 18%;
+    background: #d64d4d;
+    border-radius: 4px 4px 0 0;
+    transform: rotate(-45deg);
+}
+
+.mouse.happy .eye::before,
+.mouse.happy .eye::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #d64d4d;
+    border-radius: 50%;
+}
+
+.mouse.happy .eye::before {
+    top: -50%;
+    left: 0;
+}
+
+.mouse.happy .eye::after {
+    top: 0;
+    left: 50%;
+}
+
+.cheese {
+    width: 50%;
+    height: 50%;
+    background: #f5c24a;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.35);
+    z-index: 1;
+}
+
+#status-line {
+    min-height: 22px;
+    color: #cfe3e6;
+}
+
+#dpad-vertigo {
+    display: grid;
+    gap: 8px;
+    justify-items: center;
+    margin: 6px 0;
+}
+
+.dpad-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.vertigo-btn {
+    width: clamp(46px, 7vw, 58px);
+    height: clamp(46px, 7vw, 58px);
+    border: none;
+    border-radius: 8px;
+    background-color: #126364;
+    color: #eee;
+    font-size: clamp(1.05em, 1.8vw, 1.25em);
+    cursor: pointer;
+    transition: transform 0.1s, background-color 0.2s;
+    box-shadow: 0 0 8px rgba(18, 99, 100, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+    font-weight: 700;
+}
+
+.vertigo-btn:active {
+    transform: scale(0.95);
+    background-color: #0d4f50;
+}
+
+.vertigo-button {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 16px;
+    background: #7ddfdf;
+    color: #102334;
+    font-family: 'Futura', sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, background-color 0.25s;
+}
+
+.vertigo-button:hover {
+    transform: scale(1.02);
+    background-color: #a7eded;
+}
+
+#controls-panel {
+    text-align: left;
+}
+
+.control-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0;
+    color: #e8f0f0;
+    font-size: 0.95em;
+}
+
+.control-row label {
+    font-weight: 700;
+}
+
+.control-row input[type="range"] {
+    width: 100%;
+}
+
+.control-value {
+    text-align: right;
+    color: #bfe6ea;
+    font-size: 0.95em;
+}
+
+#results-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(8, 15, 24, 0.78);
+    z-index: 1200;
+}
+
+#results-card {
+    width: min(92vw, 460px);
+    background: #102334;
+    border: 2px solid #126364;
+    border-radius: 12px;
+    padding: 18px;
+    color: #eee;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(8, 15, 24, 0.7);
+}
+
+#results-text {
+    white-space: pre-wrap;
+    text-align: left;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px 0 14px;
+}
+
+.results-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.results-actions button {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'Futura', sans-serif;
+    cursor: pointer;
+}
+
+#copy-share {
+    background: #7ddfdf;
+    color: #102334;
+    font-weight: 700;
+}
+
+#close-results {
+    background: #2e4b61;
+    color: #e8f0f0;
+}
+
+@media (min-width: 980px) {
+    body[data-mode="standard"] #vertigo-wrapper,
+    body[data-mode="custom"] #vertigo-wrapper {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(230px, 280px);
+        column-gap: 24px;
+        row-gap: 16px;
+        align-items: center;
+        width: min(96vw, 1020px);
+    }
+
+    body[data-mode="standard"] #vertigo-wrapper {
+        grid-template-areas:
+            "level level"
+            "maze status";
+    }
+
+    body[data-mode="custom"] #vertigo-wrapper {
+        grid-template-areas:
+            "level level"
+            "controls controls"
+            "maze status";
+    }
+
+    #level-panel {
+        grid-area: level;
+        width: 100%;
+    }
+
+    #controls-panel {
+        grid-area: controls;
+        width: 100%;
+    }
+
+    #maze-area {
+        grid-area: maze;
+        width: 100%;
+    }
+
+    #status-panel {
+        grid-area: status;
+        width: 100%;
+        align-self: center;
+    }
+}
+
+@media (max-width: 680px) {
+    .control-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+    .control-value {
+        text-align: left;
+    }
+}

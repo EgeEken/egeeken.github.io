@@ -313,8 +313,8 @@ function showResults() {
 
     const shareUrl = window.location.href.split('#')[0];
     const modeLabel = 'Memory Tiles';
-    const scoreLabel = `Level ${level}`;
-    const shareText = `${modeLabel} ${scoreLabel}\n${shareUrl}`;
+    const scoreLabel = `Score: ${level-1}`;
+    const shareText = `${modeLabel} - ${scoreLabel}\n${shareUrl}`;
 
     resultsTextEl.textContent = shareText;
     resultsModal.style.display = 'flex';

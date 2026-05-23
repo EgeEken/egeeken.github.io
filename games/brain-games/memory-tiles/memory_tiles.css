@@ -45,7 +45,7 @@ body {
 
 .tile {
     aspect-ratio: 1 / 1;
-    background: #9ca3a8;
+    background: #7c8286;
     border: 2px solid #1f2d3a;
     border-radius: 8px;
     cursor: pointer;
@@ -185,6 +185,52 @@ body {
 #close-results {
     background: #2e4b61;
     color: #e8f0f0;
+}
+
+@media (min-width: 980px) {
+    body[data-mode="standard"] #memory-wrapper,
+    body[data-mode="custom"] #memory-wrapper {
+        display: grid;
+        grid-template-columns: minmax(240px, 280px) minmax(0, 1fr);
+        column-gap: 150px;
+        row-gap: 16px;
+        align-items: center;
+        width: min(96vw, 1020px);
+    }
+
+    body[data-mode="standard"] #memory-wrapper {
+        grid-template-areas:
+            "level level"
+            "status grid";
+    }
+
+    body[data-mode="custom"] #memory-wrapper {
+        grid-template-areas:
+            "level level"
+            "controls controls"
+            "status grid";
+    }
+
+    #level-panel {
+        grid-area: level;
+        width: 100%;
+    }
+
+    #controls-panel {
+        grid-area: controls;
+        width: 100%;
+    }
+
+    #status-panel {
+        grid-area: status;
+        width: 100%;
+        align-self: center;
+    }
+
+    #tiles-grid {
+        grid-area: grid;
+        width: min(64vw, 520px);
+    }
 }
 
 @media (max-width: 680px) {
