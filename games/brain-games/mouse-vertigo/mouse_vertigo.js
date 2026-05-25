@@ -1,5 +1,6 @@
 const MODE = document.body.dataset.mode || 'standard';
 const isCustomMode = MODE === 'custom';
+const isHardMode = MODE === 'hard';
 
 const MOVE_ANIMATION_MS = 300;
 const INPUT_BUFFER_MS = 100;
@@ -111,6 +112,27 @@ function getPresetConfig(presetLevel) {
     return { mazeSize: size, rotationTimeMin: timeMin, rotationIntensityMin: intensityMin };
 }
 
+function getHardPresetConfig(presetLevel) {
+    const clamped = Math.max(1, Math.min(30, presetLevel));
+    const mazeSize = getPresetConfig(clamped).mazeSize;
+    const rotationTimeMin = clamped >= 8 ? 0 : 1 + (-1 * (clamped - 1) / 7);
+    const rotationIntensityMin = clamped >= 10 ? 150 : 40 + ((150 - 40) * (clamped - 1) / 9);
+    let timerLeniencyValue = 35;
+    if (clamped <= 20) {
+        timerLeniencyValue = 35 + ((10 - 35) * (clamped - 1) / 19);
+    } else if (clamped < 30) {
+        timerLeniencyValue = 10 + ((5 - 10) * (clamped - 20) / 10);
+    } else {
+        timerLeniencyValue = 5;
+    }
+    return {
+        mazeSize,
+        rotationTimeMin,
+        rotationIntensityMin,
+        timerLeniency: timerLeniencyValue
+    };
+}
+
 function getLevelLeniency(lvl) {
     const levelValue = Math.max(0, Math.min(30, lvl));
     if (levelValue <= 1) {
@@ -143,6 +165,12 @@ function getCustomConfig() {
 function applyConfig() {
     if (isCustomMode) {
         const config = getCustomConfig();
+        mazeSize = config.mazeSize;
+        rotationTimeMin = config.rotationTimeMin;
+        rotationIntensityMin = config.rotationIntensityMin;
+        timerLeniency = config.timerLeniency;
+    } else if (isHardMode) {
+        const config = getHardPresetConfig(level);
         mazeSize = config.mazeSize;
         rotationTimeMin = config.rotationTimeMin;
         rotationIntensityMin = config.rotationIntensityMin;

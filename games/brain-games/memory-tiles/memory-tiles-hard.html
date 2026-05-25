@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="memory_tiles.css">
+    <link rel="icon" href="../../../assets/favicon.png" type="image/png">
+    <title>Ege - Memory Tiles (Hard Mode)</title>
+</head>
+
+<body data-mode="hard">
+    <header>
+        <a href="./" class="back-button">← Return to Menu</a>
+        <label class="start-level-toggle" for="start-level-10-toggle">
+            <input type="checkbox" id="start-level-10-toggle">
+            <span>Start from lvl 5</span>
+        </label>
+        <h1>Memory Tiles (Hard Mode)</h1>
+        <h2>Remember the highlighted tiles, then click them all.</h2>
+    </header>
+
+    <main id="memory-wrapper">
+        <div class="memory-panel" id="level-panel">
+            <div class="memory-stat blue" id="level-label">Level 1</div>
+            <div class="memory-stat" id="high-score">Ege's highest score: 11</div>
+        </div>
+
+        <div id="tiles-grid" aria-live="polite"></div>
+
+        <div class="memory-panel" id="status-panel">
+            <div id="status-line">Get ready...</div>
+            <div class="memory-stat" id="strike-display">Strikes: 0 / 1</div>
+            <button class="memory-button" id="restart-button">Restart</button>
+        </div>
+    </main>
+
+    <div id="results-modal" role="dialog" aria-modal="true">
+        <div id="results-card">
+            <h3>Result</h3>
+            <div id="results-text"></div>
+            <div class="results-actions">
+                <button id="copy-share">Copy Share Text</button>
+                <button id="close-results">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="memory_tiles.js"></script>
+</body>
+
+</html>

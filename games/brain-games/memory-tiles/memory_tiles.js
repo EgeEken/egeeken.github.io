@@ -1,5 +1,6 @@
 const MODE = document.body.dataset.mode || 'standard';
 const isCustomMode = MODE === 'custom';
+const isHardMode = MODE === 'hard';
 
 const gridEl = document.getElementById('tiles-grid');
 const statusLineEl = document.getElementById('status-line');
@@ -29,6 +30,7 @@ const RESTART_REVEAL_DELAY_MS = 200;
 
 const DEFAULT_START_LEVEL = 1;
 const ALT_START_LEVEL = 10;
+const ALT_HARD_START_LEVEL = 5;
 
 let level = DEFAULT_START_LEVEL;
 let startLevel = DEFAULT_START_LEVEL;
@@ -65,8 +67,21 @@ function getStandardConfig(targetLevel) {
     };
 }
 
+function getHardConfig(targetLevel) {
+    const base = getStandardConfig(targetLevel);
+    return {
+        ...base,
+        revealTimeMs: 100,
+        strikeLimit: 1
+    };
+}
+
 function getStartLevel() {
-    return startLevelToggleEl && startLevelToggleEl.checked ? ALT_START_LEVEL : DEFAULT_START_LEVEL;
+    if (isHardMode) {
+        return startLevelToggleEl && startLevelToggleEl.checked ? ALT_HARD_START_LEVEL : DEFAULT_START_LEVEL;
+    } else {
+        return startLevelToggleEl && startLevelToggleEl.checked ? ALT_START_LEVEL : DEFAULT_START_LEVEL;
+    }
 }
 
 function applyStartLevel() {
@@ -143,7 +158,7 @@ function updateControlLabels() {
 }
 
 function applyConfig() {
-    const config = isCustomMode ? getCustomConfig() : getStandardConfig(level);
+    const config = isCustomMode ? getCustomConfig() : (isHardMode ? getHardConfig(level) : getStandardConfig(level));
     gridSize = config.gridSize;
     highlightCount = config.highlightCount;
     revealTimeMs = config.revealTimeMs;
