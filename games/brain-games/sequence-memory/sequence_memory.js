@@ -6,7 +6,6 @@ const gridEl = document.getElementById('tiles-grid');
 const statusLineEl = document.getElementById('status-line');
 const restartButtonEl = document.getElementById('restart-button');
 const levelLabelEl = document.getElementById('level-label');
-const sequenceLabelEl = document.getElementById('sequence-label');
 
 const resultsModal = document.getElementById('results-modal');
 const resultsTextEl = document.getElementById('results-text');
@@ -78,9 +77,6 @@ function clearTileStates() {
 function updateLabels() {
     if (levelLabelEl) {
         levelLabelEl.textContent = `Level ${level}`;
-    }
-    if (sequenceLabelEl) {
-        sequenceLabelEl.textContent = `Sequence: ${sequence.length}`;
     }
 }
 
