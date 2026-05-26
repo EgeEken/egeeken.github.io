@@ -99,7 +99,7 @@ function applyConfig() {
     if (isHardMode) {
         gridWidth = 4;
         gridHeight = 4;
-        tilesPerLevel = 1;
+        tilesPerLevel = 2;
         startLevel = 1;
         return;
     }
@@ -114,7 +114,7 @@ function applyConfig() {
 
     startLevel = clampInt(startLevelInput.value, 1, 30, 1);
     tilesPerLevel = clampInt(tilesPerLevelInput.value, 1, 5, 1);
-    gridHeight = clampInt(gridHeightInput.value, 1, 5, 3);
+    gridHeight = clampInt(gridHeightInput.value, 1, 8, 3);
     gridWidth = clampInt(gridWidthInput.value, 2, 8, 3);
 }
 
