@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="../memory-tiles/memory_tiles.css">
+    <link rel="icon" href="../../../assets/favicon.png" type="image/png">
+    <title>Ege - Sequence Memory</title>
+</head>
+
+<body data-mode="standard">
+    <header>
+        <a href="./" class="back-button">← Return to Menu</a>
+        <h1>Sequence Memory</h1>
+        <h2>Watch the sequence, then repeat it from the start.</h2>
+    </header>
+
+    <main id="memory-wrapper">
+        <div class="memory-panel" id="level-panel">
+            <div class="memory-stat blue" id="level-label">Level 1</div>
+            <div class="memory-stat" id="sequence-label">Sequence: 1</div>
+        </div>
+
+        <div id="tiles-grid" aria-live="polite"></div>
+
+        <div class="memory-panel" id="status-panel">
+            <div id="status-line">Get ready...</div>
+            <button class="memory-button" id="restart-button">Restart</button>
+        </div>
+    </main>
+
+    <div id="results-modal" role="dialog" aria-modal="true">
+        <div id="results-card">
+            <h3>Result</h3>
+            <div id="results-text"></div>
+            <div class="results-actions">
+                <button id="copy-share">Copy Share Text</button>
+                <button id="close-results">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="sequence_memory.js"></script>
+</body>
+
+</html>

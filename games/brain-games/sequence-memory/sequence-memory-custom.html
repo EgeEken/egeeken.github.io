@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="../memory-tiles/memory_tiles.css">
+    <link rel="icon" href="../../../assets/favicon.png" type="image/png">
+    <title>Ege - Sequence Memory (Custom)</title>
+</head>
+
+<body data-mode="custom">
+    <header>
+        <a href="./" class="back-button">← Return to Menu</a>
+        <h1>Sequence Memory (Custom)</h1>
+        <h2>Configure your run, then try to go as far as you can.</h2>
+    </header>
+
+    <main id="memory-wrapper">
+        <div class="memory-panel" id="level-panel">
+            <div class="control-row">
+                <label for="start-level">Start level</label>
+                <input type="range" id="start-level" min="1" max="30" value="1" step="1">
+                <span class="control-value" id="start-level-value">1</span>
+            </div>
+            <div class="control-row">
+                <label for="tiles-per-level">Tiles per level</label>
+                <input type="range" id="tiles-per-level" min="1" max="5" value="1" step="1">
+                <span class="control-value" id="tiles-per-level-value">1</span>
+            </div>
+        </div>
+
+        <div class="memory-panel" id="controls-panel">
+            <div class="control-row">
+                <label for="grid-height">Grid height</label>
+                <input type="range" id="grid-height" min="1" max="5" value="3" step="1">
+                <span class="control-value" id="grid-height-value">3</span>
+            </div>
+            <div class="control-row">
+                <label for="grid-width">Grid width</label>
+                <input type="range" id="grid-width" min="2" max="8" value="3" step="1">
+                <span class="control-value" id="grid-width-value">3</span>
+            </div>
+        </div>
+
+        <div id="tiles-grid" aria-live="polite"></div>
+
+        <div class="memory-panel" id="status-panel">
+            <div id="status-line">Adjust the sliders and press restart.</div>
+            <div class="memory-stat blue" id="level-label">Level 1</div>
+            <div class="memory-stat" id="sequence-label">Sequence: 1</div>
+            <button class="memory-button" id="restart-button">Restart</button>
+        </div>
+    </main>
+
+    <div id="results-modal" role="dialog" aria-modal="true">
+        <div id="results-card">
+            <h3>Result</h3>
+            <div id="results-text"></div>
+            <div class="results-actions">
+                <button id="copy-share">Copy Share Text</button>
+                <button id="close-results">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="sequence_memory.js"></script>
+</body>
+
+</html>
