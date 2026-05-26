@@ -202,7 +202,8 @@ function showResults() {
         return;
     }
 
-    const scoreLabel = `Score: ${level - 1}`;
+    const score = Math.max(0, level - startLevel);
+    const scoreLabel = `Score: ${score}`;
     const modeLabel = isHardMode ? 'Sequence Memory (Hard Mode)' : (isCustomMode ? 'Sequence Memory (Custom)' : 'Sequence Memory');
     const shareUrl = (!isHardMode && !isCustomMode)
         ? 'https://egeeken.github.io/sequence-memory'
