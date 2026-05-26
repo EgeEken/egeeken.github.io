@@ -343,7 +343,9 @@ function showResults() {
     }
 
     //const shareUrl = window.location.href.split('#')[0];
-    const shareUrl = 'https://egeeken.github.io/memory-tiles';
+    const shareUrl = isHardMode
+        ? 'https://egeeken.github.io/games/brain-games/memory-tiles/memory-tiles-hard.html'
+        : 'https://egeeken.github.io/memory-tiles';
     const modeLabel = 'Memory Tiles';
     const scoreLabel = `Score: ${level - 1}`;
     const shareText = `${modeLabel} - ${scoreLabel}\n${shareUrl}`;

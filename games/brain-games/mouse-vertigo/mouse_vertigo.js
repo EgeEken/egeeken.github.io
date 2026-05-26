@@ -484,7 +484,9 @@ function showResults() {
         return;
     }
     //const shareUrl = window.location.href.split('#')[0];
-    const shareUrl = 'https://egeeken.github.io/mouse-vertigo';
+    const shareUrl = isHardMode
+        ? 'https://egeeken.github.io/games/brain-games/mouse-vertigo/mouse-vertigo-hard.html'
+        : 'https://egeeken.github.io/mouse-vertigo';
     const scoreLabel = `Score: ${level - 1}`;
     const shareText = `Mouse Vertigo - ${scoreLabel}\n${shareUrl}`;
     resultsTextEl.textContent = shareText;
