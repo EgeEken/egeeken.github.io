@@ -168,3 +168,44 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.getElementById("toggle-embeds");
+  if (!toggle) return;
+
+  const players = document.querySelectorAll(".recommendation-player");
+
+  players.forEach(player => {
+    const iframe = player.querySelector("iframe");
+    if (!iframe) return;
+
+    const videoId = (iframe.dataset.src.split("/embed/")[1] || "").split(/[?&]/)[0];
+    const link = document.createElement("a");
+    link.className = "recommendation-link";
+    link.href = "https://www.youtube.com/watch?v=" + videoId;
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.innerHTML = '<span class="recommendation-link-icon">►</span> Watch on YouTube';
+    player.appendChild(link);
+  });
+
+  const applyEmbedState = () => {
+    players.forEach(player => {
+      const iframe = player.querySelector("iframe");
+      const link = player.querySelector(".recommendation-link");
+      if (!iframe || !link) return;
+
+      if (toggle.checked) {
+        if (!iframe.src) iframe.src = iframe.dataset.src;
+        iframe.style.display = "";
+        link.style.display = "none";
+      } else {
+        iframe.style.display = "none";
+        link.style.display = "";
+      }
+    });
+  };
+
+  toggle.addEventListener("change", applyEmbedState);
+  applyEmbedState();
+});
