@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <title>Ege - PBC</title>
+    <style>
+        .demo-intro {
+            width: 90%;
+            max-width: 1000px;
+            margin: 24px auto 0;
+            padding: 22px 26px;
+            box-sizing: border-box;
+            background: linear-gradient(135deg, #eef3f3, #dde6e6);
+            color: #2a2a2a;
+            border-radius: 16px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2);
+            line-height: 1.6;
+        }
+
+        .demo-intro h2 {
+            margin: 0 0 10px;
+            color: #1d3b3b;
+            font-size: 1.3em;
+        }
+
+        .demo-intro p {
+            margin: 0 0 6px;
+            font-size: 0.95em;
+        }
+
+        .demo-intro a {
+            color: #126364;
+            font-weight: bold;
+        }
+
+        .demo-shell {
+            position: relative;
+            width: 92%;
+            max-width: 1200px;
+            margin: 24px auto 60px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.28);
+            background: #1c2630;
+        }
+
+        .demo-frame {
+            display: block;
+            width: 100%;
+            height: 85vh;
+            min-height: 560px;
+            border: 0;
+        }
+
+        .demo-loader {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            color: #e8f0f0;
+            background: linear-gradient(135deg, #273a4d, #126364);
+            text-align: center;
+            padding: 24px;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .demo-shell.loaded .demo-loader {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .demo-loader .spinner {
+            width: 54px;
+            height: 54px;
+            border: 5px solid rgba(255, 255, 255, 0.25);
+            border-top-color: #e3f3f3;
+            border-radius: 50%;
+            animation: demo-spin 0.9s linear infinite;
+        }
+
+        .demo-loader p {
+            margin: 0;
+            max-width: 460px;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        @keyframes demo-spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="../demos.html" class="back-button">← Return to Demos</a>
+        <h1>PBC — Probabilistic Brush Compression</h1>
+        <h2>An interactive demo of my lossy image compression algorithm.</h2>
+    </header>
+
+    <div class="demo-intro">
+        <p>This is a simple embed of the Hugging Face Spaces demo for the latest release of PBC (V2.3).</p>
+        <p>Full source, details and results are on the <a href="https://github.com/EgeEken/PBC" target="_blank" rel="noopener">GitHub repository</a>.</p>
+    </div>
+
+    <div class="demo-shell" id="demo-shell">
+        <div class="demo-loader">
+            <div class="spinner"></div>
+            <p>Loading the demo… if the backend was asleep it may take up to a minute to wake up. Thanks for your patience!</p>
+        </div>
+        <iframe
+            class="demo-frame"
+            id="demo-frame"
+            src="https://huggingface.co/spaces/EgeEken/PBC_V2.3"
+            title="PBC Compression Demo"
+            allow="clipboard-write; fullscreen"
+        ></iframe>
+    </div>
+
+    <script>
+        document.getElementById("demo-frame").addEventListener("load", () => {
+            document.getElementById("demo-shell").classList.add("loaded");
+        });
+    </script>
+
+</body>
+
+</html>
