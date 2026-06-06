@@ -97,17 +97,67 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  const overlay = document.createElement("div");
+  overlay.className = "lightbox";
+  overlay.innerHTML = `
+    <button class="lightbox-close" aria-label="Close">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>
+    </button>
+    <button class="lightbox-nav lightbox-prev" aria-label="Previous">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 5 8 12 15 19"></polyline></svg>
+    </button>
+    <img class="lightbox-img" alt="">
+    <button class="lightbox-nav lightbox-next" aria-label="Next">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 5 16 12 9 19"></polyline></svg>
+    </button>
+  `;
+  document.body.appendChild(overlay);
 
-  if (isTouchDevice) {
-    document.body.addEventListener("click", e => {
-      document.querySelectorAll(".photo.expanded, .favorite img.expanded, #art-gallery img.photo.expanded")
-          .forEach(img => img.classList.remove("expanded"));
-      if (e.target.matches(".photo, .favorite img, #art-gallery img.photo") && !e.target.classList.contains("expanded")) {
-        e.target.classList.toggle("expanded");
-      }
-    });
-  }
+  const imgEl = overlay.querySelector(".lightbox-img");
+  let group = [];
+  let index = 0;
+
+  const show = i => {
+    index = (i + group.length) % group.length;
+    imgEl.src = group[index].src;
+    imgEl.alt = group[index].alt;
+  };
+
+  const open = (els, i) => {
+    group = els;
+    overlay.classList.toggle("single", group.length < 2);
+    show(i);
+    overlay.classList.add("open");
+    document.body.classList.add("lightbox-active");
+  };
+
+  const close = () => {
+    overlay.classList.remove("open");
+    document.body.classList.remove("lightbox-active");
+    imgEl.src = "";
+  };
+
+  document.addEventListener("click", e => {
+    const target = e.target.closest("#photo-gallery img, #art-gallery img, .favorite img");
+    if (!target) return;
+    const container = target.closest("#photo-gallery, #art-gallery, .favorite");
+    const els = Array.from(container.querySelectorAll("img"));
+    open(els, els.indexOf(target));
+  });
+
+  overlay.querySelector(".lightbox-close").addEventListener("click", close);
+  overlay.querySelector(".lightbox-prev").addEventListener("click", () => show(index - 1));
+  overlay.querySelector(".lightbox-next").addEventListener("click", () => show(index + 1));
+  overlay.addEventListener("click", e => {
+    if (e.target === overlay) close();
+  });
+
+  document.addEventListener("keydown", e => {
+    if (!overlay.classList.contains("open")) return;
+    if (e.key === "Escape") close();
+    if (e.key === "ArrowLeft") show(index - 1);
+    if (e.key === "ArrowRight") show(index + 1);
+  });
 });
 
 document.addEventListener("DOMContentLoaded", () => {
