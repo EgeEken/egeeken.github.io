@@ -900,3 +900,98 @@ body.lightbox-active {
   margin-top: 10px;
   line-height: 1.5;
 }
+
+.cs-portfolio .programming-project {
+    overflow: visible;
+    background-color: #eee;
+}
+
+.cs-portfolio .programming-project:hover {
+    transform: scale(1.03);
+}
+
+.cs-portfolio .project-thumbnail {
+    padding: 24px;
+    background: #eee;
+}
+
+.cs-portfolio .project-thumbnail:hover {
+    transform: none;
+}
+
+.cs-portfolio .project-thumbnail img,
+.cs-portfolio .project-thumbnail video {
+    display: block;
+    width: 75%;
+    height: auto;
+    margin: 0 auto 18px;
+    border-radius: 8px;
+}
+
+.cs-portfolio .project-thumbnail:hover img,
+.cs-portfolio .project-thumbnail:hover video {
+    filter: none;
+}
+
+.cs-portfolio .project-info {
+    position: static;
+    transform: none;
+    width: 90%;
+    margin: 0 auto;
+    color: #222;
+    opacity: 1;
+    -webkit-text-stroke: 0;
+}
+
+.cs-portfolio .project-thumbnail:hover .project-info {
+    width: 90%;
+}
+
+.cs-portfolio .project-description {
+    max-height: none;
+    overflow: visible;
+    margin-top: 10px;
+}
+
+.cs-portfolio .project-thumbnail:hover .project-description {
+    max-height: none;
+    text-shadow: none;
+}
+
+.cs-portfolio .project-thumbnail:hover .project-name {
+    text-shadow: none;
+}
+
+.cs-portfolio .project-action {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 12px 22px;
+    background: linear-gradient(135deg, #273a4d, #126364);
+    color: #f4f7f8;
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.cs-portfolio .project-action:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+}
+
+@media screen and (max-width: 700px) {
+    .cs-portfolio .programming-project {
+        width: 90%;
+    }
+
+    .cs-portfolio .project-thumbnail {
+        padding: 18px;
+    }
+
+    .cs-portfolio .project-thumbnail img,
+    .cs-portfolio .project-thumbnail video,
+    .cs-portfolio .project-info,
+    .cs-portfolio .project-thumbnail:hover .project-info {
+        width: 100%;
+    }
+}
