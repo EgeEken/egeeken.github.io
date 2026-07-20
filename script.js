@@ -350,6 +350,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentShuffleIndex = -1;
 
     const fallbackSlug = name => String(name).toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    })[character]);
+    const note = piece => piece.note
+        ? `<p class="recommendation-note">${esc(piece.note)}</p>`
+        : '';
+    const player = piece => `<div class="recommendation-player"><iframe data-src="https://www.youtube.com/embed/${esc(piece.video)}" title="${esc(piece.iframeTitle || piece.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
 
     const renderNormal = () => {
         root.innerHTML = '';
