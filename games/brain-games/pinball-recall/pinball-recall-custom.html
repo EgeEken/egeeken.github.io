@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="pinball_recall.css">
+    <link rel="icon" href="../../../assets/favicon.png" type="image/png">
+    <title>Ege - Pinball Recall (Custom)</title>
+</head>
+
+<body data-mode="custom">
+    <header>
+        <a href="./" class="back-button">← Return to Menu</a>
+        <h1>Pinball Recall (Custom)</h1>
+        <h2>Build a practice setup, then trace the hidden path.</h2>
+    </header>
+
+    <main id="pinball-wrapper">
+        <div class="pinball-panel" id="level-panel">
+            <div class="control-row">
+                <label for="preset-level">Level preset</label>
+                <input type="range" id="preset-level" min="1" max="30" value="10" step="1">
+                <span class="control-value" id="preset-level-value">10</span>
+            </div>
+        </div>
+
+        <div class="pinball-panel" id="controls-panel">
+            <div class="control-row">
+                <label for="grid-size">Matrix size</label>
+                <input type="range" id="grid-size" min="3" max="8" value="4" step="1">
+                <span class="control-value" id="grid-size-value">4 × 4</span>
+            </div>
+            <div class="control-row">
+                <label for="wall-count">Mirror count</label>
+                <input type="range" id="wall-count" min="1" max="16" value="4" step="1">
+                <span class="control-value" id="wall-count-value">4 mirrors (25%)</span>
+            </div>
+            <div class="control-row">
+                <label for="reveal-time">Reveal time</label>
+                <input type="range" id="reveal-time" min="250" max="5000" value="3000" step="250">
+                <span class="control-value" id="reveal-time-value">3.0 s</span>
+            </div>
+            <div class="control-row">
+                <label for="strike-limit">Strikes</label>
+                <input type="range" id="strike-limit" min="1" max="6" value="3" step="1">
+                <span class="control-value" id="strike-limit-value">3</span>
+            </div>
+        </div>
+
+        <div id="pinball-board-shell" aria-live="polite">
+            <div class="port-row" id="top-ports"></div>
+            <div class="port-column" id="left-ports"></div>
+            <div id="pinball-grid"></div>
+            <div class="port-column" id="right-ports"></div>
+            <div class="port-row" id="bottom-ports"></div>
+            <svg id="trajectory-layer" aria-hidden="true">
+                <defs>
+                    <mask id="trail-reveal-mask" maskUnits="userSpaceOnUse">
+                        <path id="trail-mask-path"></path>
+                    </mask>
+                </defs>
+                <path id="trajectory-guide"></path>
+                <path id="trajectory-path" mask="url(#trail-reveal-mask)"></path>
+                <circle id="pinball-dot" r="7"></circle>
+            </svg>
+        </div>
+
+        <div class="pinball-panel" id="status-panel">
+            <div id="status-line">Adjust the sliders and press restart.</div>
+            <div class="pinball-stat" id="strike-display">Strikes: 0 / 3</div>
+            <div class="pinball-stat" id="custom-score">Solved: 0</div>
+            <div class="pinball-legend" aria-hidden="true">
+                <span><i class="legend-port launch"></i> launch</span>
+                <span><i class="legend-port choice"></i> prediction</span>
+            </div>
+            <button class="pinball-button" id="restart-button">Restart</button>
+        </div>
+    </main>
+
+    <div id="results-modal" role="dialog" aria-modal="true" aria-labelledby="results-title">
+        <div id="results-card">
+            <h3 id="results-title">Result</h3>
+            <div id="results-text"></div>
+            <div class="results-actions">
+                <button id="copy-share">Copy Share Text</button>
+                <button id="close-results">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="pinball_recall.js"></script>
+</body>
+
+</html>
