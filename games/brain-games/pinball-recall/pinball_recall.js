@@ -2,12 +2,47 @@ const MODE = document.body.dataset.mode || 'standard';
 const isCustomMode = MODE === 'custom';
 const isHardMode = MODE === 'hard';
 
-const MAX_LEVEL = 30;
 const STANDARD_REVEAL_MS = 3000;
 const STANDARD_STRIKES = 3;
 const HARD_STRIKES = 1;
 const FEEDBACK_PAUSE_MS = 1250;
-const GENERATION_ATTEMPTS = 300;
+const GENERATION_ATTEMPTS = 600;
+
+// Thirty distinct rounds. Wall count rises on every level while board sizes
+// move from 3 × 3 to 8 × 8 and finish at 50% occupancy.
+const LEVEL_PLAN = [
+    { gridSize: 3, wallCount: 2 },
+    { gridSize: 3, wallCount: 3 },
+    { gridSize: 3, wallCount: 4 },
+    { gridSize: 4, wallCount: 5 },
+    { gridSize: 4, wallCount: 6 },
+    { gridSize: 4, wallCount: 7 },
+    { gridSize: 5, wallCount: 8 },
+    { gridSize: 5, wallCount: 9 },
+    { gridSize: 5, wallCount: 10 },
+    { gridSize: 5, wallCount: 11 },
+    { gridSize: 5, wallCount: 12 },
+    { gridSize: 6, wallCount: 13 },
+    { gridSize: 6, wallCount: 14 },
+    { gridSize: 6, wallCount: 15 },
+    { gridSize: 6, wallCount: 16 },
+    { gridSize: 6, wallCount: 17 },
+    { gridSize: 6, wallCount: 18 },
+    { gridSize: 7, wallCount: 19 },
+    { gridSize: 7, wallCount: 20 },
+    { gridSize: 7, wallCount: 21 },
+    { gridSize: 7, wallCount: 22 },
+    { gridSize: 7, wallCount: 23 },
+    { gridSize: 7, wallCount: 24 },
+    { gridSize: 8, wallCount: 25 },
+    { gridSize: 8, wallCount: 26 },
+    { gridSize: 8, wallCount: 27 },
+    { gridSize: 8, wallCount: 28 },
+    { gridSize: 8, wallCount: 29 },
+    { gridSize: 8, wallCount: 30 },
+    { gridSize: 8, wallCount: 32 }
+];
+const MAX_LEVEL = LEVEL_PLAN.length;
 
 const DIRECTIONS = {
     up: { row: -1, col: 0 },
@@ -17,18 +52,8 @@ const DIRECTIONS = {
 };
 
 const REFLECTIONS = {
-    slash: {
-        up: 'right',
-        right: 'up',
-        down: 'left',
-        left: 'down'
-    },
-    backslash: {
-        up: 'left',
-        left: 'up',
-        down: 'right',
-        right: 'down'
-    }
+    slash: { up: 'right', right: 'up', down: 'left', left: 'down' },
+    backslash: { up: 'left', left: 'up', down: 'right', right: 'down' }
 };
 
 const LAUNCH_ARROWS = {
@@ -38,7 +63,6 @@ const LAUNCH_ARROWS = {
     left: '→'
 };
 
-const pinballWrapperEl = document.getElementById('pinball-wrapper');
 const boardShellEl = document.getElementById('pinball-board-shell');
 const gridEl = document.getElementById('pinball-grid');
 const topPortsEl = document.getElementById('top-ports');
@@ -112,10 +136,6 @@ function shuffle(items) {
     return copy;
 }
 
-function portKey(port) {
-    return `${port.side}:${port.index}`;
-}
-
 function samePort(a, b) {
     return Boolean(a && b && a.side === b.side && a.index === b.index);
 }
@@ -130,18 +150,13 @@ function formatSeconds(milliseconds) {
 }
 
 function getLevelConfig(targetLevel) {
-    const clampedLevel = clamp(targetLevel, 1, MAX_LEVEL);
+    const clampedLevel = clamp(Math.round(targetLevel), 1, MAX_LEVEL);
     const levelIndex = clampedLevel - 1;
-    const progress = levelIndex / (MAX_LEVEL - 1);
-    const size = 3 + Math.floor(levelIndex / 5);
-    const density = 0.2 + (0.2 * progress);
-    const count = Math.max(1, Math.round(size * size * density));
+    const planned = LEVEL_PLAN[levelIndex];
     const hardReveal = Math.round(2000 - (Math.min(levelIndex, 15) * (1000 / 15)));
 
     return {
-        gridSize: size,
-        wallCount: count,
-        density,
+        ...planned,
         revealTimeMs: isHardMode ? hardReveal : STANDARD_REVEAL_MS,
         strikeLimit: isHardMode ? HARD_STRIKES : STANDARD_STRIKES
     };
@@ -159,7 +174,7 @@ function syncWallCountRange(size, preferredValue = null) {
 
     let value = preferredValue === null ? Number(wallCountInput.value) : Number(preferredValue);
     if (!Number.isFinite(value)) {
-        value = Math.max(1, Math.round(max * 0.25));
+        value = Math.max(1, Math.round(max * 0.4));
     }
     value = clamp(Math.round(value), 1, max);
     wallCountInput.value = String(value);
@@ -168,10 +183,9 @@ function syncWallCountRange(size, preferredValue = null) {
 
 function getCustomConfig() {
     const size = Number(gridSizeInput.value);
-    const count = syncWallCountRange(size);
     return {
         gridSize: size,
-        wallCount: count,
+        wallCount: syncWallCountRange(size),
         revealTimeMs: Number(revealTimeInput.value),
         strikeLimit: Number(strikeLimitInput.value)
     };
@@ -187,15 +201,14 @@ function updateCustomControlLabels() {
     const percent = Math.round((count / (size * size)) * 100);
 
     gridSizeValueEl.textContent = `${size} × ${size}`;
-    wallCountValueEl.textContent = `${count} ${count === 1 ? 'mirror' : 'mirrors'} (${percent}%)`;
+    wallCountValueEl.textContent = `${count} ${count === 1 ? 'wall' : 'walls'} (${percent}%)`;
     revealTimeValueEl.textContent = formatSeconds(Number(revealTimeInput.value));
     strikeLimitValueEl.textContent = strikeLimitInput.value;
     levelPresetValueEl.textContent = levelPresetInput.value;
 }
 
 function applyLevelPreset() {
-    const presetLevel = Number(levelPresetInput.value);
-    const preset = getLevelConfig(presetLevel);
+    const preset = getLevelConfig(Number(levelPresetInput.value));
     gridSizeInput.value = String(preset.gridSize);
     syncWallCountRange(preset.gridSize, preset.wallCount);
     revealTimeInput.value = String(STANDARD_REVEAL_MS);
@@ -213,7 +226,7 @@ function applyConfig() {
         levelLabelEl.textContent = `Level ${level} / ${MAX_LEVEL}`;
     }
     if (configLabelEl) {
-        configLabelEl.textContent = `${gridSize} × ${gridSize} · ${wallCount} ${wallCount === 1 ? 'mirror' : 'mirrors'} · ${formatSeconds(revealTimeMs)}`;
+        configLabelEl.textContent = `${gridSize} × ${gridSize} · ${wallCount} ${wallCount === 1 ? 'wall' : 'walls'} · ${formatSeconds(revealTimeMs)}`;
     }
     if (levelProgressEl) {
         levelProgressEl.style.width = `${(clamp(level, 1, MAX_LEVEL) / MAX_LEVEL) * 100}%`;
@@ -244,7 +257,7 @@ function saveBestScore(score) {
     try {
         localStorage.setItem(getStorageKey(), String(score));
     } catch (error) {
-        // Local storage can be unavailable in private browsing; the game remains playable.
+        // The game remains playable when local storage is unavailable.
     }
 }
 
@@ -283,6 +296,7 @@ function resetTrajectory() {
     trajectoryGuideEl.setAttribute('d', '');
     trajectoryPathEl.setAttribute('d', '');
     trailMaskPathEl.setAttribute('d', '');
+    trailMaskPathEl.style.strokeDasharray = '';
     trajectoryPathEl.style.opacity = '0';
     pinballDotEl.style.opacity = '0';
 }
@@ -311,12 +325,13 @@ function buildBoard() {
     bottomPortsEl.innerHTML = '';
     leftPortsEl.innerHTML = '';
 
-    gridEl.style.gridTemplateColumns = `repeat(${gridSize}, minmax(0, 1fr))`;
-    gridEl.style.gridTemplateRows = `repeat(${gridSize}, minmax(0, 1fr))`;
-    topPortsEl.style.gridTemplateColumns = `repeat(${gridSize}, minmax(0, 1fr))`;
-    bottomPortsEl.style.gridTemplateColumns = `repeat(${gridSize}, minmax(0, 1fr))`;
-    leftPortsEl.style.gridTemplateRows = `repeat(${gridSize}, minmax(0, 1fr))`;
-    rightPortsEl.style.gridTemplateRows = `repeat(${gridSize}, minmax(0, 1fr))`;
+    const trackTemplate = `repeat(${gridSize}, minmax(0, 1fr))`;
+    gridEl.style.gridTemplateColumns = trackTemplate;
+    gridEl.style.gridTemplateRows = trackTemplate;
+    topPortsEl.style.gridTemplateColumns = trackTemplate;
+    bottomPortsEl.style.gridTemplateColumns = trackTemplate;
+    leftPortsEl.style.gridTemplateRows = trackTemplate;
+    rightPortsEl.style.gridTemplateRows = trackTemplate;
 
     for (let index = 0; index < gridSize; index += 1) {
         topPortsEl.appendChild(createPortButton('top', index));
@@ -345,7 +360,6 @@ function generateWalls() {
         const col = position % gridSize;
         nextWalls.set(wallKey(row, col), Math.random() < 0.5 ? 'slash' : 'backslash');
     });
-
     return nextWalls;
 }
 
@@ -389,9 +403,9 @@ function tracePath(startPort, wallMap) {
         visitedStates.add(stateKey);
         cells.push({ row, col });
 
-        const mirror = wallMap.get(wallKey(row, col));
-        if (mirror) {
-            direction = REFLECTIONS[mirror][direction];
+        const orientation = wallMap.get(wallKey(row, col));
+        if (orientation) {
+            direction = REFLECTIONS[orientation][direction];
             bounceCount += 1;
         }
 
@@ -432,6 +446,20 @@ function getAllPorts() {
     return ports;
 }
 
+function buildFallbackPuzzle() {
+    const positions = Array.from({ length: gridSize * gridSize }, (_, index) => index);
+    walls = new Map([[wallKey(0, 0), 'slash']]);
+    shuffle(positions.filter((position) => position !== 0))
+        .slice(0, Math.max(0, wallCount - 1))
+        .forEach((position) => {
+            const row = Math.floor(position / gridSize);
+            const col = position % gridSize;
+            walls.set(wallKey(row, col), Math.random() < 0.5 ? 'slash' : 'backslash');
+        });
+    launch = { side: 'left', index: 0 };
+    solution = tracePath(launch, walls);
+}
+
 function generatePuzzle() {
     for (let attempt = 0; attempt < GENERATION_ATTEMPTS; attempt += 1) {
         const candidateWalls = generateWalls();
@@ -452,14 +480,7 @@ function generatePuzzle() {
             return;
         }
     }
-
-    // Deterministic fallback: one mirror on the launch line always creates a valid turn.
-    walls = new Map();
-    const row = Math.floor(gridSize / 2);
-    const col = Math.floor(gridSize / 2);
-    walls.set(wallKey(row, col), 'slash');
-    launch = { side: 'left', index: row };
-    solution = tracePath(launch, walls);
+    buildFallbackPuzzle();
 }
 
 function renderWalls(visible, feedback = false) {
@@ -473,15 +494,11 @@ function renderWalls(visible, feedback = false) {
             return;
         }
 
-        const mirror = document.createElement('span');
-        mirror.className = `mirror ${orientation}`;
-        if (visible) {
-            mirror.classList.add('visible');
-        }
-        if (feedback) {
-            mirror.classList.add('feedback');
-        }
-        cell.appendChild(mirror);
+        const wall = document.createElement('span');
+        wall.className = `wall ${orientation}`;
+        wall.classList.toggle('visible', visible);
+        wall.classList.toggle('feedback', feedback);
+        cell.appendChild(wall);
     });
 }
 
@@ -521,7 +538,7 @@ function startRound() {
     resetTrajectory();
     renderWalls(true);
     setPortsEnabled(false);
-    statusLineEl.textContent = `Memorize the ${wallCount} ${wallCount === 1 ? 'mirror' : 'mirrors'}...`;
+    statusLineEl.textContent = `Memorize the ${wallCount} ${wallCount === 1 ? 'wall' : 'walls'}...`;
 
     revealTimer = setTimeout(() => {
         renderWalls(false);
@@ -542,29 +559,28 @@ function getElementCenter(element, relativeRect) {
 
 function getTrajectoryPoints() {
     const shellRect = boardShellEl.getBoundingClientRect();
-    const startButton = getPortButton(launch);
-    const exitButton = getPortButton(solution.exit);
-    const points = [getElementCenter(startButton, shellRect)];
+    const points = [getElementCenter(getPortButton(launch), shellRect)];
 
     solution.cells.forEach(({ row, col }) => {
         const cell = gridEl.querySelector(`.pinball-cell[data-row="${row}"][data-col="${col}"]`);
         points.push(getElementCenter(cell, shellRect));
     });
 
-    points.push(getElementCenter(exitButton, shellRect));
+    points.push(getElementCenter(getPortButton(solution.exit), shellRect));
     return points;
 }
 
 function pointsToPath(points) {
-    return points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`).join(' ');
+    return points
+        .map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`)
+        .join(' ');
 }
 
 function animateTrajectory() {
     const currentToken = animationToken;
     const width = boardShellEl.clientWidth;
     const height = boardShellEl.clientHeight;
-    const points = getTrajectoryPoints();
-    const pathData = pointsToPath(points);
+    const pathData = pointsToPath(getTrajectoryPoints());
 
     trajectoryLayerEl.setAttribute('viewBox', `0 0 ${width} ${height}`);
     trailMaskEl.setAttribute('x', '0');
@@ -622,7 +638,6 @@ function onPortClick(event) {
     event.currentTarget.classList.add('predicted');
     renderWalls(true, true);
     statusLineEl.textContent = 'Tracing the ball...';
-
     requestAnimationFrame(animateTrajectory);
 }
 
