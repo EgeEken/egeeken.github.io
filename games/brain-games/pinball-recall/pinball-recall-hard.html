@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="pinball_recall.css">
+    <link rel="icon" href="../../../assets/favicon.png" type="image/png">
+    <title>Ege - Pinball Recall (Hard Mode)</title>
+</head>
+
+<body data-mode="hard">
+    <header>
+        <a href="./" class="back-button">← Return to Menu</a>
+        <h1>Pinball Recall (Hard Mode)</h1>
+        <h2>The mirrors disappear faster, and one wrong prediction ends the run.</h2>
+    </header>
+
+    <main id="pinball-wrapper">
+        <div class="pinball-panel" id="level-panel">
+            <div class="pinball-stat blue" id="level-label">Level 1 / 30</div>
+            <div class="pinball-stat" id="config-label">3 × 3 · 2 mirrors · 2.0 s</div>
+            <div class="pinball-stat" id="best-score">Best score: 0</div>
+            <div class="level-track" aria-hidden="true"><span id="level-progress"></span></div>
+        </div>
+
+        <div id="pinball-board-shell" aria-live="polite">
+            <div class="port-row" id="top-ports"></div>
+            <div class="port-column" id="left-ports"></div>
+            <div id="pinball-grid"></div>
+            <div class="port-column" id="right-ports"></div>
+            <div class="port-row" id="bottom-ports"></div>
+            <svg id="trajectory-layer" aria-hidden="true">
+                <defs>
+                    <mask id="trail-reveal-mask" maskUnits="userSpaceOnUse">
+                        <path id="trail-mask-path"></path>
+                    </mask>
+                </defs>
+                <path id="trajectory-guide"></path>
+                <path id="trajectory-path" mask="url(#trail-reveal-mask)"></path>
+                <circle id="pinball-dot" r="7"></circle>
+            </svg>
+        </div>
+
+        <div class="pinball-panel" id="status-panel">
+            <div id="status-line">Get ready...</div>
+            <div class="pinball-stat" id="strike-display">Strikes: 0 / 1</div>
+            <div class="pinball-legend" aria-hidden="true">
+                <span><i class="legend-port launch"></i> launch</span>
+                <span><i class="legend-port choice"></i> prediction</span>
+            </div>
+            <button class="pinball-button" id="restart-button">Restart</button>
+        </div>
+    </main>
+
+    <div id="results-modal" role="dialog" aria-modal="true" aria-labelledby="results-title">
+        <div id="results-card">
+            <h3 id="results-title">Result</h3>
+            <div id="results-text"></div>
+            <div class="results-actions">
+                <button id="copy-share">Copy Share Text</button>
+                <button id="close-results">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="pinball_recall.js"></script>
+</body>
+
+</html>
