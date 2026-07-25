@@ -51,6 +51,9 @@ body {
 
 #pinball-board-shell {
     --port-band: clamp(34px, 7vw, 48px);
+    --board-gap: clamp(2px, 0.65vw, 6px);
+    --board-padding: clamp(5px, 1.3vw, 10px);
+    --grid-border: 2px;
     position: relative;
     display: grid;
     grid-template-columns: var(--port-band) minmax(0, 1fr) var(--port-band);
@@ -69,21 +72,29 @@ body {
 #top-ports {
     grid-column: 2;
     grid-row: 1;
+    padding-inline: calc(var(--board-padding) + var(--grid-border));
+    column-gap: var(--board-gap);
 }
 
 #bottom-ports {
     grid-column: 2;
     grid-row: 3;
+    padding-inline: calc(var(--board-padding) + var(--grid-border));
+    column-gap: var(--board-gap);
 }
 
 #left-ports {
     grid-column: 1;
     grid-row: 2;
+    padding-block: calc(var(--board-padding) + var(--grid-border));
+    row-gap: var(--board-gap);
 }
 
 #right-ports {
     grid-column: 3;
     grid-row: 2;
+    padding-block: calc(var(--board-padding) + var(--grid-border));
+    row-gap: var(--board-gap);
 }
 
 .port-row,
@@ -93,6 +104,7 @@ body {
     display: grid;
     align-items: center;
     justify-items: center;
+    box-sizing: border-box;
 }
 
 .port-column {
@@ -165,13 +177,13 @@ body {
     position: relative;
     z-index: 2;
     display: grid;
-    gap: clamp(2px, 0.65vw, 6px);
-    padding: clamp(5px, 1.3vw, 10px);
+    gap: var(--board-gap);
+    padding: var(--board-padding);
     box-sizing: border-box;
     background:
         radial-gradient(circle at center, rgba(125, 223, 223, 0.09) 0 2px, transparent 2.6px) 0 0 / 18px 18px,
         #0c1d2b;
-    border: 2px solid #1b5862;
+    border: var(--grid-border) solid #1b5862;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -193,8 +205,8 @@ body {
     background: rgba(201, 235, 235, 0.2);
 }
 
-.mirror {
-    --mirror-angle: 45deg;
+.wall {
+    --wall-angle: 45deg;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -205,24 +217,24 @@ body {
     background: #f5f7f7;
     box-shadow: 0 0 0 2px rgba(16, 35, 52, 0.35), 0 0 9px rgba(245, 247, 247, 0.45);
     opacity: 0;
-    transform: translate(-50%, -50%) rotate(var(--mirror-angle)) scale(0.72);
+    transform: translate(-50%, -50%) rotate(var(--wall-angle)) scale(0.72);
     transition: opacity 0.24s ease, transform 0.24s ease;
 }
 
-.mirror.slash {
-    --mirror-angle: -45deg;
+.wall.slash {
+    --wall-angle: -45deg;
 }
 
-.mirror.backslash {
-    --mirror-angle: 45deg;
+.wall.backslash {
+    --wall-angle: 45deg;
 }
 
-.mirror.visible {
+.wall.visible {
     opacity: 1;
-    transform: translate(-50%, -50%) rotate(var(--mirror-angle)) scale(1);
+    transform: translate(-50%, -50%) rotate(var(--wall-angle)) scale(1);
 }
 
-.mirror.feedback {
+.wall.feedback {
     box-shadow: 0 0 0 2px rgba(16, 35, 52, 0.35), 0 0 12px rgba(125, 223, 223, 0.72);
 }
 
@@ -418,23 +430,23 @@ body {
         display: grid;
         grid-template-columns: minmax(260px, 300px) minmax(0, 650px);
         grid-template-areas:
-            "level board"
+            "level level"
             "status board";
         justify-content: center;
-        column-gap: 48px;
+        column-gap: 150px;
         row-gap: 16px;
         align-items: center;
     }
 
     body[data-mode="custom"] #pinball-wrapper {
         display: grid;
-        grid-template-columns: minmax(310px, 380px) minmax(0, 650px);
+        grid-template-columns: minmax(260px, 300px) minmax(0, 650px);
         grid-template-areas:
             "level level"
-            "controls board"
+            "controls controls"
             "status board";
         justify-content: center;
-        column-gap: 42px;
+        column-gap: 150px;
         row-gap: 16px;
         align-items: center;
     }
@@ -486,7 +498,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .mirror,
+    .wall,
     .port-button,
     .level-track span {
         transition-duration: 0.01ms;
