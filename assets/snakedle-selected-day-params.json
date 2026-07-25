@@ -44,6 +44,181 @@
       "mapSize": 10,
       "fruitCount": 8,
       "wallCount": 10
+    },
+    "105": {
+      "mapSize": 9,
+      "fruitCount": 10,
+      "wallCount": 15
+    },
+    "115": {
+      "mapSize": 10,
+      "fruitCount": 9,
+      "wallCount": 13
+    },
+    "146": {
+      "mapSize": 10,
+      "fruitCount": 9,
+      "wallCount": 15
+    },
+    "159": {
+      "mapSize": 9,
+      "fruitCount": 10,
+      "wallCount": 12
+    },
+    "182": {
+      "mapSize": 10,
+      "fruitCount": 8,
+      "wallCount": 12
+    },
+    "244": {
+      "mapSize": 9,
+      "fruitCount": 10,
+      "wallCount": 13
+    },
+    "289": {
+      "mapSize": 9,
+      "fruitCount": 10,
+      "wallCount": 14
+    },
+    "290": {
+      "mapSize": 10,
+      "fruitCount": 9,
+      "wallCount": 14
+    },
+    "321": {
+      "mapSize": 10,
+      "fruitCount": 8,
+      "wallCount": 13
+    },
+    "384": {
+      "mapSize": 8,
+      "fruitCount": 10,
+      "wallCount": 10
+    },
+    "391": {
+      "mapSize": 10,
+      "fruitCount": 9,
+      "wallCount": 12
+    },
+    "459": {
+      "mapSize": 10,
+      "fruitCount": 9,
+      "wallCount": 12
+    },
+    "541": {
+      "mapSize": 9,
+      "fruitCount": 9,
+      "wallCount": 13
+    },
+    "578": {
+      "mapSize": 9,
+      "fruitCount": 10,
+      "wallCount": 14
+    },
+    "605": {
+      "mapSize": 10,
+      "fruitCount": 9,
+      "wallCount": 13
+    },
+    "618": {
+      "mapSize": 10,
+      "fruitCount": 8,
+      "wallCount": 13
+    },
+    "619": {
+      "mapSize": 10,
+      "fruitCount": 9,
+      "wallCount": 19
+    },
+    "665": {
+      "mapSize": 10,
+      "fruitCount": 8,
+      "wallCount": 15
+    },
+    "701": {
+      "mapSize": 9,
+      "fruitCount": 9,
+      "wallCount": 10
+    },
+    "705": {
+      "mapSize": 10,
+      "fruitCount": 9,
+      "wallCount": 10
+    },
+    "708": {
+      "mapSize": 9,
+      "fruitCount": 10,
+      "wallCount": 14
+    },
+    "722": {
+      "mapSize": 9,
+      "fruitCount": 10,
+      "wallCount": 10
+    },
+    "724": {
+      "mapSize": 10,
+      "fruitCount": 8,
+      "wallCount": 12
+    },
+    "737": {
+      "mapSize": 10,
+      "fruitCount": 8,
+      "wallCount": 12
+    },
+    "763": {
+      "mapSize": 10,
+      "fruitCount": 9,
+      "wallCount": 15
+    },
+    "774": {
+      "mapSize": 9,
+      "fruitCount": 10,
+      "wallCount": 12
+    },
+    "783": {
+      "mapSize": 9,
+      "fruitCount": 10,
+      "wallCount": 11
+    },
+    "792": {
+      "mapSize": 10,
+      "fruitCount": 9,
+      "wallCount": 12
+    },
+    "858": {
+      "mapSize": 10,
+      "fruitCount": 8,
+      "wallCount": 11
+    },
+    "893": {
+      "mapSize": 10,
+      "fruitCount": 8,
+      "wallCount": 14
+    },
+    "894": {
+      "mapSize": 10,
+      "fruitCount": 8,
+      "wallCount": 11
+    },
+    "908": {
+      "mapSize": 10,
+      "fruitCount": 8,
+      "wallCount": 11
+    },
+    "941": {
+      "mapSize": 9,
+      "fruitCount": 9,
+      "wallCount": 11
+    },
+    "975": {
+      "mapSize": 9,
+      "fruitCount": 9,
+      "wallCount": 12
+    },
+    "981": {
+      "mapSize": 8,
+      "fruitCount": 11,
+      "wallCount": 10
     }
   }
 }
