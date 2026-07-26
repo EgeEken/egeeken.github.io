@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../../style.css">
     <link rel="stylesheet" href="pinball_recall.css">
+    <link rel="stylesheet" href="pinball_recall_v2.css">
     <link rel="icon" href="../../../assets/favicon.png" type="image/png">
     <title>Ege - Pinball Recall (Custom)</title>
 </head>
@@ -42,11 +43,6 @@
                 <input type="range" id="reveal-time" min="250" max="5000" value="3000" step="250">
                 <span class="control-value" id="reveal-time-value">3.0 s</span>
             </div>
-            <div class="control-row">
-                <label for="strike-limit">Strikes</label>
-                <input type="range" id="strike-limit" min="1" max="6" value="3" step="1">
-                <span class="control-value" id="strike-limit-value">3</span>
-            </div>
         </div>
 
         <div id="pinball-board-shell" aria-live="polite">
@@ -69,7 +65,6 @@
 
         <div class="pinball-panel" id="status-panel">
             <div id="status-line">Adjust the sliders and press restart.</div>
-            <div class="pinball-stat" id="strike-display">Strikes: 0 / 3</div>
             <div class="pinball-stat" id="custom-score">Solved: 0</div>
             <div class="pinball-legend" aria-hidden="true">
                 <span><i class="legend-port launch"></i> launch</span>
@@ -90,7 +85,7 @@
         </div>
     </div>
 
-    <script src="pinball_recall.js"></script>
+    <script src="pinball_recall_v2.js"></script>
 </body>
 
 </html>
