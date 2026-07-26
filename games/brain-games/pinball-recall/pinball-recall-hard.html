@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../../style.css">
     <link rel="stylesheet" href="pinball_recall.css">
+    <link rel="stylesheet" href="pinball_recall_v2.css">
     <link rel="icon" href="../../../assets/favicon.png" type="image/png">
     <title>Ege - Pinball Recall (Hard Mode)</title>
 </head>
@@ -14,7 +15,7 @@
     <header>
         <a href="./" class="back-button">← Return to Menu</a>
         <h1>Pinball Recall (Hard Mode)</h1>
-        <h2>The walls disappear faster, and one wrong prediction ends the run.</h2>
+        <h2>The walls disappear faster, so memorize the layout quickly.</h2>
     </header>
 
     <main id="pinball-wrapper">
@@ -45,7 +46,6 @@
 
         <div class="pinball-panel" id="status-panel">
             <div id="status-line">Get ready...</div>
-            <div class="pinball-stat" id="strike-display">Strikes: 0 / 1</div>
             <div class="pinball-legend" aria-hidden="true">
                 <span><i class="legend-port launch"></i> launch</span>
                 <span><i class="legend-port choice"></i> prediction</span>
@@ -65,7 +65,7 @@
         </div>
     </div>
 
-    <script src="pinball_recall.js"></script>
+    <script src="pinball_recall_v2.js"></script>
 </body>
 
 </html>
