@@ -14,6 +14,10 @@
 <body data-mode="standard">
     <header>
         <a href="./" class="back-button">← Return to Menu</a>
+        <label class="start-level-toggle" for="start-level-5-toggle">
+            <input type="checkbox" id="start-level-5-toggle">
+            <span>Start from lvl 5</span>
+        </label>
         <h1>Pinball Recall</h1>
         <h2>Memorize the walls, then predict where the ball will exit.</h2>
     </header>
@@ -21,8 +25,7 @@
     <main id="pinball-wrapper">
         <div class="pinball-panel" id="level-panel">
             <div class="pinball-stat blue" id="level-label">Level 1 / 30</div>
-            <div class="pinball-stat" id="config-label">3 × 3 · 2 walls · 3.0 s</div>
-            <div class="pinball-stat" id="best-score">Best score: 0</div>
+            <div class="pinball-stat" id="best-score">Best score: 11</div>
             <div class="level-track" aria-hidden="true"><span id="level-progress"></span></div>
         </div>
 
@@ -66,6 +69,7 @@
     </div>
 
     <script src="pinball_recall_v2.js"></script>
+    <script src="pinball_recall_mode_patch.js"></script>
 </body>
 
 </html>
