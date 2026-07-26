@@ -1,0 +1,13 @@
+#pinball-grid {
+    background: #0c1d2b;
+}
+
+.pinball-cell::after {
+    content: none;
+    display: none;
+}
+
+.wall {
+    width: 84%;
+    height: clamp(7px, 1.55vw, 12px);
+}
