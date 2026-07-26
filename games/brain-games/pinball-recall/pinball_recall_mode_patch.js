@@ -1,6 +1,7 @@
 (() => {
     const pinballStartLevelToggleEl = document.getElementById('start-level-5-toggle');
     const pinballBaselineBestScore = isHardMode ? 10 : 11;
+    const pinballTilesPerSecond = 7.5;
     const pinballOriginalGetBestScore = getBestScore;
 
     getBestScore = function getBestScoreWithBaseline() {
@@ -28,7 +29,7 @@
         }, true);
     }
 
-    animateTrajectory = function animateTrajectoryAtConstantSpeed() {
+    animateTrajectory = function animateTrajectoryAtConstantTileSpeed() {
         const pinballCurrentAnimationToken = animationToken;
         const pinballBoardWidth = boardShellEl.clientWidth;
         const pinballBoardHeight = boardShellEl.clientHeight;
@@ -46,6 +47,10 @@
 
         const pinballTotalLength = Math.max(0.01, trajectoryGuideEl.getTotalLength());
         const pinballFirstPoint = trajectoryGuideEl.getPointAtLength(0);
+        const pinballFirstCell = gridEl.querySelector('.pinball-cell');
+        const pinballFirstCellRect = pinballFirstCell.getBoundingClientRect();
+        const pinballTileSize = Math.max(1, (pinballFirstCellRect.width + pinballFirstCellRect.height) / 2);
+        const pinballDistanceInTiles = pinballTotalLength / pinballTileSize;
 
         trailMaskPathEl.style.strokeDasharray = `0 ${pinballTotalLength}`;
         pinballDotEl.setAttribute('cx', pinballFirstPoint.x);
@@ -53,10 +58,10 @@
         trajectoryPathEl.style.opacity = '1';
         pinballDotEl.style.opacity = '1';
 
-        const pinballStepCount = Math.max(1, solution.cells.length + 1);
         const pinballReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const pinballOriginalDuration = clamp(650 + (pinballStepCount * 145), 1100, 3900);
-        const pinballDuration = pinballReducedMotion ? 280 : Math.round(pinballOriginalDuration * 0.8);
+        const pinballDuration = pinballReducedMotion
+            ? 200
+            : Math.max(260, Math.round((pinballDistanceInTiles / pinballTilesPerSecond) * 1000));
 
         requestAnimationFrame((pinballStartTime) => {
             function pinballAnimationFrame(pinballNow) {
