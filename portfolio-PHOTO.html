@@ -5,6 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Preserve the original vertical masonry ordering for photography only. */
+        #photo-gallery {
+            display: block;
+            column-count: 4;
+            column-gap: 16px;
+        }
+
+        @media screen and (min-width: 1600px) {
+            #photo-gallery {
+                column-count: 5;
+            }
+        }
+
+        @media screen and (max-width: 1100px) {
+            #photo-gallery {
+                column-count: 3;
+            }
+        }
+
+        @media screen and (max-width: 750px) {
+            #photo-gallery {
+                column-count: 2;
+                column-gap: 12px;
+            }
+        }
+    </style>
     <link rel="icon" href="assets/favicon.png" type="image/png">
     <script src="script.js" defer></script>
     <title>Ege - Photography Portfolio</title>
