@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-01",
+  "title": "Daily Brief — Saturday, 1 August 2026",
+  "generatedAt": "2026-08-01T16:06:00+02:00",
+  "readingTime": "10–15 min",
+  "sections": [
+    {
+      "id": "paris_events",
+      "number": 1,
+      "title": "Paris events",
+      "content": "<ul><li><strong>Ciné-Jazz — tonight, with sets at 19:30 and 21:30.</strong> JASS Club Paris, 141 rue de Tolbiac, Paris 13e; <strong>€10–19</strong>, reservation required. Kicca, Hugo Corbin, Oscar Marchioni and Mourad Benhammou recast film themes for voice, guitar, Hammond organ and drums. The format is compact enough for an evening outing and the Hammond-led instrumentation should keep it from becoming a generic standards set. <a href=\"https://www.paris.fr/evenements/cine-jazz-les-themes-legendaires-du-grand-ecran-113440\" target=\"_blank\" rel=\"noopener noreferrer\">Event and booking</a></li><li><strong>“WE ARE [still] HERE” — Petit Palais, through 20 September.</strong> Avenue Winston-Churchill, Paris 8e; <strong>free</strong>, open Tuesday–Sunday, 10:00–18:00. The exhibition brings roughly 200 works by 75 artists into dialogue with the museum’s permanent collection, focusing on artists from African and diasporic communities in France. The useful angle is not merely representation: the installation tests what changes when a municipal museum’s inherited canon is treated as an active curatorial argument rather than neutral background. <a href=\"https://www.petitpalais.paris.fr/en/expositions/we-are-still-here\" target=\"_blank\" rel=\"noopener noreferrer\">Exhibition information</a></li></ul>"
+    },
+    {
+      "id": "cs_ai",
+      "number": 2,
+      "title": "CS and AI developments",
+      "content": "<h3>CADER spends long-video inference only where uncertainty justifies it</h3><p>Long-video systems often choose between two bad defaults: sample sparsely and miss the decisive moment, or process many frames and waste compute on irrelevant footage. <strong>CADER</strong> uses a two-stage inference policy. It first samples the video uniformly and answers from the global view; a confidence measure based on the answer-logit margin decides whether to stop. Only uncertain cases trigger temporal cropping, semantic verification and relevance-guided resampling.</p><p>The architectural point is more important than the benchmark table. The system treats additional perception as a <strong>conditional action with a cost</strong>, not as a fixed preprocessing budget. That is close to selective computation in classical systems: cheap global pass, explicit uncertainty test, then targeted acquisition. It is also easier to inspect than an end-to-end policy because the escalation boundary can be logged and calibrated.</p><p>The main risk is confidence miscalibration. A confidently wrong first pass exits early and never requests the evidence that could correct it. A practical implementation therefore needs calibration under temporal distribution shift, plus protected escalation rules for queries involving small text, brief events or safety-critical actions. <a href=\"https://arxiv.org/abs/2607.24582\" target=\"_blank\" rel=\"noopener noreferrer\">Paper</a></p><h3>Quantization can preserve answers while damaging the signal that says an answer is wrong</h3><p>A study of Qwen2-VL models across 5,700 predictions and multiple image degradations separates <strong>task accuracy</strong> from <strong>error-detection quality</strong>. Scaling from 2B to 7B parameters substantially improves internal uncertainty discrimination: reported AUROC rises from about <strong>0.80 to 0.98</strong>. But 4-bit quantization creates an asymmetric trade-off. Accuracy falls by only about <strong>1.6 percentage points</strong>, while internal error-detection AUROC falls from roughly <strong>0.95 to 0.80</strong>, and the rate of parseable verbal-confidence outputs drops from <strong>99% to 64%</strong>.</p><p>That matters for deployment because a compressed model may look almost unchanged on ordinary accuracy while becoming much worse at deciding when to abstain, ask for another image or route to a larger model. Quantization evaluation should therefore include selective-risk curves, calibration and escalation quality—not only top-line correctness.</p><p>The result is not a universal indictment of 4-bit inference; the authors still find the 7B 4-bit model attractive under a fixed memory budget. The narrower lesson is that <strong>compression can damage metacognitive signals before it visibly damages answers</strong>. <a href=\"https://arxiv.org/abs/2607.24440\" target=\"_blank\" rel=\"noopener noreferrer\">Paper</a></p>"
+    },
+    {
+      "id": "technical_idea",
+      "number": 3,
+      "title": "Technical idea: hazard pointers for lock-free memory reclamation",
+      "content": "<p>A lock-free stack can remove a node without locking readers, but unlinking is not the same as safely freeing. Another thread may have loaded the node’s address and be about to dereference it. Immediate deallocation creates a use-after-free; delaying every free forever defeats the purpose.</p><p><strong>Hazard pointers</strong> give each participating thread a small set of globally visible protection slots:</p><ol><li>Load the shared pointer.</li><li>Publish that address in a hazard slot.</li><li>Reload the shared pointer and restart if it changed between the load and publication.</li><li>Dereference only after the validation succeeds.</li></ol><p>A remover unlinks the node and places it on a private <strong>retired list</strong> rather than freeing it. Periodically, it scans all published hazard slots; retired nodes absent from every slot can be reclaimed. The load–publish–validate loop closes the race in which a node disappears just before the reader announces protection.</p><p>The attraction is that the method needs only atomic reads and writes, with no tracing garbage collector and no assumption that stalled threads will quickly resume. It also delays address reuse, which helps control ABA-style failures. The costs are publication traffic, global scans and awkwardness when an operation must protect many nodes simultaneously. Hazard pointers are therefore a systems pattern, not free safety: make transient ownership explicit, then reclaim only after proving that no reader has advertised a claim. <a href=\"https://research.ibm.com/publications/hazard-pointers-safe-memory-reclamation-for-lock-free-objects\" target=\"_blank\" rel=\"noopener noreferrer\">Michael’s original paper</a></p>"
+    },
+    {
+      "id": "non_cs_science",
+      "number": 4,
+      "title": "Non-CS science: adaptive electrochromic crop shading",
+      "content": "<p>A <em>Nature Communications</em> study reports an <strong>adaptive electrochromic shading system</strong> designed for protected agriculture. Instead of using a fixed shade cloth, the material changes optical transmission in response to sunlight, suppressing ultraviolet and near-infrared radiation while regulating the photosynthetically active wavelengths crops actually use. The system is solar-powered and requires no external operating energy.</p><p>In tropical cultivation tests, the authors report canopy-temperature reductions of up to <strong>3.8 °C</strong>, improvements of <strong>23.7–64%</strong> in measured crop-quality indicators, and biomass gains of up to <strong>235%</strong> relative to conventional shading. The mechanism is plausible: fixed shade is necessarily a compromise, because protection that is useful at peak irradiance wastes photosynthetic opportunity when conditions soften. A variable filter can separate thermal load from useful light more intelligently.</p><p>The large percentage should not be generalized casually. It is relative to a particular conventional-shade baseline under particular crops and climate conditions; durability, manufacturing cost, switching lifetime and performance under dust or humidity will determine whether the material is agronomically useful at scale. The interesting result is the control principle: a passive envelope can dynamically allocate the solar spectrum rather than merely blocking a fixed fraction of it. <a href=\"https://www.nature.com/articles/s41467-026-76115-0\" target=\"_blank\" rel=\"noopener noreferrer\">Paper</a></p>"
+    },
+    {
+      "id": "geopolitics",
+      "number": 5,
+      "title": "Geopolitics and political economy",
+      "content": "<h3>Turkey’s PKK process has moved from declarations to a sequencing problem</h3><p>The Turkish government says it is preparing a legal framework following the PKK’s decision to disband and disarm. A parliamentary commission has already approved a report intended to advance the process, while recent Turkey–Iraq talks have included the handling of fighters and a limited legal route for some returns. <a href=\"https://www.reuters.com/world/erdogan-says-legal-framework-speed-up-militant-pkks-disbandment-underway-2026-06-24/\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters on the legal framework</a> · <a href=\"https://www.reuters.com/world/middle-east/turkish-lawmakers-vote-report-advancing-pkk-peace-process-2026-02-18/\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters on the parliamentary report</a> · <a href=\"https://apnews.com/article/facc45078b547e096e96547dc093588d\" target=\"_blank\" rel=\"noopener noreferrer\">AP on Turkey–Iraq talks</a></p><p>The hard question is now <strong>sequence and verification</strong>. The state wants irreversible organisational dissolution before conceding broad legal or political changes. Kurdish actors need credible evidence that disarmament will not simply remove leverage before prisoner policy, political participation, municipal governance and language or association rights are addressed. Iraq and the Kurdistan Regional Government also matter because camps, crossings and armed personnel are not confined to Turkish territory.</p><p>A workable process therefore needs differentiated categories rather than one binary label of “terrorist” or “returnee”: senior commanders, rank-and-file members, non-combatant affiliates, people wanted for specific crimes and civilians displaced around the organisation cannot all pass through the same legal channel. It also needs an observable timetable. Otherwise every step becomes hostage to the accusation that the other side is demanding performance first while withholding its own reciprocal obligation.</p><p>The political-economy constraint is territorial administration. A settlement is not only about weapons; it reallocates budgets, appointments, policing authority and access to local institutions. That is why municipal trustees, elected representation and the distribution of administrative power are not secondary symbolic questions. They determine whether demobilisation produces incorporation or merely a less armed form of exclusion.</p>"
+    },
+    {
+      "id": "signal_vs_noise",
+      "number": 6,
+      "title": "Signal versus noise",
+      "subtitle": "“235% more biomass” is not a universal yield multiplier",
+      "content": "<p><strong>The signal</strong> is that adaptive spectral control can outperform fixed shade by responding to changing irradiance and separating heat management from photosynthetically useful light.</p><p><strong>The noise</strong> is treating the largest reported improvement as the expected commercial effect everywhere. Percentage gains depend heavily on the baseline, crop, season, local climate, greenhouse geometry and maintenance burden. Before extrapolating, look for multi-season trials, absolute yield per area, device lifetime, cost per square metre and performance after fouling. A spectacular relative gain can still sit on a weak baseline or an expensive material system.</p>"
+    },
+    {
+      "id": "marxist_fragment",
+      "number": 7,
+      "title": "Marxist fragment",
+      "content": "<blockquote>“Between social reforms and revolution there exists for the Social Democracy an indissoluble tie.”</blockquote><p class=\"attribution\">— Rosa Luxemburg, <em>Reform or Revolution</em>, introduction, 1900. <a href=\"https://www.marxists.org/archive/luxemburg/1900/reform-revolution/intro.htm\" target=\"_blank\" rel=\"noopener noreferrer\">Primary text</a></p><p>Luxemburg’s target was not reform as such. She argued against treating parliamentary and trade-union gains as a self-sufficient road that gradually converts capitalism into socialism. Reforms matter because they organize capacity, alter the balance of forces and expose the limits imposed by ownership and state power; severed from that strategic horizon, they become administration of the existing order.</p><p>The formulation also cuts the other way. A politics that invokes rupture while treating every partial gain as contamination loses the institutions, experience and organized constituencies through which collective power is built. The “tie” is therefore a problem of direction: whether reforms accumulate autonomous working-class capacity or merely stabilize the conditions under which capital continues to rule.</p>"
+    },
+    {
+      "id": "philosophy_fragments",
+      "number": 8,
+      "title": "Two philosophy and political fragments",
+      "content": "<h3>Olympe de Gouges: universality must survive literal application</h3><blockquote>“La femme naît libre et demeure égale à l’homme en droits.”</blockquote><p class=\"attribution\">— Olympe de Gouges, <em>Déclaration des droits de la femme et de la citoyenne</em>, article I, 1791. <a href=\"https://www.assemblee-nationale.fr/dyn/histoire-et-patrimoine/revolution-francaise/declaration-des-droits-de-la-femme-et-de-la-citoyenne\" target=\"_blank\" rel=\"noopener noreferrer\">Assemblée nationale text</a></p><p>De Gouges copied the universal grammar of the 1789 declaration and changed the subject who was allowed to occupy it. The move exposes a recurring political test: a principle advertised as universal may function as a privilege when institutions quietly restrict who counts as its bearer. The limitation is that formal inclusion alone does not dissolve economic dependence, domestic hierarchy or unequal access to public power.</p><h3>Clausewitz: force remains politically intelligible</h3><blockquote>“War is a mere continuation of policy by other means.”</blockquote><p class=\"attribution\">— Carl von Clausewitz, <em>On War</em>, book I, chapter I, standard English translation. <a href=\"https://www.gutenberg.org/files/1946/1946-h/1946-h.htm\" target=\"_blank\" rel=\"noopener noreferrer\">Primary text</a></p><p>The line is often flattened into “politics causes war.” Clausewitz’s stronger claim is that organized violence remains subordinate to an objective: war’s scale, targets and termination criteria make sense only through the policy it serves. This is useful against explanations that treat escalation as autonomous military momentum. But policy is not necessarily coherent; states contain competing institutions, leaders misperceive costs and battlefield action can transform the objective it was meant to implement.</p>"
+    },
+    {
+      "id": "french_usage",
+      "number": 9,
+      "title": "French usage: être à deux doigts de",
+      "content": "<p><strong>Être à deux doigts de + infinitive</strong> means to be <strong>very close to doing something</strong>, often something narrowly avoided or nearly achieved. It is common and conversational without being slang.</p><ul><li><em>J’étais à deux doigts de rater le dernier métro.</em></li><li><em>On est à deux doigts d’avoir fini, ne change plus rien.</em></li><li><em>Il a été à deux doigts de démissionner.</em></li></ul><p>The construction normally describes proximity to an event, not physical distance. It often carries more drama than <em>presque</em>: <em>j’ai presque oublié</em> is neutral, while <em>j’étais à deux doigts d’oublier</em> foregrounds the narrow margin. With a noun, French usually prefers another construction: <em>à deux doigts de la victoire</em> is possible and rhetorical, but the infinitive pattern is the everyday default. <a href=\"https://www.larousse.fr/dictionnaires/college/doigt/12785\" target=\"_blank\" rel=\"noopener noreferrer\">Larousse</a> · <a href=\"https://www.cnrtl.fr/etymologie/doigt\" target=\"_blank\" rel=\"noopener noreferrer\">CNRTL</a></p>"
+    },
+    {
+      "id": "music",
+      "number": 10,
+      "title": "Music corner",
+      "content": "<p>Three direct, playable recommendations are embedded below. The queue button opens the same three exact videos in sequence.</p>",
+      "queue": "https://www.youtube.com/watch_videos?video_ids=hO4QGgAB2-U,WisO0t1LXcI,bmWm6I3aAqw",
+      "items": [
+        {
+          "type": "classical",
+          "label": "Classical",
+          "piece": "Vítězslav Novák — Slovak Suite, Op. 32",
+          "performer": "Royal Liverpool Philharmonic Orchestra / Libor Pešek",
+          "url": "https://www.youtube.com/watch?v=hO4QGgAB2-U",
+          "videoId": "hO4QGgAB2-U",
+          "description": "A form and instrumentation reset after two large concertante successes. Novák builds a five-part orchestral suite from Moravian-Slovak melodic material, but the attraction is not ethnographic colour by itself: the writing has broad late-Romantic phrasing, clear thematic returns and a final movement that gives the preceding atmosphere structural payoff. The possible miss is that its pastoral sections may feel too episodic; the test is whether the full arc develops rather than merely presents attractive scenes."
+        },
+        {
+          "type": "jazz",
+          "label": "Jazz / fusion",
+          "piece": "Kokoroko — Uman",
+          "performer": "Brownswood Basement Session",
+          "url": "https://www.youtube.com/watch?v=WisO0t1LXcI",
+          "videoId": "WisO0t1LXcI",
+          "description": "A compact London jazz arrangement built around a memorable horn theme, interlocking guitar and percussion, and a controlled rise rather than open-ended solo display. It moves away from yesterday’s polished big-band fusion while retaining a legible theme and ensemble direction. The risk is that the Afrobeat-derived groove may feel too static if the arrangement’s incremental changes do not register as development."
+        },
+        {
+          "type": "other",
+          "label": "Other",
+          "piece": "Luedji Luna — Banho de Folhas",
+          "performer": "",
+          "url": "https://www.youtube.com/watch?v=bmWm6I3aAqw",
+          "videoId": "bmWm6I3aAqw",
+          "description": "Brazilian art-pop and Afro-Bahian songwriting with a strong vocal melody, restrained electronic texture and a harmonic atmosphere that is neither straightforward singer-songwriter minimalism nor groove-first boogie. It is selected as a vocal lane with more arrangement identity than the recent Lhasa and Mon Laferte picks. The likely failure mode is that its slow pacing may remain textural rather than becoming a foreground listen."
+        }
+      ]
+    },
+    {
+      "id": "unrelated_fact",
+      "number": 11,
+      "title": "Unrelated fact: khipu and positional zero",
+      "content": "<p>The Inca <strong>khipu</strong> encoded numbers in a positional decimal system using knots on pendant cords. Knot type and vertical position represented units, tens, hundreds and higher powers of ten. A missing knot in a place-value position could function as <strong>zero</strong>—information carried by an intentional absence rather than a dedicated written glyph.</p><p>This was not a toy notation. Khipukamayuq specialists used khipus to administer tribute, labour obligations, inventories and census-like records across an empire without alphabetic writing. Colour, cord structure and attachment patterns added categories beyond the numerical value, and many surviving khipus may contain information that has not been fully deciphered.</p><p>The deeper point is that a number system does not require ink, paper or a distinct symbol for every concept. It requires a stable convention for positions, categories and null values. Khipu made administrative data portable, auditable and physically structured through fibre. <a href=\"https://americanhistory.si.edu/collections/object/nmah_1590977\" target=\"_blank\" rel=\"noopener noreferrer\">Smithsonian collection note</a> · <a href=\"https://www.nist.gov/blogs/taking-measure/historic-measures-how-standards-and-technology-enabled-inca-empire-thrive\" target=\"_blank\" rel=\"noopener noreferrer\">NIST overview</a></p>"
+    },
+    {
+      "id": "puzzle",
+      "number": 12,
+      "title": "Puzzle: Fitch’s paradox of knowability",
+      "content": "<p>Consider the apparently modest principle:</p><blockquote><strong>Every truth is knowable</strong>, even if nobody currently knows it.</blockquote><p>In modal notation: for every proposition <code>p</code>, if <code>p</code> is true, then it is possible that someone knows <code>p</code>.</p><p>Now suppose there is an unknown truth <code>q</code>: <code>q</code> is true, but nobody knows <code>q</code>. Form the proposition:</p><p><code>q and nobody knows q</code>.</p><p>If every truth is knowable, this conjunction must be possibly knowable. But if someone knew the conjunction, they would know <code>q</code> and also know that nobody knows <code>q</code>. Since knowledge is factive, the second part implies that nobody knows <code>q</code>—contradicting the first part, which says the knower does know it.</p><p>The standard derivation appears to turn <strong>“every truth is knowable” into “every truth is already known.”</strong> Which assumption should be weakened: unrestricted knowability, the way knowledge distributes over conjunction, factivity, or the permission to apply the principle to self-referential epistemic propositions? Give a rule that blocks the paradox without making “knowable” trivial. <a href=\"https://plato.stanford.edu/entries/fitch-paradox/\" target=\"_blank\" rel=\"noopener noreferrer\">Background</a></p>"
+    }
+  ]
+}
