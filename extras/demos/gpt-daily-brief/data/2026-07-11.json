@@ -1,0 +1,24 @@
+{
+  "date": "2026-07-11",
+  "timezone": "Europe/Paris",
+  "sections": {
+    "paris_events": ["13 July bals des pompiers planning", "Paris Jazz Festival weekend option", "heat-aware event logistics"],
+    "cs_ai": ["visual coding and visual-token design as a unified compression problem", "task-dependent semantic compression and irrecoverable information"],
+    "technical_idea": "content-defined chunking with rolling hashes for insertion-resilient deduplication",
+    "non_cs_science": ["France's third 2026 heatwave as cumulative infrastructure and health load", "distributional structure of climate adaptation"],
+    "geopolitics": ["French heat response as a state-capacity test", "political time mismatch between emergency response and structural adaptation", "France softening opposition to Turkey SAMP/T sale through coalition industrial policy"],
+    "signal_vs_noise": "recurrent heatwaves are an operating environment, not isolated exceptions",
+    "marxist_quote": "Engels, On Authority, coordination versus class hierarchy",
+    "philosophy_fragments": ["Hume on custom, induction and learned expectation", "Burke on tacit institutional knowledge and inherited oppression"],
+    "french_usage": "ça marche — everyday coordination and register",
+    "music": ["Moszkowski Violin Concerto in C major Op. 30", "Michel Petrucciani — Looking Up", "Darren Korb — In the Blood"],
+    "unrelated_fact": "medieval temporal hours varied with daylight",
+    "puzzle": "moral luck through identical reckless drivers with different outcomes"
+  },
+  "sources": [
+    {"publisher":"Le Monde","title":"France's third heatwave of the year drags on","date":"2026-07-10"},
+    {"publisher":"Financial Times","title":"Postcard from Paris: joining the party brigade at the Firefighters' Ball","date":"2026-07-09"},
+    {"publisher":"Reuters","title":"France softens stance on Turkey SAMP/T air defence sale","date":"2026-07-06"},
+    {"publisher":"arXiv","title":"Compression Tells Intelligence","date":"2026-01-28"}
+  ]
+}
