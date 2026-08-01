@@ -6,10 +6,7 @@
   const overallFeedback = document.querySelector('#general-feedback');
   const recordedPanel = document.querySelector('#recorded-feedback-panel');
 
-  // The main renderer still keeps a reference to this node, so removing it here is safe
-  // and prevents the old standalone recorded-feedback panel from appearing.
   recordedPanel?.remove();
-
   if (!archiveSelect || !briefContent || !overallFeedback) return;
 
   const feedbackCache = new Map();
@@ -37,6 +34,58 @@
     return existing ? `${existing}\n\n${addition}` : addition;
   }
 
+  function structuredChunks(markdown) {
+    const userBlock = String(markdown || '').match(/^##\s+User feedback\s*$([\s\S]*?)(?=^##\s+|(?![\s\S]))/im)?.[1];
+    if (userBlock == null) return null;
+
+    const chunks = [];
+    const headings = [...userBlock.matchAll(/^###\s+(.+)$/gm)];
+    headings.forEach((heading, index) => {
+      const start = heading.index + heading[0].length;
+      const end = index + 1 < headings.length ? headings[index + 1].index : userBlock.length;
+      chunks.push({ heading: heading[1].trim(), body: userBlock.slice(start, end).trim() });
+    });
+    return chunks;
+  }
+
+  function parseStructuredFeedback(markdown) {
+    const chunks = structuredChunks(markdown);
+    if (!chunks) return null;
+
+    const sectionFeedback = new Map();
+    const musicFeedback = new Map();
+    let overall = '';
+
+    for (const chunk of chunks) {
+      const sectionMatch = chunk.heading.match(/^section\.([a-z0-9_]+)$/i);
+      if (sectionMatch) {
+        const value = plainMarkdown(chunk.body);
+        if (value) sectionFeedback.set(sectionMatch[1], value);
+        continue;
+      }
+
+      const musicMatch = chunk.heading.match(/^music\.(classical|jazz|other)$/i);
+      if (musicMatch) {
+        const ratingMatch = chunk.body.match(/^Rating:\s*(\d{1,2})\s*\/\s*10\s*$/im);
+        const commentaryMarker = chunk.body.match(/^Commentary:\s*(.*)$/im);
+        let commentary = '';
+        if (commentaryMarker) {
+          const markerEnd = commentaryMarker.index + commentaryMarker[0].length;
+          commentary = [commentaryMarker[1], chunk.body.slice(markerEnd)].filter(Boolean).join('\n');
+        }
+        musicFeedback.set(musicMatch[1].toLowerCase(), {
+          rating: ratingMatch ? Number(ratingMatch[1]) : null,
+          commentary: plainMarkdown(commentary) || ''
+        });
+        continue;
+      }
+
+      if (/^overall$/i.test(chunk.heading)) overall = plainMarkdown(chunk.body);
+    }
+
+    return { sectionFeedback, musicFeedback, overall, structured: true };
+  }
+
   function feedbackChunks(markdown) {
     const chunks = [];
     let current = null;
@@ -53,18 +102,12 @@
     if (current) chunks.push(current);
 
     return chunks
-      .map((chunk) => ({
-        heading: chunk.heading,
-        body: plainMarkdown(chunk.lines.join('\n'))
-      }))
+      .map((chunk) => ({ heading: chunk.heading, body: plainMarkdown(chunk.lines.join('\n')) }))
       .filter((chunk) => chunk.body);
   }
 
   function normaliseHeading(value) {
-    return String(value || '')
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase();
+    return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   }
 
   function classifyHeading(heading, previousContext) {
@@ -89,20 +132,12 @@
     if (/music|recommendation preference/.test(text)) add('music');
     if (/puzzle|dilemma|problem|thought[- ]provoking|moral luck|precommitment|teletransporter|sleeping beauty|conway|paradox/.test(text)) add('puzzle');
 
-    if (!targets.length
-      && /stable (preference|delivery)|durable preference|preference implications?/.test(text)
-      && previousContext.includes('music')) {
-      add('music');
-    }
-
+    if (!targets.length && /stable (preference|delivery)|durable preference|preference implications?/.test(text) && previousContext.includes('music')) add('music');
     if (!targets.length) add('overall');
-    return {
-      targets,
-      context: targets.filter((target) => target !== 'overall')
-    };
+    return { targets, context: targets.filter((target) => target !== 'overall') };
   }
 
-  function parseRecordedFeedback(markdown) {
+  function parseLegacyFeedback(markdown) {
     const sectionFeedback = new Map();
     let overall = '';
     let previousContext = [];
@@ -110,17 +145,16 @@
     for (const chunk of feedbackChunks(markdown)) {
       const classification = classifyHeading(chunk.heading, previousContext);
       previousContext = classification.context;
-
       for (const target of classification.targets) {
-        if (target === 'overall') {
-          overall = appendText(overall, chunk.body);
-        } else {
-          sectionFeedback.set(target, appendText(sectionFeedback.get(target), chunk.body));
-        }
+        if (target === 'overall') overall = appendText(overall, chunk.body);
+        else sectionFeedback.set(target, appendText(sectionFeedback.get(target), chunk.body));
       }
     }
+    return { sectionFeedback, musicFeedback: new Map(), overall, structured: false };
+  }
 
-    return { sectionFeedback, overall };
+  function parseRecordedFeedback(markdown) {
+    return parseStructuredFeedback(markdown) || parseLegacyFeedback(markdown);
   }
 
   async function getArchive() {
@@ -135,11 +169,10 @@
 
   async function getRecordedFeedback(date) {
     if (feedbackCache.has(date)) return feedbackCache.get(date);
-
     const archive = await getArchive();
     const record = archive.briefs.find((entry) => entry.date === date);
     if (!record?.feedback) {
-      const empty = { sectionFeedback: new Map(), overall: '' };
+      const empty = { sectionFeedback: new Map(), musicFeedback: new Map(), overall: '' };
       feedbackCache.set(date, empty);
       return empty;
     }
@@ -147,7 +180,7 @@
     const response = await fetch(`data/${record.feedback}`, { cache: 'no-store' });
     const parsed = response.ok
       ? parseRecordedFeedback(await response.text())
-      : { sectionFeedback: new Map(), overall: '' };
+      : { sectionFeedback: new Map(), musicFeedback: new Map(), overall: '' };
     feedbackCache.set(date, parsed);
     return parsed;
   }
@@ -161,26 +194,36 @@
     });
   }
 
+  function hydrateMusic(musicFeedback) {
+    for (const [type, feedback] of musicFeedback) {
+      const commentary = briefContent.querySelector(`[data-music-commentary="${CSS.escape(type)}"]`);
+      if (commentary && !commentary.value.trim() && feedback.commentary) commentary.value = feedback.commentary;
+
+      const rating = briefContent.querySelector(`[data-rating="${CSS.escape(type)}"]`);
+      if (rating && Number.isFinite(feedback.rating) && rating.dataset.touched !== 'true') {
+        rating.value = String(feedback.rating);
+        rating.dataset.touched = 'true';
+        const output = rating.closest('.rating-row')?.querySelector('.rating-value');
+        if (output) output.textContent = `${feedback.rating}/10`;
+      }
+    }
+  }
+
   async function hydrate() {
     const date = archiveSelect.value;
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return;
-
     const run = ++hydrationRun;
+
     try {
-      const [recorded, ready] = await Promise.all([
-        getRecordedFeedback(date),
-        waitForRenderedBrief(date, run)
-      ]);
+      const [recorded, ready] = await Promise.all([getRecordedFeedback(date), waitForRenderedBrief(date, run)]);
       if (!ready || run !== hydrationRun || archiveSelect.value !== date) return;
 
       for (const [sectionId, feedback] of recorded.sectionFeedback) {
         const textarea = briefContent.querySelector(`[data-section-feedback="${CSS.escape(sectionId)}"]`);
         if (textarea && !textarea.value.trim()) textarea.value = feedback;
       }
-
-      if (!overallFeedback.value.trim() && recorded.overall) {
-        overallFeedback.value = recorded.overall;
-      }
+      hydrateMusic(recorded.musicFeedback);
+      if (!overallFeedback.value.trim() && recorded.overall) overallFeedback.value = recorded.overall;
     } catch (error) {
       console.warn('Could not hydrate recorded feedback into the form.', error);
     }
