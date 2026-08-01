@@ -10,6 +10,7 @@
     .replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, '$1')
     .replace(/_([^_\n]+)_/g, '$1')
     .replace(/`([^`]+)`/g, '$1')
+    .replace(/^>\s?/gm, '')
     .replace(/\s+/g, ' ')
     .trim();
 
@@ -21,9 +22,9 @@
     if (/non[- ]?cs science/.test(value)) return 'non_cs_science';
     if (/geopolitic|political economy/.test(value)) return 'geopolitics';
     if (/signal.*noise/.test(value)) return 'signal_vs_noise';
-    if (/marxist/.test(value)) return 'marxist_fragment';
+    if (/marxist|marxist quote/.test(value)) return 'marxist_fragment';
     if (/philosophy|political fragment/.test(value)) return 'philosophy_fragments';
-    if (/french/.test(value)) return 'french_usage';
+    if (/french|language note/.test(value)) return 'french_usage';
     if (/music/.test(value)) return 'music';
     if (/unrelated|fresh fact/.test(value)) return 'unrelated_fact';
     if (/puzzle|dilemma|morning problem/.test(value)) return 'puzzle';
@@ -48,51 +49,79 @@
     return match?.[1] || '';
   }
 
-  function lineEntry(line, index) {
-    const marker = line.match(/^\s*(?:[-*]|\d+[.)])\s+(.+)$/);
-    if (!marker) return null;
-    const body = marker[1];
-    const typeMatch = body.match(/^\*\*(Classical|Jazz(?:\s*\/\s*fusion)?|Other|Different lane)[^*]*\*\*/i);
-    if (!typeMatch) return null;
-
-    const rawType = typeMatch[1].toLowerCase();
-    const type = rawType.startsWith('jazz') ? 'jazz' : rawType === 'classical' ? 'classical' : 'other';
-    const label = type === 'classical' ? 'Classical' : type === 'jazz' ? 'Jazz' : 'Other';
-    const links = [...body.matchAll(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g)];
-    const youtube = links.find((item) => /(?:youtube\.com|youtu\.be)/i.test(item[2]));
-    const url = youtube?.[2] || '';
-
-    let strong = typeMatch[0].replace(/^\*\*|\*\*$/g, '');
-    strong = strong.replace(/^(Classical|Jazz(?:\s*\/\s*fusion)?|Other|Different lane)\s*(?:—|:)?\s*/i, '');
-    let piece = plain(strong).replace(/[.:—\s]+$/, '');
-    if (!piece && youtube) piece = plain(youtube[1]);
-    if (!piece) piece = `${label} recommendation ${index + 1}`;
-
-    let description = plain(body);
-    const prefix = new RegExp(`^${label}(?:\\s*\\/\\s*fusion)?\\s*(?:—|:)?\\s*`, 'i');
-    description = description.replace(prefix, '');
-    if (description.toLowerCase().startsWith(piece.toLowerCase())) {
-      description = description.slice(piece.length).replace(/^[\s.:—-]+/, '');
-    }
-
-    return {
-      type,
-      label,
-      piece,
-      performer: '',
-      url,
-      videoId: youtubeId(url),
-      description
-    };
-  }
-
   function parseMusic(markdown) {
     const body = musicBody(markdown);
     if (!body) return null;
-    const entries = body.split(/\r?\n/).map(lineEntry).filter(Boolean);
+
+    const lines = body.replace(/\r/g, '').split('\n');
+    const entries = [];
+    let current = null;
+    let queue = '';
+
+    const finish = () => {
+      if (!current) return;
+      const continuation = current.continuation
+        .filter((line) => line.trim() && !/^#{3,6}\s+/.test(line.trim()))
+        .join('\n');
+      const description = plain([current.inlineDescription, continuation].filter(Boolean).join('\n'));
+      entries.push({
+        type: current.type,
+        label: current.label,
+        piece: current.piece,
+        performer: '',
+        url: current.url,
+        videoId: youtubeId(current.url),
+        description
+      });
+      current = null;
+    };
+
+    for (const rawLine of lines) {
+      const line = rawLine.trimEnd();
+      const queueMatch = line.match(/\[[^\]]*(?:queue|playlist|play all)[^\]]*\]\((https?:\/\/www\.youtube\.com\/watch_videos\?[^)]+)\)/i);
+      if (queueMatch) {
+        queue = queueMatch[1];
+        continue;
+      }
+
+      const start = line.match(/^\s*(?:[-*]|\d+[.)])\s+\*\*(Classical|Jazz(?:\s*\/\s*fusion)?|Other|Different lane)(?:\s*(?:—|:))?\s*([^*]*)\*\*\s*(.*)$/i);
+      if (start) {
+        finish();
+        const rawType = start[1].toLowerCase();
+        const type = rawType.startsWith('jazz') ? 'jazz' : rawType === 'classical' ? 'classical' : 'other';
+        const label = type === 'classical' ? 'Classical' : type === 'jazz' ? 'Jazz' : 'Other';
+        const afterBold = start[3] || '';
+        const allLinks = [...line.matchAll(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g)];
+        const youtube = allLinks.find((item) => /(?:youtube\.com|youtu\.be)/i.test(item[2]));
+        const url = youtube?.[2] || '';
+        let piece = plain(start[2]);
+        if (!piece && allLinks.length) piece = plain(allLinks[0][1]);
+        if (!piece) piece = `${label} recommendation ${entries.length + 1}`;
+
+        let inlineDescription = afterBold;
+        if (!start[2] && allLinks.length) inlineDescription = inlineDescription.replace(allLinks[0][0], '');
+        inlineDescription = inlineDescription
+          .replace(/\s*(?:—|-)?\s*\*\*\d{1,2}\/10\.?\*\*.*$/i, '')
+          .replace(/\s*(?:—|-)?\s*\d{1,2}\/10\.?\s*.*$/i, '');
+
+        current = { type, label, piece, url, inlineDescription, continuation: [] };
+        continue;
+      }
+
+      if (current) current.continuation.push(line);
+    }
+    finish();
+
     if (entries.length < 3) return null;
-    const queue = body.match(/\[[^\]]*(?:queue|playlist|play all)[^\]]*\]\((https?:\/\/www\.youtube\.com\/watch_videos\?[^)]+)\)/i)?.[1] || '';
     return { items: entries.slice(-3), queue };
+  }
+
+  function disableEmbeds(items) {
+    for (const item of items || []) {
+      const id = item.videoId || youtubeId(item.url);
+      if (id) item.embedVideoId = id;
+      item.videoId = null;
+    }
   }
 
   window.fetch = async function fullBriefPostprocessFetch(input, init) {
@@ -120,6 +149,9 @@
           music.content = '';
         }
       }
+
+      const music = data.sections.find((section) => section.id === 'music');
+      if (music) disableEmbeds(music.items);
 
       return new Response(`${JSON.stringify(data)}\n`, {
         status: response.status,
