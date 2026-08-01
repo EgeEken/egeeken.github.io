@@ -13,7 +13,6 @@
   <header class="brief-header">
     <a href="../../../demos.html" class="back-button">← Return to Demos</a>
     <div class="header-inner">
-      <p class="eyebrow">EXTRAS / DEMOS</p>
       <h1>GPT Daily Brief</h1>
       <h2>Read the latest brief, annotate each section, and export structured feedback.</h2>
     </div>
@@ -37,6 +36,8 @@
 
     <nav id="section-nav" class="section-nav" aria-label="Brief sections"></nav>
 
+    <div id="recorded-feedback-panel" class="recorded-feedback-panel" hidden></div>
+
     <div id="status" class="status-card" role="status">Loading the brief…</div>
     <div id="brief-content" class="brief-content" hidden></div>
 
@@ -48,7 +49,7 @@
       </div>
       <label class="general-feedback" for="general-feedback">
         Overall feedback <span>(optional)</span>
-        <textarea id="general-feedback" rows="4" placeholder="Anything that applies to the brief as a whole…"></textarea>
+        <textarea id="general-feedback" rows="4" placeholder="What do you think?"></textarea>
       </label>
       <div class="export-actions">
         <button id="export-feedback" class="primary-button" type="button">Export feedback JSON</button>
