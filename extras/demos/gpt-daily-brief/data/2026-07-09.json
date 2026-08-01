@@ -1,0 +1,82 @@
+{
+  "date": "2026-07-09",
+  "timezone": "Europe/Paris",
+  "brief_files": {
+    "latest": "daily_brief.md",
+    "archive": "briefs/2026-07-09.md"
+  },
+  "loaded_files": [
+    "README.md",
+    "state/briefing_rules.md",
+    "state/profile.json",
+    "state/index.json",
+    "state/fresh_chat_bootstrap.md",
+    "state/music_recommendation_memory.md"
+  ],
+  "sections": {
+    "paris_events": [
+      "Japan Expo opens 2026-07-09 at Paris-Nord Villepinte, runs through 2026-07-12",
+      "Azzedine Alaïa et L’Afrique at Fondation Azzedine Alaïa",
+      "Paris Haute Couture Week Fall/Winter 2026 closes 2026-07-09",
+      "Esports World Cup Paris as France-Saudi esports political-economy item"
+    ],
+    "cs_ai": [
+      "Future of Life Institute / Axios: major AI companies weakening voluntary safety commitments under capability, product, and military pressure",
+      "Tempo paper: small VLM as query-aware compressor for long-video understanding with adaptive token allocation"
+    ],
+    "technical_idea": "Equality saturation and e-graphs; non-greedy rewrite optimization, egg paper, e-class analyses and rebuilding",
+    "geopolitics": [
+      "Turkey hosting NATO summit and pushing defense-industry inclusion / SAFE access",
+      "İmamoğlu trial alongside NATO summit as external alliance centrality plus domestic coercion pattern",
+      "Le Pen legal setback but 2027 campaign still electorally alive via appeal/calendar dynamics",
+      "Trump/Ukraine Patriot manufacturing signal separated from surrounding rhetorical noise"
+    ],
+    "signal_vs_noise": "Defense spending headlines vs security-rent capture and defense-industrial constituencies",
+    "marxist_quote": "Marx on Paris Commune: working class cannot simply lay hold of ready-made state machinery",
+    "philosophy_fragments": [
+      "Machiavelli: republican conflict can check domination",
+      "Arendt: public action vs administration of necessity, with materialist caveat"
+    ],
+    "french_note": "Derrière as shorthand for underlying political/material logic",
+    "music": {
+      "classical": "Wieniawski — Légende, Op. 17",
+      "jazz": "Oscar Peterson Trio — Night Train",
+      "different_lane": "Austin Wintory — Apotheosis from Journey"
+    },
+    "unrelated_fact": "Perseverance analyzed macromolecular organic carbon in Jezero Crater mudstone; not evidence of life but relevant to ancient habitability",
+    "puzzle": {
+      "consumed_followup": "absent-minded-driver-solution",
+      "new_puzzle": "three switches and three bulbs"
+    }
+  },
+  "sources": [
+    {"title": "Japan Expo listings", "ref": "web: turn578483search1"},
+    {"title": "Vogue Paris Couture Week Fall/Winter 2026", "ref": "web: turn814321news1"},
+    {"title": "Vogue Azzedine Alaïa et L’Afrique", "ref": "web: turn814321news2"},
+    {"title": "Le Monde EWC 2026 in Paris / France-Saudi partnership", "ref": "web: turn851939news0"},
+    {"title": "Axios AI safety pledges report", "ref": "web: turn401722news0"},
+    {"title": "Tempo long-video VLM paper", "ref": "web: turn401722academia1"},
+    {"title": "Reuters Erdogan NATO restrictions", "ref": "web: turn410462news0"},
+    {"title": "AP Imamoglu trial", "ref": "web: turn410462news2"},
+    {"title": "Reuters Breakingviews Le Pen", "ref": "web: turn410462news1"},
+    {"title": "Le Monde Le Pen candidacy/legal mechanics", "ref": "web: turn410462news3"},
+    {"title": "Guardian NATO live Ukraine/Patriot signal", "ref": "web: turn410462news4"},
+    {"title": "egg: Fast and Extensible Equality Saturation", "ref": "web: turn273009academia0"},
+    {"title": "Marx / Civil War in France reference", "ref": "web: turn948671search0"},
+    {"title": "Machiavelli Discourses reference", "ref": "web: turn359896search1"},
+    {"title": "Arendt Human Condition reference", "ref": "web: turn359896search2"},
+    {"title": "Wieniawski Légende", "ref": "web: turn301760search4"},
+    {"title": "Oscar Peterson Night Train", "ref": "web: turn301760search0"},
+    {"title": "Journey / Austin Wintory Apotheosis", "ref": "web: turn504307search0"},
+    {"title": "Reuters Perseverance organic carbon", "ref": "web: turn776812news1"}
+  ],
+  "repeat_avoidance_added": [
+    "Do not repeat equality saturation/e-graphs as near-term technical idea",
+    "Do not repeat semantic long-video VLM compression/Tempo as near-term AI item",
+    "Do not repeat defense spending as security-rent capture without a new procurement/institutional angle",
+    "Do not repeat Wieniawski Légende, Oscar Peterson Night Train, or Journey Apotheosis as music picks",
+    "Do not repeat three-switches puzzle"
+  ],
+  "consumed_followups": ["absent-minded-driver-solution"],
+  "notes": "daily_brief.md did not exist before this run, so it was created rather than overwritten. No stable profile changes inferred."
+}
