@@ -1,0 +1,50 @@
+{
+  "date": "2026-07-10",
+  "generated_at_timezone": "Europe/Paris",
+  "sections": {
+    "paris_events": [
+      "Japan Expo 2026 at Paris-Nord Villepinte, 9-12 July",
+      "Philharmonie de Paris Video Games & Music exhibition, through 1 November 2026",
+      "The Weeknd at Stade de France, 10 July 2026, noted mainly for transit/crowd relevance",
+      "Bals des pompiers planning note for 13 July"
+    ],
+    "cs_ai": [
+      "Topical phase transitions in AI research meta-study across 80,814 accepted papers",
+      "ICML 2026 reward hacking/tool-use agent safety benchmark signal"
+    ],
+    "technical_idea": "Prefix sums / scan as a systems primitive for parallel address assignment, compaction, GPU work queues, and layout construction",
+    "geopolitics": [
+      "İmamoğlu trial alongside NATO summit as external indispensability/internal coercion pattern",
+      "NATO Ankara procurement and Ukraine Patriot production-license signal under erratic US rhetoric",
+      "Le Pen remains electorally viable despite conviction according to post-verdict polling",
+      "US-Iran escalation as background condition for energy chokepoints and remilitarization pressure"
+    ],
+    "signal_vs_noise": "Le Pen eligibility framed less as legal calendar and more as legitimacy gap between judicial accountability and populist bloc cohesion",
+    "marxist_quote": "Marx on Paris Commune: working class cannot simply lay hold of ready-made state machinery; added concrete Commune context and failure analysis",
+    "philosophy_politics": [
+      "Machiavelli on armed prophets and founding force",
+      "Arendt on revolution, social question, and public freedom"
+    ],
+    "french_note": "judiciarisation / se judiciariser",
+    "music": [
+      "Wieniawski — Polonaise brillante No. 1 in D major, Op. 4",
+      "Hiromi — XYZ from Another Mind",
+      "Gareth Coker — Naru, Embracing the Light from Ori and the Blind Forest"
+    ],
+    "unrelated_fact": "Hawaiian bobtail squid, Aliivibrio fischeri, and counter-illumination camouflage",
+    "puzzle_dilemma": "The precommitment problem: present-self constraints over future-self preferences"
+  },
+  "source_notes": [
+    "Le Monde on Philharmonie VGM and Paris open-air cinema",
+    "Japan Expo listings",
+    "Stade de France tour listings and Pitchfork tour announcement for The Weeknd",
+    "FT on Bals des Pompiers",
+    "arXiv 2606.12828 topical phase transitions in AI research",
+    "ICML 2026 reporting on Reward Hacking Benchmark",
+    "AP and FT on İmamoğlu trial during NATO summit",
+    "Le Monde on NATO Ankara summit",
+    "Reuters on Le Pen polling after conviction",
+    "Times on US-Iran escalation",
+    "Reference sources for Marx Civil War in France / Paris Commune, Machiavelli, Arendt, and bobtail squid"
+  ]
+}
