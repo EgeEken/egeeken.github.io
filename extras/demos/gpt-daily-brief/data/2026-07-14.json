@@ -1,0 +1,18 @@
+{
+  "date": "2026-07-14",
+  "generated_at_local": "2026-07-14T09:12:00+02:00",
+  "sections": [
+    {"section":"paris_events","items":["Bastille Day military parade as a European and Ukraine-solidarity display","Post-parade low-friction Paris day rather than repeating the 13 July fireworks plan"],"sources":["https://apnews.com/article/d78621ef18de51b16c8ab99e2bf43f4b"]},
+    {"section":"cs_ai","items":["Learned image compression for machine perception","Task-conditional information loss and layered machine/human representations"],"sources":["https://arxiv.org/abs/2111.02249"]},
+    {"section":"technical_idea","items":["Rendezvous hashing for stable distributed placement and ordered failover"],"sources":[]},
+    {"section":"non_cs_science","items":["Quantum/classical embedding workflow for FLiBe chemistry and fusion tritium breeding"],"sources":["https://www.livescience.com/technology/quantum/quantum-computing-wielded-to-create-extremely-rare-material-critical-to-nuclear-fusion"]},
+    {"section":"geopolitics","items":["European anti-ballistic coalition","FCAS collapse as evidence of conflict between military integration and national-industrial sovereignty"],"sources":["https://www.reuters.com/business/aerospace-defense/western-leaders-agree-anti-ballistic-missile-coalition-with-ukraine-2026-07-13/","https://www.reuters.com/business/aerospace-defense/macron-calls-go-it-alone-defence-strategies-europe-an-absurdity-2026-07-13/"]},
+    {"section":"signal_vs_noise","items":["Shared architecture is signal; unresolved ownership, funding and production authority are noise"],"sources":[]},
+    {"section":"marxist_quote","items":["Marx on cooperation producing a social productive force that appears as capital's power"],"sources":[]},
+    {"section":"philosophy_fragments","items":["Ostrom on nested commons institutions","Montesquieu on institutional checks and the cost of friction"],"sources":[]},
+    {"section":"french_usage","items":["ça te dit de / ça me dit versus ça me dit quelque chose"],"sources":[]},
+    {"section":"music","recommendations":[{"type":"classical","piece":"Ernő Dohnányi — Piano Quintet No. 1 in C minor, Op. 1","rating":9,"rating_note":"Liked a lot; strong positive."},{"type":"jazz","piece":"Phronesis — Abraham's New Gift","rating":6,"rating_note":"Okay."},{"type":"other","piece":"L'Impératrice — Agitations tropicales","rating":8,"rating_note":"Pretty good."}],"sources":["https://www.youtube.com/results?search_query=Ern%C5%91+Dohn%C3%A1nyi+Piano+Quintet+No.+1+Op.+1","https://www.youtube.com/results?search_query=Phronesis+Abraham%27s+New+Gift","https://www.youtube.com/results?search_query=L%27Imp%C3%A9ratrice+Agitations+tropicales"]},
+    {"section":"unrelated_fact","items":["Lime clasts and water-triggered self-healing chemistry in some Roman concrete"],"sources":[]},
+    {"section":"puzzle","items":["Absent-minded driver and ex-ante versus information-state rationality"],"sources":[]}
+  ]
+}
