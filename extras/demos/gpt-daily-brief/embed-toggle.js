@@ -111,6 +111,6 @@
   }
 
   select.addEventListener('change', queueRefresh);
-  new MutationObserver(queueRefresh).observe(briefContent, { childList: true, subtree: true });
+  new MutationObserver(queueRefresh).observe(briefContent, { childList: true });
   queueRefresh();
 })();
