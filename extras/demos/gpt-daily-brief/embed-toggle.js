@@ -32,7 +32,7 @@
   function mediaMarkup(item) {
     const id = youtubeId(item);
     if (embedsEnabled && id) {
-      return `<div class="player-frame"><iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}" title="${escapeHtml(item.piece || 'YouTube video')}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`;
+      return `<div class="player-frame"><iframe src="https://www.youtube.com/embed/${encodeURIComponent(id)}" title="${escapeHtml(item.piece || 'YouTube video')}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
     }
     if (item?.url) {
       return `<div class="watch-link-frame"><a class="watch-youtube-button" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a></div>`;
