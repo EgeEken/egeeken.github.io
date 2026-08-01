@@ -1,0 +1,27 @@
+{
+  "date": "2026-07-13",
+  "timezone": "Europe/Paris",
+  "sections": {
+    "paris_events": ["13 July Concert de Paris at Champ-de-Mars: Maîtrise at 20:00, main concert at 21:00, fireworks afterward, free without reservation", "Bir-Hakeim and multiple nearby stops not served from 18:00; plan an approach from outside the closure perimeter"],
+    "cs_ai": ["Edge VLM profiling: autoregressive output decoding dominates measured latency and energy more than visual-token processing", "Scalable visual pretraining: learning directly from rendered documents and web pages rather than text extraction"],
+    "technical_idea": "Elias-Fano encoding for near-succinct monotone integer sequences with fast indexed access",
+    "non_cs_science": ["folding-driven machine-knitted textiles with geometry-programmed auxetic behaviour", "capacitive strain sensing integrated during knitting through conductive-yarn partial plating"],
+    "geopolitics": ["Paris Ukraine summit shifts focus toward ballistic-missile interceptor stocks, replenishment and European-Ukrainian production", "IMF cuts Turkey 2026 growth forecast to 2.9% amid weaker activity and higher energy prices", "France cuts 2026 growth forecast to 0.7% and seeks further cuts/freezes as its 5% deficit target comes under pressure"],
+    "signal_vs_noise": "air-defence launcher counts and pledged euros versus the full radar, crew, integration, interceptor-inventory and reload chain",
+    "marxist_quote": "Marx on public debt as a lever of primitive accumulation and a tradable claim on future taxation",
+    "philosophy_fragments": ["John Dewey on publics forming around indirect consequences", "Carl Schmitt on sovereignty as decision over the exception and the problem of self-authorizing emergency power"],
+    "french_usage": "tant qu'à faire / tant qu'à faire, autant",
+    "music": ["Josef Suk — Piano Quartet in A minor Op. 1, I Allegro appassionato", "Shai Maestro — The Dream Thief", "Cortex — Troupeau bleu"],
+    "unrelated_fact": "chuño as natural Andean freeze-drying through repeated night freezing, daytime drying and trampling",
+    "puzzle": "Conway's soldiers and whether a finite sequence can reach the fifth row"
+  },
+  "sources": [
+    {"title":"Concert de Paris","url":"https://www.maisondelaradioetdelamusique.fr/evenement/concert-de-paris-5"},
+    {"title":"Edge VLM energy bottleneck","url":"https://arxiv.org/abs/2607.09520"},
+    {"title":"Scalable Visual Pretraining","url":"https://arxiv.org/abs/2607.09657"},
+    {"title":"Auxetic knit textiles","url":"https://arxiv.org/abs/2607.07713"},
+    {"title":"Ukraine air defence aid","url":"https://www.reuters.com/business/aerospace-defense/allies-muster-more-air-defence-aid-ukraine-battlefield-momentum-shifts-2026-07-13/"},
+    {"title":"Marx, Capital I chapter 31","url":"https://www.marxists.org/archive/marx/works/1867-c1/ch31.htm"},
+    {"title":"Conway's soldiers paper","url":"https://arxiv.org/abs/math/0612612"}
+  ]
+}
