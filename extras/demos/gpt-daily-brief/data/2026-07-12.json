@@ -1,0 +1,27 @@
+{
+  "date": "2026-07-12",
+  "timezone": "Europe/Paris",
+  "sections": {
+    "paris_events": ["13 July Concert de Paris and fireworks at Champ-de-Mars; 20:00 pre-concert, 21:00 main concert; nearby station closures from 18:00", "La Villette open-air cinema from 22 July to 16 August"],
+    "cs_ai": ["ZipDepth: 6.1M-parameter distilled and reparameterizable zero-shot monocular depth model", "Whareformer: updateable what/where object-track memory for long egocentric video"],
+    "technical_idea": "invertible Bloom lookup tables and peeling-based, difference-sized set reconciliation",
+    "non_cs_science": ["SpudCell bottom-up integration of membrane growth, synthetic-DNA replication and division", "external ATP, feeder liposome, enzyme and ribosome dependencies distinguish life-like cycling from autonomy"],
+    "geopolitics": ["US strikes Iran after IRGC attack on a Cyprus-flagged container ship in the Strait of Hormuz", "Trump CAATSA/F-35 opening for Turkey remains constrained by law, Congress and the S-400", "France seeks post-Assad Syrian influence through reconstruction, finance, infrastructure and business access"],
+    "signal_vs_noise": "presidential and summit announcements versus distributed implementation veto points",
+    "marxist_quote": "Marx, Grundrisse, transport and the annihilation of space by time",
+    "philosophy_fragments": ["Schelling on compellence versus deterrence", "Simone Weil on force turning persons into things"],
+    "french_usage": "en avoir pour + duration or amount",
+    "music": ["Anton Arensky — Piano Trio No. 1 Op. 32, III Elegia", "Avishai Cohen Trio — Seattle", "Béla Fleck and the Flecktones — Big Country"],
+    "unrelated_fact": "singing dunes and self-synchronized granular acoustic emission",
+    "puzzle": "teletransporter survival and branching personal identity"
+  },
+  "sources": [
+    {"title":"Concert de Paris","url":"https://www.maisondelaradioetdelamusique.fr/evenement/concert-de-paris-5"},
+    {"title":"RATP line 6 traffic","url":"https://www.ratp.fr/infos-trafic/metro/6"},
+    {"title":"ZipDepth","url":"https://arxiv.org/abs/2607.08771"},
+    {"title":"Whareformer","url":"https://arxiv.org/abs/2607.08537"},
+    {"title":"Invertible Bloom Lookup Tables","url":"https://arxiv.org/abs/1101.2245"},
+    {"title":"US strikes Iran after ship attack","url":"https://www.reuters.com/world/middle-east/us-says-it-launched-strikes-against-iran-after-attack-cyprus-flagged-container-2026-07-12/"},
+    {"title":"Singing dunes paper","url":"https://arxiv.org/abs/nlin/0412047"}
+  ]
+}
