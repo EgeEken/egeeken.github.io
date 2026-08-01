@@ -44,7 +44,7 @@
   }
 
   function musicBody(markdown) {
-    const match = String(markdown || '').match(/^##\s+(?:\d+\.\s*)?[^\n]*music[^\n]*\n([\s\S]*?)(?=^##\s+|\s*$)/im);
+    const match = String(markdown || '').match(/^##\s+(?:\d+\.\s*)?[^\n]*music[^\n]*\n([\s\S]*?)(?=^##\s+|(?![\s\S]))/im);
     return match?.[1] || '';
   }
 
