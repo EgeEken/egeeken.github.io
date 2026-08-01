@@ -1,0 +1,18 @@
+{
+  "date": "2026-07-16",
+  "generated_at_local": "2026-07-16T08:15:02+02:00",
+  "sections": [
+    {"section":"paris_events","items":["Hermon Mehari invites Estelle Perrault at 38Riv on 16 July, with sets at 19:30 and 21:30"],"sources":["https://www.paris.fr/evenements/hermon-mehari-invite-estelle-perrault-au-38riv-jazz-club-113498"]},
+    {"section":"cs_ai","items":["VideoRAE repurposing frozen video-foundation-model features as compact continuous or discrete generative latents","M4World jointly generating surround-view video and LiDAR with object-level control and causal minute-long streaming"],"sources":["https://arxiv.org/abs/2607.14088","https://arxiv.org/abs/2607.14005"]},
+    {"section":"technical_idea","items":["Piece tables: immutable original and append-only add buffers composed through span descriptors for efficient editing and undo"],"sources":["https://www.cs.unm.edu/~crowley/papers/sds/node15.html"]},
+    {"section":"non_cs_science","items":["Hillsborough CM1/2 meteorite preserving evidence of concentrated asteroid brines, organics and amino acids with unusually low terrestrial contamination"],"sources":["https://nypost.com/2026/07/15/science/alien-chemistry-discovered-on-meteorite-that-plunged-through-new-jersey-home/"]},
+    {"section":"geopolitics","items":["Özgür Özel preparing a possible new party if CHP appeal and extraordinary-congress routes are blocked; analysis focused on migration of organizational assets and opposition re-coordination costs"],"sources":["https://www.reuters.com/business/media-telecom/turkeys-ousted-opposition-leader-says-preparing-possible-new-party-2026-07-15/"]},
+    {"section":"signal_vs_noise","items":["Movement of MPs, mayors, provincial organizations and candidate-control machinery is signal; party-registration headlines without organizational migration are noise"],"sources":[]},
+    {"section":"marxist_quote","items":["Rosa Luxemburg on mass struggle recruiting and organizing proletarian layers rather than organization only preceding struggle"],"sources":["https://www.marxists.org/archive/luxemburg/1906/mass-strike/ch07.htm"]},
+    {"section":"philosophy_fragments","items":["Madison on faction as a permanent feature whose effects must be controlled","Hayek on dispersed, local and tacit knowledge as the core planning problem"],"sources":["https://avalon.law.yale.edu/18th_century/fed10.asp","https://www.econlib.org/library/Essays/hykKnw.html"]},
+    {"section":"french_usage","items":["au pire as an informal way to introduce an acceptable fallback"],"sources":[]},
+    {"section":"music","recommendations":[{"type":"classical","piece":"Dora Pejačević — Piano Quintet in B minor, Op. 40","rating":"N/A"},{"type":"jazz","piece":"Shahin Novrasli — Bayati","rating":"N/A"},{"type":"other","piece":"Marcos Valle — Estrelar","rating":"N/A"}],"sources":["https://www.youtube.com/results?search_query=Dora+Peja%C4%8Devi%C4%87+%E2%80%94+Piano+Quintet+in+B+minor%2C+Op.+40","https://www.youtube.com/results?search_query=Shahin+Novrasli+%E2%80%94+Bayati","https://www.youtube.com/results?search_query=Marcos+Valle+%E2%80%94+Estrelar"]},
+    {"section":"unrelated_fact","items":["Woodland and Silver's original bull's-eye barcode traded orientation independence against printing-smear sensitivity; linear UPC won as a physical-channel compromise"],"sources":["https://patents.google.com/patent/US2612994A/en"]},
+    {"section":"puzzle","items":["Goodman's grue problem: why green is projectable but a time-indexed grue predicate is not, despite identical fit to past observations"],"sources":["https://plato.stanford.edu/entries/induction-problem/#NewRidInd"]}
+  ]
+}
