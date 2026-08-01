@@ -2,7 +2,7 @@
   'use strict';
 
   const nativeFetch = window.fetch.bind(window);
-  const fullBriefPattern = /^(.*\/data\/full\/)(\d{4}-\d{2}-\d{2})\.md(?:[?#].*)?$/;
+  const fullBriefPattern = /^((?:.*\/)?data\/full\/)(\d{4}-\d{2}-\d{2})\.md(?:[?#].*)?$/;
 
   window.fetch = async function multipartFetch(input, init) {
     const url = typeof input === 'string' ? input : input?.url;
