@@ -2,10 +2,24 @@
   "schemaVersion": 1,
   "latest": "2026-07-31",
   "briefs": [
-    {
-      "date": "2026-07-31",
-      "title": "Daily Brief — Friday, 31 July 2026",
-      "file": "2026-07-31.json"
-    }
+    {"date":"2026-07-31","title":"Daily Brief — Friday, 31 July 2026","file":"2026-07-31.json","feedback":"feedback/2026-07-31.md"},
+    {"date":"2026-07-30","title":"Daily Brief — Thursday, 30 July 2026","file":"2026-07-30.json","feedback":"feedback/2026-07-30.md"},
+    {"date":"2026-07-29","title":"Daily Brief — Wednesday, 29 July 2026","file":"2026-07-29.json","feedback":"feedback/2026-07-29.md"},
+    {"date":"2026-07-28","title":"Daily Brief — Tuesday, 28 July 2026","file":"2026-07-28.json","feedback":"feedback/2026-07-28.md"},
+    {"date":"2026-07-27","title":"Daily Brief — Monday, 27 July 2026","file":"2026-07-27.json","feedback":"feedback/2026-07-27.md"},
+    {"date":"2026-07-24","title":"Daily Brief — Friday, 24 July 2026","file":"2026-07-24.json","feedback":"feedback/2026-07-24.md"},
+    {"date":"2026-07-23","title":"Daily Brief — Thursday, 23 July 2026","file":"2026-07-23.json"},
+    {"date":"2026-07-22","title":"Daily Brief — Wednesday, 22 July 2026","file":"2026-07-22.json","feedback":"feedback/2026-07-22.md"},
+    {"date":"2026-07-21","title":"Daily Brief — Tuesday, 21 July 2026","file":"2026-07-21.json","feedback":"feedback/2026-07-21.md"},
+    {"date":"2026-07-20","title":"Daily Brief — Monday, 20 July 2026","file":"2026-07-20.json","feedback":"feedback/2026-07-20.md"},
+    {"date":"2026-07-17","title":"Daily Brief — Friday, 17 July 2026","file":"2026-07-17.json","feedback":"feedback/2026-07-17.md"},
+    {"date":"2026-07-16","title":"Daily Brief — Thursday, 16 July 2026","file":"2026-07-16.json","feedback":"feedback/2026-07-16.md"},
+    {"date":"2026-07-15","title":"Daily Brief — Wednesday, 15 July 2026","file":"2026-07-15.json","feedback":"feedback/2026-07-15.md"},
+    {"date":"2026-07-14","title":"Daily Brief — Tuesday, 14 July 2026","file":"2026-07-14.json","feedback":"feedback/2026-07-14.md"},
+    {"date":"2026-07-13","title":"Daily Brief — Monday, 13 July 2026","file":"2026-07-13.json","feedback":"feedback/2026-07-13.md"},
+    {"date":"2026-07-12","title":"Daily Brief — Sunday, 12 July 2026","file":"2026-07-12.json","feedback":"feedback/2026-07-12.md"},
+    {"date":"2026-07-11","title":"Daily Brief — Saturday, 11 July 2026","file":"2026-07-11.json","feedback":"feedback/2026-07-11.md"},
+    {"date":"2026-07-10","title":"Daily Brief — Friday, 10 July 2026","file":"2026-07-10.json","feedback":"feedback/2026-07-10.md"},
+    {"date":"2026-07-09","title":"Daily Brief — Thursday, 9 July 2026","file":"2026-07-09.json","feedback":"feedback/2026-07-09.md"}
   ]
 }
