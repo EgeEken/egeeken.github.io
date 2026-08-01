@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interactive archive and feedback interface for Ege's GPT Daily Brief.">
+  <link rel="stylesheet" href="../../../style.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="../../../assets/favicon.png" type="image/png">
+  <title>Ege — GPT Daily Brief</title>
+</head>
+<body class="daily-brief-page">
+  <header class="brief-header">
+    <a href="../../../demos.html" class="back-button">← Return to Demos</a>
+    <div class="header-inner">
+      <p class="eyebrow">EXTRAS / DEMOS</p>
+      <h1>GPT Daily Brief</h1>
+      <h2>Read the latest brief, annotate each section, and export structured feedback.</h2>
+    </div>
+  </header>
+
+  <main class="brief-shell">
+    <section class="brief-toolbar" aria-label="Daily brief controls">
+      <div class="date-control">
+        <label for="brief-date">Brief</label>
+        <select id="brief-date" disabled>
+          <option>Loading archive…</option>
+        </select>
+      </div>
+      <div class="toolbar-meta" aria-live="polite">
+        <span id="brief-date-label">Loading…</span>
+        <span aria-hidden="true">•</span>
+        <span id="reading-time"></span>
+      </div>
+      <p class="autosave-note">Feedback is saved locally in this browser until exported or cleared.</p>
+    </section>
+
+    <nav id="section-nav" class="section-nav" aria-label="Brief sections"></nav>
+
+    <div id="status" class="status-card" role="status">Loading the brief…</div>
+    <div id="brief-content" class="brief-content" hidden></div>
+
+    <section id="export-panel" class="export-panel" hidden>
+      <div>
+        <p class="eyebrow">FEEDBACK EXPORT</p>
+        <h2>Send your notes back to ChatGPT</h2>
+        <p>The exported JSON preserves the brief date, section IDs, music ratings, and commentary. Blank fields remain <code>null</code>.</p>
+      </div>
+      <label class="general-feedback" for="general-feedback">
+        Overall feedback <span>(optional)</span>
+        <textarea id="general-feedback" rows="4" placeholder="Anything that applies to the brief as a whole…"></textarea>
+      </label>
+      <div class="export-actions">
+        <button id="export-feedback" class="primary-button" type="button">Export feedback JSON</button>
+        <button id="clear-feedback" class="secondary-button" type="button">Clear saved feedback</button>
+      </div>
+      <p id="export-status" class="export-status" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <noscript>
+    <div class="noscript-message">This page needs JavaScript to render archived briefs and export feedback.</div>
+  </noscript>
+  <script src="script.js"></script>
+</body>
+</html>
