@@ -1,0 +1,18 @@
+{
+  "date": "2026-07-15",
+  "generated_at_local": "2026-07-15T13:16:39+02:00",
+  "sections": [
+    {"section":"paris_events","items":["Lea Maria Fries contemporary-jazz concert at Parc Floral on 18 July; free daytime concert after park admission"],"sources":["https://festivalsduparcfloral.paris/event/lea-maria-fries/","https://festivalsduparcfloral.paris/infos-pratiques/"]},
+    {"section":"cs_ai","items":["X-Lens metric-depth architecture for heterogeneous pinhole and fisheye camera rigs using calibration tokens and distortion-aware cross-attention","Inhibited Self-Attention retaining negative interactions as explicit suppression evidence"],"sources":["https://arxiv.org/abs/2607.12993","https://arxiv.org/abs/2607.12881"]},
+    {"section":"technical_idea","items":["Bitemporal databases separating valid time from transaction time for historical truth and historical information-state reconstruction"],"sources":[]},
+    {"section":"non_cs_science","items":["Detection of the four-carbon sugar erythrulose in an interstellar molecular cloud and grain-surface formation implications"],"sources":["https://arxiv.org/abs/2606.03313","https://apnews.com/article/357144f4d69449b29dff17271ccd0dcd"]},
+    {"section":"geopolitics","items":["Ukraine prime-ministerial resignation and expected succession as a test of cabinet delegation, decision rights and wartime accountability"],"sources":["https://www.reuters.com/world/ukraine-parliament-accepts-pm-svyrydenkos-resignation-2026-07-14/"]},
+    {"section":"signal_vs_noise","items":["Published mandate and transferred authority are signal; personnel rotation without changed decision rights is noise"],"sources":[]},
+    {"section":"marxist_quote","items":["Marx in Critique of the Gotha Programme on right being bounded by economic structure and conditioned cultural development"],"sources":["https://www.marxists.org/archive/marx/works/1875/gotha/ch01.htm"]},
+    {"section":"philosophy_fragments","items":["J. S. Mill on knowing one's own position through adversarial contact","Machiavelli on providing political conflict with lawful institutional outlets"],"sources":["https://www.gutenberg.org/files/34901/34901-h/34901-h.htm","https://www.gutenberg.org/files/10827/10827-h/10827-h.htm"]},
+    {"section":"french_usage","items":["c'est pas gagné as an informal expression of difficulty or uncertain success"],"sources":[]},
+    {"section":"music","recommendations":[{"type":"classical","piece":"Amy Beach — Piano Quintet in F-sharp minor, Op. 67","rating":5,"rating_note":"Not a fan; not terrible, but not particularly good either."},{"type":"jazz","piece":"Esbjörn Svensson Trio — From Gagarin's Point of View","rating":6,"rating_note":"Not particularly interesting; neat background music."},{"type":"other","piece":"Natalia Lafourcade — Soledad y el Mar","rating":8,"rating_note":"Pretty good."}],"sources":["https://www.youtube.com/results?search_query=Amy+Beach+Piano+Quintet+F-sharp+minor+Op.+67","https://www.youtube.com/results?search_query=Esbj%C3%B6rn+Svensson+Trio+From+Gagarin%27s+Point+of+View","https://www.youtube.com/results?search_query=Natalia+Lafourcade+Soledad+y+el+Mar"]},
+    {"section":"unrelated_fact","items":["Fore-edge paintings hidden by page alignment and revealed when the text block is fanned"],"sources":["https://en.wikipedia.org/wiki/Fore-edge_painting"]},
+    {"section":"puzzle","items":["Two Generals problem: unreliable acknowledgements and the impossibility of finite common knowledge"],"sources":[]}
+  ]
+}
