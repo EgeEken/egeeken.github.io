@@ -1,7 +1,12 @@
 {
   "schemaVersion": 1,
-  "latest": "2026-08-01",
+  "latest": "2026-08-02",
   "briefs": [
+    {
+      "date": "2026-08-02",
+      "title": "Daily Brief — Sunday, 2 August 2026",
+      "file": "2026-08-02.json"
+    },
     {
       "date": "2026-08-01",
       "title": "Daily Brief — Saturday, 1 August 2026",
