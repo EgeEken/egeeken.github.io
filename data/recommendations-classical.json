@@ -1,0 +1,664 @@
+{
+  "_instructions": [
+    "Keep eras, composers, main pieces, and additional pieces in the exact display order wanted on the page.",
+    "Each composer requires composer and main. Put optional secondary works in additional; omit additional when empty.",
+    "Use catalogue-style titles such as \"Symphony No. 1 in E major, Op. 26\"; do not append composition years unless they are part of the established work title.",
+    "Store only the 11-character YouTube video ID in video. iframeTitle is the accessible player title. note may be plain text or a parts object containing text and linked text."
+  ],
+  "eras": [
+    {
+      "era": "BAROQUE",
+      "composers": [
+        {
+          "composer": "Bach",
+          "slug": "bach",
+          "main": {
+            "title": "Concerto for 2 Violins in D minor, BWV 1043",
+            "video": "MIeMQpFLbrg",
+            "iframeTitle": "J.S. Bach: Concerto for 2 Violins in D Minor, BWV 1043: I. Vivace"
+          },
+          "additional": [
+            {
+              "title": "Violin Concerto No. 2 in E major, BWV 1042",
+              "video": "ErIFOYTOX5M",
+              "iframeTitle": "Bach - Violin Concerto No. 2 in E major, BWV 1042"
+            }
+          ]
+        },
+        {
+          "composer": "Vivaldi",
+          "slug": "vivaldi",
+          "main": {
+            "title": "The Four Seasons, Op. 8",
+            "video": "zzE-kVadtNw",
+            "iframeTitle": "Vivaldi - The Four Seasons - Janine Jansen",
+            "note": "Favorites: Spring 1, Summer 3, Autumn 1, Winter 1, 2, 3"
+          },
+          "additional": [
+            {
+              "title": "Violin Concerto in E Minor, Op. 4 No. 2, RV 279, \"La Stravaganza\"",
+              "video": "QP73569coeo",
+              "iframeTitle": "Antonio Vivaldi - La Stravaganza"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "era": "CLASSICAL",
+      "composers": [
+        {
+          "composer": "Mozart",
+          "slug": "mozart",
+          "main": {
+            "title": "Divertimento in D major, K. 136",
+            "video": "7FRYoBy7iT8",
+            "iframeTitle": "Mozart - Divertimento in D major, K. 136 (1772)"
+          },
+          "additional": [
+            {
+              "title": "Symphony No. 25 in G minor, K. 183",
+              "video": "GIHQivoISco",
+              "iframeTitle": "Mozart - Symphony No. 25 in G Minor, K. 183"
+            },
+            {
+              "title": "Symphony No. 40 in G minor, K. 550",
+              "video": "-Iz-ah9ka3c",
+              "iframeTitle": "Mozart - Symphony No. 40 in G minor, K. 550"
+            },
+            {
+              "title": "Piano Concerto No. 23 in A major, K. 488",
+              "video": "DXeBFhqViYg",
+              "iframeTitle": "Mozart - Piano Concerto No. 23 in A major, K. 488 - Pollini, Böhm"
+            },
+            {
+              "title": "Lacrimosa (from Requiem in D minor, K. 626)",
+              "video": "WMLSwqAOzHo",
+              "iframeTitle": "Mozart - Lacrimosa from Requiem in D minor, K. 626"
+            }
+          ]
+        },
+        {
+          "composer": "Beethoven",
+          "slug": "beethoven",
+          "main": {
+            "title": "Piano Sonata No. 8 in C minor, Op. 13 \"Pathétique\"",
+            "video": "qO8yfBLNVjU",
+            "iframeTitle": "Beethoven Sonata No. 8 in C minor Op. 13 Pathétique"
+          },
+          "additional": [
+            {
+              "title": "Violin Concerto in D major, Op. 61: III. Rondo",
+              "video": "QJXJy0_A820",
+              "iframeTitle": "Beethoven - Violin Concerto in D major, Op. 61: III. Rondo - Itzhak Perlman, Daniel Barenboim"
+            },
+            {
+              "title": "Violin Sonata No. 9 in A major, Op. 47 \"Kreutzer\"",
+              "video": "v9YowLzeC0c",
+              "iframeTitle": "Beethoven - Kreutzer Sonata - Anne-Sophie Mutter and Lambert Orkis"
+            },
+            {
+              "title": "Piano Sonata No. 23 in F minor, Op. 57 \"Appassionata\"",
+              "video": "Tdg-DT8rTUQ",
+              "iframeTitle": "Beethoven - Appassionata Sonata - Claudio Arrau"
+            }
+          ]
+        },
+        {
+          "composer": "Paganini",
+          "slug": "paganini",
+          "main": {
+            "title": "Violin Concerto No. 1 in D major, Op. 6",
+            "video": "pJJWxBeHqM8",
+            "iframeTitle": "Paganini: Violin Concerto No. 1 in D Major, Op. 6"
+          },
+          "additional": [
+            {
+              "title": "La Campanella (from Violin Concerto No. 2 in B minor, Op. 7)",
+              "video": "rGPT50XhbEg",
+              "iframeTitle": "Paganini - La Campanella"
+            },
+            {
+              "title": "Caprice No. 24 in A minor, Op. 1",
+              "video": "YxPTb0I3SrU",
+              "iframeTitle": "Paganini - Caprice No. 24 in A minor, Op. 1"
+            }
+          ]
+        },
+        {
+          "composer": "Schubert",
+          "slug": "schubert",
+          "main": {
+            "title": "Ständchen in D minor, D. 957 \"Serenade\"",
+            "video": "WS1IGWLatVk",
+            "iframeTitle": "Schubert - Serenade"
+          },
+          "additional": [
+            {
+              "title": "Impromptus, D. 899 (Op. 90)",
+              "video": "bRjKo0QEIuI",
+              "iframeTitle": "Schubert - Impromptus, D. 899 (Op. 90)",
+              "note": "Favorites: 2, 3, 4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "era": "ROMANTIC",
+      "composers": [
+        {
+          "composer": "Chopin",
+          "slug": "chopin",
+          "main": {
+            "title": "Scherzo No. 2 in B-flat minor, Op. 31",
+            "video": "OCUSalQf-jY",
+            "iframeTitle": "Seong-Jin Cho – Chopin: Scherzo No. 2 in B Flat Minor, Op. 31"
+          },
+          "additional": [
+            {
+              "title": "Piano Concerto No. 2 in F minor, Op. 21",
+              "video": "zGxpyvQ7p-o",
+              "iframeTitle": "Chopin Piano Concerto No. 2 - Argerich, Ozawa, New Japan Phil"
+            },
+            {
+              "title": "Ballade No. 1 in G minor, Op. 23",
+              "video": "payc4PKtzQo",
+              "iframeTitle": "Chopin - Ballade No. 1 in G minor, Op. 23"
+            },
+            {
+              "title": "Études, Op. 10",
+              "video": "2pq1v8NsOR4",
+              "iframeTitle": "Chopin - Études, Op. 10",
+              "note": "Favorites: all of them except 6 to be honest"
+            },
+            {
+              "title": "Études, Op. 25",
+              "video": "t5e2GFGHyjw",
+              "iframeTitle": "Chopin - Études, Op. 25",
+              "note": "Favorites: 1, 2, 6, 9, 11, 12"
+            },
+            {
+              "title": "Préludes, Op. 28",
+              "video": "QkodzAsgo6o",
+              "iframeTitle": "Chopin: 24 Preludes, Op.28 (Pogorelich)",
+              "note": "Favorites: 1, 4, 8, 10, 12, 15, 16, 17, 19, 24, especially 24"
+            },
+            {
+              "title": "Polonaises",
+              "video": "Pp4v42suFQg",
+              "iframeTitle": "Chopin - Polonaises",
+              "note": "Favorites: Op. 26 No. 1, Op. 44, Op. 53"
+            },
+            {
+              "title": "Nocturnes",
+              "video": "wuL7UC2glJM",
+              "iframeTitle": "Chopin - Nocturnes - Arthur Rubinstein",
+              "note": {
+                "parts": [
+                  {
+                    "text": "Favorites: Op. 9 Nos. 1 and 2, Op. 15 No. 2, Op. 37 No. 2, Op. 48 Nos. 1 and 2, Op. 55 No. 1, and Op. posth. No. 20 in C-sharp minor (not included here; Rubinstein appears not to have recorded it—listen to "
+                  },
+                  {
+                    "text": "Ashkenazy's recording",
+                    "url": "https://youtu.be/m5qeuVOIbHk?si=WGd4M8b9YztXWRml"
+                  },
+                  {
+                    "text": ")."
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "composer": "Liszt",
+          "slug": "liszt",
+          "main": {
+            "title": "Mephisto Waltz No. 1 in A major, S. 514",
+            "video": "KJbg9V2KnD8",
+            "iframeTitle": "Liszt - Mephisto Waltz No. 1, S. 514"
+          },
+          "additional": [
+            {
+              "title": "Piano Sonata in B minor, S. 178",
+              "video": "gRaGPsett04",
+              "iframeTitle": "Liszt - Piano Sonata in B minor, S. 178"
+            }
+          ]
+        },
+        {
+          "composer": "Rachmaninoff",
+          "slug": "rachmaninoff",
+          "main": {
+            "title": "Piano Concerto No. 2 in C minor, Op. 18",
+            "video": "UacBYgyu5uQ",
+            "iframeTitle": "Rachmaninoff Piano Concerto No. 2"
+          },
+          "additional": [
+            {
+              "title": "Piano Concerto No. 3 in D minor, Op. 30",
+              "video": "GvKQKnIVy1I",
+              "iframeTitle": "Rachmaninoff - Piano Concerto No. 3 in D minor, Op. 30"
+            },
+            {
+              "title": "Élégie in E-flat minor, Op. 3 No. 1",
+              "video": "nFcuZK_Xu7c",
+              "iframeTitle": "Rachmaninoff - Élégie in E-flat minor, Op. 3 No. 1"
+            },
+            {
+              "title": "Symphony No. 1 in D minor, Op. 13",
+              "video": "82N1BMukZRM",
+              "iframeTitle": "Rachmaninoff - Symphony No. 1 in D minor, Op. 13"
+            }
+          ]
+        },
+        {
+          "composer": "Debussy",
+          "slug": "debussy",
+          "main": {
+            "title": "Deux Arabesques, L. 66",
+            "video": "9Fle2CP8gR0",
+            "iframeTitle": "Debussy - Arabesque No.1 and No.2"
+          },
+          "additional": [
+            {
+              "title": "Suite bergamasque, L. 75",
+              "video": "3l9J0LkuERk",
+              "iframeTitle": "Debussy - Suite bergamasque, L. 75",
+              "note": "Favorites: 3 (Clair de Lune) and 4 (Passepied)"
+            }
+          ]
+        },
+        {
+          "composer": "Tchaikovsky",
+          "slug": "tchaikovsky",
+          "main": {
+            "title": "Swan Lake, Op. 20",
+            "video": "Qlz8GXj6sn4",
+            "iframeTitle": "Tchaikovsky - Swan Lake Ballet, Op. 20",
+            "note": "Favorites: 1, 2, 9 (9, 10 and 14 are essentially the same, but gotta listen to at least one of them), 13 (specifically 13.4), 19, 21, 27, 29"
+          },
+          "additional": [
+            {
+              "title": "Symphony No. 6 in B minor, Op. 74 \"Pathétique\"",
+              "video": "jqq31QZU7sg",
+              "iframeTitle": "Tchaikovsky - Symphony No. 6 in B minor, Op. 74 Pathétique"
+            },
+            {
+              "title": "Piano Concerto No. 1 in B-flat minor, Op. 23",
+              "video": "ItSJ_woWnmk",
+              "iframeTitle": "Tchaikovsky - Piano Concerto No. 1 in B-flat minor, Op. 23"
+            },
+            {
+              "title": "The Nutcracker Suite, Op. 71a",
+              "video": "yQNJvhdh-Y0",
+              "iframeTitle": "Tchaikovsky - The Nutcracker Suite, Op. 71a",
+              "note": "Favorites: 1, 2a, 2b, 2c, 2f, 3"
+            },
+            {
+              "title": "Violin Concerto in D major, Op. 35",
+              "video": "QCKL95HAdQ8",
+              "iframeTitle": "Tchaikovsky - Violin Concerto in D major, Op. 35 - Itzhak Perlman"
+            }
+          ]
+        },
+        {
+          "composer": "Sibelius",
+          "slug": "sibelius",
+          "main": {
+            "title": "Violin Concerto in D minor, Op. 47",
+            "video": "3u-unvYedx8",
+            "iframeTitle": "SIBELIUS Violin Concerto in D minor, Op. 47"
+          },
+          "additional": [
+            {
+              "title": "Symphony No. 2 in D major, Op. 43",
+              "video": "iXU8EXL7a_4",
+              "iframeTitle": "Sibelius - Symphony No. 2 in D major, Op. 43 - hr-Sinfonieorchester"
+            }
+          ]
+        },
+        {
+          "composer": "Mendelssohn",
+          "slug": "mendelssohn",
+          "main": {
+            "title": "Violin Concerto in E minor, Op. 64",
+            "video": "DvbndXvcJw0",
+            "iframeTitle": "Maxim Vengerov plays Mendelssohn Violin Concerto"
+          },
+          "additional": [
+            {
+              "title": "String Quartet No. 6 in F minor, Op. 80",
+              "video": "7epVd81pc5U",
+              "iframeTitle": "Mendelssohn - String Quartet No. 6 in F minor, Op. 80"
+            }
+          ]
+        },
+        {
+          "composer": "Saint-Saëns",
+          "slug": "saint-saens",
+          "main": {
+            "title": "Introduction and Rondo Capriccioso in A minor, Op. 28",
+            "video": "Q0ajM7aL-Vc",
+            "iframeTitle": "Saint-Saëns Introduction + Rondo Capriccioso op. 28"
+          },
+          "additional": [
+            {
+              "title": "The Swan (from The Carnival of the Animals)",
+              "video": "3qrKjywjo7Q",
+              "iframeTitle": "Saint-Saëns - The Swan (from The Carnival of the Animals)"
+            },
+            {
+              "title": "Violin Concerto No. 3 in B minor, Op. 61",
+              "video": "CdtWPmu0eRw",
+              "iframeTitle": "Saint-Saëns - Violin Concerto No. 3 - Daishin Kashimoto, NHK Symphony Orchestra"
+            }
+          ]
+        },
+        {
+          "composer": "Wieniawski",
+          "slug": "wieniawski",
+          "main": {
+            "title": "Violin Concerto No. 2 in D minor, Op. 22",
+            "video": "8M_Aq5YobTk",
+            "iframeTitle": "Wieniawski - Violin Concerto No.2 in D minor, Op.22"
+          },
+          "additional": [
+            {
+              "title": "Scherzo-Tarantelle in G minor, Op. 16",
+              "video": "5BsSfKl2B0g",
+              "iframeTitle": "Wieniawski - Scherzo-Tarantelle in G minor, Op. 16"
+            },
+            {
+              "title": "Polonaise brillante No. 1 in D major, Op. 4",
+              "video": "uEwMTxbpbrA",
+              "iframeTitle": "Wieniawski - Polonaise brillante No. 1 in D major, Op. 4 - Kristine Balanas"
+            }
+          ]
+        },
+        {
+          "composer": "Bruch",
+          "main": {
+            "title": "Violin Concerto No. 1 in G minor, Op. 26",
+            "video": "KDJ6Wbzgy3E",
+            "iframeTitle": "Bruch - Violin Concerto No. 1 in G minor, Op. 26 - Hilary Hahn"
+          }
+        },
+        {
+          "composer": "Brahms",
+          "slug": "brahms",
+          "main": {
+            "title": "Hungarian Dances, WoO 1",
+            "video": "YXT42ghiuZ4",
+            "iframeTitle": "Johannes Brahms - 21 Hungarian dances FULL",
+            "note": "Favorites: 1, 2, 5, 6, 7, 9, 11, 21"
+          },
+          "additional": [
+            {
+              "title": "Violin Concerto in D major, Op. 77",
+              "video": "UFl9xuYP5T8",
+              "iframeTitle": "Brahms - Violin Concerto in D major, Op. 77 - Hilary Hahn, Paavo Järvi"
+            }
+          ]
+        },
+        {
+          "composer": "Strauss",
+          "main": {
+            "title": "The Blue Danube, Op. 314",
+            "video": "cKkDMiGUbUw",
+            "iframeTitle": "Strauss - The Blue Danube Waltz"
+          }
+        },
+        {
+          "composer": "Grieg",
+          "slug": "grieg",
+          "main": {
+            "title": "Piano Concerto in A minor, Op. 16",
+            "video": "yI4Cpo29dao",
+            "iframeTitle": "Grieg: Piano Concerto in A Minor, Op. 16"
+          },
+          "additional": [
+            {
+              "title": "Peer Gynt Suite No. 1, Op. 46",
+              "video": "xcOjUmWKVjM",
+              "iframeTitle": "Grieg - Peer Gynt Suite No. 1, Op. 46",
+              "note": "Favorites: 1, 2, 4"
+            }
+          ]
+        },
+        {
+          "composer": "Dvořák",
+          "slug": "dvorak",
+          "main": {
+            "title": "Humoresque No. 7 in G-flat major, Op. 101",
+            "video": "Eg6a9YA9YEs",
+            "iframeTitle": "Dvorák - Humoresque"
+          },
+          "additional": [
+            {
+              "title": "String Quartet No. 14 in A-flat major, Op. 105",
+              "video": "5gaxtKQpGWI",
+              "iframeTitle": "Dvořák - String Quartet No. 14 in A-flat major, Op. 105"
+            },
+            {
+              "title": "Cello Concerto in B minor, Op. 104",
+              "video": "190faUQ7xJg",
+              "iframeTitle": "Dvořák - Cello Concerto in B minor, Op. 104 - Yo-Yo Ma, Calgary Philharmonic"
+            },
+            {
+              "title": "Symphony No. 9 in E minor, Op. 95 \"From the New World\"",
+              "video": "uOmaQSqnPfw",
+              "iframeTitle": "Dvořák - Symphony No. 9 From the New World - Paavo Järvi, Tonhalle-Orchester Zürich"
+            }
+          ]
+        },
+        {
+          "composer": "Rimsky-Korsakov",
+          "main": {
+            "title": "Scheherazade, Op. 35",
+            "video": "4rWG_tMJhh8",
+            "iframeTitle": "Rimsky-Korsakov: Scheherazade, Op. 35"
+          }
+        },
+        {
+          "composer": "Borodin",
+          "slug": "borodin",
+          "main": {
+            "title": "Polovtsian Dances (from Prince Igor)",
+            "video": "AYEyRd0tBOI",
+            "iframeTitle": "Borodin: Polovtsian Dances from Prince Igor"
+          },
+          "additional": [
+            {
+              "title": "String Quartet No. 2 in D major",
+              "video": "2YAzUC6LzNk",
+              "iframeTitle": "Borodin - String Quartet No. 2 in D major"
+            },
+            {
+              "title": "String Quartet No. 1 in A major",
+              "video": "h-5FuKRbUZs",
+              "iframeTitle": "Borodin - String Quartet No. 1 in A major"
+            }
+          ]
+        },
+        {
+          "composer": "Fauré",
+          "slug": "faure",
+          "main": {
+            "title": "Sicilienne in G minor, Op. 78",
+            "video": "VJNsA67hVzg",
+            "iframeTitle": "Gabriel Fauré - Sicilienne, Op. 78"
+          },
+          "additional": [
+            {
+              "title": "Après un rêve, Op. 7 No. 1",
+              "video": "Xdjosc8HIhI",
+              "iframeTitle": "Fauré - Après un rêve, Op. 7 No. 1"
+            },
+            {
+              "title": "Pavane in F-sharp minor, Op. 50",
+              "video": "mpgyTl8yqbw",
+              "iframeTitle": "Fauré - Pavane in F-sharp minor, Op. 50"
+            }
+          ]
+        },
+        {
+          "composer": "Sarasate",
+          "main": {
+            "title": "Zigeunerweisen, Op. 20",
+            "video": "ufIlOXXMqs0",
+            "iframeTitle": "Itzhak Perlman - Pablo de Sarasate, Zigeunerweisen Op.20"
+          }
+        },
+        {
+          "composer": "Glazunov",
+          "main": {
+            "title": "Violin Concerto in A minor, Op. 82",
+            "video": "ZbQ1f4NNWkU",
+            "iframeTitle": "Glazunov - Violin Concerto | Hilary Hahn | WDR Symphony Orchestra"
+          }
+        },
+        {
+          "composer": "Alkan",
+          "main": {
+            "title": "Grande Sonate \"Les quatre âges\", Op. 33: 20 ans",
+            "video": "fkQe3tqnYpg",
+            "iframeTitle": "Senekeremian Plays Alkan - 20 Ans from Grand Sonate, Op. 33"
+          }
+        },
+        {
+          "composer": "Karłowicz",
+          "slug": "karlowicz",
+          "main": {
+            "title": "Lithuanian Rhapsody, Op. 11",
+            "video": "wJKhuwq-xsM",
+            "iframeTitle": "Mieczysław Karłowicz - Lithuanian Rhapsody, Op. 11"
+          },
+          "additional": [
+            {
+              "title": "Serenade for Strings, Op. 2",
+              "video": "RNxPMBVkjJc",
+              "iframeTitle": "Mieczysław Karłowicz - Serenade for Strings, Op. 2"
+            },
+            {
+              "title": "Violin Concerto in A major, Op. 8",
+              "video": "TW-9L_n2cDw",
+              "iframeTitle": "Mieczysław Karłowicz - Violin Concerto in A major, Op. 8"
+            }
+          ]
+        },
+        {
+          "composer": "Bortkiewicz",
+          "slug": "bortkiewicz",
+          "main": {
+            "title": "Piano Concerto No. 2 for the Left Hand, Op. 28",
+            "video": "HO5xUkrXbxo",
+            "iframeTitle": "Sergei Bortkiewicz - Piano Concerto No. 2 for the Left Hand, Op. 28 - Stefan Doniga, Janáček Philharmonic Orchestra, David Porcelijn",
+            "note": "Favorite: III. Allegro dramatico"
+          },
+          "additional": [
+            {
+              "title": "Piano Concerto No. 3 in C minor, Op. 32 \"Per aspera ad astra\"",
+              "video": "NyELx8RKRUA",
+              "iframeTitle": "Sergei Bortkiewicz - Piano Concerto No. 3 in C minor, Op. 32 - Stefan Doniga, Janáček Philharmonic Orchestra, David Porcelijn"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "era": "MODERN",
+      "composers": [
+        {
+          "composer": "Kapustin",
+          "slug": "kapustin",
+          "main": {
+            "title": "Eight Concert Études, Op. 40",
+            "video": "RrpjWM8JT7k",
+            "iframeTitle": "Nikolai Kapustin - Eight Concert Etudes, Op. 40"
+          },
+          "additional": [
+            {
+              "title": "Piano Concerto No. 2, Op. 14",
+              "video": "-A6J9_J2-vE",
+              "iframeTitle": "Kapustin - Piano Concerto No. 2, Op. 14"
+            }
+          ]
+        },
+        {
+          "composer": "Garūta",
+          "main": {
+            "title": "Piano Concerto in F-sharp minor",
+            "video": "PM2zZn_Kt-0",
+            "iframeTitle": "Lucija Garuta - Piano Concerto"
+          }
+        },
+        {
+          "composer": "Satie",
+          "main": {
+            "title": "Gnossienne No. 1",
+            "video": "lqZehFAwoTM",
+            "iframeTitle": "Erik Satie - Gnossienne No. 1"
+          }
+        },
+        {
+          "composer": "Scriabin",
+          "slug": "scriabin",
+          "main": {
+            "title": "Piano Concerto in F-sharp minor, Op. 20",
+            "video": "F734PyD3NAw",
+            "iframeTitle": "Alexander Scriabin - Piano Concerto in F sharp minor, Op. 20"
+          },
+          "additional": [
+            {
+              "title": "Symphony No. 1 in E major, Op. 26",
+              "video": "IUA_A-KwXU8",
+              "iframeTitle": "Alexander Scriabin - Symphony No. 1 in E major, Op. 26"
+            }
+          ]
+        },
+        {
+          "composer": "Ysaÿe",
+          "main": {
+            "title": "Violin Sonata No. 3 in D minor, Op. 27",
+            "video": "Bg1NUBLK1tk",
+            "iframeTitle": "Eugene Ysaye - Sonata No 3 in D minor, Ballade Op. 27"
+          }
+        },
+        {
+          "composer": "Prokofiev",
+          "main": {
+            "title": "Romeo and Juliet Suite No. 2, Op. 64ter",
+            "video": "-LVmH4bwH3Q",
+            "iframeTitle": "Prokofiev: Romeo and Juliet Suite No. 2, Op. 64ter"
+          }
+        },
+        {
+          "composer": "Shostakovich",
+          "main": {
+            "title": "Jazz Suite: Waltz No. 2",
+            "video": "WaKdPgkTZ7M",
+            "iframeTitle": "Shostakovich: Jazz Suite No. 2: Waltz II"
+          }
+        },
+        {
+          "composer": "Ravel",
+          "slug": "ravel",
+          "main": {
+            "title": "Le Tombeau de Couperin, M. 68",
+            "video": "hcuPVgpUKKs",
+            "iframeTitle": "Ravel: Le Tombeau de Couperin"
+          },
+          "additional": [
+            {
+              "title": "Pavane pour une infante défunte, M. 19",
+              "video": "2_c8JRCKq1A",
+              "iframeTitle": "Ravel - Pavane pour une infante défunte, M. 19"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
