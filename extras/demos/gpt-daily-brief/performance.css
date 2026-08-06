@@ -1,0 +1,20 @@
+/*
+ * Performance-only overrides for the Daily Brief.
+ *
+ * The page background is already a smooth gradient and the cards are 95%
+ * opaque, so backdrop blur produces virtually no visible change while forcing
+ * expensive compositing and repaints, particularly in Firefox.
+ */
+.brief-toolbar,
+.export-panel,
+.recorded-feedback-panel,
+.status-card,
+.brief-section {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  contain: layout paint;
+}
+
+.music-card {
+  contain: layout paint;
+}
