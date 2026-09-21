@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="rfk_jr_photo_finder.css">
+    <link rel="icon" href="../../../assets/favicon.png" type="image/png">
+    <script src="rfk_jr_photo_finder.js" defer></script>
+    <title>Ege - RFK Jr Similar Photo Finder</title>
+</head>
+
+<body>
+    <header>
+        <a href="../../../demos.html" class="back-button">← Return to Demos</a>
+        <h1>RFK Jr Similar Photo Finder</h1>
+    </header>
+
+    <main class="rfk-finder">
+        <section class="upload-card">
+            <label class="drop-zone" id="drop-zone" for="image-input">
+                <input id="image-input" type="file" accept="image/*">
+                <span class="upload-icon" aria-hidden="true">↑</span>
+                <strong>Drop an image here</strong>
+                <span>or click to choose a file</span>
+            </label>
+
+            <div class="selected-image" id="selected-image" hidden>
+                <img id="selected-preview" alt="Selected image preview">
+                <div class="selected-details">
+                    <strong id="selected-name"></strong>
+                    <button id="choose-another" type="button">Choose another image</button>
+                </div>
+            </div>
+
+            <p class="status" id="status" role="status">Loading photo index…</p>
+        </section>
+
+        <section class="results-section" id="results-section" hidden>
+            <div class="results-heading">
+                <h2>Top matches</h2>
+                <span id="timing"></span>
+            </div>
+            <div class="results-grid" id="results-grid"></div>
+        </section>
+    </main>
+
+    <canvas id="histogram-canvas" hidden></canvas>
+</body>
+
+</html>
