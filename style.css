@@ -243,6 +243,31 @@ section {
     font-weight: bold;
 }
 
+#tag-selector.photo-filters {
+    width: 92%;
+    margin: 24px auto 0;
+    text-align: center;
+}
+
+.photo-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#tag-selector.photo-filters button[hidden],
+#tag-selector.photo-filters .photo-filter-row[hidden],
+#photo-event-disclaimer[hidden],
+#photo-gallery img.photo[hidden] {
+    display: none;
+}
+
+#photo-event-disclaimer {
+    font-size: 0.8em;
+    margin: 8px 0 0;
+    color: #333;
+}
+
 
 
 .programming-project {

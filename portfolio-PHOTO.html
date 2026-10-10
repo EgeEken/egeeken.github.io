@@ -40,8 +40,8 @@
 <body>
     <header>
         <a href="portfolio.html" class="back-button">← Return to Portfolio List</a>
-        <h1>My Photography Portfolio:</h1>
-        <h2>I primarily use my Sony A7S camera with a 70-200mm F/4 G OSS lens for photography. But also of course my phone when I don't have my camera, which is a Samsung A54, not particularly great as a camera but not too bad either, a couple of the pictures here were taken with it.</h2>
+        <h1>My Photography Portfolio</h1>
+        <h2>I've been doing photography since 2025, it's mostly a hobby but i've done some professional photography work in some events.</h2>
         <!-- <img class="picture-photo" src="assets/ege photo cropped.png"> -->
     </header>
 
@@ -49,6 +49,18 @@
         <h2>My Current Favorite Photo:</h2>
         <img src="assets/favorite_photo.jpg" alt="Favorite Photo">
         <p>This is my favorite photo I've taken so far. It was captured on the Istanbul coastline during sunset.</p>
+    </div>
+
+    <div id="tag-selector" class="photo-filters">
+        <h3>Filter by Tag</h3>
+        <div class="photo-filter-row photo-categories">
+            <button type="button" data-tag="ALL" class="active">ALL</button>
+            <button type="button" data-tag="ANIMALS">Animals</button>
+            <button type="button" data-tag="EVENTS">Events</button>
+            <button type="button" data-tag="OTHER">Other</button>
+        </div>
+        <div id="photo-event-filters" class="photo-filter-row" hidden></div>
+        <p id="photo-event-disclaimer" hidden>No permission to publish pictures of people from this event.</p>
     </div>
 
     <div id="photo-gallery"></div>

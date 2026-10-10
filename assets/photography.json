@@ -1,29 +1,176 @@
 [
-    "1.JPG",
-    "2.JPG",
-    "3.JPG",
-    "4.JPG",
-    "5.JPG",
-    "6.JPG",
-    "7.JPG",
-    "8.JPG",
-    "9.JPG",
-    "10.JPG",
-    "11.JPG",
-    "12.JPG",
-    "13.JPG",
-    "14.JPG",
-    "15.JPG",
-    "16.JPG",
-    "DSC03092.JPG",
-    "DSC03326.JPG",
-    "DSC03397.JPG",
-    "DSC03617.JPG",
-    "DSC03630.JPG",
-    "DSC05547.JPG",
-    "DSC05581.JPG",
-    "DSC05613.JPG",
-    "DSC05630.JPG",
-    "DSC05776.JPG",
-    "DSC05987.JPG"
+    {
+        "file": "1.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "2.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "3.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "4.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "5.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "6.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "7.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "8.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "9.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "10.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "11.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "12.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "13.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "14.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "15.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "16.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "DSC03092.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "DSC03326.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "DSC03397.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "DSC03617.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "DSC03630.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "DSC05547.JPG",
+        "tags": [
+            "ANIMALS",
+            "EVENTS",
+            "MOMENTS_LAB_OFF_SITE"
+        ]
+    },
+    {
+        "file": "DSC05581.JPG",
+        "tags": [
+            "ANIMALS",
+            "EVENTS",
+            "MOMENTS_LAB_OFF_SITE"
+        ]
+    },
+    {
+        "file": "DSC05613.JPG",
+        "tags": [
+            "ANIMALS",
+            "EVENTS",
+            "MOMENTS_LAB_OFF_SITE"
+        ]
+    },
+    {
+        "file": "DSC05630.JPG",
+        "tags": [
+            "OTHER",
+            "EVENTS",
+            "MOMENTS_LAB_OFF_SITE"
+        ]
+    },
+    {
+        "file": "DSC05776.JPG",
+        "tags": [
+            "ANIMALS",
+            "EVENTS",
+            "MOMENTS_LAB_OFF_SITE"
+        ]
+    },
+    {
+        "file": "DSC05987.JPG",
+        "tags": [
+            "ANIMALS",
+            "EVENTS",
+            "MOMENTS_LAB_OFF_SITE"
+        ]
+    }
 ]

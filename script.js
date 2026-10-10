@@ -49,6 +49,73 @@ function setActiveButton(button) {
     if (button) button.classList.add('active');
 }
 
+
+function setupPhotoFilters(gallery, photos) {
+    const selector = document.querySelector('#tag-selector.photo-filters');
+    if (!selector) return;
+
+    const events = [
+        { tag: 'MOMENTS_LAB_OFF_SITE', label: 'Moments Lab Off-Site', disclaimer: true },
+        { tag: 'FIGHT_NIGHT_9', label: 'Fight Night 9 (Kickboxing Event)', disclaimer: false },
+        { tag: 'COCA_COLA_RECRUITMENT', label: 'Coca-Cola Recruitment Event', disclaimer: true }
+    ];
+    const categories = Array.from(selector.querySelectorAll('.photo-categories button'));
+    const eventRow = selector.querySelector('#photo-event-filters');
+    const disclaimer = selector.querySelector('#photo-event-disclaimer');
+    const availableEvents = events.filter(event => photos.some(photo => photo.tags.includes(event.tag)));
+    const hasTag = tag => photos.some(photo => photo.tags.includes(tag));
+
+    categories.forEach(button => {
+        button.hidden = button.dataset.tag !== 'ALL' && !hasTag(button.dataset.tag);
+    });
+    availableEvents.forEach(event => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.dataset.event = event.tag;
+        button.textContent = event.label;
+        eventRow.appendChild(button);
+    });
+
+    let category = 'ALL';
+    let selectedEvent = availableEvents.find(event => event.tag === 'FIGHT_NIGHT_9')?.tag || availableEvents[0]?.tag;
+
+    const render = () => {
+        gallery.querySelectorAll('img').forEach(img => {
+            const tags = img.dataset.tags.split(' ');
+            img.hidden = category !== 'ALL' && (
+                !tags.includes(category) || (category === 'EVENTS' && !tags.includes(selectedEvent))
+            );
+        });
+        categories.forEach(button => {
+            const active = button.dataset.tag === category;
+            button.classList.toggle('active', active);
+            button.setAttribute('aria-pressed', String(active));
+        });
+        eventRow.hidden = category !== 'EVENTS';
+        eventRow.querySelectorAll('button').forEach(button => {
+            const active = button.dataset.event === selectedEvent;
+            button.classList.toggle('active', active);
+            button.setAttribute('aria-pressed', String(active));
+        });
+        disclaimer.hidden = category !== 'EVENTS' || !events.find(event => event.tag === selectedEvent)?.disclaimer;
+    };
+
+    categories.forEach(button => button.addEventListener('click', () => {
+        category = button.dataset.tag;
+        if (category === 'EVENTS') {
+            selectedEvent = availableEvents.find(event => event.tag === 'FIGHT_NIGHT_9')?.tag || availableEvents[0]?.tag;
+        }
+        render();
+    }));
+    eventRow.addEventListener('click', event => {
+        const button = event.target.closest('button[data-event]');
+        if (!button) return;
+        selectedEvent = button.dataset.event;
+        render();
+    });
+    render();
+}
+
 async function loadGallery(galleryId, source, assetDirectory, altPrefix) {
     const gallery = document.getElementById(galleryId);
     if (!gallery) return;
@@ -61,13 +128,16 @@ async function loadGallery(galleryId, source, assetDirectory, altPrefix) {
         console.log('Loaded images:', images);
 
         images.forEach(file => {
+            const filename = typeof file === 'string' ? file : file.file;
             const img = document.createElement('img');
-            img.src = assetDirectory + file;
-            img.alt = altPrefix + file;
+            img.src = assetDirectory + filename;
+            img.alt = altPrefix + filename;
             img.classList.add('photo');
+            if (galleryId === 'photo-gallery') img.dataset.tags = file.tags.join(' ');
             img.onerror = () => console.error('Image failed to load:', img.src);
             gallery.appendChild(img);
         });
+        if (galleryId === 'photo-gallery') setupPhotoFilters(gallery, images);
     } catch (err) {
         console.error(`Failed to load ${source}:`, err);
     }
@@ -123,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const target = e.target.closest('#photo-gallery img, #art-gallery img, .favorite img');
         if (!target) return;
         const container = target.closest('#photo-gallery, #art-gallery, .favorite');
-        const els = Array.from(container.querySelectorAll('img'));
+        const els = Array.from(container.querySelectorAll('img')).filter(img => !img.hidden);
         open(els, els.indexOf(target));
     });
 

@@ -36,7 +36,23 @@ print(f"Found {len(filenames)} files.")
 print(f"Sorted filenames: {sorted_filenames[:3]} ...")
 
 # Write the sorted filenames to the JSON file
+try:
+    with open(output_file) as json_file:
+        previous_photos = json.load(json_file)
+except (FileNotFoundError, json.JSONDecodeError):
+    previous_photos = []
+
+previous_tags = {
+    photo['file']: photo['tags']
+    for photo in previous_photos
+    if isinstance(photo, dict)
+}
+photos = [
+    {'file': filename, 'tags': previous_tags.get(filename, ['OTHER'])}
+    for filename in sorted_filenames
+]
+
 with open(output_file, 'w') as json_file:
-    json.dump(sorted_filenames, json_file, indent=4)
+    json.dump(photos, json_file, indent=4)
 
 print(f"File '{output_file}' has been created/updated with the sorted list of filenames.")
