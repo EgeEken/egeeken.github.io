@@ -14,7 +14,7 @@
     {
         "file": "3.JPG",
         "tags": [
-            "OTHER"
+            "ANIMALS"
         ]
     },
     {
@@ -26,19 +26,19 @@
     {
         "file": "5.JPG",
         "tags": [
-            "OTHER"
+            "ANIMALS"
         ]
     },
     {
         "file": "6.JPG",
         "tags": [
-            "OTHER"
+            "ANIMALS"
         ]
     },
     {
         "file": "7.JPG",
         "tags": [
-            "OTHER"
+            "ANIMALS"
         ]
     },
     {
@@ -68,7 +68,7 @@
     {
         "file": "12.JPG",
         "tags": [
-            "OTHER"
+            "ANIMALS"
         ]
     },
     {
@@ -80,13 +80,13 @@
     {
         "file": "14.JPG",
         "tags": [
-            "OTHER"
+            "ANIMALS"
         ]
     },
     {
         "file": "15.JPG",
         "tags": [
-            "OTHER"
+            "ANIMALS"
         ]
     },
     {
@@ -110,7 +110,7 @@
     {
         "file": "DSC03397.JPG",
         "tags": [
-            "OTHER"
+            "ANIMALS"
         ]
     },
     {
@@ -122,7 +122,7 @@
     {
         "file": "DSC03630.JPG",
         "tags": [
-            "OTHER"
+            "ANIMALS"
         ]
     },
     {
@@ -171,6 +171,158 @@
             "ANIMALS",
             "EVENTS",
             "MOMENTS_LAB_OFF_SITE"
+        ]
+    },
+    {
+        "file": "fightnight9_DSC06775.JPG",
+        "tags": [
+            "EVENTS",
+            "FIGHT_NIGHT_9"
+        ]
+    },
+    {
+        "file": "fightnight9_DSC05029.JPG",
+        "tags": [
+            "EVENTS",
+            "FIGHT_NIGHT_9"
+        ]
+    },
+    {
+        "file": "fightnight9_DSC05068.JPG",
+        "tags": [
+            "EVENTS",
+            "FIGHT_NIGHT_9"
+        ]
+    },
+    {
+        "file": "fightnight9_DSC05203.JPG",
+        "tags": [
+            "EVENTS",
+            "FIGHT_NIGHT_9"
+        ]
+    },
+    {
+        "file": "fightnight9_DSC04785.JPG",
+        "tags": [
+            "EVENTS",
+            "FIGHT_NIGHT_9"
+        ]
+    },
+    {
+        "file": "fightnight9_DSC05251.JPG",
+        "tags": [
+            "EVENTS",
+            "FIGHT_NIGHT_9"
+        ]
+    },
+    {
+        "file": "fightnight9_DSC05310.JPG",
+        "tags": [
+            "EVENTS",
+            "FIGHT_NIGHT_9"
+        ]
+    },
+    {
+        "file": "fightnight9_DSC05534.JPG",
+        "tags": [
+            "EVENTS",
+            "FIGHT_NIGHT_9"
+        ]
+    },
+    {
+        "file": "fightnight9_DSC05545.JPG",
+        "tags": [
+            "EVENTS",
+            "FIGHT_NIGHT_9"
+        ]
+    },
+    {
+        "file": "fightnight9_DSC05630.JPG",
+        "tags": [
+            "EVENTS",
+            "FIGHT_NIGHT_9"
+        ]
+    },
+    {
+        "file": "fightnight9_DSC05831.JPG",
+        "tags": [
+            "EVENTS",
+            "FIGHT_NIGHT_9"
+        ]
+    },
+    {
+        "file": "fightnight9_DSC05891.JPG",
+        "tags": [
+            "EVENTS",
+            "FIGHT_NIGHT_9"
+        ]
+    },
+    {
+        "file": "fightnight9_DSC06170.JPG",
+        "tags": [
+            "EVENTS",
+            "FIGHT_NIGHT_9"
+        ]
+    },
+    {
+        "file": "fightnight9_DSC06181.JPG",
+        "tags": [
+            "EVENTS",
+            "FIGHT_NIGHT_9"
+        ]
+    },
+    {
+        "file": "fightnight9_DSC06493.JPG",
+        "tags": [
+            "EVENTS",
+            "FIGHT_NIGHT_9"
+        ]
+    },
+    {
+        "file": "fightnight9_DSC06507.JPG",
+        "tags": [
+            "EVENTS",
+            "FIGHT_NIGHT_9"
+        ]
+    },
+    {
+        "file": "fightnight9_DSC06692.JPG",
+        "tags": [
+            "EVENTS",
+            "FIGHT_NIGHT_9"
+        ]
+    },
+    {
+        "file": "cocacola_DSC01210.JPG",
+        "tags": [
+            "EVENTS",
+            "COCA_COLA_RECRUITMENT"
+        ]
+    },
+    {
+        "file": "cocacola_DSC02098.JPG",
+        "tags": [
+            "EVENTS",
+            "COCA_COLA_RECRUITMENT"
+        ]
+    },
+    {
+        "file": "cocacola_DSC09829.JPG",
+        "tags": [
+            "EVENTS",
+            "COCA_COLA_RECRUITMENT"
+        ]
+    },
+    {
+        "file": "other_DSC04448.JPG",
+        "tags": [
+            "OTHER"
+        ]
+    },
+    {
+        "file": "other_DSC06867.JPG",
+        "tags": [
+            "OTHER"
         ]
     }
 ]
