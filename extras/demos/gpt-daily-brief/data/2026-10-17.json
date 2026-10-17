@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "title": "Daily Brief — Saturday, 17 October 2026",
+  "generatedAt": "2026-10-17T13:27:00+02:00",
+  "readingTime": "10–15 min",
+  "sections": [
+    {
+      "id": "paris_events",
+      "number": 1,
+      "title": "Paris events",
+      "content": "<p><strong>Krystian Zimerman — Saturday 17 October, 20:00.</strong> Grande salle Pierre Boulez, Philharmonie de Paris, 221 avenue Jean-Jaurès, 19e. About 1h45; €13–98; last remaining places advertised. Zimerman is particularly distinguished by phrasing, voicing and control of large-scale harmonic direction. The programme is not yet specified on the venue's page, so the recommendation rests on the performer rather than confirmed repertoire. <a href=\"https://philharmoniedeparis.fr/fr/activite/recital-piano/29177-krystian-zimerman\" target=\"_blank\" rel=\"noopener noreferrer\">Programme and tickets</a></p><p><strong>Glenn Ferris “new-tet” — Saturday 17 October, 19:00 and 21:00.</strong> Le Baiser Salé, 58 rue des Lombards, 1er; Jazz sur Seine 2026. A smaller-club alternative, built around improvised ensemble interplay led by American trombonist Ferris. Price not verified. <a href=\"https://www.jazzmagazine.com/agenda/page/64/?date=2026-10-17\" target=\"_blank\" rel=\"noopener noreferrer\">Jazz Magazine listings</a></p><p><strong>Handel — Riccardo Primo — Sunday 18 October, 15:00.</strong> Les Arts Florissants under Paul Agnew; Grande salle Pierre Boulez, Philharmonie. About 3h15 including interval; €13–93. Hugh Cutting, Mélissa Petit and Juliette Mey are among the singers. This concert performance of Handel's 1727 opera is a good opportunity to sample historically informed Baroque vocal and orchestral interpretation. <a href=\"https://philharmoniedeparis.fr/fr/activite/opera-en-concert/29330-georg-friedrich-haendel-riccardo-primo\" target=\"_blank\" rel=\"noopener noreferrer\">Programme and tickets</a></p>"
+    },
+    {
+      "id": "cs_ai",
+      "number": 2,
+      "title": "CS and AI developments",
+      "content": "<h3>WaveLLM: wavelet-domain lossless compression</h3><p><a href=\"https://arxiv.org/abs/2610.22232\" target=\"_blank\" rel=\"noopener noreferrer\">WaveLLM</a>, submitted 15 October, argues that the <em>predictability of the signal representation</em> can matter as much as the model's capacity. Instead of serializing pixels directly for an autoregressive predictor, the image is decomposed into multilevel wavelet subbands: low frequencies hold coarse structure; high-frequency bands capture edges and fine detail. A shared LoRA-adapted Llama-3.2-3B estimates coefficient probabilities with numerical input/output interfaces and subband conditioning; an entropy coder then uses those distributions.</p><p>The authors report <strong>2.51, 2.24 and 2.27 bits per subpixel</strong> on Kodak, CLIC and DIV2K respectively, improving on a PixelCNN codec using the same wavelet transform by 0.43, 0.36 and 0.46 bits per subpixel. The question left open is deployment economics: a 3B-parameter probability estimator must justify its memory and sequential decoding costs against established codecs. The interesting design result is the separation of transform quality and entropy-model quality.</p><h3>Reusing depth in a pretrained VLM</h3><p><a href=\"https://arxiv.org/abs/2610.22075\" target=\"_blank\" rel=\"noopener noreferrer\">Retrofitting Recurrent Vision-Language Models from Pretrained Backbones</a>, also submitted 15 October, removes some language-backbone layers and loops over a surviving transformer block. A learned adapter fuses representations between passes. Because pruning destroys capabilities, the researchers recover them with language adaptation, vision-language projector alignment, visual instruction tuning and teacher distillation.</p><p>On TinyLLaVA-1.4B, they report <strong>23.3% fewer stored language parameters</strong> while surpassing a baseline trained on the same recovery data, particularly on reasoning-oriented evaluation; basic visual understanding remains broadly comparable. The distinction is <em>parameter depth versus computation depth</em>: weight storage can fall even if latency does not. These are author-reported results on a limited setup, not yet a general VLM efficiency result.</p>"
+    },
+    {
+      "id": "technical_idea",
+      "number": 3,
+      "title": "Technical idea: Elias–Fano coding for sorted integers",
+      "content": "<p>Suppose an inverted search index contains monotonically increasing document IDs such as <code>[3, 8, 9, 21, 35, 41, 54]</code>. Storing every number independently wastes bits because sortedness provides information. <strong>Elias–Fano</strong> encoding stores each value as lower bits and upper bits, treating the upper sequence as a monotone bitvector rather than repeated integers.</p><p>For <strong>n</strong> sorted integers in <strong>[0,U)</strong>, take approximately <strong>ℓ = floor(log₂(U/n))</strong> low bits per value. Pack those low bits directly. Encode the upper parts using positions of set bits in a unary monotone bitvector. Rank/select operations can reconstruct individual values without decompressing the entire list.</p><p>The compact representation uses approximately <strong>n(2 + log₂(U/n)) bits</strong>, plus indexing overhead, and supports effective sequential access, indexed random access and next-greater-than searches. This is valuable for posting lists, graph adjacency arrays and monotone offsets in columnar data. The main trade-off is mutability: arbitrary inserts into a compressed monotone representation are expensive, so Elias–Fano suits read-mostly structures. <a href=\"https://github.com/gevg/ef\" target=\"_blank\" rel=\"noopener noreferrer\">Implementation/explanation</a></p>"
+    },
+    {
+      "id": "non_cs_science",
+      "number": 4,
+      "title": "Non-CS science: where clean hydrogen is actually worth using",
+      "content": "<p>A <a href=\"https://www.nature.com/articles/s41558-026-02763-1\" target=\"_blank\" rel=\"noopener noreferrer\">15 October Nature Climate Change study</a> compares clean hydrogen across ten carbon-intensive sectors around 2035. The central constraint is that hydrogen production consumes large amounts of energy, so making hydrogen from low-carbon electricity and then using it often wastes more energy than direct electrification.</p><p>The researchers find relatively attractive uses in <strong>steelmaking, oil refining and ammonia production</strong>, where hydrogen can function as an industrial feedstock or take part directly in chemical transformations. Hydrogen for <strong>road and rail transport</strong> is comparatively unattractive against electrification.</p><p>The policy consequence matters: undifferentiated subsidies to hydrogen <em>producers</em> can send scarce low-carbon hydrogen to weak use cases. Targeting specific high-value <em>uses</em> may cut more emissions per euro. This is an economic and emissions-modeling comparison, not an assertion that every individual project outside those sectors is unviable; local infrastructure and energy costs matter.</p>"
+    },
+    {
+      "id": "geopolitics",
+      "number": 5,
+      "title": "Geopolitics and political economy",
+      "content": "<ul><li><strong>Ukraine's dependence on U.S. military services has become a negotiating vulnerability.</strong> Reports on 16–17 October describe continued restrictions to Ukraine's Starshield satellite access amid a worsening Trump–Zelenskiy dispute over Ukrainian attacks on Russian energy assets and U.S. diesel arrangements with Moscow. Ukraine says this affects its defence capabilities; the broader issue is that allied hardware, intelligence and subscriptions can be politically interruptible even after deployment. <a href=\"https://www.reuters.com/world/europe/trump-zelenskiy-rift-threatens-vital-support-kyiv-2026-10-17/\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters</a> · <a href=\"https://www.theguardian.com/world/2026/oct/16/ukraine-military-starlink-access-starshield-volodymyr-zelenskyy\" target=\"_blank\" rel=\"noopener noreferrer\">The Guardian</a></li></ul><ul><li><strong>The EU's support for Ukraine is becoming a 2027 financing problem.</strong> Zelenskiy asked European leaders to help cover a projected €70 billion budget gap, while member governments debated new lending and whether to mobilise frozen Russian assets. The institutional bottleneck is not just diplomatic support: it is who takes fiscal and legal responsibility for multi-year transfers. <a href=\"https://www.lemonde.fr/en/international/article/2026/10/17/war-in-ukraine-europe-stands-united-behind-kyiv-but-must-revisit-how-to-finance-its-support_6758692_4.html\" target=\"_blank\" rel=\"noopener noreferrer\">Le Monde</a></li></ul><ul><li><strong>Turkey's possible early 2028 election has a constitutional mechanism behind it.</strong> Presidential adviser Mehmet Uçum floated moving the vote to March or April 2028. If parliament itself calls an early election, Erdoğan may become eligible for another presidential run under the constitutional exception; his alliance does not currently command the required 360 seats out of 600. This makes opposition parliamentary support, rather than merely a scheduling announcement, the decisive constraint. <a href=\"https://www.reuters.com/world/middle-east/turkey-floats-earlier-2028-vote-that-would-clear-way-erdogan-run-again-2026-10-15/\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters</a></li></ul><ul><li><strong>Gaza's nutrition recovery remains dependent on predictable commercial supply.</strong> UNICEF warned on 16 October that gains in child nutrition are fragile after a halt in commercial deliveries related to an Israeli–Hamas tax dispute. Humanitarian food aid alone does not substitute for functioning ordinary markets and household food diversity, especially with displaced families facing winter. <a href=\"https://www.reuters.com/world/middle-east/un-says-gaza-malnutrition-gains-fragile-commercial-supplies-halt-2026-10-16/\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters</a></li></ul><ul><li><strong>The EU is shifting from China market-access diplomacy toward import defence.</strong> A recent push by France and Germany comes amid a reported €360 billion EU trade deficit with China in 2025, manufacturing-job pressure and debates over hybrid-car imports. The dilemma is that protection may preserve certain production capabilities but raise consumer and input prices, and EU members have different exposure to China as market and supplier. <a href=\"https://www.reuters.com/world/china/pressured-home-eu-leaders-weigh-china-trade-steps-2026-10-14/\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters</a></li></ul>"
+    },
+    {
+      "id": "marxist_fragment",
+      "number": 6,
+      "title": "Marxist fragment: labour time as social domination",
+      "content": "<blockquote><p>“Time is everything, man is nothing; he is, at the most, time’s carcase.”</p></blockquote><p>— Karl Marx, <em>The Poverty of Philosophy</em> (1847), chapter 1, section 2. <a href=\"https://www.marxists.org/archive/marx/works/1847/poverty-philosophy/ch01b.htm\" target=\"_blank\" rel=\"noopener noreferrer\">Primary English text</a></p><p>Marx is attacking Proudhon's proposal to turn measured labour time directly into a principle of fair exchange. Marx's reply is that abstract equality of hours is already produced by capitalist industry, which strips different workers' activities of distinctive qualitative character and renders them commensurable in competition. Treating the existing measure of value as an emancipatory blueprint risks copying the coercive social relation into the proposed alternative.</p><p>The point is not that time accounting is inherently oppressive. The distinction is between socially controlled allocation of collective labour and a market constraint that makes each worker's time answer to externally imposed production standards.</p>"
+    },
+    {
+      "id": "philosophy_fragments",
+      "number": 7,
+      "title": "Two philosophy and political fragments",
+      "content": "<h3>Adam Smith: markets create incentives to collude</h3><blockquote><p>“People of the same trade seldom meet together, even for merriment and diversion”</p></blockquote><p>— Adam Smith, <em>The Wealth of Nations</em>, book I, chapter X. <a href=\"https://www.gutenberg.org/files/3300/3300-h/3300-h.htm\" target=\"_blank\" rel=\"noopener noreferrer\">Primary text, Project Gutenberg</a></p><p>Smith goes on to warn that such meetings can lead to coordination against the public or efforts to raise prices. This is an argument <em>within</em> classical political economy against treating every private agreement as socially benign. Importantly, Smith also rejects a sweeping ban on association as incompatible with liberty; his narrower policy concern is that the state should not require or facilitate cartel-forming assemblies.</p><h3>Mary Wollstonecraft: empowerment is not reversed domination</h3><blockquote><p>“I do not wish them to have power over men; but over themselves.”</p></blockquote><p>— Mary Wollstonecraft, <em>A Vindication of the Rights of Woman</em> (1792), chapter IV. <a href=\"https://oll-resources.s3.amazonaws.com/titles/126/Wollstonecraft_0730_EBk_v6.0.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Primary text / edition</a></p><p>Wollstonecraft is responding directly to Rousseau's claim that educating women like men would weaken male authority. Her answer is that the objective is independent judgment, not simply reversing the direction of domination. Her argument broadens immediately to class education: elites use similarly paternalistic reasoning to deny poor people literacy. The shared structure is dependence maintained under the pretext of natural social roles.</p>"
+    },
+    {
+      "id": "french_usage",
+      "number": 8,
+      "title": "French usage: à vue de nez / au pif",
+      "content": "<p><strong>À vue de nez</strong> means “roughly,” “at a guess,” or “by a quick estimate.” Its more casual cousin <strong>au pif</strong> can also mean “by guesswork / at random.” The first is suitable for an informal but intelligible approximation; the second often emphasizes that no real method was used.</p><ul><li><em>À vue de nez, il y en a pour vingt minutes.</em> → “I'd say it'll take about twenty minutes.”</li><li><em>J'ai répondu au pif.</em> → “I just guessed.”</li><li><em>Tu dirais combien, à vue de nez ?</em> → “Roughly how much would you say?”</li></ul><p>They are not identical: <em>à vue de nez</em> often implies an eyeballed estimate, while <em>au pif</em> can suggest a fairly arbitrary choice. <a href=\"https://www.larousse.fr/dictionnaires/francais/nez/54499\" target=\"_blank\" rel=\"noopener noreferrer\">Larousse: nez</a> · <a href=\"https://www.larousse.fr/dictionnaires/francais/pif/60862\" target=\"_blank\" rel=\"noopener noreferrer\">Larousse: pif</a></p>"
+    },
+    {
+      "id": "music",
+      "number": 9,
+      "title": "Music corner — recommendations pending playback verification",
+      "content": "<p><strong>The following are listening candidates, not validated YouTube embeds.</strong> This environment cannot inspect the live player timeline or France-region/embed eligibility required by the repository's publication protocol. I have therefore not attached video IDs or built a playlist, rather than risk another unavailable video.</p><ol><li><strong>Classical — Cécile Chaminade: Six Études de concert, Op. 35, No. 2, “Automne” (piano).</strong> A compact late-Romantic miniature with a long melodic arc and changing harmonic colour rather than a twenty-minute orchestral canvas. A good test of whether Chaminade's lyrical virtuosity works as strongly as recent shorter Romantic discoveries.</li></ol><ol><li><strong>Jazz — Brad Mehldau: “Blackbird” (solo piano, live).</strong> A melodic reharmonization of a familiar tune in which the arrangement and inner voices, rather than rhythmic density, carry the development. This is closer to the Bill Evans / Michel Petrucciani side of your positive responses than to the jazz-funk choices.</li></ol><ol><li><strong>Other — Men I Trust: “Show Me How”.</strong> A deliberate excursion into restrained dream-pop: soft vocals, repeating bass movement and uncluttered harmonic changes. The risk is that it might feel too static or atmospheric; the test is whether the melodic identity makes it more than background listening.</li></ol><p><strong>Playback status:</strong> Unverified; individual video links, embeds and temporary queue withheld pending direct player-state verification.</p>",
+      "queue": "",
+      "items": [
+        {
+          "type": "classical",
+          "label": "Classical",
+          "piece": "Cécile Chaminade — Six Études de concert, Op. 35, No. 2, Automne",
+          "performer": "Piano",
+          "url": "",
+          "videoId": "",
+          "description": "A compact late-Romantic miniature with a long melodic arc and changing harmonic colour rather than a twenty-minute orchestral canvas. A test of Chaminade's lyrical virtuosity."
+        },
+        {
+          "type": "jazz",
+          "label": "Jazz",
+          "piece": "Brad Mehldau — Blackbird (solo piano, live)",
+          "performer": "Brad Mehldau",
+          "url": "",
+          "videoId": "",
+          "description": "A melodic reharmonization of a familiar tune in which arrangement and inner voices carry the development. A Bill Evans / Michel Petrucciani adjacent test."
+        },
+        {
+          "type": "other",
+          "label": "Other",
+          "piece": "Men I Trust — Show Me How",
+          "performer": "Men I Trust",
+          "url": "",
+          "videoId": "",
+          "description": "A deliberately restrained dream-pop test with soft vocals and repeating bass movement, whose risk is becoming too static or atmospheric."
+        }
+      ]
+    },
+    {
+      "id": "unrelated_fact",
+      "number": 10,
+      "title": "Unrelated fact: an oil drill accidentally swallowed an entire lake",
+      "content": "<p>On <strong>20 November 1980</strong>, an oil-exploration operation at <strong>Lake Peigneur, Louisiana</strong>, breached workings associated with a salt mine below the lake. The resulting inflow enlarged the opening as freshwater dissolved salt and destabilised the underground workings. Water rushed downward and the surface collapsed; the drilling platform disappeared. The lake's outflow canal briefly ran in reverse as outside saltwater entered the newly emptied basin.</p><p>What makes this more than an improbable industrial anecdote is the feedback mechanism. A small connection between a shallow freshwater lake and a large engineered void became a rapidly expanding conduit because the water dissolved the material supporting the underground structure. The mine workers and drill crew escaped; there were <strong>no reported human deaths</strong>. Official investigation did not definitively establish whether drilling position or mine mapping was responsible. <a href=\"https://www.ineris.fr/sites/default/files/contribution/Documents/drs-15-149641-02735a-rpt-forages-rexaccidents-unique-1432733079.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">INERIS industrial-accident summary</a></p>"
+    },
+    {
+      "id": "puzzle",
+      "number": 11,
+      "title": "Puzzle: the hundred mismatched hats",
+      "content": "<p>One hundred guests leave identical-looking hats at a cloakroom. At the end of the evening, the attendant returns the hats in a <strong>uniformly random permutation</strong>, with exactly one hat per guest.</p><p><strong>Question A:</strong> How many guests should you expect to get their own hats back?</p><p><strong>Question B:</strong> Is the probability that <em>nobody</em> gets the correct hat smaller than 1%, between 1% and 20%, or greater than 20%?</p><p>You can solve A without enumerating any permutations. For B, think about the principle of inclusion–exclusion. <a href=\"https://mathworld.wolfram.com/Derangement.html\" target=\"_blank\" rel=\"noopener noreferrer\">Mathematical background, if you want a hint</a></p>"
+    }
+  ]
+}
