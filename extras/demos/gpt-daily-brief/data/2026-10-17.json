@@ -56,36 +56,36 @@
     {
       "id": "music",
       "number": 9,
-      "title": "Music corner — recommendations pending playback verification",
-      "content": "<p><strong>The following are listening candidates, not validated YouTube embeds.</strong> This environment cannot inspect the live player timeline or France-region/embed eligibility required by the repository's publication protocol. I have therefore not attached video IDs or built a playlist, rather than risk another unavailable video.</p><ol><li><strong>Classical — Cécile Chaminade: Six Études de concert, Op. 35, No. 2, “Automne” (piano).</strong> A compact late-Romantic miniature with a long melodic arc and changing harmonic colour rather than a twenty-minute orchestral canvas. A good test of whether Chaminade's lyrical virtuosity works as strongly as recent shorter Romantic discoveries.</li></ol><ol><li><strong>Jazz — Brad Mehldau: “Blackbird” (solo piano, live).</strong> A melodic reharmonization of a familiar tune in which the arrangement and inner voices, rather than rhythmic density, carry the development. This is closer to the Bill Evans / Michel Petrucciani side of your positive responses than to the jazz-funk choices.</li></ol><ol><li><strong>Other — Men I Trust: “Show Me How”.</strong> A deliberate excursion into restrained dream-pop: soft vocals, repeating bass movement and uncluttered harmonic changes. The risk is that it might feel too static or atmospheric; the test is whether the melodic identity makes it more than background listening.</li></ol><p><strong>Playback status:</strong> Unverified; individual video links, embeds and temporary queue withheld pending direct player-state verification.</p>",
-      "queue": "",
+      "title": "Music corner",
+      "content": "<p>Three direct recommendations. <a href=\"https://www.youtube.com/watch_videos?video_ids=DeuAw6-9TJE,danOVKcnaR4,OZRYzH0Q0pU\" target=\"_blank\" rel=\"noopener noreferrer\">Open the three-video YouTube queue</a>.</p>",
+      "queue": "https://www.youtube.com/watch_videos?video_ids=DeuAw6-9TJE,danOVKcnaR4,OZRYzH0Q0pU",
       "items": [
         {
           "type": "classical",
           "label": "Classical",
-          "piece": "Cécile Chaminade — Six Études de concert, Op. 35, No. 2, Automne",
-          "performer": "Piano",
-          "url": "",
-          "videoId": "",
-          "description": "A compact late-Romantic miniature with a long melodic arc and changing harmonic colour rather than a twenty-minute orchestral canvas. A test of Chaminade's lyrical virtuosity."
+          "piece": "Cécile Chaminade — Six Études de concert, Op. 35, No. 2, “Automne” — Mark Viner",
+          "performer": "Mark Viner (piano)",
+          "url": "https://www.youtube.com/watch?v=DeuAw6-9TJE",
+          "videoId": "DeuAw6-9TJE",
+          "description": "About 6 minutes. A compact late-Romantic miniature with a sustained melodic arc and rich harmonic colour, played by Mark Viner on a Brilliant Classics recording. This returns to shorter classical repertoire without abandoning the lyrical, developmental writing that has worked well in previous recommendations."
         },
         {
           "type": "jazz",
           "label": "Jazz",
-          "piece": "Brad Mehldau — Blackbird (solo piano, live)",
-          "performer": "Brad Mehldau",
-          "url": "",
-          "videoId": "",
-          "description": "A melodic reharmonization of a familiar tune in which arrangement and inner voices carry the development. A Bill Evans / Michel Petrucciani adjacent test."
+          "piece": "Brad Mehldau — Blackbird (Live) — 10 Years Solo Live",
+          "performer": "Brad Mehldau (solo piano; Nonesuch)",
+          "url": "https://www.youtube.com/watch?v=danOVKcnaR4",
+          "videoId": "danOVKcnaR4",
+          "description": "A solo-piano reworking of a familiar Beatles melody, with reharmonization and changing inner voices carrying the development rather than sheer rhythmic density. The bet is that its melodic and harmonic clarity will suit the Bill Evans and Michel Petrucciani side of your preferences."
         },
         {
           "type": "other",
           "label": "Other",
-          "piece": "Men I Trust — Show Me How",
+          "piece": "Men I Trust — Show Me How (Official Video)",
           "performer": "Men I Trust",
-          "url": "",
-          "videoId": "",
-          "description": "A deliberately restrained dream-pop test with soft vocals and repeating bass movement, whose risk is becoming too static or atmospheric."
+          "url": "https://www.youtube.com/watch?v=OZRYzH0Q0pU",
+          "videoId": "OZRYzH0Q0pU",
+          "description": "A restrained excursion into dream-pop: soft vocals, prominent repeating bass movement and understated harmonic shifts. The risk is that it may feel too static or atmospheric; the test is whether the melody gives it more identity than background listening."
         }
       ]
     },
