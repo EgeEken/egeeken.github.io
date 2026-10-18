@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#273a4d">
+    <link rel="icon" href="../../../assets/favicon.png" type="image/png">
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="breaking-point.css">
+    <script src="breaking-point.js" defer></script>
+    <title>Ege - What's Your Breaking Point?</title>
+</head>
+<body>
+    <header class="bp-header">
+        <a href="../../../demos.html" class="back-button">← Return to Demos</a>
+        <span class="eyebrow">An interactive decision experiment</span>
+        <h1>What's your breaking point?</h1>
+        <h2>How much would you risk for a chance at something bigger?</h2>
+    </header>
+
+    <main class="bp-main">
+        <section class="bp-card playable" aria-labelledby="play-title">
+            <div class="section-heading">
+                <span class="section-index">01 / THE CHOICE</span>
+                <h2 id="play-title">Take the money, or take your chances?</h2>
+                <p>Change the stakes, make your choice, and see what happens.</p>
+            </div>
+            <div class="offer-grid">
+                <label class="offer-field">
+                    <span>Guaranteed money</span>
+                    <span class="input-wrap"><b>$</b><input id="play-small" type="number" min="1000" max="10000000" step="any" value="50000" inputmode="decimal"></span>
+                    <small>$1K – $10M</small>
+                </label>
+                <div class="versus" aria-hidden="true">OR</div>
+                <label class="offer-field">
+                    <span>Possible jackpot</span>
+                    <span class="input-wrap"><b>$</b><input id="play-big" type="number" min="10000" max="1000000000000" step="any" value="50000000" inputmode="decimal"></span>
+                    <small>$10K – $1T</small>
+                </label>
+                <label class="offer-field odds-field">
+                    <span>Chance of winning the jackpot</span>
+                    <span class="input-wrap"><input id="play-odds" type="number" min="1" max="99" step="any" value="50" inputmode="decimal"><b>%</b></span>
+                    <small>1% – 99% · Nothing if you lose</small>
+                </label>
+            </div>
+            <p class="validation" id="play-error" role="alert" hidden></p>
+            <div class="choice-buttons">
+                <button type="button" class="choice-btn take-btn" id="play-take"><span>TAKE</span><strong id="take-label">$50K</strong><small>Guaranteed</small></button>
+                <button type="button" class="choice-btn flip-btn" id="play-flip"><span>FLIP</span><strong id="flip-label">50% for $50M</strong><small>Leave it to chance</small></button>
+            </div>
+            <div class="play-result" id="play-result" aria-live="polite" hidden>
+                <div class="coin" id="coin" aria-hidden="true">$</div>
+                <div><strong id="result-title"></strong><p id="result-description"></p></div>
+                <div class="result-actions">
+                    <button type="button" class="subtle-button" id="play-again">Try again</button>
+                    <button type="button" class="accent-button" id="play-share">Share result ↗</button>
+                </div>
+            </div>
+        </section>
+
+        <a class="scroll-invite" href="#breaking-points">
+            <span>Find my breaking points</span>
+            <span class="down-arrow" aria-hidden="true">↓</span>
+        </a>
+
+        <section id="breaking-points" class="bp-card explorer" aria-labelledby="explore-title">
+            <div class="section-heading">
+                <span class="section-index">02 / THE MAP</span>
+                <h2 id="explore-title">Map your decision boundary</h2>
+                <p>Answer adaptive questions. Every answer rules out offers that are strictly better or worse.</p>
+            </div>
+
+            <div class="explore-controls">
+                <div class="control-group">
+                    <span class="control-label">Dimensions</span>
+                    <div class="segment" role="group" aria-label="Number of dimensions">
+                        <button type="button" data-mode="1" aria-pressed="false">1D</button>
+                        <button type="button" data-mode="2" aria-pressed="true">2D</button>
+                        <button type="button" data-mode="3" aria-pressed="false">3D</button>
+                    </div>
+                </div>
+                <label class="control-group" id="axis-x-group">
+                    <span class="control-label" id="axis-x-label">Horizontal axis</span>
+                    <select id="axis-x">
+                        <option value="small">Guaranteed money</option>
+                        <option value="big" selected>Jackpot</option>
+                        <option value="odds">Win probability</option>
+                    </select>
+                </label>
+                <label class="control-group" id="axis-y-group">
+                    <span class="control-label">Vertical axis</span>
+                    <select id="axis-y">
+                        <option value="small">Guaranteed money</option>
+                        <option value="big">Jackpot</option>
+                        <option value="odds" selected>Win probability</option>
+                    </select>
+                </label>
+            </div>
+            <div class="fixed-controls" id="fixed-controls"></div>
+
+            <div class="plot-card">
+                <div class="plot-topbar">
+                    <div class="plot-title"><strong id="plot-heading">Your estimated boundary</strong><span id="plot-subtitle">Based on your answers</span></div>
+                    <div class="plot-count"><strong id="answer-count">0</strong><span>answers</span></div>
+                </div>
+                <div class="plot-holder" id="plot-holder">
+                    <canvas id="plot" role="img" aria-label="Decision boundary plot showing estimated take and flip regions"></canvas>
+                    <div class="plot-empty" id="plot-empty">Your boundary will appear here as you answer.</div>
+                </div>
+                <div class="plot-footer">
+                    <div class="legend">
+                        <span><i class="legend-swatch flip"></i>Flip</span>
+                        <span><i class="legend-swatch take"></i>Take</span>
+                        <span><i class="legend-swatch answer"></i>Answered point</span>
+                    </div>
+                    <span class="plot-hint" id="plot-hint">Color is an estimate; darker regions are logically determined.</span>
+                </div>
+            </div>
+
+            <div class="quiz-card">
+                <div class="quiz-topline">
+                    <span class="section-index">03 / REFINE THE BOUNDARY</span>
+                    <button type="button" class="text-button" id="undo-answer" disabled>↶ Undo last answer</button>
+                </div>
+                <p class="quiz-caption" id="quiz-caption">Which would you choose?</p>
+                <div class="quiz-offer">
+                    <div><span>Guaranteed</span><strong id="quiz-small">$50K</strong></div>
+                    <span class="quiz-or">OR</span>
+                    <div><span id="quiz-odds">50% chance</span><strong id="quiz-big">$50M</strong><small>Nothing otherwise</small></div>
+                </div>
+                <div class="quiz-buttons">
+                    <button type="button" class="choice-btn take-btn" id="quiz-take">Take guaranteed</button>
+                    <button type="button" class="choice-btn flip-btn" id="quiz-flip">Take the gamble</button>
+                </div>
+                <div class="quiz-bottom">
+                    <span id="quiz-status" aria-live="polite">Your answers are saved in this browser.</span>
+                    <button type="button" class="text-button" id="reset-answers">Reset answers</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <dialog id="share-dialog" class="share-dialog">
+        <form method="dialog"><button class="dialog-close" aria-label="Close share window">×</button></form>
+        <h2>Share your choice</h2>
+        <p>Copy this result or share a link that reproduces the scenario and outcome.</p>
+        <textarea id="share-text" rows="6" readonly aria-label="Text to share"></textarea>
+        <button type="button" class="accent-button" id="copy-share">Copy result and link</button>
+        <p id="copy-status" role="status"></p>
+    </dialog>
+</body>
+</html>
