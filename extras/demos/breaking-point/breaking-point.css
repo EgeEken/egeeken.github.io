@@ -137,3 +137,33 @@ section.bp-card { display: block; box-sizing: border-box; width: 100%; max-width
     .quiz-buttons { gap: 9px; }
 }
 @media(prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .down-arrow, .coin.spinning { animation: none; } }
+
+/* Compact, inline questions */
+.bp-header { padding: 80px 20px 42px; }
+.bp-header h1:not(.main-menu-exception) { margin: 10px auto 0; width: min(1040px, 92%); font-size: clamp(1.65rem, 3.6vw, 2.75rem); }
+.bp-main { margin-top: -11px; }
+section.bp-card.playable { padding: 27px clamp(16px, 3vw, 32px) 29px; }
+.decision-question { max-width: 850px; margin: 0 auto 27px; font-size: clamp(1.12rem, 2.6vw, 1.68rem); font-weight: 600; line-height: 1.85; text-align: center; text-wrap: pretty; color: #edf6f7; }
+.inline-edit { white-space: nowrap; display: inline-block; vertical-align: baseline; }
+.inline-value, .static-value { background: rgba(72, 143, 154, .22); border: 1px solid rgba(139, 228, 222, .42); border-radius: 8px; color: #9cece1; padding: .13em .37em; font-weight: 700; font-size: 1em; line-height: 1.3; white-space: nowrap; }
+.inline-value { cursor: pointer; transition: background .2s; }
+.inline-value:hover { background: rgba(73, 165, 170, .38); }
+.inline-edit input { box-sizing: border-box; width: 160px; max-width: 39vw; padding: 7px 9px; text-align: center; color: #fff; background: #214557; border: 1px solid #9cece1; border-radius: 8px; font-size: .85em; font-weight: 700; }
+.inline-edit #play-odds { width: 90px; }
+.playable .choice-buttons { max-width: 665px; }
+.playable .choice-btn { padding: 15px 12px; }
+.quiz-topline { justify-content: flex-end; }
+.quiz-question { max-width: 755px; margin: 0 auto 22px; font-size: clamp(1.02rem, 2.25vw, 1.4rem); }
+.quiz-buttons { max-width: 665px; }
+.quiz-buttons .choice-btn { padding: 14px 10px; gap: 5px; }
+.quiz-buttons .choice-btn strong { font-size: clamp(1.05rem, 2.1vw, 1.45rem); }
+.quiz-buttons .choice-btn > span { font-size: .7rem; }
+.plot-empty { top: 28px; left: 50%; transform: translateX(-50%); width: auto; max-width: calc(100% - 50px); font-size: .73rem; padding: 7px 13px; }
+.legend-swatch.obvious { background: none; height: 0; width: 20px; border: 0; border-top: 2px dashed #f2cf8a; border-radius: 0; }
+@media(max-width: 650px) {
+    .bp-header { padding: 80px 8px 36px; }
+    .bp-header h1:not(.main-menu-exception) { font-size: clamp(1.6rem, 6vw, 2.1rem); width: 92%; }
+    .decision-question { line-height: 2.15; margin-bottom: 19px; }
+    .quiz-question { line-height: 2.05; }
+    .plot-empty { top: 22px; }
+}

@@ -6,7 +6,7 @@
         { key: 'big', name: 'Jackpot', min: 10000, max: 1000000000000, log: true },
         { key: 'odds', name: 'Win probability', min: 1, max: 99, log: false }
     ];
-    const defaults = [50000, 50000000, 50];
+    const defaults = [500000, 50000000, 50];
     const $ = id => document.getElementById(id);
     const canvas = $('plot');
     const ctx = canvas.getContext('2d');
@@ -21,6 +21,11 @@
     const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
     const money = n => '$' + new Intl.NumberFormat('en-US', { notation: 'compact', maximumSignificantDigits: 4 }).format(n);
     const percent = n => Number(n.toFixed(2)) + '%';
+    const questionMoney = n => {
+        for (const [scale, name] of [[1e12, 'trillion'], [1e9, 'billion'], [1e6, 'million']])
+            if (n >= scale) return '$' + Number((n / scale).toPrecision(4)) + ' ' + name;
+        return money(n);
+    };
     const axisText = (i, n) => i === 2 ? percent(n) : money(n);
     const rawPosition = (i, v) => {
         const a = axes[i];
@@ -32,6 +37,7 @@
         return i === 2 ? Math.round(v * 100) / 100 : Math.round(v);
     };
     const toU = v => [1 - rawPosition(0, v[0]), rawPosition(1, v[1]), rawPosition(2, v[2])];
+    const obviousScore = u => 4 * u[0] + 8 * u[1] - 3;
     const fromU = u => [rawValue(0, 1 - u[0]), rawValue(1, u[1]), rawValue(2, u[2])];
     const activeAxes = () => state.mode === 3 ? [0, 1, 2] : state.mode === 2 ? [state.x, state.y] : [state.x];
     const fixedU = () => toU(state.fixed);
@@ -44,6 +50,7 @@
         v.every((x, i) => Number.isFinite(x) && x >= axes[i].min && x <= axes[i].max);
 
     function inference(u) {
+        if (obviousScore(u) <= 1e-10) return -1;
         for (const a of state.answers) {
             if (a.flip && u.every((v, i) => v >= a.u[i] - 1e-10)) return 1;
             if (!a.flip && u.every((v, i) => v <= a.u[i] + 1e-10)) return -1;
@@ -64,7 +71,7 @@
             else { dt = Math.min(dt, distance); takes++; }
         }
         if (!flips) df = u.reduce((s, v) => s + (1 - v) ** 2, 0) * .65;
-        if (!takes) dt = u.reduce((s, v) => s + v ** 2, 0) * .65;
+        dt = Math.min(dt, Math.max(0, obviousScore(u)) ** 2 / 80);
         df = Math.sqrt(df);
         dt = Math.sqrt(dt);
         return (dt - df) / (dt + df + 1e-9);
@@ -80,7 +87,10 @@
         const dims = activeAxes();
         if (state.mode === 1) {
             const axis = dims[0], anchor = fixedU();
+            if (axis === 2 && obviousScore(anchor) <= 0) return null;
             let lower = 0, upper = 1;
+            if (axis === 0) lower = clamp((3 - 8 * anchor[1]) / 4, 0, 1);
+            if (axis === 1) lower = clamp((3 - 4 * anchor[0]) / 8, 0, 1);
             for (const a of state.answers) {
                 if (a.flip &&
                     a.u.every((v, i) => i === axis || anchor[i] >= v - 1e-10)) upper = Math.min(upper, a.u[axis]);
@@ -94,7 +104,10 @@
             }
             return null;
         }
-        if (state.answers.length === 0) return candidate(dims.map(() => .5));
+        if (state.answers.length === 0) {
+            const first = candidate(dims.map(() => .5));
+            if (inference(first) === 0) return first;
+        }
         const bases = [2, 3, 5];
         let best = null, bestScore = -Infinity;
         const count = state.mode === 3 ? 1050 : 650;
@@ -152,12 +165,17 @@
         $('quiz-flip').disabled = !q;
         if (q) {
             const v = fromU(q);
-            $('quiz-small').textContent = money(v[0]);
-            $('quiz-big').textContent = money(v[1]);
-            $('quiz-odds').textContent = percent(v[2]) + ' chance';
-            $('quiz-caption').textContent = 'Which would you choose?';
+            $('quiz-prompt').hidden = false;
+            $('quiz-caption').hidden = true;
+            $('quiz-small').textContent = '(' + questionMoney(v[0]) + ')';
+            $('quiz-big').textContent = '(' + questionMoney(v[1]) + ')';
+            $('quiz-odds').textContent = '(' + percent(v[2]) + ')';
+            $('quiz-take-label').textContent = money(v[0]);
+            $('quiz-flip-label').textContent = percent(v[2]) + ' for ' + money(v[1]);
             $('quiz-status').textContent = state.answers.length + ' answered · Only unresolved offers are asked';
         } else {
+            $('quiz-prompt').hidden = true;
+            $('quiz-caption').hidden = false;
             $('quiz-caption').textContent = 'This slice is resolved to the available precision.';
             $('quiz-status').textContent = 'Change the axes or fixed values to explore more.';
         }
@@ -166,8 +184,8 @@
         $('plot-subtitle').textContent = active.map(i => axes[i].name).join(' · ');
         $('plot-empty').hidden = state.answers.length > 0;
         $('plot-hint').textContent = state.mode === 3
-            ? 'Drag to rotate · Scroll to zoom · The surface is an estimate.'
-            : 'Lighter color is estimated; stronger color follows logically.';
+            ? 'Drag to rotate · Scroll to zoom.'
+            : 'Pale regions are estimated; darker regions follow from your answers.';
         $('plot-holder').style.touchAction = state.mode === 3 ? 'none' : 'pan-y';
         $('plot-holder').style.cursor = state.mode === 3 ? 'grab' : 'default';
         scheduleDraw();
@@ -194,12 +212,18 @@
             const slider = document.createElement('input');
             slider.type = 'range';
             slider.id = id;
-            slider.min = 0; slider.max = 1000; slider.step = 1;
-            slider.value = String(Math.round(rawPosition(i, state.fixed[i]) * 1000));
+            const ticks = i === 2 ? Array.from({ length: 99 }, (_, n) => n + 1) : [];
+            if (i !== 2) for (let power = 3; power <= 12; power++)
+                for (const factor of [1, 2, 5]) {
+                    const n = factor * 10 ** power;
+                    if (n >= axes[i].min && n <= axes[i].max) ticks.push(n);
+                }
+            slider.min = 0; slider.max = ticks.length - 1; slider.step = 1;
+            slider.value = String(ticks.indexOf(state.fixed[i]));
             const value = document.createElement('output');
             value.textContent = axisText(i, state.fixed[i]);
             slider.addEventListener('input', () => {
-                state.fixed[i] = rawValue(i, Number(slider.value) / 1000);
+                state.fixed[i] = ticks[Number(slider.value)];
                 value.textContent = axisText(i, state.fixed[i]);
                 refresh();
             });
@@ -266,13 +290,49 @@
             ctx.restore();
         }
     }
+    function dashedLine(x1, y1, x2, y2) {
+        ctx.save();
+        ctx.setLineDash([6, 6]);
+        line(x1, y1, x2, y2, '#f2cf8a', 2);
+        ctx.restore();
+    }
+
+    function obviousLine2D(f) {
+        const at = (x, y) => {
+            const u = fixedU();
+            u[state.x] = state.x === 0 ? 1 - x : x;
+            u[state.y] = state.y === 0 ? 1 - y : y;
+            return obviousScore(u);
+        };
+        const corners = [[0, 0], [1, 0], [1, 1], [0, 1]];
+        const hits = [];
+        for (let k = 0; k < 4; k++) {
+            const a = corners[k], b = corners[(k + 1) % 4];
+            const sa = at(...a), sb = at(...b);
+            if (Math.abs(sa - sb) < 1e-12) continue;
+            const t = sa / (sa - sb);
+            if (t >= 0 && t <= 1) {
+                const x = a[0] + (b[0] - a[0]) * t;
+                const y = a[1] + (b[1] - a[1]) * t;
+                if (!hits.some(v => Math.hypot(v[0] - x, v[1] - y) < 1e-7)) hits.push([x, y]);
+            }
+        }
+        if (hits.length >= 2) {
+            const [a, b] = hits;
+            dashedLine(f.l + a[0] * f.pw, f.b - a[1] * f.ph,
+                f.l + b[0] * f.pw, f.b - b[1] * f.ph);
+        }
+    }
+
     function plot1D(w, h) {
         const f = frame(w, h, 73, 86), axis = state.x, u0 = fixedU();
         const top = f.t + f.ph * .37, height = Math.max(48, f.ph * .27);
         const n = 220;
-        if (state.answers.length) for (let j = 0; j < n; j++) {
+        for (let j = 0; j < n; j++) {
             const u = u0.slice(); u[axis] = axis === 0 ? 1 - (j + .5) / n : (j + .5) / n;
-            const s = field(u), certain = inference(u) !== 0;
+            const known = inference(u);
+            if (!state.answers.length && known === 0) continue;
+            const s = known || field(u), certain = known !== 0;
             ctx.fillStyle = s >= 0 ? (certain ? 'rgba(52,182,168,.84)' : 'rgba(52,182,168,.32)')
                 : (certain ? 'rgba(204,97,105,.84)' : 'rgba(204,97,105,.32)');
             ctx.fillRect(f.l + j * f.pw / n, top, f.pw / n + 1, height);
@@ -300,6 +360,17 @@
             }
         }
         grid2D({ ...f, t: top + height + 27, b: top + height + 27, ph: 0 }, axis, null);
+        const left = u0.slice(), right = u0.slice();
+        left[axis] = axis === 0 ? 1 : 0;
+        right[axis] = axis === 0 ? 0 : 1;
+        const aScore = obviousScore(left), bScore = obviousScore(right);
+        if (aScore !== bScore) {
+            const t = -aScore / (bScore - aScore);
+            if (t >= 0 && t <= 1) {
+                const x = f.l + t * f.pw;
+                dashedLine(x, top - 10, x, top + height + 13);
+            }
+        }
         if (state.answers.length) {
             const edge = t => {
                 const u = u0.slice();
@@ -320,13 +391,15 @@
             u[state.y] = state.y === 0 ? 1 - j / ny : j / ny;
             return u;
         };
-        if (state.answers.length) {
-            for (let j = 0; j <= ny; j++) for (let i = 0; i <= nx; i++) {
-                data[j * (nx + 1) + i] = field(at(i, j));
-            }
+        if (state.answers.length) for (let j = 0; j <= ny; j++) for (let i = 0; i <= nx; i++) {
+            data[j * (nx + 1) + i] = field(at(i, j));
+        }
+        {
             for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
                 const u = at(i + .5, j + .5);
-                const val = field(u), certain = inference(u) !== 0;
+                const known = inference(u);
+                if (!state.answers.length && known === 0) continue;
+                const val = known || field(u), certain = known !== 0;
                 ctx.fillStyle = val >= 0 ? (certain ? 'rgba(50,170,157,.62)' : 'rgba(50,170,157,.20)')
                     : (certain ? 'rgba(199,86,96,.62)' : 'rgba(199,86,96,.20)');
                 ctx.fillRect(f.l + i * f.pw / nx, f.b - (j + 1) * f.ph / ny, f.pw / nx + 1, f.ph / ny + 1);
@@ -356,6 +429,7 @@
             }
             ctx.stroke();
         }
+        obviousLine2D(f);
         for (const a of state.answers) {
             if (a.u.every((v, i) => i === state.x || i === state.y || Math.abs(v - uFixed[i]) < .002)) {
                 dot(f.l + rawPosition(state.x, a.v[state.x]) * f.pw,
@@ -416,6 +490,24 @@
                 ctx.lineWidth = .6; ctx.stroke();
             }
         }
+        const limitPlane = [
+            [rawPosition(0, 10000), 0, 0],
+            [1, rawPosition(1, 10000000), 0],
+            [1, rawPosition(1, 10000000), 1],
+            [rawPosition(0, 10000), 0, 1]
+        ].map(project);
+        ctx.beginPath();
+        ctx.moveTo(limitPlane[0].x, limitPlane[0].y);
+        for (const p of limitPlane.slice(1)) ctx.lineTo(p.x, p.y);
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(242,207,138,.10)';
+        ctx.fill();
+        ctx.save();
+        ctx.setLineDash([6, 6]);
+        ctx.strokeStyle = '#f2cf8a';
+        ctx.lineWidth = 1.8;
+        ctx.stroke();
+        ctx.restore();
         const origin = project([0, 0, 0]);
         for (let axis = 0; axis < 3; axis++) {
             const end = [0, 0, 0]; end[axis] = 1;
@@ -465,6 +557,11 @@
         $('play-flip').disabled = !valid || playBusy;
         $('take-label').textContent = Number.isFinite(v[0]) ? money(v[0]) : '—';
         $('flip-label').textContent = Number.isFinite(v[1]) && Number.isFinite(v[2]) ? percent(v[2]) + ' for ' + money(v[1]) : '—';
+        for (const [name, i] of [['small', 0], ['big', 1], ['odds', 2]]) {
+            $('display-' + name).textContent = '(' + (Number.isFinite(v[i]) ?
+                (i === 2 ? percent(v[i]) : questionMoney(v[i])) : '—') + ')';
+            $('display-' + name).disabled = playBusy;
+        }
         return valid;
     }
     function showOutcome() {
@@ -543,9 +640,32 @@
     $('play-flip').addEventListener('click', () => choosePlay('flip'));
     $('play-again').addEventListener('click', () => { playOutcome = null; showOutcome(); });
     $('play-share').addEventListener('click', shareResult);
-    for (const id of ['play-small', 'play-big', 'play-odds']) $(id).addEventListener('input', () => {
-        playOutcome = null; showOutcome(); syncPlay();
-    });
+    for (const name of ['small', 'big', 'odds']) {
+        const input = $('play-' + name), button = $('display-' + name);
+        button.addEventListener('click', () => {
+            if (playBusy) return;
+            input.dataset.previous = input.value;
+            button.hidden = true;
+            input.hidden = false;
+            input.focus();
+            input.select();
+        });
+        input.addEventListener('input', () => {
+            playOutcome = null; showOutcome(); syncPlay();
+        });
+        input.addEventListener('blur', () => {
+            input.hidden = true;
+            button.hidden = false;
+            syncPlay();
+        });
+        input.addEventListener('keydown', e => {
+            if (e.key === 'Enter') input.blur();
+            if (e.key === 'Escape') {
+                input.value = input.dataset.previous;
+                input.blur();
+            }
+        });
+    }
     $('copy-share').addEventListener('click', async () => {
         try {
             if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText($('share-text').value);
