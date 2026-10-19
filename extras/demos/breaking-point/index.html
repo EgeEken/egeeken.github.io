@@ -20,11 +20,11 @@
         <section class="bp-card playable" aria-labelledby="play-title">
             <p class="decision-question" id="play-title">
                 Would you rather take a guaranteed
-                <span class="inline-edit"><button type="button" id="display-small" class="inline-value" aria-label="Edit guaranteed amount" title="Click to edit">($500K)</button><input id="play-small" type="number" min="1000" max="10000000" step="1" value="500000" inputmode="decimal" aria-label="Guaranteed money, dollars" hidden></span>
+                <span class="inline-edit"><button type="button" id="display-small" class="inline-value" aria-label="Edit guaranteed amount" title="Click to edit">$500K</button><input id="play-small" type="number" min="1000" max="10000000" step="1" value="500000" inputmode="decimal" aria-label="Guaranteed money, dollars" hidden></span>
                 or gamble with a
-                <span class="inline-edit"><button type="button" id="display-odds" class="inline-value" aria-label="Edit winning probability" title="Click to edit">(50%)</button><input id="play-odds" type="number" min="1" max="99" step="1" value="50" inputmode="numeric" aria-label="Winning probability, percent" hidden></span>
+                <span class="inline-edit"><button type="button" id="display-odds" class="inline-value" aria-label="Edit winning probability" title="Click to edit">50%</button><input id="play-odds" type="number" min="1" max="99" step="1" value="50" inputmode="numeric" aria-label="Winning probability, percent" hidden></span>
                 chance of winning
-                <span class="inline-edit"><button type="button" id="display-big" class="inline-value" aria-label="Edit jackpot amount" title="Click to edit">($50M)</button><input id="play-big" type="number" min="10000" max="1000000000000" step="1" value="50000000" inputmode="decimal" aria-label="Jackpot, dollars" hidden></span>?
+                <span class="inline-edit"><button type="button" id="display-big" class="inline-value" aria-label="Edit jackpot amount" title="Click to edit">$50M</button><input id="play-big" type="number" min="10000" max="1000000000000" step="1" value="50000000" inputmode="decimal" aria-label="Jackpot, dollars" hidden></span>?
             </p>
             <p class="validation" id="play-error" role="alert" hidden></p>
             <div class="choice-buttons">
@@ -80,6 +80,14 @@
             </div>
             <div class="fixed-controls" id="fixed-controls"></div>
 
+
+            <div class="map-actions">
+                <button type="button" class="subtle-button" id="export-choices">Export choices</button>
+                <button type="button" class="subtle-button" id="import-choices-button">Import choices</button>
+                <input type="file" id="import-choices" accept=".json,application/json" hidden>
+                <span id="map-transfer-status" role="status" aria-live="polite"></span>
+            </div>
+
             <div class="plot-card">
                 <div class="plot-topbar">
                     <div class="plot-title"><strong id="plot-heading">Your estimated boundary</strong><span id="plot-subtitle">Based on your answers</span></div>
@@ -94,7 +102,7 @@
                         <span><i class="legend-swatch flip"></i>Flip</span>
                         <span><i class="legend-swatch take"></i>Take</span>
                         <span><i class="legend-swatch answer"></i>Answered point</span>
-                        <span><i class="legend-swatch obvious"></i>Obvious choice boundary</span>
+                        <span id="obvious-legend"><i class="legend-swatch obvious"></i>Obvious choice boundary</span>
                     </div>
                     <span class="plot-hint" id="plot-hint">Color is an estimate; darker regions are logically determined.</span>
                 </div>
@@ -105,9 +113,9 @@
                 <button type="button" class="text-button" id="undo-answer" disabled>↶ Undo last answer</button>
             </div>
             <p class="decision-question quiz-question" id="quiz-prompt">
-                Would you rather take a guaranteed <strong class="static-value" id="quiz-small">($500K)</strong>
-                or gamble with a <strong class="static-value" id="quiz-odds">(50%)</strong>
-                chance of winning <strong class="static-value" id="quiz-big">($50M)</strong>?
+                Would you rather take a guaranteed <strong class="static-value" id="quiz-small">$500K</strong>
+                or gamble with a <strong class="static-value" id="quiz-odds">50%</strong>
+                chance of winning <strong class="static-value" id="quiz-big">$50M</strong>?
             </p>
             <p class="quiz-caption" id="quiz-caption" hidden></p>
             <div class="quiz-buttons">
@@ -125,7 +133,7 @@
     <dialog id="share-dialog" class="share-dialog">
         <form method="dialog"><button class="dialog-close" aria-label="Close share window">×</button></form>
         <h2>Share your choice</h2>
-        <p>Copy this result or share a link that reproduces the scenario and outcome.</p>
+        <p>Copy your result and a link to the demo.</p>
         <textarea id="share-text" rows="6" readonly aria-label="Text to share"></textarea>
         <button type="button" class="accent-button" id="copy-share">Copy result and link</button>
         <p id="copy-status" role="status"></p>

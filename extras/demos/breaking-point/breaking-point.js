@@ -167,9 +167,9 @@
             const v = fromU(q);
             $('quiz-prompt').hidden = false;
             $('quiz-caption').hidden = true;
-            $('quiz-small').textContent = '(' + questionMoney(v[0]) + ')';
-            $('quiz-big').textContent = '(' + questionMoney(v[1]) + ')';
-            $('quiz-odds').textContent = '(' + percent(v[2]) + ')';
+            $('quiz-small').textContent = questionMoney(v[0]);
+            $('quiz-big').textContent = questionMoney(v[1]);
+            $('quiz-odds').textContent = percent(v[2]);
             $('quiz-take-label').textContent = money(v[0]);
             $('quiz-flip-label').textContent = percent(v[2]) + ' for ' + money(v[1]);
             $('quiz-status').textContent = state.answers.length + ' answered · Only unresolved offers are asked';
@@ -182,7 +182,11 @@
         const active = activeAxes();
         $('plot-heading').textContent = state.mode + 'D decision boundary';
         $('plot-subtitle').textContent = active.map(i => axes[i].name).join(' · ');
-        $('plot-empty').hidden = state.answers.length > 0;
+        const showObvious = !(state.mode === 2 && [state.x, state.y].includes(1) && [state.x, state.y].includes(2));
+        $('obvious-legend').hidden = !showObvious;
+        $('plot-empty').hidden = state.answers.length > 0 || !showObvious;
+        $('plot-empty').textContent = 'Dotted: the guaranteed payout equals the jackpot.';
+        $('export-choices').disabled = state.answers.length === 0;
         $('plot-hint').textContent = state.mode === 3
             ? 'Drag to rotate · Scroll to zoom.'
             : 'Pale regions are estimated; darker regions follow from your answers.';
@@ -429,7 +433,7 @@
             }
             ctx.stroke();
         }
-        obviousLine2D(f);
+        if (!([state.x, state.y].includes(1) && [state.x, state.y].includes(2))) obviousLine2D(f);
         for (const a of state.answers) {
             if (a.u.every((v, i) => i === state.x || i === state.y || Math.abs(v - uFixed[i]) < .002)) {
                 dot(f.l + rawPosition(state.x, a.v[state.x]) * f.pw,
@@ -558,8 +562,8 @@
         $('take-label').textContent = Number.isFinite(v[0]) ? money(v[0]) : '—';
         $('flip-label').textContent = Number.isFinite(v[1]) && Number.isFinite(v[2]) ? percent(v[2]) + ' for ' + money(v[1]) : '—';
         for (const [name, i] of [['small', 0], ['big', 1], ['odds', 2]]) {
-            $('display-' + name).textContent = '(' + (Number.isFinite(v[i]) ?
-                (i === 2 ? percent(v[i]) : questionMoney(v[i])) : '—') + ')';
+            $('display-' + name).textContent = Number.isFinite(v[i]) ?
+                (i === 2 ? percent(v[i]) : questionMoney(v[i])) : '—';
             $('display-' + name).disabled = playBusy;
         }
         return valid;
@@ -610,11 +614,13 @@
         if (!playOutcome) return;
         const { choice, won, v } = playOutcome;
         const url = new URL(location.pathname, location.origin);
-        url.searchParams.set('small', v[0]);
-        url.searchParams.set('big', v[1]);
-        url.searchParams.set('odds', v[2]);
-        url.searchParams.set('choice', choice);
-        if (choice === 'flip') url.searchParams.set('result', won ? 'won' : 'lost');
+        if (v.some((amount, i) => amount !== defaults[i])) {
+            url.searchParams.set('small', v[0]);
+            url.searchParams.set('big', v[1]);
+            url.searchParams.set('odds', v[2]);
+            url.searchParams.set('choice', choice);
+            if (choice === 'flip') url.searchParams.set('result', won ? 'won' : 'lost');
+        }
         const summary = 'Would you take ' + money(v[0]) + ' or gamble for ' + money(v[1]) +
             ' at ' + percent(v[2]) + ' odds?\n' +
             (choice === 'take' ? 'I took the guaranteed ' + money(v[0]) + '.'
@@ -673,6 +679,76 @@
             $('copy-status').textContent = 'Copied to clipboard.';
         } catch (_) { $('copy-status').textContent = 'Select the text above to copy it.'; }
     });
+
+    function exportChoices() {
+        if (!state.answers.length) return;
+        const data = {
+            format: 'breaking-point-choices',
+            version: 1,
+            view: { mode: state.mode, x: axes[state.x].key, y: axes[state.y].key, fixed: state.fixed.slice() },
+            choices: state.answers.map(a => [...a.v, a.flip])
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'breaking-point-choices.json';
+        document.body.append(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        $('map-transfer-status').textContent = 'Exported ' + state.answers.length + ' choices.';
+    }
+
+    async function importChoices(event) {
+        const input = event.target;
+        const file = input.files && input.files[0];
+        input.value = '';
+        if (!file) return;
+        try {
+            if (file.size > 1000000) throw Error('File is too large.');
+            const data = JSON.parse(await file.text());
+            if (!data || data.format !== 'breaking-point-choices' || data.version !== 1 ||
+                !Array.isArray(data.choices) || data.choices.length > 2000)
+                throw Error('Unsupported choice file.');
+            const view = data.view;
+            const x = axes.findIndex(a => a.key === view?.x);
+            const y = axes.findIndex(a => a.key === view?.y);
+            if (![1, 2, 3].includes(view?.mode) || x < 0 || y < 0 || x === y || !validValues(view.fixed))
+                throw Error('Invalid view settings.');
+            const imported = [];
+            for (const row of data.choices) {
+                if (!Array.isArray(row) || row.length !== 4 || !validValues(row.slice(0, 3)) ||
+                    typeof row[3] !== 'boolean') throw Error('Invalid choice values.');
+                const v = row.slice(0, 3), flip = row[3], u = toU(v);
+                if (flip && v[0] >= v[1]) throw Error('Contradictory choices.');
+                for (const previous of imported) {
+                    const better = u.every((n, i) => n >= previous.u[i] - 1e-10);
+                    const worse = u.every((n, i) => n <= previous.u[i] + 1e-10);
+                    if (previous.flip && !flip && better || !previous.flip && flip && worse)
+                        throw Error('Contradictory choices.');
+                }
+                imported.push({ v, u, flip });
+            }
+            if (state.answers.length && !confirm('Replace your ' + state.answers.length +
+                ' saved choices with the imported ones?')) return;
+            state.answers = imported;
+            state.mode = view.mode;
+            state.x = x;
+            state.y = y;
+            state.fixed = view.fixed.slice();
+            saveAnswers();
+            configureAxes();
+            $('map-transfer-status').textContent = 'Imported ' + imported.length + ' choices. Viewing the imported boundary.';
+        } catch (error) {
+            $('map-transfer-status').textContent = 'Import failed: ' + error.message;
+        }
+    }
+
+    $('export-choices').addEventListener('click', exportChoices);
+    $('import-choices-button').addEventListener('click', () => $('import-choices').click());
+    $('import-choices').addEventListener('change', importChoices);
+
     $('quiz-take').addEventListener('click', () => respond(false));
     $('quiz-flip').addEventListener('click', () => respond(true));
     $('undo-answer').addEventListener('click', () => {

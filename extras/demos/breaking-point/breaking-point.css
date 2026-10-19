@@ -167,3 +167,27 @@ section.bp-card.playable { padding: 27px clamp(16px, 3vw, 32px) 29px; }
     .quiz-question { line-height: 2.05; }
     .plot-empty { top: 22px; }
 }
+
+.bp-main { margin-top: 22px; }
+.map-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: -3px auto 19px;
+}
+.map-actions .subtle-button {
+    background: #213f50;
+}
+#map-transfer-status {
+    flex-basis: 100%;
+    min-height: 0;
+    text-align: center;
+    color: #b9d4d5;
+    font-size: .72rem;
+}
+#map-transfer-status:empty { display: none; }
+@media (max-width: 650px) {
+    .bp-main { margin-top: 18px; }
+}
