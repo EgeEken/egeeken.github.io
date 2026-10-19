@@ -7,23 +7,32 @@
         { key: 'odds', name: 'Win probability', min: 1, max: 99, log: false }
     ];
     const defaults = [500000, 50000000, 50];
+    const yaw0 = .75, pitch0 = .55;
+    const c0 = Math.cos(yaw0), s0 = Math.sin(yaw0), cp0 = Math.cos(pitch0), sp0 = Math.sin(pitch0);
     const $ = id => document.getElementById(id);
     const canvas = $('plot');
     const ctx = canvas.getContext('2d');
     const state = {
-        mode: 2, x: 1, y: 2, fixed: defaults.slice(),
-        answers: [], question: null, yaw: .75, pitch: .55, zoom: 1,
+        mode: 2, x: 0, y: 1, fixed: defaults.slice(),
+        answers: [], question: null, zoom: 1,
+        view: [
+            [c0, -s0, 0],
+            [-sp0 * s0, -sp0 * c0, cp0],
+            [cp0 * s0, cp0 * c0, sp0]
+        ],
         dragging: false, lastX: 0, lastY: 0, scheduled: false, surface: null
     };
     let playOutcome = null;
     let playBusy = false;
 
     const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-    const money = n => '$' + new Intl.NumberFormat('en-US', { notation: 'compact', maximumSignificantDigits: 4 }).format(n);
+    const money = n => (n < 0 ? '-$' : '$') +
+        new Intl.NumberFormat('en-US', { notation: 'compact', maximumSignificantDigits: 4 }).format(Math.abs(n));
     const percent = n => Number(n.toFixed(2)) + '%';
     const questionMoney = n => {
         for (const [scale, name] of [[1e12, 'trillion'], [1e9, 'billion'], [1e6, 'million']])
-            if (n >= scale) return '$' + Number((n / scale).toPrecision(4)) + ' ' + name;
+            if (Math.abs(n) >= scale) return (n < 0 ? '-$' : '$') +
+                Number((Math.abs(n) / scale).toPrecision(4)) + ' ' + name;
         return money(n);
     };
     const axisText = (i, n) => i === 2 ? percent(n) : money(n);
@@ -48,6 +57,8 @@
     };
     const validValues = v => Array.isArray(v) && v.length === 3 &&
         v.every((x, i) => Number.isFinite(x) && x >= axes[i].min && x <= axes[i].max);
+    const validPlayValues = v => Array.isArray(v) && v.length === 3 &&
+        v.every(Number.isFinite) && v[2] >= 0 && v[2] <= 100;
 
     function inference(u) {
         if (obviousScore(u) <= 1e-10) return -1;
@@ -184,7 +195,7 @@
         $('plot-subtitle').textContent = active.map(i => axes[i].name).join(' · ');
         const showObvious = !(state.mode === 2 && [state.x, state.y].includes(1) && [state.x, state.y].includes(2));
         $('obvious-legend').hidden = !showObvious;
-        $('plot-empty').hidden = state.answers.length > 0 || !showObvious;
+        $('plot-empty').hidden = state.mode === 3 || state.answers.length > 0 || !showObvious;
         $('plot-empty').textContent = 'Dotted: the guaranteed payout equals the jackpot.';
         $('export-choices').disabled = state.answers.length === 0;
         $('plot-hint').textContent = state.mode === 3
@@ -444,12 +455,14 @@
 
     function plot3D(w, h) {
         const scale = Math.min(w * .49, h * .56) * state.zoom;
-        const c = Math.cos(state.yaw), s = Math.sin(state.yaw);
-        const cp = Math.cos(state.pitch), sp = Math.sin(state.pitch);
         function project(v) {
-            const x = v[0] - .5, y = v[1] - .5, z = v[2] - .5;
-            const rx = x * c - y * s, ry = x * s + y * c;
-            return { x: w * .5 + scale * rx, y: h * .53 - scale * (z * cp - ry * sp), depth: ry * cp + z * sp };
+            const pos = [v[0] - .5, v[1] - .5, v[2] - .5];
+            const dot = axis => pos[0] * axis[0] + pos[1] * axis[1] + pos[2] * axis[2];
+            return {
+                x: w * .5 + scale * dot(state.view[0]),
+                y: h * .53 - scale * dot(state.view[1]),
+                depth: dot(state.view[2])
+            };
         }
         const corners = [];
         for (let z = 0; z < 2; z++) for (let y = 0; y < 2; y++) for (let x = 0; x < 2; x++) corners.push(project([x, y, z]));
@@ -539,7 +552,6 @@
             return { ...p, flip: a.flip };
         }).sort((a, b) => b.depth - a.depth);
         for (const p of points) dot(p.x, p.y, p.flip, 5.5);
-        if (!state.answers.length) label('Rotate by dragging once your boundary appears', w / 2, h - 14, 'center', '#8ea6ae', 11);
     }
 
     function draw() {
@@ -554,9 +566,10 @@
     function playValues() { return [Number($('play-small').value), Number($('play-big').value), Number($('play-odds').value)]; }
     function syncPlay() {
         const v = playValues();
-        const valid = validValues(v);
+        const valid = validPlayValues(v) &&
+            ['play-small', 'play-big', 'play-odds'].every(id => $(id).value !== '');
         $('play-error').hidden = valid;
-        $('play-error').textContent = 'Enter values within the ranges shown for each offer.';
+        $('play-error').textContent = 'Enter valid amounts and a probability between 0% and 100%.';
         $('play-take').disabled = !valid || playBusy;
         $('play-flip').disabled = !valid || playBusy;
         $('take-label').textContent = Number.isFinite(v[0]) ? money(v[0]) : '—';
@@ -632,7 +645,7 @@
     function loadSharedPlay() {
         const params = new URLSearchParams(location.search);
         const shared = [Number(params.get('small')), Number(params.get('big')), Number(params.get('odds'))];
-        if (!['small', 'big', 'odds'].every(k => params.has(k)) || !validValues(shared)) return;
+        if (!['small', 'big', 'odds'].every(k => params.has(k) && params.get(k) !== '') || !validPlayValues(shared)) return;
         ['play-small', 'play-big', 'play-odds'].forEach((id, i) => { $(id).value = shared[i]; });
         syncPlay();
         const choice = params.get('choice'), result = params.get('result');
@@ -772,6 +785,17 @@
         if (state.x === state.y) state.x = [0, 1, 2].find(i => i !== state.y);
         configureAxes();
     });
+    function rotateView(dx, dy) {
+        const [right, up, depth] = state.view;
+        const ch = Math.cos(dx * .009), sh = Math.sin(dx * .009);
+        const nextRight = right.map((v, i) => v * ch + depth[i] * sh);
+        const nextDepth = depth.map((v, i) => v * ch - right[i] * sh);
+        const cv = Math.cos(dy * .007), sv = Math.sin(dy * .007);
+        const nextUp = up.map((v, i) => v * cv - nextDepth[i] * sv);
+        const finalDepth = nextDepth.map((v, i) => v * cv + up[i] * sv);
+        state.view = [nextRight, nextUp, finalDepth];
+    }
+
     canvas.addEventListener('pointerdown', e => {
         if (state.mode !== 3) return;
         state.dragging = true; state.lastX = e.clientX; state.lastY = e.clientY;
@@ -780,8 +804,7 @@
     });
     canvas.addEventListener('pointermove', e => {
         if (!state.dragging) return;
-        state.yaw += (e.clientX - state.lastX) * .009;
-        state.pitch = clamp(state.pitch + (e.clientY - state.lastY) * .007, -.95, 1.25);
+        rotateView(e.clientX - state.lastX, e.clientY - state.lastY);
         state.lastX = e.clientX; state.lastY = e.clientY;
         scheduleDraw();
     });

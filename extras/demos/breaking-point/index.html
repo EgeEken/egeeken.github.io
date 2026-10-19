@@ -20,11 +20,11 @@
         <section class="bp-card playable" aria-labelledby="play-title">
             <p class="decision-question" id="play-title">
                 Would you rather take a guaranteed
-                <span class="inline-edit"><button type="button" id="display-small" class="inline-value" aria-label="Edit guaranteed amount" title="Click to edit">$500K</button><input id="play-small" type="number" min="1000" max="10000000" step="1" value="500000" inputmode="decimal" aria-label="Guaranteed money, dollars" hidden></span>
+                <span class="inline-edit"><button type="button" id="display-small" class="inline-value" aria-label="Edit guaranteed amount" title="Click to edit">$500K</button><input id="play-small" type="number" step="any" value="500000" inputmode="decimal" aria-label="Guaranteed money, dollars" hidden></span>
                 or gamble with a
-                <span class="inline-edit"><button type="button" id="display-odds" class="inline-value" aria-label="Edit winning probability" title="Click to edit">50%</button><input id="play-odds" type="number" min="1" max="99" step="1" value="50" inputmode="numeric" aria-label="Winning probability, percent" hidden></span>
+                <span class="inline-edit"><button type="button" id="display-odds" class="inline-value" aria-label="Edit winning probability" title="Click to edit">50%</button><input id="play-odds" type="number" min="0" max="100" step="any" value="50" inputmode="numeric" aria-label="Winning probability, percent" hidden></span>
                 chance of winning
-                <span class="inline-edit"><button type="button" id="display-big" class="inline-value" aria-label="Edit jackpot amount" title="Click to edit">$50M</button><input id="play-big" type="number" min="10000" max="1000000000000" step="1" value="50000000" inputmode="decimal" aria-label="Jackpot, dollars" hidden></span>?
+                <span class="inline-edit"><button type="button" id="display-big" class="inline-value" aria-label="Edit jackpot amount" title="Click to edit">$50M</button><input id="play-big" type="number" step="any" value="50000000" inputmode="decimal" aria-label="Jackpot, dollars" hidden></span>?
             </p>
             <p class="validation" id="play-error" role="alert" hidden></p>
             <div class="choice-buttons">
@@ -64,8 +64,8 @@
                 <label class="control-group" id="axis-x-group">
                     <span class="control-label" id="axis-x-label">Horizontal axis</span>
                     <select id="axis-x">
-                        <option value="small">Guaranteed money</option>
-                        <option value="big" selected>Jackpot</option>
+                        <option value="small" selected>Guaranteed money</option>
+                        <option value="big">Jackpot</option>
                         <option value="odds">Win probability</option>
                     </select>
                 </label>
@@ -73,8 +73,8 @@
                     <span class="control-label">Vertical axis</span>
                     <select id="axis-y">
                         <option value="small">Guaranteed money</option>
-                        <option value="big">Jackpot</option>
-                        <option value="odds" selected>Win probability</option>
+                        <option value="big" selected>Jackpot</option>
+                        <option value="odds">Win probability</option>
                     </select>
                 </label>
             </div>
