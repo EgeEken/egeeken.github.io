@@ -1,0 +1,1458 @@
+{
+  "_instructions": [
+    "Preliminary jazz / jazz-fusion catalog derived from downloaded_music_corrected.csv.",
+    "Keep artists and pieces in the exact display order wanted on the page.",
+    "Each artist requires artist and main. Put optional secondary tracks in additional; omit additional when empty.",
+    "Store only the 11-character YouTube video ID in video. iframeTitle is the accessible player title.",
+    "This first pass is deliberately broad and includes straight-ahead jazz, fusion, big band, vocal jazz, bossa nova, jazz-adjacent crossover, and jazz arrangements present in the library.",
+    "The user intends to prune, reorder, and change main/additional choices after reviewing this preliminary page."
+  ],
+  "artists": [
+    {
+      "artist": "Adam Neely",
+      "slug": "adam-neely",
+      "main": {
+        "title": "Castaways (ft. Martina DaSilva and Rotem Sivan)",
+        "video": "Bo5B_2cw2Wo",
+        "iframeTitle": "Adam Neely - Castaways (ft. Martina DaSilva and Rotem Sivan)"
+      },
+      "additional": [
+        {
+          "title": "The Full Track from that Adam Neely Video (Slow Learner)",
+          "video": "uXyu4mq6wBo",
+          "iframeTitle": "Adam Neely - The Full Track from that Adam Neely Video (Slow Learner)"
+        }
+      ]
+    },
+    {
+      "artist": "Ahmad Jamal Trio",
+      "slug": "ahmad-jamal-trio",
+      "main": {
+        "title": "I Love Music",
+        "video": "fW8NQgqYoVQ",
+        "iframeTitle": "Ahmad Jamal Trio - I Love Music"
+      }
+    },
+    {
+      "artist": "Anomalie",
+      "slug": "anomalie",
+      "main": {
+        "title": "MÉTROPOLE",
+        "video": "coYGq3Ptxcw",
+        "iframeTitle": "Anomalie - MÉTROPOLE"
+      },
+      "additional": [
+        {
+          "title": "Mollo",
+          "video": "3y_gZYRm05o",
+          "iframeTitle": "Anomalie - Mollo"
+        },
+        {
+          "title": "O Tannenbaum",
+          "video": "cxungHeI0Os",
+          "iframeTitle": "Anomalie - O Tannenbaum"
+        },
+        {
+          "title": "VELOURS",
+          "video": "HMwwTpESuLM",
+          "iframeTitle": "Anomalie - VELOURS"
+        }
+      ]
+    },
+    {
+      "artist": "Antônio Carlos Jobim",
+      "slug": "antonio-carlos-jobim",
+      "main": {
+        "title": "The Girl From Ipanema",
+        "video": "JGRB5uOxqsw",
+        "iframeTitle": "Antônio Carlos Jobim - The Girl From Ipanema"
+      },
+      "additional": [
+        {
+          "title": "Insensatez",
+          "video": "_Tt7w1yhHPc",
+          "iframeTitle": "Antônio Carlos Jobim - Insensatez"
+        },
+        {
+          "title": "Adam Neely feat. Martina DaSilva - Garota (The Girl From Ipanema)",
+          "video": "TTumhdbMRS8",
+          "iframeTitle": "Antônio Carlos Jobim - Adam Neely feat. Martina DaSilva - Garota (The Girl From Ipanema)"
+        },
+        {
+          "title": "Agua De Beber (Water To Drink)",
+          "video": "AcoKBiei5mQ",
+          "iframeTitle": "Antônio Carlos Jobim - Agua De Beber (Water To Drink)"
+        },
+        {
+          "title": "Desafinado",
+          "video": "oqHONL-LZ58",
+          "iframeTitle": "Antônio Carlos Jobim - Desafinado"
+        },
+        {
+          "title": "Jason Vieaux： Antonio Carlos Jobim's ＂A Felicidade＂",
+          "video": "T2LhIsO2THM",
+          "iframeTitle": "Antônio Carlos Jobim - Jason Vieaux： Antonio Carlos Jobim's ＂A Felicidade＂"
+        },
+        {
+          "title": "No More Blues",
+          "video": "m8puw2kESxI",
+          "iframeTitle": "Antônio Carlos Jobim - No More Blues"
+        },
+        {
+          "title": "Águas De Março",
+          "video": "BnB1G63XvCQ",
+          "iframeTitle": "Antônio Carlos Jobim - Águas De Março"
+        }
+      ]
+    },
+    {
+      "artist": "Art Blakey & The Jazz Messengers",
+      "slug": "art-blakey-the-jazz-messengers",
+      "main": {
+        "title": "Africaine",
+        "video": "L1UDpGzfA2w",
+        "iframeTitle": "Art Blakey & The Jazz Messengers - Africaine"
+      },
+      "additional": [
+        {
+          "title": "Crisis (1986 Digital Remaster)",
+          "video": "VPdqCYbRpCE",
+          "iframeTitle": "Art Blakey & The Jazz Messengers - Crisis (1986 Digital Remaster)"
+        }
+      ]
+    },
+    {
+      "artist": "Asuka Hayazaki / insaneintherainmusic",
+      "slug": "asuka-hayazaki-insaneintherainmusic",
+      "main": {
+        "title": "Coconut Mall (Jazz Arrangement)",
+        "video": "EJcdD51SDAQ",
+        "iframeTitle": "Asuka Hayazaki / insaneintherainmusic - Coconut Mall (Jazz Arrangement)"
+      }
+    },
+    {
+      "artist": "Benny Golson",
+      "slug": "benny-golson",
+      "main": {
+        "title": "I Remember Clifford",
+        "video": "mBb7nYOFuAI",
+        "iframeTitle": "Benny Golson - I Remember Clifford"
+      },
+      "additional": [
+        {
+          "title": "Blues Legacy (Alternate Take)",
+          "video": "JrM2Xp1MYOs",
+          "iframeTitle": "Benny Golson - Blues Legacy (Alternate Take)"
+        }
+      ]
+    },
+    {
+      "artist": "Billy Eckstine",
+      "slug": "billy-eckstine",
+      "main": {
+        "title": "I Want To Talk About You",
+        "video": "-T5jjfZtP5g",
+        "iframeTitle": "Billy Eckstine - I Want To Talk About You"
+      }
+    },
+    {
+      "artist": "BimBomBam Orchestra",
+      "slug": "bimbombam-orchestra",
+      "main": {
+        "title": "regalecus glesne (feat.Motoharu & RyoShibata)",
+        "video": "aBY29RbVgDk",
+        "iframeTitle": "BimBomBam Orchestra - regalecus glesne (feat.Motoharu & RyoShibata)"
+      }
+    },
+    {
+      "artist": "Blaine McGurty",
+      "slug": "blaine-mcgurty",
+      "main": {
+        "title": "Schmeebop",
+        "video": "6p2MPh3sWz0",
+        "iframeTitle": "Blaine McGurty - Schmeebop"
+      }
+    },
+    {
+      "artist": "Bobby Timmons",
+      "slug": "bobby-timmons",
+      "main": {
+        "title": "Moanin'",
+        "video": "T2WTqjC-vPs",
+        "iframeTitle": "Bobby Timmons - Moanin'"
+      }
+    },
+    {
+      "artist": "bohemianvoodoo",
+      "slug": "bohemianvoodoo",
+      "main": {
+        "title": "Adria Blue",
+        "video": "2zCvlgSEfrc",
+        "iframeTitle": "bohemianvoodoo - Adria Blue"
+      }
+    },
+    {
+      "artist": "Buddy Rich",
+      "slug": "buddy-rich",
+      "main": {
+        "title": "Time Check",
+        "video": "lS31jL3tIBU",
+        "iframeTitle": "Buddy Rich - Time Check"
+      },
+      "additional": [
+        {
+          "title": "Buddy Rich",
+          "video": "aw-_nw9zE7E",
+          "iframeTitle": "Buddy Rich - Buddy Rich"
+        }
+      ]
+    },
+    {
+      "artist": "Casiopea",
+      "slug": "casiopea",
+      "main": {
+        "title": "Asayake",
+        "video": "aGG4N5MMylo",
+        "iframeTitle": "Casiopea - Asayake"
+      },
+      "additional": [
+        {
+          "title": "Midnight Rendezvous",
+          "video": "4Hvvltt7d-U",
+          "iframeTitle": "Casiopea - Midnight Rendezvous"
+        },
+        {
+          "title": "Sunnyside Feelin'",
+          "video": "17Nn3SeGo3M",
+          "iframeTitle": "Casiopea - Sunnyside Feelin'"
+        },
+        {
+          "title": "Take Me (Live at Chuo Kaikan Hall, Tokyo, Feb. 1982)",
+          "video": "2CANuhzGtKU",
+          "iframeTitle": "Casiopea - Take Me (Live at Chuo Kaikan Hall, Tokyo, Feb. 1982)"
+        },
+        {
+          "title": "Tears Of The Star",
+          "video": "AT6YDPWaty4",
+          "iframeTitle": "Casiopea - Tears Of The Star"
+        },
+        {
+          "title": "Tears Of The Star (Live at Chuo Kaikan Hall, Tokyo, Feb. 1982)",
+          "video": "iEHmnQ67O6M",
+          "iframeTitle": "Casiopea - Tears Of The Star (Live at Chuo Kaikan Hall, Tokyo, Feb. 1982)"
+        },
+        {
+          "title": "Time Limit",
+          "video": "9PFOkv3a0KY",
+          "iframeTitle": "Casiopea - Time Limit"
+        },
+        {
+          "title": "Time Limit (Live at Chuo Kaikan Hall, Tokyo, Feb. 1982)",
+          "video": "9-vWGvm8IM4",
+          "iframeTitle": "Casiopea - Time Limit (Live at Chuo Kaikan Hall, Tokyo, Feb. 1982)"
+        }
+      ]
+    },
+    {
+      "artist": "Cedar Walton",
+      "slug": "cedar-walton",
+      "main": {
+        "title": "Mosaic",
+        "video": "8lXHHOOg-Bo",
+        "iframeTitle": "Cedar Walton - Mosaic"
+      }
+    },
+    {
+      "artist": "Charlie Parker",
+      "slug": "charlie-parker",
+      "main": {
+        "title": "Scrapple From The Apple (Rudy Van Gelder Edition ⧸ 2003 Remaster)",
+        "video": "NwqciyqFhoA",
+        "iframeTitle": "Charlie Parker - Scrapple From The Apple (Rudy Van Gelder Edition ⧸ 2003 Remaster)"
+      },
+      "additional": [
+        {
+          "title": "Bloomdido",
+          "video": "lGxajV75VvM",
+          "iframeTitle": "Charlie Parker - Bloomdido"
+        }
+      ]
+    },
+    {
+      "artist": "Chick Corea",
+      "slug": "chick-corea",
+      "main": {
+        "title": "Spain",
+        "video": "sEhQTjgoTdU",
+        "iframeTitle": "Chick Corea - Spain"
+      }
+    },
+    {
+      "artist": "Chucho Valdés",
+      "slug": "chucho-valdes",
+      "main": {
+        "title": "Sin Clave Pero Con Swing",
+        "video": "ZXc7gYlhCYQ",
+        "iframeTitle": "Chucho Valdés - Sin Clave Pero Con Swing"
+      }
+    },
+    {
+      "artist": "Count Basie",
+      "slug": "count-basie",
+      "main": {
+        "title": "Swingin' the Blues (1993 Remasterd Version)",
+        "video": "Gh8q19pjKL0",
+        "iframeTitle": "Count Basie - Swingin' the Blues (1993 Remasterd Version)"
+      },
+      "additional": [
+        {
+          "title": "Straight Ahead",
+          "video": "fm8uHT-BJP4",
+          "iframeTitle": "Count Basie - Straight Ahead"
+        }
+      ]
+    },
+    {
+      "artist": "Dave Brubeck",
+      "slug": "dave-brubeck",
+      "main": {
+        "title": "Blue Rondo à la Turk",
+        "video": "FqPC-BkylxA",
+        "iframeTitle": "Dave Brubeck - Blue Rondo à la Turk"
+      },
+      "additional": [
+        {
+          "title": "Three to Get Ready",
+          "video": "KCb10WMWSbQ",
+          "iframeTitle": "Dave Brubeck - Three to Get Ready"
+        }
+      ]
+    },
+    {
+      "artist": "Dave Brubeck / Koji Kondo",
+      "slug": "dave-brubeck-koji-kondo",
+      "main": {
+        "title": "Take Five but it's Song of Storms",
+        "video": "MJxIvT3NO78",
+        "iframeTitle": "Dave Brubeck / Koji Kondo - Take Five but it's Song of Storms"
+      }
+    },
+    {
+      "artist": "Dexter Gordon",
+      "slug": "dexter-gordon",
+      "main": {
+        "title": "For Regulars Only (Rudy Van Gelder⧸24-Bit Mastering⧸Digital Remaster⧸2004)",
+        "video": "fNPdG0SGWSQ",
+        "iframeTitle": "Dexter Gordon - For Regulars Only (Rudy Van Gelder⧸24-Bit Mastering⧸Digital Remaster⧸2004)"
+      }
+    },
+    {
+      "artist": "Dizzy Gillespie",
+      "slug": "dizzy-gillespie",
+      "main": {
+        "title": "Night In Tunisia",
+        "video": "4RaR210hglo",
+        "iframeTitle": "Dizzy Gillespie - Night In Tunisia"
+      }
+    },
+    {
+      "artist": "Dizzy Gillespie / Charlie Parker",
+      "slug": "dizzy-gillespie-charlie-parker",
+      "main": {
+        "title": "Anthropology",
+        "video": "Zq3HDQr7xWw",
+        "iframeTitle": "Dizzy Gillespie / Charlie Parker - Anthropology"
+      }
+    },
+    {
+      "artist": "Django Reinhardt",
+      "slug": "django-reinhardt",
+      "main": {
+        "title": "Swing '42",
+        "video": "2AqIdqrQtgk",
+        "iframeTitle": "Django Reinhardt - Swing '42"
+      }
+    },
+    {
+      "artist": "Django Reinhardt / Stéphane Grappelli",
+      "slug": "django-reinhardt-stephane-grappelli",
+      "main": {
+        "title": "Minor Swing (Remastered)",
+        "video": "otmTwTviAPY",
+        "iframeTitle": "Django Reinhardt / Stéphane Grappelli - Minor Swing (Remastered)"
+      }
+    },
+    {
+      "artist": "Duke Ellington",
+      "slug": "duke-ellington",
+      "main": {
+        "title": "In a Sentimental Mood - Remastered - feat. Duke Ellington",
+        "video": "Z401K8VKX5g",
+        "iframeTitle": "Duke Ellington - In a Sentimental Mood - Remastered - feat. Duke Ellington"
+      },
+      "additional": [
+        {
+          "title": "In A Sentimental Mood by Sonny Rollins from 'The Complete Prestige Recordings' Disc 2",
+          "video": "zqLn8APW4Ts",
+          "iframeTitle": "Duke Ellington - In A Sentimental Mood by Sonny Rollins from 'The Complete Prestige Recordings' Disc 2"
+        },
+        {
+          "title": "Warm Valley",
+          "video": "18m-0hZb4CQ",
+          "iframeTitle": "Duke Ellington - Warm Valley"
+        },
+        {
+          "title": "Mood Indigo",
+          "video": "HGz6my4q-20",
+          "iframeTitle": "Duke Ellington - Mood Indigo"
+        },
+        {
+          "title": "Satin Doll",
+          "video": "wQ-n7jhs_K8",
+          "iframeTitle": "Duke Ellington - Satin Doll"
+        },
+        {
+          "title": "I'm Beginning To See The Light",
+          "video": "O4ZOPWFsTG4",
+          "iframeTitle": "Duke Ellington - I'm Beginning To See The Light"
+        }
+      ]
+    },
+    {
+      "artist": "Duke Jordan",
+      "slug": "duke-jordan",
+      "main": {
+        "title": "Glad I Met Pat, Take 4",
+        "video": "Nld2yaO6MWU",
+        "iframeTitle": "Duke Jordan - Glad I Met Pat, Take 4"
+      }
+    },
+    {
+      "artist": "Ella Fitzgerald",
+      "slug": "ella-fitzgerald",
+      "main": {
+        "title": "Two Little Men In A Flying Saucer",
+        "video": "GWaUACHYhx8",
+        "iframeTitle": "Ella Fitzgerald - Two Little Men In A Flying Saucer"
+      }
+    },
+    {
+      "artist": "Eugen Cicero",
+      "slug": "eugen-cicero",
+      "main": {
+        "title": "Bach's Softly Sunrise",
+        "video": "qDAadMEMqJU",
+        "iframeTitle": "Eugen Cicero - Bach's Softly Sunrise"
+      },
+      "additional": [
+        {
+          "title": "Der Schlitten eilt",
+          "video": "rtDnxKqnkWE",
+          "iframeTitle": "Eugen Cicero - Der Schlitten eilt"
+        },
+        {
+          "title": "Dir gehört mein ganzes Leben",
+          "video": "WU2jYUqTNCA",
+          "iframeTitle": "Eugen Cicero - Dir gehört mein ganzes Leben"
+        },
+        {
+          "title": "Dort in der Ferne",
+          "video": "EHtW0VN28Ow",
+          "iframeTitle": "Eugen Cicero - Dort in der Ferne"
+        },
+        {
+          "title": "Im Mondenschein",
+          "video": "3pMc5ef6FGg",
+          "iframeTitle": "Eugen Cicero - Im Mondenschein"
+        },
+        {
+          "title": "Memories of Clausenburg",
+          "video": "fZLv9qQzphA",
+          "iframeTitle": "Eugen Cicero - Memories of Clausenburg"
+        },
+        {
+          "title": "Nur ein Mädel gibt es auf der Welt",
+          "video": "fkBAG9zh06E",
+          "iframeTitle": "Eugen Cicero - Nur ein Mädel gibt es auf der Welt"
+        },
+        {
+          "title": "Rumänische Volksweisen",
+          "video": "HmZwGy_ZjQw",
+          "iframeTitle": "Eugen Cicero - Rumänische Volksweisen"
+        },
+        {
+          "title": "Rumänisches Volkslied",
+          "video": "EEkifDowkvk",
+          "iframeTitle": "Eugen Cicero - Rumänisches Volkslied"
+        },
+        {
+          "title": "Seltener Weizen, seltene Gerste, seltenes Korn",
+          "video": "E0ip29qpCqk",
+          "iframeTitle": "Eugen Cicero - Seltener Weizen, seltene Gerste, seltenes Korn"
+        },
+        {
+          "title": "Süßer Klang ertönt",
+          "video": "UTUxYduxRqs",
+          "iframeTitle": "Eugen Cicero - Süßer Klang ertönt"
+        }
+      ]
+    },
+    {
+      "artist": "Frank Sinatra",
+      "slug": "frank-sinatra",
+      "main": {
+        "title": "Fly Me to the Moon (In Other Words)",
+        "video": "rSrc7aulay8",
+        "iframeTitle": "Frank Sinatra with Count Basie Orchestra - Fly Me to the Moon"
+      },
+      "additional": [
+        {
+          "title": "My Way (2008 Remastered)",
+          "video": "qQzdAsjWGPg",
+          "iframeTitle": "Frank Sinatra - My Way (2008 Remastered)"
+        },
+        {
+          "title": "Strangers In The Night",
+          "video": "BTOeRwIUnG0",
+          "iframeTitle": "Frank Sinatra - Strangers In The Night"
+        },
+        {
+          "title": "The World We Knew (Over And Over)",
+          "video": "dthgRdTf0Ds",
+          "iframeTitle": "Frank Sinatra - The World We Knew (Over And Over)"
+        },
+        {
+          "title": "Theme From New York, New York",
+          "video": "gFwuHsra6Oc",
+          "iframeTitle": "Frank Sinatra - Theme From New York, New York"
+        },
+        {
+          "title": "I've Got You Under My Skin",
+          "video": "xz5W5bKLj_4",
+          "iframeTitle": "Frank Sinatra - I've Got You Under My Skin"
+        }
+      ]
+    },
+    {
+      "artist": "Frank Sinatra / Nancy Sinatra",
+      "slug": "frank-sinatra-nancy-sinatra",
+      "main": {
+        "title": "Somethin' Stupid",
+        "video": "LWXUdqvVO8Y",
+        "iframeTitle": "Frank Sinatra / Nancy Sinatra - Somethin' Stupid"
+      }
+    },
+    {
+      "artist": "George Shearing",
+      "slug": "george-shearing",
+      "main": {
+        "title": "Lullaby Of Birdland",
+        "video": "jkxP1mJ9pvs",
+        "iframeTitle": "George Shearing - Lullaby Of Birdland"
+      }
+    },
+    {
+      "artist": "Gerry Mulligan",
+      "slug": "gerry-mulligan",
+      "main": {
+        "title": "Night Lights",
+        "video": "Wf02V8AtMag",
+        "iframeTitle": "Gerry Mulligan - Night Lights"
+      },
+      "additional": [
+        {
+          "title": "Blight of the Fumble Bee",
+          "video": "3RZbByVdiBI",
+          "iframeTitle": "Gerry Mulligan - Blight of the Fumble Bee"
+        },
+        {
+          "title": "Night Lights (1965 Version)",
+          "video": "Wx4EwR5tku0",
+          "iframeTitle": "Gerry Mulligan - Night Lights (1965 Version)"
+        },
+        {
+          "title": "In the Wee Small Hours of the Morning",
+          "video": "RUYypttogTI",
+          "iframeTitle": "Gerry Mulligan Sextet - In the Wee Small Hours of the Morning"
+        }
+      ]
+    },
+    {
+      "artist": "GLASYS",
+      "slug": "glasys",
+      "main": {
+        "title": "The MIDI Skull Song",
+        "video": "zpcGYnYCV7c",
+        "iframeTitle": "GLASYS - The MIDI Skull Song"
+      }
+    },
+    {
+      "artist": "Gordon Goodwin's Big Phat Band",
+      "slug": "gordon-goodwin-s-big-phat-band",
+      "main": {
+        "title": "Sing Sang Sung",
+        "video": "2MCGApB7Uxg",
+        "iframeTitle": "Gordon Goodwin's Big Phat Band - Sing Sang Sung"
+      }
+    },
+    {
+      "artist": "Hank Garland",
+      "slug": "hank-garland",
+      "main": {
+        "title": "Sugarfoot Rag",
+        "video": "YVoi_zGhQpY",
+        "iframeTitle": "Hank Garland - Sugarfoot Rag"
+      }
+    },
+    {
+      "artist": "Hank Mobley",
+      "slug": "hank-mobley",
+      "main": {
+        "title": "No Room For Squares (Remastered 2000 ⧸ Rudy Van Gelder Edition)",
+        "video": "oLWQkjcLC8Y",
+        "iframeTitle": "Hank Mobley - No Room For Squares (Remastered 2000 ⧸ Rudy Van Gelder Edition)"
+      },
+      "additional": [
+        {
+          "title": "A Caddy For Daddy",
+          "video": "8_OTOL4hWBg",
+          "iframeTitle": "Hank Mobley - A Caddy For Daddy"
+        },
+        {
+          "title": "Dig Dis",
+          "video": "ckuxxlzpfcw",
+          "iframeTitle": "Hank Mobley - Dig Dis"
+        },
+        {
+          "title": "Hank's Other Soul (Remastered 2006)",
+          "video": "k3noQ6dfw3E",
+          "iframeTitle": "Hank Mobley - Hank's Other Soul (Remastered 2006)"
+        },
+        {
+          "title": "Up A Step (Remastered 2000 ⧸ Rudy Van Gelder Edition)",
+          "video": "0cypfeCIthQ",
+          "iframeTitle": "Hank Mobley - Up A Step (Remastered 2000 ⧸ Rudy Van Gelder Edition)"
+        }
+      ]
+    },
+    {
+      "artist": "Hareton Salvanini",
+      "slug": "hareton-salvanini",
+      "main": {
+        "title": "Quarto de Hotel",
+        "video": "G79wPj_XQ5s",
+        "iframeTitle": "Hareton Salvanini - Quarto de Hotel"
+      }
+    },
+    {
+      "artist": "Herbie Hancock",
+      "slug": "herbie-hancock",
+      "main": {
+        "title": "Dolphin Dance",
+        "video": "dxnTYFE0x1I",
+        "iframeTitle": "Herbie Hancock - Dolphin Dance"
+      }
+    },
+    {
+      "artist": "Horace Silver",
+      "slug": "horace-silver",
+      "main": {
+        "title": "Song For My Father",
+        "video": "mKf1x3CALAE",
+        "iframeTitle": "Horace Silver - Song For My Father"
+      },
+      "additional": [
+        {
+          "title": "Nutville",
+          "video": "8pF0xG912VY",
+          "iframeTitle": "Horace Silver - Nutville"
+        }
+      ]
+    },
+    {
+      "artist": "insaneintherainmusic",
+      "slug": "insaneintherainmusic",
+      "main": {
+        "title": "Forward (Insane In The Rain)",
+        "video": "x1Dtk_W4L7M",
+        "iframeTitle": "insaneintherainmusic - Forward (Insane In The Rain)"
+      },
+      "additional": [
+        {
+          "title": "Luminaire (Insane In The Rain)",
+          "video": "R8Too45saHI",
+          "iframeTitle": "insaneintherainmusic - Luminaire (Insane In The Rain)"
+        },
+        {
+          "title": "Resistance (Insane In The Rain)",
+          "video": "0DFFBcEsivk",
+          "iframeTitle": "insaneintherainmusic - Resistance (Insane In The Rain)"
+        },
+        {
+          "title": "Ubuntu (Insane In The Rain)",
+          "video": "cv0FudVznps",
+          "iframeTitle": "insaneintherainmusic - Ubuntu (Insane In The Rain)"
+        }
+      ]
+    },
+    {
+      "artist": "JABBERLOOP",
+      "slug": "jabberloop",
+      "main": {
+        "title": "Sore Sore",
+        "video": "UUTfP_uKOrw",
+        "iframeTitle": "JABBERLOOP - Sore Sore"
+      }
+    },
+    {
+      "artist": "Jacob Mann",
+      "slug": "jacob-mann",
+      "main": {
+        "title": "Baby Carrots",
+        "video": "Z3BfoXnr5ZQ",
+        "iframeTitle": "Jacob Mann - Baby Carrots"
+      },
+      "additional": [
+        {
+          "title": "Barbara Bossa",
+          "video": "cSBPqqA-lqw",
+          "iframeTitle": "Jacob Mann - Barbara Bossa"
+        },
+        {
+          "title": "Bumble Buddies",
+          "video": "BiBOoHHmy1s",
+          "iframeTitle": "Jacob Mann - Bumble Buddies"
+        },
+        {
+          "title": "Hold Music",
+          "video": "kZ9tLMFCfXs",
+          "iframeTitle": "Jacob Mann - Hold Music"
+        },
+        {
+          "title": "Sloth Dream",
+          "video": "6A3hyqOyop0",
+          "iframeTitle": "Jacob Mann - Sloth Dream"
+        }
+      ]
+    },
+    {
+      "artist": "Jacob Mann Big Band",
+      "slug": "jacob-mann-big-band",
+      "main": {
+        "title": "Bounce House",
+        "video": "Fe0gIE7zVgs",
+        "iframeTitle": "Jacob Mann Big Band - Bounce House"
+      },
+      "additional": [
+        {
+          "title": "Don't Fly Spirit",
+          "video": "oI0TleUSIMk",
+          "iframeTitle": "Jacob Mann Big Band - Don't Fly Spirit"
+        },
+        {
+          "title": "Kogi",
+          "video": "4y56PtZwWUA",
+          "iframeTitle": "Jacob Mann Big Band - Kogi"
+        },
+        {
+          "title": "Parking Ticket",
+          "video": "ysoc28G4ZDw",
+          "iframeTitle": "Jacob Mann Big Band - Parking Ticket"
+        },
+        {
+          "title": "Pete Wheeler",
+          "video": "9veVb1UJLyU",
+          "iframeTitle": "Jacob Mann Big Band - Pete Wheeler"
+        },
+        {
+          "title": "Pronk",
+          "video": "5oNNpzq5FwA",
+          "iframeTitle": "Jacob Mann Big Band - Pronk"
+        },
+        {
+          "title": "Thirty Seven After Six",
+          "video": "qqxao2Ng5Yg",
+          "iframeTitle": "Jacob Mann Big Band - Thirty Seven After Six"
+        }
+      ]
+    },
+    {
+      "artist": "Jazz Emu",
+      "slug": "jazz-emu",
+      "main": {
+        "title": "Still Waiting",
+        "video": "_ws0QtAiiXQ",
+        "iframeTitle": "Jazz Emu - Still Waiting"
+      }
+    },
+    {
+      "artist": "Joe Zawinul",
+      "slug": "joe-zawinul",
+      "main": {
+        "title": "Angel Face",
+        "video": "IXzL-lN1Ntw",
+        "iframeTitle": "Joe Zawinul - Angel Face"
+      }
+    },
+    {
+      "artist": "John Coltrane",
+      "slug": "john-coltrane",
+      "main": {
+        "title": "Giant Steps (Mono)",
+        "video": "q-M5qmxXilU",
+        "iframeTitle": "John Coltrane - Giant Steps (Mono)"
+      },
+      "additional": [
+        {
+          "title": "Countdown",
+          "video": "JWqDNso8KLU",
+          "iframeTitle": "John Coltrane - Countdown"
+        },
+        {
+          "title": "Crescent",
+          "video": "Ye717DNG6HM",
+          "iframeTitle": "John Coltrane - Crescent"
+        },
+        {
+          "title": "Moment's Notice",
+          "video": "Esib-qhzCMw",
+          "iframeTitle": "John Coltrane - Moment's Notice"
+        }
+      ]
+    },
+    {
+      "artist": "Kenny Burrell",
+      "slug": "kenny-burrell",
+      "main": {
+        "title": "Your Host",
+        "video": "_FhCJrSniRw",
+        "iframeTitle": "Kenny Burrell - Your Host"
+      }
+    },
+    {
+      "artist": "Koji Kondo",
+      "slug": "koji-kondo",
+      "main": {
+        "title": "Bob-omb Battlefield (Big Band Arrangement)",
+        "video": "iWNneXXiLlA",
+        "iframeTitle": "Koji Kondo - Bob-omb Battlefield (Big Band Arrangement)"
+      },
+      "additional": [
+        {
+          "title": "Castle And Fortress",
+          "video": "Dv4f-maaiZI",
+          "iframeTitle": "Koji Kondo - Castle And Fortress"
+        },
+        {
+          "title": "Song of Storms (Jazz Cover)",
+          "video": "WDzGGHNaoV8",
+          "iframeTitle": "Koji Kondo - Song of Storms (Jazz Cover)"
+        }
+      ]
+    },
+    {
+      "artist": "Koji Kondo / insaneintherainmusic",
+      "slug": "koji-kondo-insaneintherainmusic",
+      "main": {
+        "title": "Song of Storms (Jazz Cover)",
+        "video": "WDzGGHNaoV8",
+        "iframeTitle": "Koji Kondo / insaneintherainmusic - Song of Storms (Jazz Cover)"
+      }
+    },
+    {
+      "artist": "Kristofer Maddigan",
+      "slug": "kristofer-maddigan",
+      "main": {
+        "title": "Funhouse Frazzle",
+        "video": "Z6tVmOgR-Xs",
+        "iframeTitle": "Kristofer Maddigan - Funhouse Frazzle"
+      },
+      "additional": [
+        {
+          "title": "Murine Corps",
+          "video": "zhqMfAKLjuE",
+          "iframeTitle": "Kristofer Maddigan - Murine Corps"
+        },
+        {
+          "title": "Ruse of an Ooze",
+          "video": "gVgJ6LiyPlM",
+          "iframeTitle": "Kristofer Maddigan - Ruse of an Ooze"
+        }
+      ]
+    },
+    {
+      "artist": "Larnell Lewis",
+      "slug": "larnell-lewis",
+      "main": {
+        "title": "CHANGE YOUR MIND",
+        "video": "uHwfuFdYlRU",
+        "iframeTitle": "Larnell Lewis - CHANGE YOUR MIND"
+      },
+      "additional": [
+        {
+          "title": "COCONUTS",
+          "video": "EenLubFdW7c",
+          "iframeTitle": "Larnell Lewis - COCONUTS"
+        }
+      ]
+    },
+    {
+      "artist": "Laufey",
+      "slug": "laufey",
+      "main": {
+        "title": "From The Start",
+        "video": "hbvlVCmIiEI",
+        "iframeTitle": "Laufey - From The Start"
+      },
+      "additional": [
+        {
+          "title": "I Let You Win!",
+          "video": "IueBzcNc8iw",
+          "iframeTitle": "Laufey - I Let You Win!"
+        },
+        {
+          "title": "Laufey & the Iceland Symphony Orchestra - Let You Break My Heart Again (Live at The Symphony)",
+          "video": "PK02xDT_RWA",
+          "iframeTitle": "Laufey - Laufey & the Iceland Symphony Orchestra - Let You Break My Heart Again (Live at The Symphony)"
+        },
+        {
+          "title": "Laufey & the Iceland Symphony Orchestra - Night Light (Live at The Symphony)",
+          "video": "RAxbrNLHVA0",
+          "iframeTitle": "Laufey - Laufey & the Iceland Symphony Orchestra - Night Light (Live at The Symphony)"
+        },
+        {
+          "title": "Valentine",
+          "video": "tyKu0uZS86Q",
+          "iframeTitle": "Laufey - Valentine"
+        }
+      ]
+    },
+    {
+      "artist": "Lee Morgan",
+      "slug": "lee-morgan",
+      "main": {
+        "title": "The Gigolo (Alternate Take ⧸ Remastered)",
+        "video": "MwskRIIRR0k",
+        "iframeTitle": "Lee Morgan - The Gigolo (Alternate Take ⧸ Remastered)"
+      }
+    },
+    {
+      "artist": "Lester Young",
+      "slug": "lester-young",
+      "main": {
+        "title": "Tickle Toe (1993 Remaster)",
+        "video": "0Fdz3XIce7Y",
+        "iframeTitle": "Lester Young - Tickle Toe (1993 Remaster)"
+      }
+    },
+    {
+      "artist": "Louie Zong",
+      "slug": "louie-zong",
+      "main": {
+        "title": "Puzzle Jazz",
+        "video": "N-A2RaJAbvQ",
+        "iframeTitle": "Louie Zong - Puzzle Jazz"
+      },
+      "additional": [
+        {
+          "title": "Baguette Bop",
+          "video": "RQr2ESNxWH0",
+          "iframeTitle": "Louie Zong - Baguette Bop"
+        },
+        {
+          "title": "Breezy Slide (feat. Brian David Gilbert)",
+          "video": "nUgKZFI-pTY",
+          "iframeTitle": "Louie Zong - Breezy Slide (feat. Brian David Gilbert)"
+        },
+        {
+          "title": "Cycad Conga",
+          "video": "gWJVu5SZLf8",
+          "iframeTitle": "Louie Zong - Cycad Conga"
+        },
+        {
+          "title": "Fairy Ring Funk",
+          "video": "4BodNa5seOA",
+          "iframeTitle": "Louie Zong - Fairy Ring Funk"
+        },
+        {
+          "title": "Hold On, Please!",
+          "video": "k3dvfeVUxek",
+          "iframeTitle": "Louie Zong - Hold On, Please!"
+        },
+        {
+          "title": "La Carrera Gourmet",
+          "video": "3znOCqHSRVU",
+          "iframeTitle": "Louie Zong - La Carrera Gourmet"
+        },
+        {
+          "title": "Minty Fresh",
+          "video": "9zRt0VaRpK0",
+          "iframeTitle": "Louie Zong - Minty Fresh"
+        }
+      ]
+    },
+    {
+      "artist": "Louis Armstrong",
+      "slug": "louis-armstrong",
+      "main": {
+        "title": "Swing that Music",
+        "video": "drknSlDn6yM",
+        "iframeTitle": "Louis Armstrong - Swing that Music"
+      }
+    },
+    {
+      "artist": "Louis Cole",
+      "slug": "louis-cole",
+      "main": {
+        "title": "Thinking (live sesh)",
+        "video": "ZMI1iU7VgyI",
+        "iframeTitle": "Louis Cole - Thinking (live sesh)"
+      }
+    },
+    {
+      "artist": "LP Septet",
+      "slug": "lp-septet",
+      "main": {
+        "title": "Stag (Live)",
+        "video": "luNf5IF9AWo",
+        "iframeTitle": "LP Septet - Stag (Live)"
+      }
+    },
+    {
+      "artist": "Luiz Bonfá",
+      "slug": "luiz-bonfa",
+      "main": {
+        "title": "Samba De Orpheu",
+        "video": "EEg8zK6C3H8",
+        "iframeTitle": "Luiz Bonfá - Samba De Orpheu"
+      }
+    },
+    {
+      "artist": "Marcos Valle",
+      "slug": "marcos-valle",
+      "main": {
+        "title": "Samba de Verão",
+        "video": "srCVy8ofbz0",
+        "iframeTitle": "Marcos Valle - Samba de Verão"
+      },
+      "additional": [
+        {
+          "title": "The Face I Love",
+          "video": "OSttHUmyU3c",
+          "iframeTitle": "Marcos Valle - The Face I Love"
+        }
+      ]
+    },
+    {
+      "artist": "Martial Solal",
+      "slug": "martial-solal",
+      "main": {
+        "title": "New York Herald Tribune (A bout de souffle)",
+        "video": "MjWJrqKeKUk",
+        "iframeTitle": "Martial Solal - New York Herald Tribune (A bout de souffle)"
+      }
+    },
+    {
+      "artist": "Mathieu Fiset",
+      "slug": "mathieu-fiset",
+      "main": {
+        "title": "Chick's Pain",
+        "video": "qrjhWNkL-bY",
+        "iframeTitle": "Mathieu Fiset - Chick's Pain"
+      }
+    },
+    {
+      "artist": "Miles Davis",
+      "slug": "miles-davis",
+      "main": {
+        "title": "So What",
+        "video": "KJEzFvXx3Xw",
+        "iframeTitle": "Miles Davis - So What"
+      },
+      "additional": [
+        {
+          "title": "Blue In Green",
+          "video": "TLDflhhdPCg",
+          "iframeTitle": "Miles Davis - Blue In Green"
+        },
+        {
+          "title": "Nardis",
+          "video": "xsY-9YnxGuo",
+          "iframeTitle": "Miles Davis - Nardis"
+        }
+      ]
+    },
+    {
+      "artist": "Minyo Crusaders",
+      "slug": "minyo-crusaders",
+      "main": {
+        "title": "Minyo Cumbiero - Cumbia del Monte Fuji",
+        "video": "jy6No4Xuq_E",
+        "iframeTitle": "Minyo Crusaders - Minyo Cumbiero - Cumbia del Monte Fuji"
+      }
+    },
+    {
+      "artist": "Neal Hefti",
+      "slug": "neal-hefti",
+      "main": {
+        "title": "Splanky",
+        "video": "VYO3gC962PM",
+        "iframeTitle": "Neal Hefti - Splanky"
+      }
+    },
+    {
+      "artist": "Nicola Conte",
+      "slug": "nicola-conte",
+      "main": {
+        "title": "BOSSA PER DUE",
+        "video": "3oeE8ftFkhA",
+        "iframeTitle": "Nicola Conte - BOSSA PER DUE"
+      }
+    },
+    {
+      "artist": "Nikolai Kapustin",
+      "slug": "nikolai-kapustin",
+      "main": {
+        "title": "Eight Concert Etudes, Op. 40",
+        "video": "RrpjWM8JT7k",
+        "iframeTitle": "Nikolai Kapustin - Eight Concert Etudes, Op. 40"
+      },
+      "additional": [
+        {
+          "title": "Early Pieces Collection (1962-1982)",
+          "video": "Knlac76KLmo",
+          "iframeTitle": "Nikolai Kapustin - Early Pieces Collection (1962-1982)"
+        }
+      ]
+    },
+    {
+      "artist": "Oliver Nelson",
+      "slug": "oliver-nelson",
+      "main": {
+        "title": "Stolen Moments",
+        "video": "7A9XsIjr-R4",
+        "iframeTitle": "Oliver Nelson - Stolen Moments"
+      }
+    },
+    {
+      "artist": "Oscar Peterson",
+      "slug": "oscar-peterson",
+      "main": {
+        "title": "Hymn To Freedom",
+        "video": "Uy25C_s288g",
+        "iframeTitle": "Oscar Peterson - Hymn To Freedom"
+      },
+      "additional": [
+        {
+          "title": "Squeaky's Blues",
+          "video": "ubcWIOK0e1Q",
+          "iframeTitle": "Oscar Peterson - Squeaky's Blues"
+        }
+      ]
+    },
+    {
+      "artist": "Roberto Menescal",
+      "slug": "roberto-menescal",
+      "main": {
+        "title": "O Barquinho",
+        "video": "AlfsCETwGX4",
+        "iframeTitle": "Roberto Menescal - O Barquinho"
+      }
+    },
+    {
+      "artist": "Ronnell Bright",
+      "slug": "ronnell-bright",
+      "main": {
+        "title": "Sweet Pumpkin (Lyric Video)",
+        "video": "GvOIgCI33Zs",
+        "iframeTitle": "Ronnell Bright - Sweet Pumpkin (Lyric Video)"
+      }
+    },
+    {
+      "artist": "Ryo Fukui",
+      "slug": "ryo-fukui",
+      "main": {
+        "title": "Scenery",
+        "video": "sr4vIBaumiM",
+        "iframeTitle": "Ryo Fukui - Scenery"
+      }
+    },
+    {
+      "artist": "Sacha Distel",
+      "slug": "sacha-distel",
+      "main": {
+        "title": "The Good Life",
+        "video": "CJiDerQXyoo",
+        "iframeTitle": "Sacha Distel - The Good Life"
+      }
+    },
+    {
+      "artist": "Sammy Nestico",
+      "slug": "sammy-nestico",
+      "main": {
+        "title": "Wind Machine",
+        "video": "YfU8WZqCnKo",
+        "iframeTitle": "Sammy Nestico - Wind Machine"
+      }
+    },
+    {
+      "artist": "Schroeder-Headz",
+      "slug": "schroeder-headz",
+      "main": {
+        "title": "Blue Bird",
+        "video": "qB274uRBI1o",
+        "iframeTitle": "Schroeder-Headz - Blue Bird"
+      }
+    },
+    {
+      "artist": "Shoji Meguro",
+      "slug": "shoji-meguro",
+      "main": {
+        "title": "Life Goes On (Persona 5) feat. Adam Neely ｜ J-MUSIC Ensemble",
+        "video": "_WMWP2V_7QM",
+        "iframeTitle": "Shoji Meguro - Life Goes On (Persona 5) feat. Adam Neely ｜ J-MUSIC Ensemble"
+      },
+      "additional": [
+        {
+          "title": "Life Will Change (Persona 5) feat. Mohmega ｜ J-MUSIC Ensemble",
+          "video": "ZbdZTG_LwYU",
+          "iframeTitle": "Shoji Meguro - Life Will Change (Persona 5) feat. Mohmega ｜ J-MUSIC Ensemble"
+        },
+        {
+          "title": "Persona 4 - ＂specialist＂ in the style of Persona 5",
+          "video": "AYxs9AhqRcY",
+          "iframeTitle": "Shoji Meguro - Persona 4 - ＂specialist＂ in the style of Persona 5"
+        }
+      ]
+    },
+    {
+      "artist": "Shubh Saran",
+      "slug": "shubh-saran",
+      "main": {
+        "title": "SLIP",
+        "video": "FNrHNNs6AyA",
+        "iframeTitle": "Shubh Saran - SLIP"
+      }
+    },
+    {
+      "artist": "Stanley Turrentine",
+      "slug": "stanley-turrentine",
+      "main": {
+        "title": "Little Sheri (1960 Version⧸2007 Digital Remaster⧸Rudy Van Gelder Edition)",
+        "video": "0tnxO1ncYpQ",
+        "iframeTitle": "Stanley Turrentine - Little Sheri (1960 Version⧸2007 Digital Remaster⧸Rudy Van Gelder Edition)"
+      }
+    },
+    {
+      "artist": "Stevie Wonder",
+      "slug": "stevie-wonder",
+      "main": {
+        "title": "Isn't She Lovely",
+        "video": "oE56g61mW44",
+        "iframeTitle": "Stevie Wonder - Isn't She Lovely"
+      },
+      "additional": [
+        {
+          "title": "Isn't She Lovely (Jazz Piano)",
+          "video": "t3XFMbidu3M",
+          "iframeTitle": "Stevie Wonder - Isn't She Lovely (Jazz Piano)"
+        },
+        {
+          "title": "Stevie Wonder You Are The Sunshine Of My Life",
+          "video": "3wZ_b_uUAdQ",
+          "iframeTitle": "Stevie Wonder - Stevie Wonder You Are The Sunshine Of My Life"
+        }
+      ]
+    },
+    {
+      "artist": "T-Square",
+      "slug": "t-square",
+      "main": {
+        "title": "Bond",
+        "video": "xe7a_6uejCg",
+        "iframeTitle": "T-Square - Bond"
+      },
+      "additional": [
+        {
+          "title": "Bond (Piano Version)",
+          "video": "9dNRPaA4654",
+          "iframeTitle": "T-Square - Bond (Piano Version)"
+        },
+        {
+          "title": "NEW ME",
+          "video": "vjgEVCbST_A",
+          "iframeTitle": "T-Square - NEW ME"
+        }
+      ]
+    },
+    {
+      "artist": "Thank You Scientist",
+      "slug": "thank-you-scientist",
+      "main": {
+        "title": "Rube Goldberg Variations",
+        "video": "BE50naHdWbA",
+        "iframeTitle": "Thank You Scientist - Rube Goldberg Variations"
+      }
+    },
+    {
+      "artist": "The Bad Plus",
+      "slug": "the-bad-plus",
+      "main": {
+        "title": "And Here We Test Our Powers Of Observation by The Bad Plus",
+        "video": "NrN0aMsFNgs",
+        "iframeTitle": "The Bad Plus - And Here We Test Our Powers Of Observation by The Bad Plus"
+      }
+    },
+    {
+      "artist": "The Seatbelts / Yoko Kanno",
+      "slug": "the-seatbelts-yoko-kanno",
+      "main": {
+        "title": "Tank!",
+        "video": "UFFa0QoHWvE",
+        "iframeTitle": "The Seatbelts / Yoko Kanno - Tank!"
+      },
+      "additional": [
+        {
+          "title": "Rush",
+          "video": "XtxsYF4e3uM",
+          "iframeTitle": "The Seatbelts / Yoko Kanno - Rush"
+        },
+        {
+          "title": "Piano Black",
+          "video": "ssmYUDYtrKA",
+          "iframeTitle": "The Seatbelts / Yoko Kanno - Piano Black"
+        },
+        {
+          "title": "Waltz for Zizi",
+          "video": "Ryqvdr0UxcI",
+          "iframeTitle": "The Seatbelts / Yoko Kanno - Waltz for Zizi"
+        }
+      ]
+    },
+    {
+      "artist": "Thelonious Monk",
+      "slug": "thelonious-monk",
+      "main": {
+        "title": "Pannonica",
+        "video": "FwvWLNViTRo",
+        "iframeTitle": "Thelonious Monk - Pannonica"
+      },
+      "additional": [
+        {
+          "title": "Wig Wise (Remastered)",
+          "video": "t6s0iDoXpdY",
+          "iframeTitle": "Thelonious Monk - Wig Wise (Remastered)"
+        }
+      ]
+    },
+    {
+      "artist": "Tigran Hamasyan",
+      "slug": "tigran-hamasyan",
+      "main": {
+        "title": "What The Waves Brought",
+        "video": "BWkKL_ToryE",
+        "iframeTitle": "Tigran Hamasyan - What The Waves Brought"
+      }
+    },
+    {
+      "artist": "Tim Simonec",
+      "slug": "tim-simonec",
+      "main": {
+        "title": "Upswingin'",
+        "video": "-897VTkxvKw",
+        "iframeTitle": "Tim Simonec - Upswingin'"
+      }
+    },
+    {
+      "artist": "Tony Murena / Joseph Colombo",
+      "slug": "tony-murena-joseph-colombo",
+      "main": {
+        "title": "L'Indifference",
+        "video": "-b0fwfhaak8",
+        "iframeTitle": "Tony Murena / Joseph Colombo - L'Indifference"
+      },
+      "additional": [
+        {
+          "title": "Stumptown Swing - ＂L'Indifference＂",
+          "video": "PacvL99VI_0",
+          "iframeTitle": "Tony Murena / Joseph Colombo - Stumptown Swing - ＂L'Indifference＂"
+        }
+      ]
+    },
+    {
+      "artist": "TRI4TH / Calmera",
+      "slug": "tri4th-calmera",
+      "main": {
+        "title": "HORNS RIOT ⧸ TRI4TH & カルメラ",
+        "video": "f_Rh224r2_U",
+        "iframeTitle": "TRI4TH / Calmera - HORNS RIOT ⧸ TRI4TH & カルメラ"
+      }
+    },
+    {
+      "artist": "Unknown / unresolved artist",
+      "slug": "unknown-unresolved-artist",
+      "main": {
+        "title": "what liminal jazz fusion looks like on paper",
+        "video": "lELdCpAN8rk",
+        "iframeTitle": "Unknown / unresolved artist - what liminal jazz fusion looks like on paper"
+      },
+      "additional": [
+        {
+          "title": "Autumn Blues",
+          "video": "OyRv2cAqGm0",
+          "iframeTitle": "Unknown / unresolved artist - Autumn Blues"
+        },
+        {
+          "title": "Tomara - Bossanova",
+          "video": "vJz2gk8e_qo",
+          "iframeTitle": "Unknown / unresolved artist - Tomara - Bossanova"
+        }
+      ]
+    },
+    {
+      "artist": "Vince Guaraldi Trio",
+      "slug": "vince-guaraldi-trio",
+      "main": {
+        "title": "Thanksgiving Theme",
+        "video": "4KJeS1MdYWc",
+        "iframeTitle": "Vince Guaraldi Trio - Thanksgiving Theme"
+      }
+    },
+    {
+      "artist": "Vulfpeck",
+      "slug": "vulfpeck",
+      "main": {
+        "title": "Dean Town",
+        "video": "le0BLAEO93g",
+        "iframeTitle": "Vulfpeck - Dean Town"
+      }
+    },
+    {
+      "artist": "Yohan Kim",
+      "slug": "yohan-kim",
+      "main": {
+        "title": "Jazz Funk Fusion in B minor",
+        "video": "syK4hVTxeHs",
+        "iframeTitle": "Yohan Kim - Jazz Funk Fusion in B minor"
+      }
+    },
+    {
+      "artist": "Yuji Ohno / fox capture plan",
+      "slug": "yuji-ohno-fox-capture-plan",
+      "main": {
+        "title": "SAMBA TEMPERADO 2019",
+        "video": "i2ZZrGKzc8g",
+        "iframeTitle": "Yuji Ohno / fox capture plan - SAMBA TEMPERADO 2019"
+      }
+    },
+    {
+      "artist": "ZackGrooves",
+      "slug": "zackgrooves",
+      "main": {
+        "title": "Brother Man (feat. Saxologic)",
+        "video": "4Q7avPKdM2c",
+        "iframeTitle": "ZackGrooves - Brother Man (feat. Saxologic)"
+      }
+    }
+  ]
+}
