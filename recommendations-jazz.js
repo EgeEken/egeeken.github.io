@@ -12,6 +12,7 @@
     const subtitle = header.querySelector('h2');
     const normalSubtitle = subtitle?.textContent || '';
     const shuffleSubtitle = 'One randomly selected recommendation, press shuffle to get a new one';
+    let sourceRecommendations = [];
     let recommendations = [];
     let allPieces = [];
     let currentShuffleIndex = -1;
@@ -40,6 +41,17 @@
         }).join('');
 
         return `<p class="recommendation-note">${parts}</p>`;
+    };
+
+    const rebuildRecommendations = () => {
+        recommendations = window.JazzReview?.filterCatalog
+            ? window.JazzReview.filterCatalog(sourceRecommendations)
+            : sourceRecommendations;
+
+        allPieces = recommendations.flatMap(artist => [
+            { ...artist.main, artist: artist.artist },
+            ...(artist.additional || []).map(piece => ({ ...piece, artist: artist.artist }))
+        ]);
     };
 
     const player = piece => `
@@ -164,6 +176,8 @@
                 );
             }
         }
+
+        window.JazzReview?.decorate?.(root);
     };
 
     const chooseShuffleIndex = () => {
@@ -176,6 +190,11 @@
     };
 
     const renderShuffle = () => {
+        if (!allPieces.length) {
+            root.innerHTML = '<p class="recommendation-note">No recommendations remain after local removals.</p>';
+            return;
+        }
+
         currentShuffleIndex = chooseShuffleIndex();
         const piece = allPieces[currentShuffleIndex];
         root.innerHTML = `
@@ -186,6 +205,7 @@
                 ${player(piece)}
             </div>`;
         syncRecommendationPlayers(root);
+        window.JazzReview?.decorate?.(root);
     };
 
     const installControls = () => {
@@ -290,6 +310,7 @@
 
         shuffleToggle.addEventListener('change', applyShuffleMode);
         shuffleButton.addEventListener('click', renderShuffle);
+        window.JazzReview?.installControls?.();
     };
 
     async function init() {
@@ -298,17 +319,28 @@
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
             const catalog = await response.json();
-            recommendations = catalog.artists;
-            allPieces = recommendations.flatMap(artist => [
-                { ...artist.main, artist: artist.artist },
-                ...(artist.additional || []).map(piece => ({ ...piece, artist: artist.artist }))
-            ]);
+            sourceRecommendations = catalog.artists;
+            window.JazzReview?.setSource?.(sourceRecommendations);
+            rebuildRecommendations();
 
             renderNormal();
             installControls();
             embedToggle.addEventListener('change', () => syncRecommendationPlayers());
             syncRecommendationPlayers();
             setupRecommendationMoreSections();
+
+            window.refreshJazzRecommendations = () => {
+                rebuildRecommendations();
+                currentShuffleIndex = -1;
+
+                if (document.body.classList.contains('shuffle-mode')) {
+                    renderShuffle();
+                } else {
+                    renderNormal();
+                    syncRecommendationPlayers(root);
+                    setupRecommendationMoreSections(root);
+                }
+            };
         } catch (error) {
             console.error('Failed to load jazz recommendations:', error);
             root.innerHTML = '<p class="recommendation-note">The recommendations could not be loaded.</p>';
