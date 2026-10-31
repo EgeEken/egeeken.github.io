@@ -177,7 +177,7 @@
         modal.innerHTML =
             '<div class="jazz-review-modal-backdrop"></div>' +
             '<div class="jazz-review-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="jazz-review-modal-title">' +
-                '<h2 id="jazz-review-modal-title">What\\'s the issue?</h2>' +
+                '<h2 id="jazz-review-modal-title">What\'s the issue?</h2>' +
                 '<p class="jazz-review-modal-piece"></p>' +
                 '<textarea rows="6" placeholder="Describe the issue with this entry..."></textarea>' +
                 '<div class="jazz-review-modal-actions">' +
