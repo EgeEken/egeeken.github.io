@@ -4,9 +4,10 @@
     "Keep artists and pieces in the exact display order wanted on the page.",
     "Each artist requires artist and main. Put optional secondary tracks in additional; omit additional when empty.",
     "Use concise piece titles: omit remaster/mastering labels, release years, uploader wording, redundant artist names, venue/date details, and similar recording metadata unless it is necessary to identify a genuinely distinct arrangement or version.",
+    "Meaningful version labels such as \"Piano Version\" or \"Instrumental\" should be preserved when they distinguish the music itself.",
     "For jazz covers and performances, group a recording under the performing artist/group when that is more useful than the original songwriter/composer attribution.",
     "Store only the 11-character YouTube video ID in video. iframeTitle is the accessible player title.",
-    "This catalog is still under manual review; entries from Eugen Cicero onward should not be assumed verified unless explicitly edited or removed in feedback."
+    "The catalog remains under manual review."
   ],
   "artists": [
     {
@@ -29,11 +30,21 @@
       "artist": "Anomalie",
       "slug": "anomalie",
       "main": {
-        "title": "MÉTROPOLE",
-        "video": "coYGq3Ptxcw",
-        "iframeTitle": "Anomalie - MÉTROPOLE"
+        "title": "Bond",
+        "video": "xe7a_6uejCg",
+        "iframeTitle": "Anomalie - Bond"
       },
       "additional": [
+        {
+          "title": "Bond (Piano Version)",
+          "video": "9dNRPaA4654",
+          "iframeTitle": "Anomalie - Bond (Piano Version)"
+        },
+        {
+          "title": "MÉTROPOLE",
+          "video": "coYGq3Ptxcw",
+          "iframeTitle": "Anomalie - MÉTROPOLE"
+        },
         {
           "title": "Mollo",
           "video": "3y_gZYRm05o",
@@ -109,13 +120,47 @@
       ]
     },
     {
+      "artist": "Astrud Gilberto",
+      "slug": "astrud-gilberto",
+      "main": {
+        "title": "The Face I Love",
+        "video": "OSttHUmyU3c",
+        "iframeTitle": "Astrud Gilberto - The Face I Love"
+      }
+    },
+    {
+      "artist": "Bernardo Lobo",
+      "slug": "bernardo-lobo",
+      "main": {
+        "title": "Samba de Verão",
+        "video": "srCVy8ofbz0",
+        "iframeTitle": "Bernardo Lobo - Samba de Verão"
+      }
+    },
+    {
+      "artist": "Bill Evans",
+      "slug": "bill-evans",
+      "main": {
+        "title": "Angel Face",
+        "video": "IXzL-lN1Ntw",
+        "iframeTitle": "Bill Evans - Angel Face"
+      }
+    },
+    {
       "artist": "bohemianvoodoo",
       "slug": "bohemianvoodoo",
       "main": {
         "title": "Adria Blue",
         "video": "gjDrEdEzfQc",
         "iframeTitle": "bohemianvoodoo - Adria Blue"
-      }
+      },
+      "additional": [
+        {
+          "title": "Nomad",
+          "video": "NucG6Olteho",
+          "iframeTitle": "bohemianvoodoo - Nomad"
+        }
+      ]
     },
     {
       "artist": "Buddy Rich",
@@ -218,15 +263,6 @@
       }
     },
     {
-      "artist": "Coleman Hawkins",
-      "slug": "coleman-hawkins",
-      "main": {
-        "title": "I'm Beginning To See The Light",
-        "video": "O4ZOPWFsTG4",
-        "iframeTitle": "Coleman Hawkins - I'm Beginning To See The Light"
-      }
-    },
-    {
       "artist": "Count Basie",
       "slug": "count-basie",
       "main": {
@@ -239,6 +275,16 @@
           "title": "Straight Ahead",
           "video": "fm8uHT-BJP4",
           "iframeTitle": "Count Basie - Straight Ahead"
+        },
+        {
+          "title": "Tickle Toe",
+          "video": "0Fdz3XIce7Y",
+          "iframeTitle": "Count Basie - Tickle Toe"
+        },
+        {
+          "title": "Splanky",
+          "video": "VYO3gC962PM",
+          "iframeTitle": "Count Basie - Splanky"
         }
       ]
     },
@@ -298,6 +344,11 @@
           "title": "Satin Doll",
           "video": "wQ-n7jhs_K8",
           "iframeTitle": "Duke Ellington - Satin Doll"
+        },
+        {
+          "title": "Wig Wise",
+          "video": "t6s0iDoXpdY",
+          "iframeTitle": "Duke Ellington - Wig Wise"
         }
       ]
     },
@@ -317,7 +368,14 @@
         "title": "I Remember Clifford",
         "video": "mBb7nYOFuAI",
         "iframeTitle": "Eddie Higgins Trio - I Remember Clifford"
-      }
+      },
+      "additional": [
+        {
+          "title": "Nardis",
+          "video": "xsY-9YnxGuo",
+          "iframeTitle": "Eddie Higgins Trio - Nardis"
+        }
+      ]
     },
     {
       "artist": "Ella Fitzgerald",
@@ -365,6 +423,22 @@
       ]
     },
     {
+      "artist": "fox capture plan",
+      "slug": "fox-capture-plan",
+      "main": {
+        "title": "SAMBA TEMPERADO",
+        "video": "i2ZZrGKzc8g",
+        "iframeTitle": "fox capture plan - SAMBA TEMPERADO"
+      },
+      "additional": [
+        {
+          "title": "Additional piece",
+          "video": "oklj6UKJBrI",
+          "iframeTitle": "fox capture plan - Additional piece"
+        }
+      ]
+    },
+    {
       "artist": "Frank Sinatra",
       "slug": "frank-sinatra",
       "main": {
@@ -387,11 +461,6 @@
           "title": "The World We Knew (Over And Over)",
           "video": "dthgRdTf0Ds",
           "iframeTitle": "Frank Sinatra - The World We Knew (Over And Over)"
-        },
-        {
-          "title": "Theme From New York, New York",
-          "video": "gFwuHsra6Oc",
-          "iframeTitle": "Frank Sinatra - Theme From New York, New York"
         },
         {
           "title": "I've Got You Under My Skin",
@@ -420,25 +489,11 @@
           "iframeTitle": "Gerry Mulligan - Blight of the Fumble Bee"
         },
         {
-          "title": "Night Lights",
-          "video": "Wx4EwR5tku0",
-          "iframeTitle": "Gerry Mulligan - Night Lights"
-        },
-        {
           "title": "In the Wee Small Hours of the Morning",
           "video": "RUYypttogTI",
           "iframeTitle": "Gerry Mulligan - In the Wee Small Hours of the Morning"
         }
       ]
-    },
-    {
-      "artist": "Gordon Goodwin's Big Phat Band",
-      "slug": "gordon-goodwin-s-big-phat-band",
-      "main": {
-        "title": "Sing Sang Sung",
-        "video": "2MCGApB7Uxg",
-        "iframeTitle": "Gordon Goodwin's Big Phat Band - Sing Sang Sung"
-      }
     },
     {
       "artist": "Hank Mobley",
@@ -453,11 +508,6 @@
           "title": "A Caddy For Daddy",
           "video": "8_OTOL4hWBg",
           "iframeTitle": "Hank Mobley - A Caddy For Daddy"
-        },
-        {
-          "title": "Dig Dis",
-          "video": "ckuxxlzpfcw",
-          "iframeTitle": "Hank Mobley - Dig Dis"
         },
         {
           "title": "Hank's Other Soul",
@@ -493,36 +543,32 @@
       "artist": "insaneintherainmusic",
       "slug": "insaneintherainmusic",
       "main": {
-        "title": "Forward (Insane In The Rain)",
-        "video": "x1Dtk_W4L7M",
-        "iframeTitle": "insaneintherainmusic - Forward (Insane In The Rain)"
+        "title": "Luminaire",
+        "video": "R8Too45saHI",
+        "iframeTitle": "insaneintherainmusic - Luminaire"
       },
       "additional": [
         {
-          "title": "Luminaire (Insane In The Rain)",
-          "video": "R8Too45saHI",
-          "iframeTitle": "insaneintherainmusic - Luminaire (Insane In The Rain)"
+          "title": "Forward",
+          "video": "x1Dtk_W4L7M",
+          "iframeTitle": "insaneintherainmusic - Forward"
         },
         {
-          "title": "Resistance (Insane In The Rain)",
+          "title": "Resistance",
           "video": "0DFFBcEsivk",
-          "iframeTitle": "insaneintherainmusic - Resistance (Insane In The Rain)"
+          "iframeTitle": "insaneintherainmusic - Resistance"
         },
         {
-          "title": "Ubuntu (Insane In The Rain)",
+          "title": "Ubuntu",
           "video": "cv0FudVznps",
-          "iframeTitle": "insaneintherainmusic - Ubuntu (Insane In The Rain)"
+          "iframeTitle": "insaneintherainmusic - Ubuntu"
+        },
+        {
+          "title": "Song of Storms (Jazz Cover)",
+          "video": "WDzGGHNaoV8",
+          "iframeTitle": "insaneintherainmusic - Song of Storms (Jazz Cover)"
         }
       ]
-    },
-    {
-      "artist": "JABBERLOOP",
-      "slug": "jabberloop",
-      "main": {
-        "title": "Sore Sore",
-        "video": "UUTfP_uKOrw",
-        "iframeTitle": "JABBERLOOP - Sore Sore"
-      }
     },
     {
       "artist": "Jacob Mann",
@@ -533,11 +579,6 @@
         "iframeTitle": "Jacob Mann - Baby Carrots"
       },
       "additional": [
-        {
-          "title": "Barbara Bossa",
-          "video": "cSBPqqA-lqw",
-          "iframeTitle": "Jacob Mann - Barbara Bossa"
-        },
         {
           "title": "Bumble Buddies",
           "video": "BiBOoHHmy1s",
@@ -588,11 +629,6 @@
           "title": "Pronk",
           "video": "5oNNpzq5FwA",
           "iframeTitle": "Jacob Mann Big Band - Pronk"
-        },
-        {
-          "title": "Thirty Seven After Six",
-          "video": "qqxao2Ng5Yg",
-          "iframeTitle": "Jacob Mann Big Band - Thirty Seven After Six"
         }
       ]
     },
@@ -603,16 +639,14 @@
         "title": "Night In Tunisia",
         "video": "4RaR210hglo",
         "iframeTitle": "Jesus Molina - Night In Tunisia"
-      }
-    },
-    {
-      "artist": "Joe Zawinul",
-      "slug": "joe-zawinul",
-      "main": {
-        "title": "Angel Face",
-        "video": "IXzL-lN1Ntw",
-        "iframeTitle": "Joe Zawinul - Angel Face"
-      }
+      },
+      "additional": [
+        {
+          "title": "Guadalquivir / Tiburón",
+          "video": "Q-ynG3Mszzw",
+          "iframeTitle": "Jesus Molina - Guadalquivir / Tiburón"
+        }
+      ]
     },
     {
       "artist": "John Coltrane",
@@ -646,43 +680,20 @@
       ]
     },
     {
-      "artist": "Kenny Burrell",
-      "slug": "kenny-burrell",
+      "artist": "Kitri",
+      "slug": "kitri",
       "main": {
-        "title": "Your Host",
-        "video": "_FhCJrSniRw",
-        "iframeTitle": "Kenny Burrell - Your Host"
-      }
-    },
-    {
-      "artist": "Koji Kondo",
-      "slug": "koji-kondo",
-      "main": {
-        "title": "Bob-omb Battlefield (Big Band Arrangement)",
-        "video": "iWNneXXiLlA",
-        "iframeTitle": "Koji Kondo - Bob-omb Battlefield (Big Band Arrangement)"
+        "title": "Mujunritsu",
+        "video": "aKsed7AdsT0",
+        "iframeTitle": "Kitri - Mujunritsu"
       },
       "additional": [
         {
-          "title": "Castle And Fortress",
-          "video": "Dv4f-maaiZI",
-          "iframeTitle": "Koji Kondo - Castle And Fortress"
-        },
-        {
-          "title": "Song of Storms (Jazz Cover)",
-          "video": "WDzGGHNaoV8",
-          "iframeTitle": "Koji Kondo - Song of Storms (Jazz Cover)"
+          "title": "NEW ME",
+          "video": "vjgEVCbST_A",
+          "iframeTitle": "Kitri - NEW ME"
         }
       ]
-    },
-    {
-      "artist": "Koji Kondo / insaneintherainmusic",
-      "slug": "koji-kondo-insaneintherainmusic",
-      "main": {
-        "title": "Song of Storms (Jazz Cover)",
-        "video": "WDzGGHNaoV8",
-        "iframeTitle": "Koji Kondo / insaneintherainmusic - Song of Storms (Jazz Cover)"
-      }
     },
     {
       "artist": "Kristofer Maddigan",
@@ -757,15 +768,6 @@
       }
     },
     {
-      "artist": "Lester Young",
-      "slug": "lester-young",
-      "main": {
-        "title": "Tickle Toe",
-        "video": "0Fdz3XIce7Y",
-        "iframeTitle": "Lester Young - Tickle Toe"
-      }
-    },
-    {
       "artist": "Louie Zong",
       "slug": "louie-zong",
       "main": {
@@ -812,15 +814,6 @@
       ]
     },
     {
-      "artist": "Louis Armstrong",
-      "slug": "louis-armstrong",
-      "main": {
-        "title": "Swing that Music",
-        "video": "drknSlDn6yM",
-        "iframeTitle": "Louis Armstrong - Swing that Music"
-      }
-    },
-    {
       "artist": "Louis Cole",
       "slug": "louis-cole",
       "main": {
@@ -839,29 +832,13 @@
       }
     },
     {
-      "artist": "Luiz Bonfá",
-      "slug": "luiz-bonfa",
+      "artist": "Maria Creuza",
+      "slug": "maria-creuza",
       "main": {
-        "title": "Samba De Orpheu",
-        "video": "EEg8zK6C3H8",
-        "iframeTitle": "Luiz Bonfá - Samba De Orpheu"
+        "title": "Tomara - Bossanova",
+        "video": "vJz2gk8e_qo",
+        "iframeTitle": "Maria Creuza - Tomara - Bossanova"
       }
-    },
-    {
-      "artist": "Marcos Valle",
-      "slug": "marcos-valle",
-      "main": {
-        "title": "Samba de Verão",
-        "video": "srCVy8ofbz0",
-        "iframeTitle": "Marcos Valle - Samba de Verão"
-      },
-      "additional": [
-        {
-          "title": "The Face I Love",
-          "video": "OSttHUmyU3c",
-          "iframeTitle": "Marcos Valle - The Face I Love"
-        }
-      ]
     },
     {
       "artist": "Martial Solal",
@@ -870,15 +847,6 @@
         "title": "New York Herald Tribune (A bout de souffle)",
         "video": "MjWJrqKeKUk",
         "iframeTitle": "Martial Solal - New York Herald Tribune (A bout de souffle)"
-      }
-    },
-    {
-      "artist": "Mathieu Fiset",
-      "slug": "mathieu-fiset",
-      "main": {
-        "title": "Chick's Pain",
-        "video": "qrjhWNkL-bY",
-        "iframeTitle": "Mathieu Fiset - Chick's Pain"
       }
     },
     {
@@ -894,11 +862,6 @@
           "title": "Blue In Green",
           "video": "TLDflhhdPCg",
           "iframeTitle": "Miles Davis - Blue In Green"
-        },
-        {
-          "title": "Nardis",
-          "video": "xsY-9YnxGuo",
-          "iframeTitle": "Miles Davis - Nardis"
         }
       ]
     },
@@ -910,40 +873,6 @@
         "video": "jy6No4Xuq_E",
         "iframeTitle": "Minyo Crusaders - Minyo Cumbiero - Cumbia del Monte Fuji"
       }
-    },
-    {
-      "artist": "Neal Hefti",
-      "slug": "neal-hefti",
-      "main": {
-        "title": "Splanky",
-        "video": "VYO3gC962PM",
-        "iframeTitle": "Neal Hefti - Splanky"
-      }
-    },
-    {
-      "artist": "Nicola Conte",
-      "slug": "nicola-conte",
-      "main": {
-        "title": "BOSSA PER DUE",
-        "video": "3oeE8ftFkhA",
-        "iframeTitle": "Nicola Conte - BOSSA PER DUE"
-      }
-    },
-    {
-      "artist": "Nikolai Kapustin",
-      "slug": "nikolai-kapustin",
-      "main": {
-        "title": "Eight Concert Etudes, Op. 40",
-        "video": "RrpjWM8JT7k",
-        "iframeTitle": "Nikolai Kapustin - Eight Concert Etudes, Op. 40"
-      },
-      "additional": [
-        {
-          "title": "Early Pieces Collection",
-          "video": "Knlac76KLmo",
-          "iframeTitle": "Nikolai Kapustin - Early Pieces Collection"
-        }
-      ]
     },
     {
       "artist": "Oliver Nelson",
@@ -971,13 +900,29 @@
       ]
     },
     {
+      "artist": "Paul Desmond",
+      "slug": "paul-desmond",
+      "main": {
+        "title": "Samba De Orpheu",
+        "video": "EEg8zK6C3H8",
+        "iframeTitle": "Paul Desmond - Samba De Orpheu"
+      }
+    },
+    {
       "artist": "Pearl Django",
       "slug": "pearl-django",
       "main": {
         "title": "Swing '42",
         "video": "2AqIdqrQtgk",
         "iframeTitle": "Pearl Django - Swing '42"
-      }
+      },
+      "additional": [
+        {
+          "title": "L'Indifference",
+          "video": "-b0fwfhaak8",
+          "iframeTitle": "Pearl Django - L'Indifference"
+        }
+      ]
     },
     {
       "artist": "Roberto Menescal",
@@ -1014,15 +959,6 @@
       ]
     },
     {
-      "artist": "Sacha Distel",
-      "slug": "sacha-distel",
-      "main": {
-        "title": "The Good Life",
-        "video": "CJiDerQXyoo",
-        "iframeTitle": "Sacha Distel - The Good Life"
-      }
-    },
-    {
       "artist": "Sammy Nestico",
       "slug": "sammy-nestico",
       "main": {
@@ -1039,6 +975,32 @@
         "video": "qB274uRBI1o",
         "iframeTitle": "Schroeder-Headz - Blue Bird"
       }
+    },
+    {
+      "artist": "SEATBELTS",
+      "slug": "seatbelts",
+      "main": {
+        "title": "Tank!",
+        "video": "UFFa0QoHWvE",
+        "iframeTitle": "SEATBELTS - Tank!"
+      },
+      "additional": [
+        {
+          "title": "Rush",
+          "video": "XtxsYF4e3uM",
+          "iframeTitle": "SEATBELTS - Rush"
+        },
+        {
+          "title": "Piano Black",
+          "video": "ssmYUDYtrKA",
+          "iframeTitle": "SEATBELTS - Piano Black"
+        },
+        {
+          "title": "Waltz for Zizi",
+          "video": "Ryqvdr0UxcI",
+          "iframeTitle": "SEATBELTS - Waltz for Zizi"
+        }
+      ]
     },
     {
       "artist": "Shoji Meguro",
@@ -1089,79 +1051,9 @@
       },
       "additional": [
         {
-          "title": "Isn't She Lovely (Jazz Piano)",
-          "video": "t3XFMbidu3M",
-          "iframeTitle": "Stevie Wonder - Isn't She Lovely (Jazz Piano)"
-        },
-        {
-          "title": "Stevie Wonder You Are The Sunshine Of My Life",
+          "title": "You Are The Sunshine Of My Life",
           "video": "3wZ_b_uUAdQ",
-          "iframeTitle": "Stevie Wonder - Stevie Wonder You Are The Sunshine Of My Life"
-        }
-      ]
-    },
-    {
-      "artist": "T-Square",
-      "slug": "t-square",
-      "main": {
-        "title": "Bond",
-        "video": "xe7a_6uejCg",
-        "iframeTitle": "T-Square - Bond"
-      },
-      "additional": [
-        {
-          "title": "Bond (Piano Version)",
-          "video": "9dNRPaA4654",
-          "iframeTitle": "T-Square - Bond (Piano Version)"
-        },
-        {
-          "title": "NEW ME",
-          "video": "vjgEVCbST_A",
-          "iframeTitle": "T-Square - NEW ME"
-        }
-      ]
-    },
-    {
-      "artist": "Thank You Scientist",
-      "slug": "thank-you-scientist",
-      "main": {
-        "title": "Rube Goldberg Variations",
-        "video": "BE50naHdWbA",
-        "iframeTitle": "Thank You Scientist - Rube Goldberg Variations"
-      }
-    },
-    {
-      "artist": "The Bad Plus",
-      "slug": "the-bad-plus",
-      "main": {
-        "title": "And Here We Test Our Powers of Observation",
-        "video": "NrN0aMsFNgs",
-        "iframeTitle": "The Bad Plus - And Here We Test Our Powers of Observation"
-      }
-    },
-    {
-      "artist": "The Seatbelts / Yoko Kanno",
-      "slug": "the-seatbelts-yoko-kanno",
-      "main": {
-        "title": "Tank!",
-        "video": "UFFa0QoHWvE",
-        "iframeTitle": "The Seatbelts / Yoko Kanno - Tank!"
-      },
-      "additional": [
-        {
-          "title": "Rush",
-          "video": "XtxsYF4e3uM",
-          "iframeTitle": "The Seatbelts / Yoko Kanno - Rush"
-        },
-        {
-          "title": "Piano Black",
-          "video": "ssmYUDYtrKA",
-          "iframeTitle": "The Seatbelts / Yoko Kanno - Piano Black"
-        },
-        {
-          "title": "Waltz for Zizi",
-          "video": "Ryqvdr0UxcI",
-          "iframeTitle": "The Seatbelts / Yoko Kanno - Waltz for Zizi"
+          "iframeTitle": "Stevie Wonder - You Are The Sunshine Of My Life"
         }
       ]
     },
@@ -1169,22 +1061,10 @@
       "artist": "Thelonious Monk",
       "slug": "thelonious-monk",
       "main": {
-        "title": "Pannonica",
-        "video": "FwvWLNViTRo",
-        "iframeTitle": "Thelonious Monk - Pannonica"
-      },
-      "additional": [
-        {
-          "title": "Wig Wise",
-          "video": "t6s0iDoXpdY",
-          "iframeTitle": "Thelonious Monk - Wig Wise"
-        },
-        {
-          "title": "Mood Indigo",
-          "video": "HGz6my4q-20",
-          "iframeTitle": "Thelonious Monk - Mood Indigo"
-        }
-      ]
+        "title": "Mood Indigo",
+        "video": "HGz6my4q-20",
+        "iframeTitle": "Thelonious Monk - Mood Indigo"
+      }
     },
     {
       "artist": "Tigran Hamasyan",
@@ -1205,50 +1085,13 @@
       }
     },
     {
-      "artist": "Tony Murena / Joseph Colombo",
-      "slug": "tony-murena-joseph-colombo",
+      "artist": "Tony Bennett",
+      "slug": "tony-bennett",
       "main": {
-        "title": "L'Indifference",
-        "video": "-b0fwfhaak8",
-        "iframeTitle": "Tony Murena / Joseph Colombo - L'Indifference"
-      },
-      "additional": [
-        {
-          "title": "Stumptown Swing - ＂L'Indifference＂",
-          "video": "PacvL99VI_0",
-          "iframeTitle": "Tony Murena / Joseph Colombo - Stumptown Swing - ＂L'Indifference＂"
-        }
-      ]
-    },
-    {
-      "artist": "TRI4TH / Calmera",
-      "slug": "tri4th-calmera",
-      "main": {
-        "title": "HORNS RIOT",
-        "video": "f_Rh224r2_U",
-        "iframeTitle": "TRI4TH / Calmera - HORNS RIOT"
+        "title": "The Good Life",
+        "video": "CJiDerQXyoo",
+        "iframeTitle": "Tony Bennett - The Good Life"
       }
-    },
-    {
-      "artist": "Unknown / unresolved artist",
-      "slug": "unknown-unresolved-artist",
-      "main": {
-        "title": "what liminal jazz fusion looks like on paper",
-        "video": "lELdCpAN8rk",
-        "iframeTitle": "Unknown / unresolved artist - what liminal jazz fusion looks like on paper"
-      },
-      "additional": [
-        {
-          "title": "Autumn Blues",
-          "video": "OyRv2cAqGm0",
-          "iframeTitle": "Unknown / unresolved artist - Autumn Blues"
-        },
-        {
-          "title": "Tomara - Bossanova",
-          "video": "vJz2gk8e_qo",
-          "iframeTitle": "Unknown / unresolved artist - Tomara - Bossanova"
-        }
-      ]
     },
     {
       "artist": "Vince Guaraldi Trio",
@@ -1257,16 +1100,14 @@
         "title": "Thanksgiving Theme",
         "video": "4KJeS1MdYWc",
         "iframeTitle": "Vince Guaraldi Trio - Thanksgiving Theme"
-      }
-    },
-    {
-      "artist": "Vulfpeck",
-      "slug": "vulfpeck",
-      "main": {
-        "title": "Dean Town",
-        "video": "le0BLAEO93g",
-        "iframeTitle": "Vulfpeck - Dean Town"
-      }
+      },
+      "additional": [
+        {
+          "title": "Christmas Time Is Here (Instrumental)",
+          "video": "YvI_FNrczzQ",
+          "iframeTitle": "Vince Guaraldi Trio - Christmas Time Is Here (Instrumental)"
+        }
+      ]
     },
     {
       "artist": "Yohan Kim",
@@ -1275,24 +1116,6 @@
         "title": "Jazz Funk Fusion in B minor",
         "video": "syK4hVTxeHs",
         "iframeTitle": "Yohan Kim - Jazz Funk Fusion in B minor"
-      }
-    },
-    {
-      "artist": "Yuji Ohno / fox capture plan",
-      "slug": "yuji-ohno-fox-capture-plan",
-      "main": {
-        "title": "SAMBA TEMPERADO",
-        "video": "i2ZZrGKzc8g",
-        "iframeTitle": "Yuji Ohno / fox capture plan - SAMBA TEMPERADO"
-      }
-    },
-    {
-      "artist": "ZackGrooves",
-      "slug": "zackgrooves",
-      "main": {
-        "title": "Brother Man",
-        "video": "4Q7avPKdM2c",
-        "iframeTitle": "ZackGrooves - Brother Man"
       }
     }
   ]
