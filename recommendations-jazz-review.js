@@ -1,7 +1,7 @@
 (() => {
     'use strict';
 
-    const STORAGE_KEY = 'jazzRecommendationReviewV2';
+    const STORAGE_KEY = 'jazzRecommendationReviewV3';
     let sourceRecommendations = [];
     let pendingIssue = null;
     let undoTimer = null;
@@ -18,11 +18,11 @@
         try {
             const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
             return {
-                version: 2,
+                version: 3,
                 removals: parsed.removals && typeof parsed.removals === 'object' ? parsed.removals : {}
             };
         } catch {
-            return { version: 2, removals: {} };
+            return { version: 3, removals: {} };
         }
     };
 
@@ -255,7 +255,7 @@
 
     const downloadReview = () => {
         const payload = {
-            version: 2,
+            version: 3,
             page: 'recommendations-jazz',
             exportedAt: new Date().toISOString(),
             removals: Object.values(state.removals).sort((a, b) => a.removedAt.localeCompare(b.removedAt))
