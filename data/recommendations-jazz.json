@@ -4,7 +4,7 @@
     "Keep artists and pieces in the exact display order wanted on the page.",
     "Each artist requires artist and main. Put optional secondary tracks in additional; omit additional when empty.",
     "Use concise piece titles: omit remaster/mastering labels, release years, uploader wording, redundant artist names, venue/date details, and similar recording metadata unless it is necessary to identify a genuinely distinct arrangement or version.",
-    "Meaningful version labels such as \"Piano Version\" or \"Instrumental\" should be preserved when they distinguish the music itself.",
+    "Meaningful version labels should be preserved when the user explicitly wants them or when they distinguish the music itself.",
     "For jazz covers and performances, group a recording under the performing artist/group when that is more useful than the original songwriter/composer attribution.",
     "Store only the 11-character YouTube video ID in video. iframeTitle is the accessible player title.",
     "The catalog remains under manual review."
@@ -59,6 +59,11 @@
           "title": "VELOURS",
           "video": "HMwwTpESuLM",
           "iframeTitle": "Anomalie - VELOURS"
+        },
+        {
+          "title": "Crescent",
+          "video": "gjT_FDR3CBw",
+          "iframeTitle": "Anomalie - Crescent"
         }
       ]
     },
@@ -66,9 +71,9 @@
       "artist": "Antônio Carlos Jobim",
       "slug": "antonio-carlos-jobim",
       "main": {
-        "title": "The Girl From Ipanema",
-        "video": "JGRB5uOxqsw",
-        "iframeTitle": "Antônio Carlos Jobim - The Girl From Ipanema"
+        "title": "Desafinado",
+        "video": "oqHONL-LZ58",
+        "iframeTitle": "Antônio Carlos Jobim - Desafinado"
       },
       "additional": [
         {
@@ -77,18 +82,8 @@
           "iframeTitle": "Antônio Carlos Jobim - Insensatez"
         },
         {
-          "title": "Agua De Beber",
-          "video": "AcoKBiei5mQ",
-          "iframeTitle": "Antônio Carlos Jobim - Agua De Beber"
-        },
-        {
-          "title": "Desafinado",
-          "video": "oqHONL-LZ58",
-          "iframeTitle": "Antônio Carlos Jobim - Desafinado"
-        },
-        {
           "title": "A Felicidade",
-          "video": "T2LhIsO2THM",
+          "video": "TxNfGHhETk0",
           "iframeTitle": "Antônio Carlos Jobim - A Felicidade"
         },
         {
@@ -102,15 +97,15 @@
       "artist": "Art Blakey & The Jazz Messengers",
       "slug": "art-blakey-the-jazz-messengers",
       "main": {
-        "title": "Africaine",
-        "video": "L1UDpGzfA2w",
-        "iframeTitle": "Art Blakey & The Jazz Messengers - Africaine"
+        "title": "Crisis",
+        "video": "VPdqCYbRpCE",
+        "iframeTitle": "Art Blakey & The Jazz Messengers - Crisis"
       },
       "additional": [
         {
-          "title": "Crisis",
-          "video": "VPdqCYbRpCE",
-          "iframeTitle": "Art Blakey & The Jazz Messengers - Crisis"
+          "title": "Africaine",
+          "video": "L1UDpGzfA2w",
+          "iframeTitle": "Art Blakey & The Jazz Messengers - Africaine"
         },
         {
           "title": "Mosaic",
@@ -120,13 +115,29 @@
       ]
     },
     {
+      "artist": "Arturo Sandoval",
+      "slug": "arturo-sandoval",
+      "main": {
+        "title": "Moment's Notice",
+        "video": "Esib-qhzCMw",
+        "iframeTitle": "Arturo Sandoval - Moment's Notice"
+      }
+    },
+    {
       "artist": "Astrud Gilberto",
       "slug": "astrud-gilberto",
       "main": {
         "title": "The Face I Love",
         "video": "OSttHUmyU3c",
         "iframeTitle": "Astrud Gilberto - The Face I Love"
-      }
+      },
+      "additional": [
+        {
+          "title": "Agua De Beber",
+          "video": "AcoKBiei5mQ",
+          "iframeTitle": "Astrud Gilberto - Agua De Beber"
+        }
+      ]
     },
     {
       "artist": "Bernardo Lobo",
@@ -144,7 +155,24 @@
         "title": "Angel Face",
         "video": "IXzL-lN1Ntw",
         "iframeTitle": "Bill Evans - Angel Face"
-      }
+      },
+      "additional": [
+        {
+          "title": "Stolen Moments",
+          "video": "7A9XsIjr-R4",
+          "iframeTitle": "Bill Evans - Stolen Moments"
+        },
+        {
+          "title": "Like Someone in Love",
+          "video": "QFoapxPvZy4",
+          "iframeTitle": "Bill Evans - Like Someone in Love"
+        },
+        {
+          "title": "My Foolish Heart",
+          "video": "EpVXH3Vm2wg",
+          "iframeTitle": "Bill Evans - My Foolish Heart"
+        }
+      ]
     },
     {
       "artist": "bohemianvoodoo",
@@ -251,7 +279,14 @@
         "title": "Spain",
         "video": "sEhQTjgoTdU",
         "iframeTitle": "Chick Corea - Spain"
-      }
+      },
+      "additional": [
+        {
+          "title": "Windows",
+          "video": "nLsjNuGUoxE",
+          "iframeTitle": "Chick Corea - Windows"
+        }
+      ]
     },
     {
       "artist": "Chucho Valdés",
@@ -292,11 +327,16 @@
       "artist": "Dave Brubeck",
       "slug": "dave-brubeck",
       "main": {
-        "title": "Blue Rondo à la Turk",
-        "video": "FqPC-BkylxA",
-        "iframeTitle": "Dave Brubeck - Blue Rondo à la Turk"
+        "title": "Take Five",
+        "video": "-DHuW1h1wHw",
+        "iframeTitle": "Dave Brubeck - Take Five"
       },
       "additional": [
+        {
+          "title": "Blue Rondo à la Turk",
+          "video": "FqPC-BkylxA",
+          "iframeTitle": "Dave Brubeck - Blue Rondo à la Turk"
+        },
         {
           "title": "Three to Get Ready",
           "video": "KCb10WMWSbQ",
@@ -311,7 +351,14 @@
         "title": "Warm Valley",
         "video": "18m-0hZb4CQ",
         "iframeTitle": "Dave Holland Trio - Warm Valley"
-      }
+      },
+      "additional": [
+        {
+          "title": "Without Deception",
+          "video": "_vlWAHzaAWI",
+          "iframeTitle": "Dave Holland Trio - Without Deception"
+        }
+      ]
     },
     {
       "artist": "Dexter Gordon",
@@ -329,7 +376,14 @@
         "title": "Minor Swing",
         "video": "otmTwTviAPY",
         "iframeTitle": "Django Reinhardt - Minor Swing"
-      }
+      },
+      "additional": [
+        {
+          "title": "Nuages",
+          "video": "U6RdpQADHxc",
+          "iframeTitle": "Django Reinhardt - Nuages"
+        }
+      ]
     },
     {
       "artist": "Duke Ellington",
@@ -349,6 +403,11 @@
           "title": "Wig Wise",
           "video": "t6s0iDoXpdY",
           "iframeTitle": "Duke Ellington - Wig Wise"
+        },
+        {
+          "title": "Warm Valley",
+          "video": "nbg6Vhykx-g",
+          "iframeTitle": "Duke Ellington - Warm Valley"
         }
       ]
     },
@@ -359,21 +418,38 @@
         "title": "Glad I Met Pat, Take 4",
         "video": "Nld2yaO6MWU",
         "iframeTitle": "Duke Jordan - Glad I Met Pat, Take 4"
-      }
+      },
+      "additional": [
+        {
+          "title": "Everything Happens to Me",
+          "video": "qpbVRdPDYCM",
+          "iframeTitle": "Duke Jordan - Everything Happens to Me"
+        },
+        {
+          "title": "Here's That Rainy Day",
+          "video": "GnnHT1o5PiI",
+          "iframeTitle": "Duke Jordan - Here's That Rainy Day"
+        },
+        {
+          "title": "How Deep Is the Ocean",
+          "video": "cYbchGWeFQw",
+          "iframeTitle": "Duke Jordan - How Deep Is the Ocean"
+        }
+      ]
     },
     {
       "artist": "Eddie Higgins Trio",
       "slug": "eddie-higgins-trio",
       "main": {
-        "title": "I Remember Clifford",
-        "video": "mBb7nYOFuAI",
-        "iframeTitle": "Eddie Higgins Trio - I Remember Clifford"
+        "title": "Nardis",
+        "video": "xsY-9YnxGuo",
+        "iframeTitle": "Eddie Higgins Trio - Nardis"
       },
       "additional": [
         {
-          "title": "Nardis",
-          "video": "xsY-9YnxGuo",
-          "iframeTitle": "Eddie Higgins Trio - Nardis"
+          "title": "I Remember Clifford",
+          "video": "mBb7nYOFuAI",
+          "iframeTitle": "Eddie Higgins Trio - I Remember Clifford"
         }
       ]
     },
@@ -390,11 +466,16 @@
       "artist": "Eugen Cicero",
       "slug": "eugen-cicero",
       "main": {
-        "title": "Der Schlitten eilt",
-        "video": "rtDnxKqnkWE",
-        "iframeTitle": "Eugen Cicero - Der Schlitten eilt"
+        "title": "Memories of Clausenburg",
+        "video": "fZLv9qQzphA",
+        "iframeTitle": "Eugen Cicero - Memories of Clausenburg"
       },
       "additional": [
+        {
+          "title": "Der Schlitten eilt",
+          "video": "rtDnxKqnkWE",
+          "iframeTitle": "Eugen Cicero - Der Schlitten eilt"
+        },
         {
           "title": "Dort in der Ferne",
           "video": "EHtW0VN28Ow",
@@ -404,21 +485,6 @@
           "title": "Im Mondenschein",
           "video": "3pMc5ef6FGg",
           "iframeTitle": "Eugen Cicero - Im Mondenschein"
-        },
-        {
-          "title": "Memories of Clausenburg",
-          "video": "fZLv9qQzphA",
-          "iframeTitle": "Eugen Cicero - Memories of Clausenburg"
-        },
-        {
-          "title": "Rumänische Volksweisen",
-          "video": "HmZwGy_ZjQw",
-          "iframeTitle": "Eugen Cicero - Rumänische Volksweisen"
-        },
-        {
-          "title": "Rumänisches Volkslied",
-          "video": "EEkifDowkvk",
-          "iframeTitle": "Eugen Cicero - Rumänisches Volkslied"
         }
       ]
     },
@@ -442,11 +508,16 @@
       "artist": "Frank Sinatra",
       "slug": "frank-sinatra",
       "main": {
-        "title": "Fly Me to the Moon (In Other Words)",
-        "video": "rSrc7aulay8",
-        "iframeTitle": "Frank Sinatra - Fly Me to the Moon (In Other Words)"
+        "title": "The World We Knew (Over And Over)",
+        "video": "dthgRdTf0Ds",
+        "iframeTitle": "Frank Sinatra - The World We Knew (Over And Over)"
       },
       "additional": [
+        {
+          "title": "Fly Me to the Moon (In Other Words)",
+          "video": "rSrc7aulay8",
+          "iframeTitle": "Frank Sinatra - Fly Me to the Moon (In Other Words)"
+        },
         {
           "title": "My Way",
           "video": "qQzdAsjWGPg",
@@ -458,19 +529,14 @@
           "iframeTitle": "Frank Sinatra - Strangers In The Night"
         },
         {
-          "title": "The World We Knew (Over And Over)",
-          "video": "dthgRdTf0Ds",
-          "iframeTitle": "Frank Sinatra - The World We Knew (Over And Over)"
-        },
-        {
-          "title": "I've Got You Under My Skin",
-          "video": "xz5W5bKLj_4",
-          "iframeTitle": "Frank Sinatra - I've Got You Under My Skin"
-        },
-        {
           "title": "Somethin' Stupid",
           "video": "LWXUdqvVO8Y",
           "iframeTitle": "Frank Sinatra - Somethin' Stupid"
+        },
+        {
+          "title": "The Girl From Ipanema",
+          "video": "JGRB5uOxqsw",
+          "iframeTitle": "Frank Sinatra - The Girl From Ipanema"
         }
       ]
     },
@@ -483,11 +549,6 @@
         "iframeTitle": "Gerry Mulligan - Night Lights"
       },
       "additional": [
-        {
-          "title": "Blight of the Fumble Bee",
-          "video": "3RZbByVdiBI",
-          "iframeTitle": "Gerry Mulligan - Blight of the Fumble Bee"
-        },
         {
           "title": "In the Wee Small Hours of the Morning",
           "video": "RUYypttogTI",
@@ -537,7 +598,14 @@
         "title": "Song For My Father",
         "video": "mKf1x3CALAE",
         "iframeTitle": "Horace Silver - Song For My Father"
-      }
+      },
+      "additional": [
+        {
+          "title": "Peace",
+          "video": "ieaAHwvqljg",
+          "iframeTitle": "Horace Silver - Peace"
+        }
+      ]
     },
     {
       "artist": "insaneintherainmusic",
@@ -593,42 +661,31 @@
           "title": "Sloth Dream",
           "video": "6A3hyqOyop0",
           "iframeTitle": "Jacob Mann - Sloth Dream"
-        }
-      ]
-    },
-    {
-      "artist": "Jacob Mann Big Band",
-      "slug": "jacob-mann-big-band",
-      "main": {
-        "title": "Bounce House",
-        "video": "Fe0gIE7zVgs",
-        "iframeTitle": "Jacob Mann Big Band - Bounce House"
-      },
-      "additional": [
+        },
+        {
+          "title": "Bounce House",
+          "video": "Fe0gIE7zVgs",
+          "iframeTitle": "Jacob Mann - Bounce House"
+        },
         {
           "title": "Don't Fly Spirit",
           "video": "oI0TleUSIMk",
-          "iframeTitle": "Jacob Mann Big Band - Don't Fly Spirit"
+          "iframeTitle": "Jacob Mann - Don't Fly Spirit"
         },
         {
           "title": "Kogi",
           "video": "4y56PtZwWUA",
-          "iframeTitle": "Jacob Mann Big Band - Kogi"
-        },
-        {
-          "title": "Parking Ticket",
-          "video": "ysoc28G4ZDw",
-          "iframeTitle": "Jacob Mann Big Band - Parking Ticket"
+          "iframeTitle": "Jacob Mann - Kogi"
         },
         {
           "title": "Pete Wheeler",
           "video": "9veVb1UJLyU",
-          "iframeTitle": "Jacob Mann Big Band - Pete Wheeler"
+          "iframeTitle": "Jacob Mann - Pete Wheeler"
         },
         {
           "title": "Pronk",
           "video": "5oNNpzq5FwA",
-          "iframeTitle": "Jacob Mann Big Band - Pronk"
+          "iframeTitle": "Jacob Mann - Pronk"
         }
       ]
     },
@@ -652,30 +709,25 @@
       "artist": "John Coltrane",
       "slug": "john-coltrane",
       "main": {
-        "title": "Giant Steps (Mono)",
+        "title": "Giant Steps",
         "video": "q-M5qmxXilU",
-        "iframeTitle": "John Coltrane - Giant Steps (Mono)"
+        "iframeTitle": "John Coltrane - Giant Steps"
       },
       "additional": [
-        {
-          "title": "Countdown",
-          "video": "JWqDNso8KLU",
-          "iframeTitle": "John Coltrane - Countdown"
-        },
-        {
-          "title": "Crescent",
-          "video": "Ye717DNG6HM",
-          "iframeTitle": "John Coltrane - Crescent"
-        },
-        {
-          "title": "Moment's Notice",
-          "video": "Esib-qhzCMw",
-          "iframeTitle": "John Coltrane - Moment's Notice"
-        },
         {
           "title": "Blues Legacy",
           "video": "JrM2Xp1MYOs",
           "iframeTitle": "John Coltrane - Blues Legacy"
+        },
+        {
+          "title": "Naima",
+          "video": "bPAC6zt_1ZM",
+          "iframeTitle": "John Coltrane - Naima"
+        },
+        {
+          "title": "Countdown",
+          "video": "RPS9nDFBeIE",
+          "iframeTitle": "John Coltrane - Countdown"
         }
       ]
     },
@@ -696,23 +748,23 @@
       ]
     },
     {
-      "artist": "Kristofer Maddigan",
-      "slug": "kristofer-maddigan",
+      "artist": "Kristofer Maddigan (Cuphead Soundtrack)",
+      "slug": "kristofer-maddigan-cuphead-soundtrack",
       "main": {
-        "title": "Funhouse Frazzle",
-        "video": "Z6tVmOgR-Xs",
-        "iframeTitle": "Kristofer Maddigan - Funhouse Frazzle"
+        "title": "Murine Corps",
+        "video": "zhqMfAKLjuE",
+        "iframeTitle": "Kristofer Maddigan (Cuphead Soundtrack) - Murine Corps"
       },
       "additional": [
         {
-          "title": "Murine Corps",
-          "video": "zhqMfAKLjuE",
-          "iframeTitle": "Kristofer Maddigan - Murine Corps"
+          "title": "Funhouse Frazzle",
+          "video": "Z6tVmOgR-Xs",
+          "iframeTitle": "Kristofer Maddigan (Cuphead Soundtrack) - Funhouse Frazzle"
         },
         {
           "title": "Ruse of an Ooze",
           "video": "gVgJ6LiyPlM",
-          "iframeTitle": "Kristofer Maddigan - Ruse of an Ooze"
+          "iframeTitle": "Kristofer Maddigan (Cuphead Soundtrack) - Ruse of an Ooze"
         }
       ]
     },
@@ -782,11 +834,6 @@
           "iframeTitle": "Louie Zong - Baguette Bop"
         },
         {
-          "title": "Breezy Slide",
-          "video": "nUgKZFI-pTY",
-          "iframeTitle": "Louie Zong - Breezy Slide"
-        },
-        {
           "title": "Cycad Conga",
           "video": "gWJVu5SZLf8",
           "iframeTitle": "Louie Zong - Cycad Conga"
@@ -810,6 +857,11 @@
           "title": "Minty Fresh",
           "video": "9zRt0VaRpK0",
           "iframeTitle": "Louie Zong - Minty Fresh"
+        },
+        {
+          "title": "Yoshologie",
+          "video": "zHcHpz1Iqps",
+          "iframeTitle": "Louie Zong - Yoshologie"
         }
       ]
     },
@@ -835,9 +887,9 @@
       "artist": "Maria Creuza",
       "slug": "maria-creuza",
       "main": {
-        "title": "Tomara - Bossanova",
+        "title": "Tomara",
         "video": "vJz2gk8e_qo",
-        "iframeTitle": "Maria Creuza - Tomara - Bossanova"
+        "iframeTitle": "Maria Creuza - Tomara"
       }
     },
     {
@@ -875,12 +927,33 @@
       }
     },
     {
-      "artist": "Oliver Nelson",
-      "slug": "oliver-nelson",
+      "artist": "Mort Garson",
+      "slug": "mort-garson",
       "main": {
-        "title": "Stolen Moments",
-        "video": "7A9XsIjr-R4",
-        "iframeTitle": "Oliver Nelson - Stolen Moments"
+        "title": "Plantasia",
+        "video": "LkesIsPGlSU",
+        "iframeTitle": "Mort Garson - Plantasia"
+      },
+      "additional": [
+        {
+          "title": "Swingin' Spathiphyllums",
+          "video": "C1yzxgNLChI",
+          "iframeTitle": "Mort Garson - Swingin' Spathiphyllums"
+        },
+        {
+          "title": "Concerto for Philodendron & Pothos",
+          "video": "-x7JLXsZk-w",
+          "iframeTitle": "Mort Garson - Concerto for Philodendron & Pothos"
+        }
+      ]
+    },
+    {
+      "artist": "Nara Leão",
+      "slug": "nara-leao",
+      "main": {
+        "title": "O Barquinho",
+        "video": "1v-NeQrmm3E",
+        "iframeTitle": "Nara Leão - O Barquinho"
       }
     },
     {
@@ -906,7 +979,19 @@
         "title": "Samba De Orpheu",
         "video": "EEg8zK6C3H8",
         "iframeTitle": "Paul Desmond - Samba De Orpheu"
-      }
+      },
+      "additional": [
+        {
+          "title": "Blight of the Fumble Bee",
+          "video": "3RZbByVdiBI",
+          "iframeTitle": "Paul Desmond - Blight of the Fumble Bee"
+        },
+        {
+          "title": "Circles",
+          "video": "OBL5rqCtNIA",
+          "iframeTitle": "Paul Desmond - Circles"
+        }
+      ]
     },
     {
       "artist": "Pearl Django",
@@ -925,24 +1010,6 @@
       ]
     },
     {
-      "artist": "Roberto Menescal",
-      "slug": "roberto-menescal",
-      "main": {
-        "title": "O Barquinho",
-        "video": "AlfsCETwGX4",
-        "iframeTitle": "Roberto Menescal - O Barquinho"
-      }
-    },
-    {
-      "artist": "Ronnell Bright",
-      "slug": "ronnell-bright",
-      "main": {
-        "title": "Sweet Pumpkin",
-        "video": "GvOIgCI33Zs",
-        "iframeTitle": "Ronnell Bright - Sweet Pumpkin"
-      }
-    },
-    {
       "artist": "Ryo Fukui",
       "slug": "ryo-fukui",
       "main": {
@@ -959,12 +1026,12 @@
       ]
     },
     {
-      "artist": "Sammy Nestico",
-      "slug": "sammy-nestico",
+      "artist": "Samara Joy",
+      "slug": "samara-joy",
       "main": {
-        "title": "Wind Machine",
-        "video": "YfU8WZqCnKo",
-        "iframeTitle": "Sammy Nestico - Wind Machine"
+        "title": "Sweet Pumpkin",
+        "video": "GvOIgCI33Zs",
+        "iframeTitle": "Samara Joy - Sweet Pumpkin"
       }
     },
     {
@@ -977,49 +1044,28 @@
       }
     },
     {
-      "artist": "SEATBELTS",
-      "slug": "seatbelts",
+      "artist": "SEATBELTS (Cowboy Bebop Soundtrack)",
+      "slug": "seatbelts-cowboy-bebop-soundtrack",
       "main": {
-        "title": "Tank!",
-        "video": "UFFa0QoHWvE",
-        "iframeTitle": "SEATBELTS - Tank!"
+        "title": "Rush",
+        "video": "XtxsYF4e3uM",
+        "iframeTitle": "SEATBELTS (Cowboy Bebop Soundtrack) - Rush"
       },
       "additional": [
         {
-          "title": "Rush",
-          "video": "XtxsYF4e3uM",
-          "iframeTitle": "SEATBELTS - Rush"
+          "title": "Tank!",
+          "video": "UFFa0QoHWvE",
+          "iframeTitle": "SEATBELTS (Cowboy Bebop Soundtrack) - Tank!"
         },
         {
           "title": "Piano Black",
           "video": "ssmYUDYtrKA",
-          "iframeTitle": "SEATBELTS - Piano Black"
+          "iframeTitle": "SEATBELTS (Cowboy Bebop Soundtrack) - Piano Black"
         },
         {
           "title": "Waltz for Zizi",
           "video": "Ryqvdr0UxcI",
-          "iframeTitle": "SEATBELTS - Waltz for Zizi"
-        }
-      ]
-    },
-    {
-      "artist": "Shoji Meguro",
-      "slug": "shoji-meguro",
-      "main": {
-        "title": "Life Goes On (Persona 5)",
-        "video": "_WMWP2V_7QM",
-        "iframeTitle": "Shoji Meguro - Life Goes On (Persona 5)"
-      },
-      "additional": [
-        {
-          "title": "Life Will Change (Persona 5)",
-          "video": "ZbdZTG_LwYU",
-          "iframeTitle": "Shoji Meguro - Life Will Change (Persona 5)"
-        },
-        {
-          "title": "Specialist (Persona 4, Persona 5-style arrangement)",
-          "video": "AYxs9AhqRcY",
-          "iframeTitle": "Shoji Meguro - Specialist (Persona 4, Persona 5-style arrangement)"
+          "iframeTitle": "SEATBELTS (Cowboy Bebop Soundtrack) - Waltz for Zizi"
         }
       ]
     },
@@ -1076,13 +1122,30 @@
       }
     },
     {
-      "artist": "Tim Simonec",
-      "slug": "tim-simonec",
+      "artist": "Tim Simonec (Whiplash Soundtrack)",
+      "slug": "tim-simonec-whiplash-soundtrack",
       "main": {
         "title": "Upswingin'",
         "video": "-897VTkxvKw",
-        "iframeTitle": "Tim Simonec - Upswingin'"
-      }
+        "iframeTitle": "Tim Simonec (Whiplash Soundtrack) - Upswingin'"
+      },
+      "additional": [
+        {
+          "title": "Ouverture",
+          "video": "tEfV9m2ereg",
+          "iframeTitle": "Tim Simonec (Whiplash Soundtrack) - Ouverture"
+        },
+        {
+          "title": "Whiplash",
+          "video": "-jAtHf9RA4w",
+          "iframeTitle": "Tim Simonec (Whiplash Soundtrack) - Whiplash"
+        },
+        {
+          "title": "Caravan",
+          "video": "38CRu1rCaKg",
+          "iframeTitle": "Tim Simonec (Whiplash Soundtrack) - Caravan"
+        }
+      ]
     },
     {
       "artist": "Tony Bennett",
@@ -1103,9 +1166,9 @@
       },
       "additional": [
         {
-          "title": "Christmas Time Is Here (Instrumental)",
+          "title": "Christmas Time Is Here",
           "video": "YvI_FNrczzQ",
-          "iframeTitle": "Vince Guaraldi Trio - Christmas Time Is Here (Instrumental)"
+          "iframeTitle": "Vince Guaraldi Trio - Christmas Time Is Here"
         }
       ]
     },
