@@ -1037,3 +1037,104 @@ body.lightbox-active {
         width: 100%;
     }
 }
+
+
+/* Shared recommendation-page interaction styles */
+#recommendations {
+    width: 100%;
+}
+
+.recommendation-group-toggle {
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.recommendation-group-toggle:hover {
+    background-color: #e8e8e8;
+    transform: scale(1.01);
+}
+
+.recommendation-group-toggle:focus-visible {
+    outline: 3px solid #6f8ea8;
+    outline-offset: 3px;
+}
+
+.recommendation-group-content {
+    width: 100%;
+    display: grid;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition: grid-template-rows 0.3s ease, opacity 0.2s ease;
+}
+
+.recommendation-group-content.collapsed {
+    grid-template-rows: 0fr;
+    opacity: 0;
+}
+
+.recommendation-group-inner {
+    min-height: 0;
+    overflow: hidden;
+}
+
+.recommendation-item,
+.recommendation-extra-item {
+    position: relative;
+}
+
+.recommendation-item > h2,
+.recommendation-item > h3,
+.recommendation-extra-item > h4 {
+    padding-left: 34px;
+    padding-right: 34px;
+}
+
+.recommendation-entry-embed {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background-color: #8199aa;
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.95);
+    border-radius: 7px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.recommendation-entry-embed:hover {
+    background-color: #9bb1bf;
+    transform: scale(1.08);
+}
+
+.recommendation-entry-embed svg {
+    width: 19px;
+    height: 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+@media screen and (max-width: 700px) {
+    .recommendation-entry-embed {
+        width: 29px;
+        height: 29px;
+        top: 8px;
+        right: 8px;
+    }
+
+    .recommendation-entry-embed svg {
+        width: 17px;
+        height: 17px;
+    }
+}
