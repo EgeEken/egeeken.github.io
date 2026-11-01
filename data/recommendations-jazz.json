@@ -82,66 +82,28 @@
               "iframeTitle": "Duke Ellington - Warm Valley"
             }
           ]
-        },
-        {
-          "artist": "Ella Fitzgerald",
-          "slug": "ella-fitzgerald",
-          "main": {
-            "title": "Moonlight in Vermont",
-            "video": "rhH8iMlMd6Q",
-            "iframeTitle": "Ella Fitzgerald - Moonlight in Vermont"
-          }
-        },
-        {
-          "artist": "Frank Sinatra",
-          "slug": "frank-sinatra",
-          "main": {
-            "title": "The World We Knew (Over And Over)",
-            "video": "dthgRdTf0Ds",
-            "iframeTitle": "Frank Sinatra - The World We Knew (Over And Over)"
-          },
-          "additional": [
-            {
-              "title": "Fly Me to the Moon (In Other Words)",
-              "video": "rSrc7aulay8",
-              "iframeTitle": "Frank Sinatra - Fly Me to the Moon (In Other Words)"
-            },
-            {
-              "title": "My Way",
-              "video": "qQzdAsjWGPg",
-              "iframeTitle": "Frank Sinatra - My Way"
-            },
-            {
-              "title": "Strangers In The Night",
-              "video": "BTOeRwIUnG0",
-              "iframeTitle": "Frank Sinatra - Strangers In The Night"
-            },
-            {
-              "title": "Somethin' Stupid",
-              "video": "LWXUdqvVO8Y",
-              "iframeTitle": "Frank Sinatra - Somethin' Stupid"
-            },
-            {
-              "title": "The Girl From Ipanema",
-              "video": "JGRB5uOxqsw",
-              "iframeTitle": "Frank Sinatra - The Girl From Ipanema"
-            }
-          ]
-        },
-        {
-          "artist": "Tony Bennett",
-          "slug": "tony-bennett",
-          "main": {
-            "title": "The Good Life",
-            "video": "CJiDerQXyoo",
-            "iframeTitle": "Tony Bennett - The Good Life"
-          }
         }
       ]
     },
     {
-      "genre": "Bebop",
+      "genre": "Classic Jazz",
       "artists": [
+        {
+          "artist": "Ahmad Jamal Trio",
+          "slug": "ahmad-jamal-trio",
+          "main": {
+            "title": "I Love Music",
+            "video": "fW8NQgqYoVQ",
+            "iframeTitle": "Ahmad Jamal Trio - I Love Music"
+          },
+          "additional": [
+            {
+              "title": "Dolphin Dance",
+              "video": "dxnTYFE0x1I",
+              "iframeTitle": "Ahmad Jamal Trio - Dolphin Dance"
+            }
+          ]
+        },
         {
           "artist": "Art Blakey & The Jazz Messengers",
           "slug": "art-blakey-the-jazz-messengers",
@@ -160,6 +122,32 @@
               "title": "Mosaic",
               "video": "8lXHHOOg-Bo",
               "iframeTitle": "Art Blakey & The Jazz Messengers - Mosaic"
+            }
+          ]
+        },
+        {
+          "artist": "Bill Evans",
+          "slug": "bill-evans",
+          "main": {
+            "title": "Angel Face",
+            "video": "IXzL-lN1Ntw",
+            "iframeTitle": "Bill Evans - Angel Face"
+          },
+          "additional": [
+            {
+              "title": "Stolen Moments",
+              "video": "7A9XsIjr-R4",
+              "iframeTitle": "Bill Evans - Stolen Moments"
+            },
+            {
+              "title": "Like Someone in Love",
+              "video": "QFoapxPvZy4",
+              "iframeTitle": "Bill Evans - Like Someone in Love"
+            },
+            {
+              "title": "My Foolish Heart",
+              "video": "EpVXH3Vm2wg",
+              "iframeTitle": "Bill Evans - My Foolish Heart"
             }
           ]
         },
@@ -185,6 +173,43 @@
               "title": "Anthropology",
               "video": "VXncfHa8DZw",
               "iframeTitle": "Charlie Parker - Anthropology"
+            }
+          ]
+        },
+        {
+          "artist": "Dave Brubeck",
+          "slug": "dave-brubeck",
+          "main": {
+            "title": "Take Five",
+            "video": "-DHuW1h1wHw",
+            "iframeTitle": "Dave Brubeck - Take Five"
+          },
+          "additional": [
+            {
+              "title": "Blue Rondo à la Turk",
+              "video": "FqPC-BkylxA",
+              "iframeTitle": "Dave Brubeck - Blue Rondo à la Turk"
+            },
+            {
+              "title": "Three to Get Ready",
+              "video": "KCb10WMWSbQ",
+              "iframeTitle": "Dave Brubeck - Three to Get Ready"
+            }
+          ]
+        },
+        {
+          "artist": "Dave Holland Trio",
+          "slug": "dave-holland-trio",
+          "main": {
+            "title": "Warm Valley",
+            "video": "18m-0hZb4CQ",
+            "iframeTitle": "Dave Holland Trio - Warm Valley"
+          },
+          "additional": [
+            {
+              "title": "Without Deception",
+              "video": "_vlWAHzaAWI",
+              "iframeTitle": "Dave Holland Trio - Without Deception"
             }
           ]
         },
@@ -240,6 +265,22 @@
           ]
         },
         {
+          "artist": "Gerry Mulligan",
+          "slug": "gerry-mulligan",
+          "main": {
+            "title": "Night Lights",
+            "video": "Wf02V8AtMag",
+            "iframeTitle": "Gerry Mulligan - Night Lights"
+          },
+          "additional": [
+            {
+              "title": "In the Wee Small Hours of the Morning",
+              "video": "RUYypttogTI",
+              "iframeTitle": "Gerry Mulligan - In the Wee Small Hours of the Morning"
+            }
+          ]
+        },
+        {
           "artist": "Hank Mobley",
           "slug": "hank-mobley",
           "main": {
@@ -282,6 +323,32 @@
           ]
         },
         {
+          "artist": "John Coltrane",
+          "slug": "john-coltrane",
+          "main": {
+            "title": "Giant Steps",
+            "video": "q-M5qmxXilU",
+            "iframeTitle": "John Coltrane - Giant Steps"
+          },
+          "additional": [
+            {
+              "title": "Blues Legacy",
+              "video": "JrM2Xp1MYOs",
+              "iframeTitle": "John Coltrane - Blues Legacy"
+            },
+            {
+              "title": "Naima",
+              "video": "bPAC6zt_1ZM",
+              "iframeTitle": "John Coltrane - Naima"
+            },
+            {
+              "title": "Countdown",
+              "video": "RPS9nDFBeIE",
+              "iframeTitle": "John Coltrane - Countdown"
+            }
+          ]
+        },
+        {
           "artist": "Lee Morgan",
           "slug": "lee-morgan",
           "main": {
@@ -289,6 +356,22 @@
             "video": "MwskRIIRR0k",
             "iframeTitle": "Lee Morgan - The Gigolo"
           }
+        },
+        {
+          "artist": "Miles Davis",
+          "slug": "miles-davis",
+          "main": {
+            "title": "So What",
+            "video": "KJEzFvXx3Xw",
+            "iframeTitle": "Miles Davis - So What"
+          },
+          "additional": [
+            {
+              "title": "Blue In Green",
+              "video": "TLDflhhdPCg",
+              "iframeTitle": "Miles Davis - Blue In Green"
+            }
+          ]
         },
         {
           "artist": "Oscar Peterson",
@@ -303,6 +386,27 @@
               "title": "Squeaky's Blues",
               "video": "ubcWIOK0e1Q",
               "iframeTitle": "Oscar Peterson - Squeaky's Blues"
+            }
+          ]
+        },
+        {
+          "artist": "Paul Desmond",
+          "slug": "paul-desmond",
+          "main": {
+            "title": "Samba De Orpheu",
+            "video": "EEg8zK6C3H8",
+            "iframeTitle": "Paul Desmond - Samba De Orpheu"
+          },
+          "additional": [
+            {
+              "title": "Blight of the Fumble Bee",
+              "video": "3RZbByVdiBI",
+              "iframeTitle": "Paul Desmond - Blight of the Fumble Bee"
+            },
+            {
+              "title": "Circles",
+              "video": "OBL5rqCtNIA",
+              "iframeTitle": "Paul Desmond - Circles"
             }
           ]
         },
@@ -343,165 +447,128 @@
       ]
     },
     {
-      "genre": "Modal",
+      "genre": "Vocal / Pop Jazz",
       "artists": [
         {
-          "artist": "Ahmad Jamal Trio",
-          "slug": "ahmad-jamal-trio",
+          "artist": "Ella Fitzgerald",
+          "slug": "ella-fitzgerald",
           "main": {
-            "title": "I Love Music",
-            "video": "fW8NQgqYoVQ",
-            "iframeTitle": "Ahmad Jamal Trio - I Love Music"
-          },
-          "additional": [
-            {
-              "title": "Dolphin Dance",
-              "video": "dxnTYFE0x1I",
-              "iframeTitle": "Ahmad Jamal Trio - Dolphin Dance"
-            }
-          ]
+            "title": "Moonlight in Vermont",
+            "video": "rhH8iMlMd6Q",
+            "iframeTitle": "Ella Fitzgerald - Moonlight in Vermont"
+          }
         },
         {
-          "artist": "Bill Evans",
-          "slug": "bill-evans",
+          "artist": "Frank Sinatra",
+          "slug": "frank-sinatra",
           "main": {
-            "title": "Angel Face",
-            "video": "IXzL-lN1Ntw",
-            "iframeTitle": "Bill Evans - Angel Face"
+            "title": "The World We Knew (Over And Over)",
+            "video": "dthgRdTf0Ds",
+            "iframeTitle": "Frank Sinatra - The World We Knew (Over And Over)"
           },
           "additional": [
             {
-              "title": "Stolen Moments",
-              "video": "7A9XsIjr-R4",
-              "iframeTitle": "Bill Evans - Stolen Moments"
+              "title": "Fly Me to the Moon (In Other Words)",
+              "video": "rSrc7aulay8",
+              "iframeTitle": "Frank Sinatra - Fly Me to the Moon (In Other Words)"
             },
             {
-              "title": "Like Someone in Love",
-              "video": "QFoapxPvZy4",
-              "iframeTitle": "Bill Evans - Like Someone in Love"
+              "title": "My Way",
+              "video": "qQzdAsjWGPg",
+              "iframeTitle": "Frank Sinatra - My Way"
             },
             {
-              "title": "My Foolish Heart",
-              "video": "EpVXH3Vm2wg",
-              "iframeTitle": "Bill Evans - My Foolish Heart"
-            }
-          ]
-        },
-        {
-          "artist": "Dave Brubeck",
-          "slug": "dave-brubeck",
-          "main": {
-            "title": "Take Five",
-            "video": "-DHuW1h1wHw",
-            "iframeTitle": "Dave Brubeck - Take Five"
-          },
-          "additional": [
-            {
-              "title": "Blue Rondo à la Turk",
-              "video": "FqPC-BkylxA",
-              "iframeTitle": "Dave Brubeck - Blue Rondo à la Turk"
+              "title": "Strangers In The Night",
+              "video": "BTOeRwIUnG0",
+              "iframeTitle": "Frank Sinatra - Strangers In The Night"
             },
             {
-              "title": "Three to Get Ready",
-              "video": "KCb10WMWSbQ",
-              "iframeTitle": "Dave Brubeck - Three to Get Ready"
-            }
-          ]
-        },
-        {
-          "artist": "Dave Holland Trio",
-          "slug": "dave-holland-trio",
-          "main": {
-            "title": "Warm Valley",
-            "video": "18m-0hZb4CQ",
-            "iframeTitle": "Dave Holland Trio - Warm Valley"
-          },
-          "additional": [
-            {
-              "title": "Without Deception",
-              "video": "_vlWAHzaAWI",
-              "iframeTitle": "Dave Holland Trio - Without Deception"
-            }
-          ]
-        },
-        {
-          "artist": "Gerry Mulligan",
-          "slug": "gerry-mulligan",
-          "main": {
-            "title": "Night Lights",
-            "video": "Wf02V8AtMag",
-            "iframeTitle": "Gerry Mulligan - Night Lights"
-          },
-          "additional": [
-            {
-              "title": "In the Wee Small Hours of the Morning",
-              "video": "RUYypttogTI",
-              "iframeTitle": "Gerry Mulligan - In the Wee Small Hours of the Morning"
-            }
-          ]
-        },
-        {
-          "artist": "John Coltrane",
-          "slug": "john-coltrane",
-          "main": {
-            "title": "Giant Steps",
-            "video": "q-M5qmxXilU",
-            "iframeTitle": "John Coltrane - Giant Steps"
-          },
-          "additional": [
-            {
-              "title": "Blues Legacy",
-              "video": "JrM2Xp1MYOs",
-              "iframeTitle": "John Coltrane - Blues Legacy"
+              "title": "Somethin' Stupid",
+              "video": "LWXUdqvVO8Y",
+              "iframeTitle": "Frank Sinatra - Somethin' Stupid"
             },
             {
-              "title": "Naima",
-              "video": "bPAC6zt_1ZM",
-              "iframeTitle": "John Coltrane - Naima"
-            },
-            {
-              "title": "Countdown",
-              "video": "RPS9nDFBeIE",
-              "iframeTitle": "John Coltrane - Countdown"
+              "title": "The Girl From Ipanema",
+              "video": "JGRB5uOxqsw",
+              "iframeTitle": "Frank Sinatra - The Girl From Ipanema"
             }
           ]
         },
         {
-          "artist": "Miles Davis",
-          "slug": "miles-davis",
+          "artist": "Kitri",
+          "slug": "kitri",
           "main": {
-            "title": "So What",
-            "video": "KJEzFvXx3Xw",
-            "iframeTitle": "Miles Davis - So What"
+            "title": "Mujunritsu",
+            "video": "aKsed7AdsT0",
+            "iframeTitle": "Kitri - Mujunritsu"
           },
           "additional": [
             {
-              "title": "Blue In Green",
-              "video": "TLDflhhdPCg",
-              "iframeTitle": "Miles Davis - Blue In Green"
+              "title": "NEW ME",
+              "video": "vjgEVCbST_A",
+              "iframeTitle": "Kitri - NEW ME"
             }
           ]
         },
         {
-          "artist": "Paul Desmond",
-          "slug": "paul-desmond",
+          "artist": "Laufey",
+          "slug": "laufey",
           "main": {
-            "title": "Samba De Orpheu",
-            "video": "EEg8zK6C3H8",
-            "iframeTitle": "Paul Desmond - Samba De Orpheu"
+            "title": "From The Start",
+            "video": "hbvlVCmIiEI",
+            "iframeTitle": "Laufey - From The Start"
           },
           "additional": [
             {
-              "title": "Blight of the Fumble Bee",
-              "video": "3RZbByVdiBI",
-              "iframeTitle": "Paul Desmond - Blight of the Fumble Bee"
+              "title": "Let You Break My Heart Again",
+              "video": "PK02xDT_RWA",
+              "iframeTitle": "Laufey - Let You Break My Heart Again"
             },
             {
-              "title": "Circles",
-              "video": "OBL5rqCtNIA",
-              "iframeTitle": "Paul Desmond - Circles"
+              "title": "Night Light",
+              "video": "RAxbrNLHVA0",
+              "iframeTitle": "Laufey - Night Light"
+            },
+            {
+              "title": "Valentine",
+              "video": "tyKu0uZS86Q",
+              "iframeTitle": "Laufey - Valentine"
             }
           ]
+        },
+        {
+          "artist": "Samara Joy",
+          "slug": "samara-joy",
+          "main": {
+            "title": "Sweet Pumpkin",
+            "video": "GvOIgCI33Zs",
+            "iframeTitle": "Samara Joy - Sweet Pumpkin"
+          }
+        },
+        {
+          "artist": "Stevie Wonder",
+          "slug": "stevie-wonder",
+          "main": {
+            "title": "Isn't She Lovely",
+            "video": "oE56g61mW44",
+            "iframeTitle": "Stevie Wonder - Isn't She Lovely"
+          },
+          "additional": [
+            {
+              "title": "You Are The Sunshine Of My Life",
+              "video": "3wZ_b_uUAdQ",
+              "iframeTitle": "Stevie Wonder - You Are The Sunshine Of My Life"
+            }
+          ]
+        },
+        {
+          "artist": "Tony Bennett",
+          "slug": "tony-bennett",
+          "main": {
+            "title": "The Good Life",
+            "video": "CJiDerQXyoo",
+            "iframeTitle": "Tony Bennett - The Good Life"
+          }
         }
       ]
     },
@@ -756,6 +823,32 @@
           }
         },
         {
+          "artist": "Eugen Cicero",
+          "slug": "eugen-cicero",
+          "main": {
+            "title": "Memories of Clausenburg",
+            "video": "fZLv9qQzphA",
+            "iframeTitle": "Eugen Cicero - Memories of Clausenburg"
+          },
+          "additional": [
+            {
+              "title": "Der Schlitten eilt",
+              "video": "rtDnxKqnkWE",
+              "iframeTitle": "Eugen Cicero - Der Schlitten eilt"
+            },
+            {
+              "title": "Dort in der Ferne",
+              "video": "EHtW0VN28Ow",
+              "iframeTitle": "Eugen Cicero - Dort in der Ferne"
+            },
+            {
+              "title": "Im Mondenschein",
+              "video": "3pMc5ef6FGg",
+              "iframeTitle": "Eugen Cicero - Im Mondenschein"
+            }
+          ]
+        },
+        {
           "artist": "fox capture plan",
           "slug": "fox-capture-plan",
           "main": {
@@ -799,6 +892,57 @@
               "title": "Song of Storms (Jazz Cover)",
               "video": "WDzGGHNaoV8",
               "iframeTitle": "insaneintherainmusic - Song of Storms (Jazz Cover)"
+            }
+          ]
+        },
+        {
+          "artist": "Jacob Mann",
+          "slug": "jacob-mann",
+          "main": {
+            "title": "Baby Carrots",
+            "video": "Z3BfoXnr5ZQ",
+            "iframeTitle": "Jacob Mann - Baby Carrots"
+          },
+          "additional": [
+            {
+              "title": "Bumble Buddies",
+              "video": "BiBOoHHmy1s",
+              "iframeTitle": "Jacob Mann - Bumble Buddies"
+            },
+            {
+              "title": "Hold Music",
+              "video": "kZ9tLMFCfXs",
+              "iframeTitle": "Jacob Mann - Hold Music"
+            },
+            {
+              "title": "Sloth Dream",
+              "video": "6A3hyqOyop0",
+              "iframeTitle": "Jacob Mann - Sloth Dream"
+            },
+            {
+              "title": "Bounce House",
+              "video": "Fe0gIE7zVgs",
+              "iframeTitle": "Jacob Mann - Bounce House"
+            },
+            {
+              "title": "Don't Fly Spirit",
+              "video": "oI0TleUSIMk",
+              "iframeTitle": "Jacob Mann - Don't Fly Spirit"
+            },
+            {
+              "title": "Kogi",
+              "video": "4y56PtZwWUA",
+              "iframeTitle": "Jacob Mann - Kogi"
+            },
+            {
+              "title": "Pete Wheeler",
+              "video": "9veVb1UJLyU",
+              "iframeTitle": "Jacob Mann - Pete Wheeler"
+            },
+            {
+              "title": "Pronk",
+              "video": "5oNNpzq5FwA",
+              "iframeTitle": "Jacob Mann - Pronk"
             }
           ]
         },
@@ -878,22 +1022,6 @@
             "video": "FNrHNNs6AyA",
             "iframeTitle": "Shubh Saran - SLIP"
           }
-        },
-        {
-          "artist": "Stevie Wonder",
-          "slug": "stevie-wonder",
-          "main": {
-            "title": "Isn't She Lovely",
-            "video": "oE56g61mW44",
-            "iframeTitle": "Stevie Wonder - Isn't She Lovely"
-          },
-          "additional": [
-            {
-              "title": "You Are The Sunshine Of My Life",
-              "video": "3wZ_b_uUAdQ",
-              "iframeTitle": "Stevie Wonder - You Are The Sunshine Of My Life"
-            }
-          ]
         },
         {
           "artist": "Tigran Hamasyan",
@@ -1022,125 +1150,6 @@
       "genre": "Contemporary",
       "artists": [
         {
-          "artist": "Eugen Cicero",
-          "slug": "eugen-cicero",
-          "main": {
-            "title": "Memories of Clausenburg",
-            "video": "fZLv9qQzphA",
-            "iframeTitle": "Eugen Cicero - Memories of Clausenburg"
-          },
-          "additional": [
-            {
-              "title": "Der Schlitten eilt",
-              "video": "rtDnxKqnkWE",
-              "iframeTitle": "Eugen Cicero - Der Schlitten eilt"
-            },
-            {
-              "title": "Dort in der Ferne",
-              "video": "EHtW0VN28Ow",
-              "iframeTitle": "Eugen Cicero - Dort in der Ferne"
-            },
-            {
-              "title": "Im Mondenschein",
-              "video": "3pMc5ef6FGg",
-              "iframeTitle": "Eugen Cicero - Im Mondenschein"
-            }
-          ]
-        },
-        {
-          "artist": "Jacob Mann",
-          "slug": "jacob-mann",
-          "main": {
-            "title": "Baby Carrots",
-            "video": "Z3BfoXnr5ZQ",
-            "iframeTitle": "Jacob Mann - Baby Carrots"
-          },
-          "additional": [
-            {
-              "title": "Bumble Buddies",
-              "video": "BiBOoHHmy1s",
-              "iframeTitle": "Jacob Mann - Bumble Buddies"
-            },
-            {
-              "title": "Hold Music",
-              "video": "kZ9tLMFCfXs",
-              "iframeTitle": "Jacob Mann - Hold Music"
-            },
-            {
-              "title": "Sloth Dream",
-              "video": "6A3hyqOyop0",
-              "iframeTitle": "Jacob Mann - Sloth Dream"
-            },
-            {
-              "title": "Bounce House",
-              "video": "Fe0gIE7zVgs",
-              "iframeTitle": "Jacob Mann - Bounce House"
-            },
-            {
-              "title": "Don't Fly Spirit",
-              "video": "oI0TleUSIMk",
-              "iframeTitle": "Jacob Mann - Don't Fly Spirit"
-            },
-            {
-              "title": "Kogi",
-              "video": "4y56PtZwWUA",
-              "iframeTitle": "Jacob Mann - Kogi"
-            },
-            {
-              "title": "Pete Wheeler",
-              "video": "9veVb1UJLyU",
-              "iframeTitle": "Jacob Mann - Pete Wheeler"
-            },
-            {
-              "title": "Pronk",
-              "video": "5oNNpzq5FwA",
-              "iframeTitle": "Jacob Mann - Pronk"
-            }
-          ]
-        },
-        {
-          "artist": "Kitri",
-          "slug": "kitri",
-          "main": {
-            "title": "Mujunritsu",
-            "video": "aKsed7AdsT0",
-            "iframeTitle": "Kitri - Mujunritsu"
-          },
-          "additional": [
-            {
-              "title": "NEW ME",
-              "video": "vjgEVCbST_A",
-              "iframeTitle": "Kitri - NEW ME"
-            }
-          ]
-        },
-        {
-          "artist": "Laufey",
-          "slug": "laufey",
-          "main": {
-            "title": "From The Start",
-            "video": "hbvlVCmIiEI",
-            "iframeTitle": "Laufey - From The Start"
-          },
-          "additional": [
-            {
-              "title": "Let You Break My Heart Again",
-              "video": "PK02xDT_RWA",
-              "iframeTitle": "Laufey - Let You Break My Heart Again"
-            },
-            {
-              "title": "Night Light",
-              "video": "RAxbrNLHVA0",
-              "iframeTitle": "Laufey - Night Light"
-            },
-            {
-              "title": "Valentine",
-              "video": "tyKu0uZS86Q",
-              "iframeTitle": "Laufey - Valentine"
-            }
-          ]
-        },
-        {
           "artist": "Louie Zong",
           "slug": "louie-zong",
           "main": {
@@ -1206,15 +1215,6 @@
               "iframeTitle": "Mort Garson - Concerto for Philodendron & Pothos"
             }
           ]
-        },
-        {
-          "artist": "Samara Joy",
-          "slug": "samara-joy",
-          "main": {
-            "title": "Sweet Pumpkin",
-            "video": "GvOIgCI33Zs",
-            "iframeTitle": "Samara Joy - Sweet Pumpkin"
-          }
         }
       ]
     }
