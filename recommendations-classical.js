@@ -87,12 +87,18 @@
                 container.appendChild(link);
             }
 
-            const enabled = effectiveEmbedState(videoId);
+            const more = container.closest('.recommendation-more');
+            const groupContent = container.closest('.recommendation-group-content');
+            const hiddenByMore = more && !more.classList.contains('expanded');
+            const hiddenByGroup = groupContent?.classList.contains('collapsed');
+            const enabled = effectiveEmbedState(videoId) && !hiddenByMore && !hiddenByGroup;
+
             if (enabled) {
                 if (!iframe.getAttribute('src')) iframe.src = iframe.dataset.src;
                 iframe.style.display = '';
                 link.style.display = 'none';
             } else {
+                iframe.removeAttribute('src');
                 iframe.style.display = 'none';
                 link.style.display = '';
             }
@@ -146,6 +152,7 @@
                 toggle.setAttribute('aria-expanded', String(isExpanded));
                 content.setAttribute('aria-hidden', String(!isExpanded));
                 toggle.textContent = isExpanded ? 'Hide more from this ' + CONFIG.moreNoun : 'More from this ' + CONFIG.moreNoun;
+                syncRecommendationPlayers(content);
                 if (isExpanded) setHovering();
                 else scheduleHide();
             });
@@ -164,6 +171,7 @@
                 toggle.setAttribute('aria-expanded', String(expanded));
                 content.classList.toggle('collapsed', !expanded);
                 content.setAttribute('aria-hidden', String(!expanded));
+                syncRecommendationPlayers(content);
             };
 
             const activate = () => setExpanded(toggle.getAttribute('aria-expanded') !== 'true');
