@@ -8,7 +8,7 @@
   ],
   "genres": [
     {
-      "genre": "Swing & Big Band",
+      "genre": "Classic Jazz",
       "artists": [
         {
           "artist": "Buddy Rich",
@@ -82,12 +82,7 @@
               "iframeTitle": "Duke Ellington - Warm Valley"
             }
           ]
-        }
-      ]
-    },
-    {
-      "genre": "Classic Jazz",
-      "artists": [
+        },
         {
           "artist": "Ahmad Jamal Trio",
           "slug": "ahmad-jamal-trio",
@@ -627,15 +622,6 @@
           }
         },
         {
-          "artist": "Hareton Salvanini",
-          "slug": "hareton-salvanini",
-          "main": {
-            "title": "Quarto de Hotel",
-            "video": "CrYWrPTh9Ug",
-            "iframeTitle": "Hareton Salvanini - Quarto de Hotel"
-          }
-        },
-        {
           "artist": "Maria Creuza",
           "slug": "maria-creuza",
           "main": {
@@ -997,6 +983,52 @@
           }
         },
         {
+          "artist": "Louie Zong",
+          "slug": "louie-zong",
+          "main": {
+            "title": "Puzzle Jazz",
+            "video": "N-A2RaJAbvQ",
+            "iframeTitle": "Louie Zong - Puzzle Jazz"
+          },
+          "additional": [
+            {
+              "title": "Baguette Bop",
+              "video": "RQr2ESNxWH0",
+              "iframeTitle": "Louie Zong - Baguette Bop"
+            },
+            {
+              "title": "Cycad Conga",
+              "video": "gWJVu5SZLf8",
+              "iframeTitle": "Louie Zong - Cycad Conga"
+            },
+            {
+              "title": "Fairy Ring Funk",
+              "video": "4BodNa5seOA",
+              "iframeTitle": "Louie Zong - Fairy Ring Funk"
+            },
+            {
+              "title": "Hold On, Please!",
+              "video": "k3dvfeVUxek",
+              "iframeTitle": "Louie Zong - Hold On, Please!"
+            },
+            {
+              "title": "La Carrera Gourmet",
+              "video": "3znOCqHSRVU",
+              "iframeTitle": "Louie Zong - La Carrera Gourmet"
+            },
+            {
+              "title": "Minty Fresh",
+              "video": "9zRt0VaRpK0",
+              "iframeTitle": "Louie Zong - Minty Fresh"
+            },
+            {
+              "title": "Yoshologie",
+              "video": "zHcHpz1Iqps",
+              "iframeTitle": "Louie Zong - Yoshologie"
+            }
+          ]
+        },
+        {
           "artist": "Minyo Crusaders",
           "slug": "minyo-crusaders",
           "main": {
@@ -1004,6 +1036,27 @@
             "video": "jy6No4Xuq_E",
             "iframeTitle": "Minyo Crusaders - Minyo Cumbiero - Cumbia del Monte Fuji"
           }
+        },
+        {
+          "artist": "Mort Garson",
+          "slug": "mort-garson",
+          "main": {
+            "title": "Plantasia",
+            "video": "LkesIsPGlSU",
+            "iframeTitle": "Mort Garson - Plantasia"
+          },
+          "additional": [
+            {
+              "title": "Swingin' Spathiphyllums",
+              "video": "C1yzxgNLChI",
+              "iframeTitle": "Mort Garson - Swingin' Spathiphyllums"
+            },
+            {
+              "title": "Concerto for Philodendron & Pothos",
+              "video": "-x7JLXsZk-w",
+              "iframeTitle": "Mort Garson - Concerto for Philodendron & Pothos"
+            }
+          ]
         },
         {
           "artist": "Schroeder-Headz",
@@ -1044,8 +1097,17 @@
       ]
     },
     {
-      "genre": "Soundtracks",
+      "genre": "Jazz Soundtracks",
       "artists": [
+        {
+          "artist": "Hareton Salvanini",
+          "slug": "hareton-salvanini",
+          "main": {
+            "title": "Quarto de Hotel",
+            "video": "CrYWrPTh9Ug",
+            "iframeTitle": "Hareton Salvanini - Quarto de Hotel"
+          }
+        },
         {
           "artist": "Kristofer Maddigan (Cuphead Soundtrack)",
           "slug": "kristofer-maddigan-cuphead-soundtrack",
@@ -1141,78 +1203,6 @@
               "title": "Christmas Time Is Here",
               "video": "YvI_FNrczzQ",
               "iframeTitle": "Vince Guaraldi Trio - Christmas Time Is Here"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "genre": "Contemporary",
-      "artists": [
-        {
-          "artist": "Louie Zong",
-          "slug": "louie-zong",
-          "main": {
-            "title": "Puzzle Jazz",
-            "video": "N-A2RaJAbvQ",
-            "iframeTitle": "Louie Zong - Puzzle Jazz"
-          },
-          "additional": [
-            {
-              "title": "Baguette Bop",
-              "video": "RQr2ESNxWH0",
-              "iframeTitle": "Louie Zong - Baguette Bop"
-            },
-            {
-              "title": "Cycad Conga",
-              "video": "gWJVu5SZLf8",
-              "iframeTitle": "Louie Zong - Cycad Conga"
-            },
-            {
-              "title": "Fairy Ring Funk",
-              "video": "4BodNa5seOA",
-              "iframeTitle": "Louie Zong - Fairy Ring Funk"
-            },
-            {
-              "title": "Hold On, Please!",
-              "video": "k3dvfeVUxek",
-              "iframeTitle": "Louie Zong - Hold On, Please!"
-            },
-            {
-              "title": "La Carrera Gourmet",
-              "video": "3znOCqHSRVU",
-              "iframeTitle": "Louie Zong - La Carrera Gourmet"
-            },
-            {
-              "title": "Minty Fresh",
-              "video": "9zRt0VaRpK0",
-              "iframeTitle": "Louie Zong - Minty Fresh"
-            },
-            {
-              "title": "Yoshologie",
-              "video": "zHcHpz1Iqps",
-              "iframeTitle": "Louie Zong - Yoshologie"
-            }
-          ]
-        },
-        {
-          "artist": "Mort Garson",
-          "slug": "mort-garson",
-          "main": {
-            "title": "Plantasia",
-            "video": "LkesIsPGlSU",
-            "iframeTitle": "Mort Garson - Plantasia"
-          },
-          "additional": [
-            {
-              "title": "Swingin' Spathiphyllums",
-              "video": "C1yzxgNLChI",
-              "iframeTitle": "Mort Garson - Swingin' Spathiphyllums"
-            },
-            {
-              "title": "Concerto for Philodendron & Pothos",
-              "video": "-x7JLXsZk-w",
-              "iframeTitle": "Mort Garson - Concerto for Philodendron & Pothos"
             }
           ]
         }
