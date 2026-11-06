@@ -3,127 +3,169 @@
         "file": "1.JPG",
         "tags": [
             "OTHER"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "2.JPG",
         "tags": [
             "OTHER"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "3.JPG",
         "tags": [
             "ANIMALS"
-        ]
+        ],
+        "width": 3060,
+        "height": 4080
     },
     {
         "file": "4.JPG",
         "tags": [
             "OTHER"
-        ]
+        ],
+        "width": 3060,
+        "height": 4080
     },
     {
         "file": "5.JPG",
         "tags": [
             "ANIMALS"
-        ]
+        ],
+        "width": 3576,
+        "height": 2384
     },
     {
         "file": "6.JPG",
         "tags": [
             "ANIMALS"
-        ]
+        ],
+        "width": 4240,
+        "height": 2384
     },
     {
         "file": "7.JPG",
         "tags": [
             "ANIMALS"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "8.JPG",
         "tags": [
             "OTHER"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "9.JPG",
         "tags": [
             "OTHER"
-        ]
+        ],
+        "width": 3060,
+        "height": 4080
     },
     {
         "file": "10.JPG",
         "tags": [
             "OTHER"
-        ]
+        ],
+        "width": 4080,
+        "height": 3060
     },
     {
         "file": "11.JPG",
         "tags": [
             "OTHER"
-        ]
+        ],
+        "width": 3576,
+        "height": 2384
     },
     {
         "file": "12.JPG",
         "tags": [
             "ANIMALS"
-        ]
+        ],
+        "width": 1939,
+        "height": 2424
     },
     {
         "file": "13.JPG",
         "tags": [
             "OTHER"
-        ]
+        ],
+        "width": 4240,
+        "height": 2384
     },
     {
         "file": "14.JPG",
         "tags": [
             "ANIMALS"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "15.JPG",
         "tags": [
             "ANIMALS"
-        ]
+        ],
+        "width": 4240,
+        "height": 2384
     },
     {
         "file": "16.JPG",
         "tags": [
             "OTHER"
-        ]
+        ],
+        "width": 2832,
+        "height": 4240
     },
     {
         "file": "DSC03092.JPG",
         "tags": [
             "OTHER"
-        ]
+        ],
+        "width": 4240,
+        "height": 2384
     },
     {
         "file": "DSC03326.JPG",
         "tags": [
             "OTHER"
-        ]
+        ],
+        "width": 4240,
+        "height": 2384
     },
     {
         "file": "DSC03397.JPG",
         "tags": [
             "ANIMALS"
-        ]
+        ],
+        "width": 4240,
+        "height": 2384
     },
     {
         "file": "DSC03617.JPG",
         "tags": [
             "OTHER"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "DSC03630.JPG",
         "tags": [
             "ANIMALS"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "DSC05547.JPG",
@@ -131,7 +173,9 @@
             "ANIMALS",
             "EVENTS",
             "MOMENTS_LAB_OFF_SITE"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "DSC05581.JPG",
@@ -139,7 +183,9 @@
             "ANIMALS",
             "EVENTS",
             "MOMENTS_LAB_OFF_SITE"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "DSC05613.JPG",
@@ -147,7 +193,9 @@
             "ANIMALS",
             "EVENTS",
             "MOMENTS_LAB_OFF_SITE"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "DSC05630.JPG",
@@ -155,7 +203,9 @@
             "OTHER",
             "EVENTS",
             "MOMENTS_LAB_OFF_SITE"
-        ]
+        ],
+        "width": 2832,
+        "height": 4240
     },
     {
         "file": "DSC05776.JPG",
@@ -163,7 +213,9 @@
             "ANIMALS",
             "EVENTS",
             "MOMENTS_LAB_OFF_SITE"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "DSC05987.JPG",
@@ -171,158 +223,204 @@
             "ANIMALS",
             "EVENTS",
             "MOMENTS_LAB_OFF_SITE"
-        ]
+        ],
+        "width": 2832,
+        "height": 4240
     },
     {
         "file": "fightnight9_DSC06775.JPG",
         "tags": [
             "EVENTS",
             "FIGHT_NIGHT_9"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "fightnight9_DSC05029.JPG",
         "tags": [
             "EVENTS",
             "FIGHT_NIGHT_9"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "fightnight9_DSC05068.JPG",
         "tags": [
             "EVENTS",
             "FIGHT_NIGHT_9"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "fightnight9_DSC05203.JPG",
         "tags": [
             "EVENTS",
             "FIGHT_NIGHT_9"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "fightnight9_DSC04785.JPG",
         "tags": [
             "EVENTS",
             "FIGHT_NIGHT_9"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "fightnight9_DSC05251.JPG",
         "tags": [
             "EVENTS",
             "FIGHT_NIGHT_9"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "fightnight9_DSC05310.JPG",
         "tags": [
             "EVENTS",
             "FIGHT_NIGHT_9"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "fightnight9_DSC05534.JPG",
         "tags": [
             "EVENTS",
             "FIGHT_NIGHT_9"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "fightnight9_DSC05545.JPG",
         "tags": [
             "EVENTS",
             "FIGHT_NIGHT_9"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "fightnight9_DSC05630.JPG",
         "tags": [
             "EVENTS",
             "FIGHT_NIGHT_9"
-        ]
+        ],
+        "width": 2832,
+        "height": 2557
     },
     {
         "file": "fightnight9_DSC05831.JPG",
         "tags": [
             "EVENTS",
             "FIGHT_NIGHT_9"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "fightnight9_DSC05891.JPG",
         "tags": [
             "EVENTS",
             "FIGHT_NIGHT_9"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "fightnight9_DSC06170.JPG",
         "tags": [
             "EVENTS",
             "FIGHT_NIGHT_9"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "fightnight9_DSC06181.JPG",
         "tags": [
             "EVENTS",
             "FIGHT_NIGHT_9"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "fightnight9_DSC06493.JPG",
         "tags": [
             "EVENTS",
             "FIGHT_NIGHT_9"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "fightnight9_DSC06507.JPG",
         "tags": [
             "EVENTS",
             "FIGHT_NIGHT_9"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "fightnight9_DSC06692.JPG",
         "tags": [
             "EVENTS",
             "FIGHT_NIGHT_9"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "cocacola_DSC01210.JPG",
         "tags": [
             "EVENTS",
             "COCA_COLA_RECRUITMENT"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "cocacola_DSC02098.JPG",
         "tags": [
             "EVENTS",
             "COCA_COLA_RECRUITMENT"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "cocacola_DSC09829.JPG",
         "tags": [
             "EVENTS",
             "COCA_COLA_RECRUITMENT"
-        ]
+        ],
+        "width": 4240,
+        "height": 2832
     },
     {
         "file": "other_DSC04448.JPG",
         "tags": [
             "OTHER"
-        ]
+        ],
+        "width": 4240,
+        "height": 2384
     },
     {
         "file": "other_DSC06867.JPG",
         "tags": [
             "OTHER"
-        ]
+        ],
+        "width": 4240,
+        "height": 2410
     }
 ]

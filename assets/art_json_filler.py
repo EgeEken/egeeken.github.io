@@ -1,5 +1,6 @@
 import os
 import json
+from PIL import Image, ImageOps
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 print(f"Current directory path: {current_dir}")
@@ -17,7 +18,13 @@ except FileNotFoundError:
 print(f"Found {len(filenames)} files.")
 print(f"{filenames[:3]} ...")
 
+images = []
+for filename in filenames:
+    with Image.open(os.path.join(art_dir, filename)) as image:
+        width, height = ImageOps.exif_transpose(image).size
+    images.append({'file': filename, 'width': width, 'height': height})
+
 with open(output_file, 'w') as json_file:
-    json.dump(filenames, json_file, indent=4)
+    json.dump(images, json_file, indent=4)
 
 print(f"File '{output_file}' has been created/updated with the list of filenames.")

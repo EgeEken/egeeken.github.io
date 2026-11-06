@@ -61,10 +61,11 @@
 
     const player = piece =>
         '<div class="recommendation-player" data-video="' + esc(piece.video) + '">' +
-            '<iframe data-src="https://www.youtube.com/embed/' + esc(piece.video) + '"' +
+            '<template><iframe loading="lazy" data-src="https://www.youtube.com/embed/' + esc(piece.video) + '"' +
                 ' title="' + esc(piece.iframeTitle || piece.title) + '"' +
                 ' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"' +
-                ' allowfullscreen></iframe>' +
+                ' allowfullscreen></iframe></template>' +
+            '<a class="recommendation-link" href="https://www.youtube.com/watch?v=' + esc(piece.video) + '" target="_blank" rel="noopener"><span class="recommendation-link-icon">►</span> Watch on YouTube</a>' +
         '</div>';
 
     const effectiveEmbedState = videoId =>
@@ -72,34 +73,27 @@
 
     function syncRecommendationPlayers(scope = document) {
         scope.querySelectorAll('.recommendation-player').forEach(container => {
-            const iframe = container.querySelector('iframe');
-            if (!iframe) return;
-
-            const videoId = container.dataset.video || (iframe.dataset.src.split('/embed/')[1] || '').split(/[?&]/)[0];
-            let link = container.querySelector('.recommendation-link');
-            if (!link) {
-                link = document.createElement('a');
-                link.className = 'recommendation-link';
-                link.href = 'https://www.youtube.com/watch?v=' + videoId;
-                link.target = '_blank';
-                link.rel = 'noopener';
-                link.innerHTML = '<span class="recommendation-link-icon">►</span> Watch on YouTube';
-                container.appendChild(link);
-            }
+            const videoId = container.dataset.video;
+            const link = container.querySelector('.recommendation-link');
 
             const more = container.closest('.recommendation-more');
             const groupContent = container.closest('.recommendation-group-content');
             const hiddenByMore = more && !more.classList.contains('expanded');
             const hiddenByGroup = groupContent?.classList.contains('collapsed');
             const enabled = effectiveEmbedState(videoId) && !hiddenByMore && !hiddenByGroup;
+            const template = container.querySelector('template');
+            if (enabled && template) template.replaceWith(template.content.cloneNode(true));
+            const iframe = container.querySelector('iframe');
 
             if (enabled) {
                 if (!iframe.getAttribute('src')) iframe.src = iframe.dataset.src;
                 iframe.style.display = '';
                 link.style.display = 'none';
             } else {
-                iframe.removeAttribute('src');
-                iframe.style.display = 'none';
+                if (iframe) {
+                    iframe.removeAttribute('src');
+                    iframe.style.display = 'none';
+                }
                 link.style.display = '';
             }
 
@@ -219,15 +213,14 @@
     };
 
     const renderNormal = () => {
-        root.innerHTML = '';
+        const markup = [];
 
         for (const group of recommendations) {
             const title = group[CONFIG.groupTitleField];
             const members = group[CONFIG.membersField] || [];
             const content = members.map(renderMember).join('');
 
-            root.insertAdjacentHTML(
-                'beforeend',
+            markup.push(
                 '<div class="recommendation-era recommendation-group-toggle" role="button" tabindex="0" aria-expanded="true">' +
                     '<h2>' + esc(title) + '</h2>' +
                 '</div>' +
@@ -237,6 +230,7 @@
             );
         }
 
+        root.innerHTML = markup.join('');
         syncRecommendationPlayers(root);
         setupRecommendationMoreSections(root);
         setupGroupSections(root);

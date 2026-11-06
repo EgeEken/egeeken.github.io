@@ -125,19 +125,29 @@ async function loadGallery(galleryId, source, assetDirectory, altPrefix) {
         if (!response.ok) throw new Error('HTTP ' + response.status);
 
         const images = await response.json();
-        console.log('Loaded images:', images);
-
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.src = entry.target.dataset.src;
+                observer.unobserve(entry.target);
+            });
+        }, { rootMargin: '600px' });
+        const fragment = document.createDocumentFragment();
         images.forEach(file => {
-            const filename = typeof file === 'string' ? file : file.file;
+            const filename = file.file;
             const img = document.createElement('img');
-            img.src = assetDirectory + filename;
+            img.width = file.width;
+            img.height = file.height;
+            img.dataset.src = assetDirectory + filename;
             img.alt = altPrefix + filename;
             img.classList.add('photo');
             if (galleryId === 'photo-gallery') img.dataset.tags = file.tags.join(' ');
             img.onerror = () => console.error('Image failed to load:', img.src);
-            gallery.appendChild(img);
+            fragment.appendChild(img);
         });
+        gallery.appendChild(fragment);
         if (galleryId === 'photo-gallery') setupPhotoFilters(gallery, images);
+        gallery.querySelectorAll('img').forEach(img => observer.observe(img));
     } catch (err) {
         console.error(`Failed to load ${source}:`, err);
     }
@@ -149,6 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+    if (!document.querySelector('#photo-gallery, #art-gallery, .favorite')) return;
     const overlay = document.createElement('div');
     overlay.className = 'lightbox';
     overlay.innerHTML = `
@@ -171,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const show = i => {
         index = (i + group.length) % group.length;
-        imgEl.src = group[index].src;
+        imgEl.src = group[index].dataset.src || group[index].src;
         imgEl.alt = group[index].alt;
     };
 
@@ -212,59 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-function setupRecommendationMoreSections(scope = document) {
-    scope.querySelectorAll('.recommendation-more').forEach(section => {
-        if (section.dataset.recommendationReady === 'true') return;
-        section.dataset.recommendationReady = 'true';
-
-        const item = section.previousElementSibling;
-        const toggle = section.querySelector('.recommendation-more-toggle');
-        const content = section.querySelector('.recommendation-more-content');
-        let hideTimer = null;
-        if (!toggle || !content) return;
-
-        const setHovering = () => {
-            if (hideTimer) {
-                clearTimeout(hideTimer);
-                hideTimer = null;
-            }
-            section.classList.add('hovering');
-        };
-
-        const scheduleHide = () => {
-            if (section.classList.contains('expanded')) return;
-            if (hideTimer) clearTimeout(hideTimer);
-            hideTimer = setTimeout(() => {
-                section.classList.remove('hovering');
-            }, 3000);
-        };
-
-        if (item && item.classList.contains('recommendation-item')) {
-            item.addEventListener('mouseenter', setHovering);
-            item.addEventListener('mouseleave', scheduleHide);
-        }
-
-        section.addEventListener('mouseenter', setHovering);
-        section.addEventListener('mouseleave', scheduleHide);
-
-        toggle.addEventListener('click', () => {
-            const isExpanded = section.classList.toggle('expanded');
-            toggle.setAttribute('aria-expanded', String(isExpanded));
-            content.setAttribute('aria-hidden', String(!isExpanded));
-            toggle.textContent = isExpanded ? 'Hide more from this composer' : 'More from this composer';
-            if (isExpanded) {
-                setHovering();
-            } else {
-                scheduleHide();
-            }
-        });
-    });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    setupRecommendationMoreSections();
-});
-
 document.addEventListener('DOMContentLoaded', () => {
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
@@ -273,210 +231,4 @@ document.addEventListener('DOMContentLoaded', () => {
             link.addEventListener('contextmenu', e => e.preventDefault());
         });
     }
-});
-
-function syncRecommendationPlayers(scope = document) {
-    const toggle = document.getElementById('toggle-embeds');
-    if (!toggle) return;
-
-    scope.querySelectorAll('.recommendation-player').forEach(container => {
-        const iframe = container.querySelector('iframe');
-        if (!iframe) return;
-
-        let link = container.querySelector('.recommendation-link');
-        if (!link) {
-            const videoId = (iframe.dataset.src.split('/embed/')[1] || '').split(/[?&]/)[0];
-            link = document.createElement('a');
-            link.className = 'recommendation-link';
-            link.href = 'https://www.youtube.com/watch?v=' + videoId;
-            link.target = '_blank';
-            link.rel = 'noopener';
-            link.innerHTML = '<span class="recommendation-link-icon">►</span> Watch on YouTube';
-            container.appendChild(link);
-        }
-
-        if (toggle.checked) {
-            if (!iframe.src) iframe.src = iframe.dataset.src;
-            iframe.style.display = '';
-            link.style.display = 'none';
-        } else {
-            iframe.style.display = 'none';
-            link.style.display = '';
-        }
-    });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const toggle = document.getElementById('toggle-embeds');
-    if (!toggle) return;
-
-    toggle.addEventListener('change', () => syncRecommendationPlayers());
-    syncRecommendationPlayers();
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const root = document.getElementById('recommendations');
-    const embedToggle = document.getElementById('toggle-embeds');
-    const embedLabel = document.querySelector('label[for="toggle-embeds"]');
-    const header = root?.previousElementSibling?.id === 'shuffle-actions'
-        ? root.previousElementSibling.previousElementSibling
-        : document.querySelector('header');
-
-    if (!root || !embedToggle || !embedLabel || !header || typeof recommendations === 'undefined') return;
-
-    const subtitle = header.querySelector('h2');
-    if (!subtitle) return;
-
-    const style = document.createElement('style');
-    style.textContent = `
-        .recommendation-controls {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            gap: 8px;
-            z-index: 1000;
-        }
-        .recommendation-controls .start-level-toggle {
-            position: static;
-            justify-content: flex-start;
-        }
-        #shuffle-actions {
-            display: none;
-            width: 100%;
-            justify-content: center;
-            box-sizing: border-box;
-            padding: 18px 20px 2px;
-        }
-        #shuffle-actions.visible {
-            display: flex;
-        }
-        #shuffle-button {
-            background-color: #b3262d;
-            color: #fff;
-            border: 3px solid #fff;
-            border-radius: 8px;
-            padding: 12px 28px;
-            font-family: 'Futura', sans-serif;
-            font-size: 1.05em;
-            font-weight: bold;
-            letter-spacing: 0.08em;
-            cursor: pointer;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
-            transition: transform 0.2s, background-color 0.2s;
-        }
-        #shuffle-button:hover {
-            background-color: #d33a42;
-            transform: scale(1.05);
-        }
-        #shuffle-button:active {
-            transform: scale(0.98);
-        }
-        body.shuffle-mode #recommendations {
-            width: 100%;
-        }
-        body.shuffle-mode .recommendation-item {
-            margin-top: 24px;
-        }
-        @media screen and (max-width: 700px) {
-            .recommendation-controls {
-                top: 14px;
-                right: 14px;
-            }
-            .recommendation-controls .start-level-toggle {
-                padding: 8px 10px;
-                font-size: 0.8em;
-            }
-        }
-    `;
-    document.head.appendChild(style);
-
-    const controls = document.createElement('div');
-    controls.className = 'recommendation-controls';
-    embedLabel.parentNode.insertBefore(controls, embedLabel);
-    controls.appendChild(embedLabel);
-
-    const shuffleLabel = document.createElement('label');
-    shuffleLabel.className = 'start-level-toggle';
-    shuffleLabel.htmlFor = 'toggle-shuffle';
-    shuffleLabel.innerHTML = '<input type="checkbox" id="toggle-shuffle"><span>Shuffle mode</span>';
-    controls.appendChild(shuffleLabel);
-
-    const shuffleToggle = shuffleLabel.querySelector('input');
-    const shuffleActions = document.createElement('div');
-    shuffleActions.id = 'shuffle-actions';
-    shuffleActions.innerHTML = '<button id="shuffle-button" type="button">SHUFFLE</button>';
-    header.insertAdjacentElement('afterend', shuffleActions);
-    const shuffleButton = shuffleActions.querySelector('button');
-
-    const normalSubtitle = subtitle.textContent;
-    const shuffleSubtitle = 'One randomly selected recommendation, press shuffle to get a new one';
-    const allPieces = recommendations.flatMap(group => group.composers.flatMap(composer => [
-        { ...composer, composer: composer.composer },
-        ...(composer.extras || []).map(piece => ({ ...piece, composer: composer.composer }))
-    ]));
-    let currentShuffleIndex = -1;
-
-    const fallbackSlug = name => String(name).toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
-    })[character]);
-    const note = piece => piece.note
-        ? `<p class="recommendation-note">${esc(piece.note)}</p>`
-        : '';
-    const player = piece => `<div class="recommendation-player"><iframe data-src="https://www.youtube.com/embed/${esc(piece.video)}" title="${esc(piece.iframeTitle || piece.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
-
-    const renderNormal = () => {
-        root.innerHTML = '';
-        for (const group of recommendations) {
-            root.insertAdjacentHTML('beforeend', `<div class="recommendation-era"><h2>${esc(group.era)}</h2></div>`);
-            for (const composer of group.composers) {
-                root.insertAdjacentHTML('beforeend', `<div class="recommendation-item"><h2>${esc(composer.composer)}</h2><h3>${esc(composer.title)}</h3>${note(composer)}${player(composer)}</div>`);
-                if (composer.extras?.length) {
-                    const extras = composer.extras.map(piece => `<div class="recommendation-extra-item"><h4>${esc(piece.title)}</h4>${note(piece)}${player(piece)}</div>`).join('');
-                    root.insertAdjacentHTML('beforeend', `<div class="recommendation-more" data-composer="${esc(composer.slug || fallbackSlug(composer.composer))}"><button class="recommendation-more-toggle" type="button" aria-expanded="false">More from this composer</button><div class="recommendation-more-content" aria-hidden="true"><div class="recommendation-extra">${extras}</div></div></div>`);
-                }
-            }
-        }
-    };
-
-    const chooseShuffleIndex = () => {
-        if (allPieces.length < 2) return 0;
-        let next = currentShuffleIndex;
-        while (next === currentShuffleIndex) {
-            next = Math.floor(Math.random() * allPieces.length);
-        }
-        return next;
-    };
-
-    const renderShuffle = () => {
-        currentShuffleIndex = chooseShuffleIndex();
-        const piece = allPieces[currentShuffleIndex];
-        root.innerHTML = `<div class="recommendation-item"><h2>${esc(piece.composer)}</h2><h3>${esc(piece.title)}</h3>${note(piece)}${player(piece)}</div>`;
-        syncRecommendationPlayers(root);
-    };
-
-    const applyShuffleMode = () => {
-        const enabled = shuffleToggle.checked;
-        document.body.classList.toggle('shuffle-mode', enabled);
-        shuffleActions.classList.toggle('visible', enabled);
-        subtitle.textContent = enabled ? shuffleSubtitle : normalSubtitle;
-
-        if (enabled) {
-            renderShuffle();
-        } else {
-            renderNormal();
-            syncRecommendationPlayers(root);
-            setupRecommendationMoreSections(root);
-        }
-    };
-
-    shuffleToggle.addEventListener('change', applyShuffleMode);
-    shuffleButton.addEventListener('click', renderShuffle);
 });

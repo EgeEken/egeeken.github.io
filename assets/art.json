@@ -1,23 +1,107 @@
 [
-    "11.jpg",
-    "12.jpg",
-    "13.jpg",
-    "14.jpg",
-    "15.jpg",
-    "16.jpg",
-    "17.jpg",
-    "18.jpg",
-    "19.jpg",
-    "190.jpg",
-    "191.jpg",
-    "192.jpg",
-    "193.jpg",
-    "194.jpg",
-    "195.jpg",
-    "20251005_184628.jpg",
-    "20251005_184642.jpg",
-    "20251005_184648.jpg",
-    "20251005_185007.jpg",
-    "20251005_185024.jpg",
-    "20251005_185114.jpg"
+    {
+        "file": "11.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "12.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "13.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "14.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "15.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "16.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "17.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "18.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "19.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "190.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "191.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "192.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "193.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "194.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "195.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "20251005_184628.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "20251005_184642.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "20251005_184648.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "20251005_185007.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "20251005_185024.jpg",
+        "width": 3060,
+        "height": 4080
+    },
+    {
+        "file": "20251005_185114.jpg",
+        "width": 3060,
+        "height": 4080
+    }
 ]

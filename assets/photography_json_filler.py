@@ -1,6 +1,7 @@
 import os
 import json
 import re
+from PIL import Image, ImageOps
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 print(f"Current directory path: {current_dir}")
@@ -51,6 +52,9 @@ photos = [
     {'file': filename, 'tags': previous_tags.get(filename, ['OTHER'])}
     for filename in sorted_filenames
 ]
+for photo in photos:
+    with Image.open(os.path.join(photography_dir, photo['file'])) as image:
+        photo['width'], photo['height'] = ImageOps.exif_transpose(image).size
 
 with open(output_file, 'w') as json_file:
     json.dump(photos, json_file, indent=4)
