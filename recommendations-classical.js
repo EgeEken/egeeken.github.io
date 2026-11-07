@@ -113,42 +113,14 @@
             if (section.dataset.recommendationReady === 'true') return;
             section.dataset.recommendationReady = 'true';
 
-            const item = section.previousElementSibling;
-            const toggle = section.querySelector('.recommendation-more-toggle');
+            const toggle = section.previousElementSibling.querySelector('.recommendation-more-toggle');
             const content = section.querySelector('.recommendation-more-content');
-            let hideTimer = null;
-            if (!toggle || !content) return;
-
-            const setHovering = () => {
-                if (hideTimer) {
-                    clearTimeout(hideTimer);
-                    hideTimer = null;
-                }
-                section.classList.add('hovering');
-            };
-
-            const scheduleHide = () => {
-                if (section.classList.contains('expanded')) return;
-                if (hideTimer) clearTimeout(hideTimer);
-                hideTimer = setTimeout(() => section.classList.remove('hovering'), 3000);
-            };
-
-            if (item && item.classList.contains('recommendation-item')) {
-                item.addEventListener('mouseenter', setHovering);
-                item.addEventListener('mouseleave', scheduleHide);
-            }
-
-            section.addEventListener('mouseenter', setHovering);
-            section.addEventListener('mouseleave', scheduleHide);
-
             toggle.addEventListener('click', () => {
                 const isExpanded = section.classList.toggle('expanded');
                 toggle.setAttribute('aria-expanded', String(isExpanded));
                 content.setAttribute('aria-hidden', String(!isExpanded));
                 toggle.textContent = isExpanded ? 'Hide more from this ' + CONFIG.moreNoun : 'More from this ' + CONFIG.moreNoun;
                 syncRecommendationPlayers(content);
-                if (isExpanded) setHovering();
-                else scheduleHide();
             });
         });
     }
@@ -188,6 +160,7 @@
                 '<h3>' + esc(main.title) + '</h3>' +
                 renderNote(main.note) +
                 player(main) +
+                (member.additional?.length ? '<button class="recommendation-more-toggle" type="button" aria-expanded="false">More from this ' + CONFIG.moreNoun + '</button>' : '') +
             '</div>';
 
         if (member.additional?.length) {
@@ -202,7 +175,6 @@
 
             html +=
                 '<div class="recommendation-more" data-owner="' + esc(member.slug || fallbackSlug(name)) + '">' +
-                    '<button class="recommendation-more-toggle" type="button" aria-expanded="false">More from this ' + CONFIG.moreNoun + '</button>' +
                     '<div class="recommendation-more-content" aria-hidden="true">' +
                         '<div class="recommendation-extra">' + additional + '</div>' +
                     '</div>' +

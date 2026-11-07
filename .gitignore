@@ -1,0 +1,4 @@
+_site/
+.preview-cache/
+.performance-audit/
+__pycache__/

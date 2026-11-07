@@ -822,33 +822,34 @@ body.lightbox-active {
     text-align: center;
 }
 
-.recommendation-more.hovering,
 .recommendation-more.expanded {
     margin-bottom: 18px;
 }
 
 .recommendation-more-toggle {
     box-sizing: border-box;
-    width: 100%;
+    display: block;
+    width: calc(100% + 40px);
+    margin: 14px -20px -20px;
     padding: 12px 18px;
     background-color: #d9e5e7;
     color: #333;
-    border: 1px solid #d0d0d0;
-    border-radius: 10px;
+    border: 0;
+    border-top: 1px solid #c1d0d2;
+    border-radius: 0 0 10px 10px;
+    font-family: inherit;
     font-size: 0.95em;
     cursor: pointer;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: opacity 0.2s ease, max-height 0.2s ease, transform 0.2s ease;
+    transition: background-color 0.2s ease;
 }
 
-.recommendation-more.hovering .recommendation-more-toggle,
-.recommendation-more.expanded .recommendation-more-toggle {
-    opacity: 1;
-    max-height: 60px;
-    transform: translateY(6px);
+.recommendation-more-toggle:hover {
+    background-color: #bed5d9;
+}
+
+.recommendation-more-toggle:focus-visible {
+    outline: 3px solid #6f8ea8;
+    outline-offset: -3px;
 }
 
 .recommendation-more-content {
@@ -1138,5 +1139,46 @@ body.lightbox-active {
     .recommendation-entry-embed svg {
         width: 17px;
         height: 17px;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    header h1 {
+        font-size: clamp(1.7rem, 7vw, 2.5rem);
+        overflow-wrap: anywhere;
+    }
+
+    header h1:not(.main-menu-exception) {
+        margin-top: 24px;
+    }
+
+    header h2 {
+        font-size: clamp(1.1rem, 4.8vw, 1.5rem);
+        overflow-wrap: anywhere;
+    }
+
+    header .back-button {
+        position: static;
+        display: table;
+        box-sizing: border-box;
+        max-width: calc(100% - 32px);
+        margin: 16px;
+        text-align: left;
+        font-size: 0.9em;
+    }
+
+    .recommendations-page header .recommendation-controls {
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin: 0 16px;
+    }
+
+    .recommendations-page header .recommendation-controls .start-level-toggle {
+        font-size: 0.8em;
+    }
+
+    .recommendations-page .recommendation-era {
+        box-sizing: border-box;
     }
 }

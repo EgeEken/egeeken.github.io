@@ -128,6 +128,7 @@ async function loadGallery(galleryId, source, assetDirectory, altPrefix) {
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (!entry.isIntersecting) return;
+                if (entry.target.dataset.srcset) entry.target.srcset = entry.target.dataset.srcset;
                 entry.target.src = entry.target.dataset.src;
                 observer.unobserve(entry.target);
             });
@@ -138,7 +139,11 @@ async function loadGallery(galleryId, source, assetDirectory, altPrefix) {
             const img = document.createElement('img');
             img.width = file.width;
             img.height = file.height;
-            img.dataset.src = assetDirectory + filename;
+            img.style.aspectRatio = `${file.width} / ${file.height}`;
+            img.dataset.original = assetDirectory + filename;
+            img.dataset.src = file.preview || img.dataset.original;
+            if (file.srcset) img.dataset.srcset = file.srcset;
+            img.sizes = '(max-width: 750px) calc((92vw - 12px) / 2), (max-width: 1100px) calc((92vw - 32px) / 3), (max-width: 1599px) calc((92vw - 48px) / 4), 288px';
             img.alt = altPrefix + filename;
             img.classList.add('photo');
             if (galleryId === 'photo-gallery') img.dataset.tags = file.tags.join(' ');
@@ -182,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const show = i => {
         index = (i + group.length) % group.length;
-        imgEl.src = group[index].dataset.src || group[index].src;
+        imgEl.src = group[index].dataset.original || group[index].src;
         imgEl.alt = group[index].alt;
     };
 
