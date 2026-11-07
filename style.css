@@ -1158,13 +1158,18 @@ body.lightbox-active {
     }
 
     header .back-button {
-        position: static;
+        top: 16px;
+        left: 16px;
         display: table;
         box-sizing: border-box;
         max-width: calc(100% - 32px);
-        margin: 16px;
+        margin: 0;
         text-align: left;
         font-size: 0.9em;
+    }
+
+    header:has(> .back-button) {
+        padding-top: 76px;
     }
 
     .recommendations-page header .recommendation-controls {
