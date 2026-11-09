@@ -82,7 +82,9 @@
             const hiddenByGroup = groupContent?.classList.contains('collapsed');
             const enabled = effectiveEmbedState(videoId) && !hiddenByMore && !hiddenByGroup;
             const template = container.querySelector('template');
-            if (enabled && template) template.replaceWith(template.content.cloneNode(true));
+            if (enabled && !container.querySelector('iframe')) {
+                container.insertBefore(template.content.cloneNode(true), template);
+            }
             const iframe = container.querySelector('iframe');
 
             if (enabled) {
@@ -91,8 +93,7 @@
                 link.style.display = 'none';
             } else {
                 if (iframe) {
-                    iframe.removeAttribute('src');
-                    iframe.style.display = 'none';
+                    iframe.remove();
                 }
                 link.style.display = '';
             }
