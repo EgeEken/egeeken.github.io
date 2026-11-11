@@ -60,8 +60,19 @@
             });
         }
 
+        const obstacles = [3.05, 5.85, 8.35].map((x, i) => ({
+            x: x + (rng() - .5) * .28,
+            width: .24 + rng() * .05,
+            height: (.38 + rng() * .12) * (i === 0 ? .92 : 1)
+        }));
+        for (const obstacle of obstacles) {
+            ground.createFixture(pl.Box(obstacle.width / 2, obstacle.height / 2,
+                V(obstacle.x, height(obstacle.x) - obstacle.height / 2)), {
+                friction: cfg.grip, restitution: 0
+            });
+        }
         const initialX = .55;
-        const initialY = height(initialX) - 1.17;
+        const initialY = height(initialX) - 1.28;
         const torso = world.createDynamicBody({
             position: V(initialX, initialY),
             angularDamping: .9, linearDamping: .13, allowSleep: false
@@ -75,9 +86,15 @@
             position: V(initialX, initialY + .73), angularDamping: .35, allowSleep: false
         });
         lower.createFixture(pl.Box(.061, .28), { density: 1.0, friction: .3 });
-        lower.createFixture(pl.Circle(V(0, .29), .13), {
-            density: 1.7, friction: cfg.grip * 1.45, restitution: 0
+        const wheel = world.createDynamicBody({
+            position: V(initialX, initialY + 1.02), allowSleep: false
         });
+        wheel.createFixture(pl.Circle(.18), {
+            density: 2, friction: cfg.grip * 2.1, restitution: 0
+        });
+        const drive = world.createJoint(pl.RevoluteJoint({
+            enableMotor: true, motorSpeed: 0, maxMotorTorque: 1.8
+        }, lower, wheel, V(initialX, initialY + 1.02)));
 
         const hip = world.createJoint(pl.RevoluteJoint({
             enableMotor: true, motorSpeed: 0, maxMotorTorque: cfg.torque,
@@ -89,10 +106,10 @@
         }, upper, lower, V(initialX, initialY + .53), V(0, 1)));
 
         const s = {
-            type: 'hopper', cfg, seed, weights, world, torso, upper, lower, hip, slider,
+            type: 'hopper', cfg, seed, weights, world, torso, upper, lower, wheel, hip, slider, drive,
             frame: 0, done: false, win: false, best: 0,
-            footContact: false, unstableFrames: 0,
-            groundAt: height, course: points, barriers, gaps,
+            footContact: false, unstableFrames: 0, charge: 0, cooldown: 0,
+            groundAt: height, course: points, barriers, gaps, obstacles,
             milestones: cfg.milestones.slice(), rayVisuals: []
         };
 
@@ -113,14 +130,15 @@
             const jointAngle = hip.getJointAngle();
             const legExtension = slider.getJointTranslation();
             s.rayVisuals = [];
-            const ahead = ray(V(pos.x + .10, pos.y + .28), V(pos.x + 1.65, pos.y + 1.15));
+            const wp = wheel.getPosition();
+            const ahead = ray(V(wp.x + .18, wp.y - .13), V(wp.x + 1.75, wp.y - .13));
             const below = ray(V(pos.x + .32, pos.y + .08), V(pos.x + .32, pos.y + 1.60));
             return [
                 clamp(angle / 1.7, -1, 1),
                 clamp(torso.getAngularVelocity() / 6, -1, 1),
                 clamp(vel.x / 2.8, -1, 1),
                 Math.sin(jointAngle),
-                Math.cos(jointAngle),
+                s.charge * 2 - 1,
                 clamp(legExtension / .26, -1, 1),
                 s.footContact ? 1 : -1,
                 ahead, below,
@@ -136,10 +154,23 @@
             const actions = s.getActions();
             const tilt = Math.atan2(Math.sin(torso.getAngle()), Math.cos(torso.getAngle()));
             torso.applyTorque(clamp(-tilt * 12 - torso.getAngularVelocity() * 3.5, -9, 9), true);
-            hip.setMotorSpeed(clamp((actions[0] * .88 * cfg.direction - hip.getJointAngle()) * 8,
+            hip.setMotorSpeed(clamp((-tilt * .6 - hip.getJointAngle()) * 8,
                 -cfg.motorSpeed, cfg.motorSpeed));
             slider.setMotorSpeed(clamp((actions[1] * .23 - slider.getJointTranslation()) * 12,
                 -cfg.extensionSpeed, cfg.extensionSpeed));
+            drive.setMotorSpeed(actions[0] * 11 * cfg.direction);
+            s.cooldown = Math.max(0, s.cooldown - 1);
+            if (s.footContact && actions[1] > .25) {
+                s.charge = Math.min(1, s.charge + DT * (1 + actions[1]));
+            }
+            if (s.footContact && s.cooldown === 0 && s.charge > .45 && actions[1] < -.25) {
+                const impulse = 5.2 * s.charge;
+                torso.applyLinearImpulse(V(0, -impulse * .72), torso.getWorldCenter(), true);
+                wheel.applyLinearImpulse(V(0, -impulse * .16), wheel.getWorldCenter(), true);
+                lower.applyLinearImpulse(V(0, -impulse * .12), lower.getWorldCenter(), true);
+                s.charge = 0;
+                s.cooldown = 27;
+            }
             world.step(DT, 7, 3);
             s.frame++;
 
@@ -147,7 +178,7 @@
             for (let c = world.getContactList(); c; c = c.getNext()) {
                 if (!c.isTouching()) continue;
                 const a = c.getFixtureA().getBody(), b = c.getFixtureB().getBody();
-                if ((a === lower && b === ground) || (a === ground && b === lower)) {
+                if ((a === wheel && b === ground) || (a === ground && b === wheel)) {
                     s.footContact = true;
                     break;
                 }
@@ -156,7 +187,7 @@
             const p = torso.getPosition();
             s.best = Math.max(s.best, p.x - initialX);
             const angle = Math.abs(Math.atan2(Math.sin(torso.getAngle()), Math.cos(torso.getAngle())));
-            const fallen = angle > 2.25 || p.y > height(p.x) - .33;
+            const fallen = angle > 2.25;
             s.unstableFrames = fallen ? s.unstableFrames + 1 : Math.max(0, s.unstableFrames - 2);
             if (s.best >= cfg.milestones[2]) {
                 s.done = true;
@@ -205,6 +236,13 @@
                     Math.max(0, sx(gap.to) - sx(gap.from)), h);
             }
 
+            ctx.fillStyle = '#65848d';
+            for (const obstacle of obstacles) {
+                ctx.fillRect(sx(obstacle.x - obstacle.width / 2),
+                    sy(height(obstacle.x) - obstacle.height),
+                    obstacle.width * scale, obstacle.height * scale);
+            }
+
             for (let i = 0; i < cfg.milestones.length; i++) {
                 const x = sx(initialX + cfg.milestones[i]);
                 if (x < -15 || x > w + 15) continue;
@@ -243,17 +281,27 @@
                     const wide = shape === 'upper' ? .06 : .064;
                     const half = shape === 'upper' ? .33 : .28;
                     ctx.fillRect(-wide * scale, -half * scale, wide * 2 * scale, half * 2 * scale);
-                    if (shape === 'lower') {
-                        ctx.beginPath(); ctx.arc(0, .29 * scale, .13 * scale, 0, Math.PI * 2);
-                        ctx.fillStyle = s.footContact ? '#f2c679' : '#b78e63';
-                        ctx.fill();
-                    }
+                    // The telescopic strut ends in a separately rotating powered wheel.
                 }
                 ctx.restore();
             }
             drawBody(upper, 'upper', '#dcba7e');
             drawBody(lower, 'lower', '#bd9d73');
             drawBody(torso, 'torso', '#67d4bf');
+            const wp = wheel.getPosition();
+            ctx.save();
+            ctx.translate(sx(wp.x), sy(wp.y));
+            ctx.rotate(wheel.getAngle());
+            ctx.fillStyle = s.footContact ? '#f2c679' : '#b78e63';
+            ctx.beginPath(); ctx.arc(0, 0, .18 * scale, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = '#6d5038'; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(-.13 * scale, 0); ctx.lineTo(.13 * scale, 0); ctx.stroke();
+            ctx.restore();
+
+            ctx.fillStyle = '#a5d4e1';
+            ctx.font = '12px system-ui';
+            ctx.textAlign = 'right';
+            ctx.fillText('Spring ' + Math.round(s.charge * 100) + '%', w - 12, 23);
 
             ctx.fillStyle = '#e5f3f8';
             ctx.textAlign = 'left'; ctx.font = 'bold 16px system-ui';
