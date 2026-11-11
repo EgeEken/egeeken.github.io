@@ -215,7 +215,7 @@
                 0, 0, 0, .9, 0, 0, 0, 0];
         }
         return [3, 0, -2, 0, -.6, 0, 0,
-            0, -1.2, 0, 2.6, 0, 0, -.2];
+            0, -1.2, 0, 2.6, 0, 0, state.cfg.variant === 'Low gravity' ? -.55 : -.2];
     }
 
     function setEditorEnabled(enabled) {
@@ -321,8 +321,7 @@
         state.evalCarry = 0;
         $('final-score').textContent = 'Running · 0/3';
         $('evaluation-message').textContent = 'Evaluating the submitted weights.';
-        if (state.type === 'walker') startRound(session, 0);
-        else startRound(session, 0);
+        startRound(session, 0);
     }
 
     function startRound(session, round) {
@@ -529,9 +528,12 @@
         }
         const session = state.session;
         if (session && session.sim && !session.finished) {
-            const sim = session.sim;
-            advance(sim, 'evalCarry', elapsed, state.evalSpeed, () => finishRound(session));
-            sim.draw($('eval-canvas-' + session.current).getContext('2d'));
+            const sim = session.sim, round = session.current;
+            advance(sim, 'evalCarry', elapsed, state.evalSpeed, () => {
+                sim.draw($('eval-canvas-' + round).getContext('2d'));
+                finishRound(session);
+            });
+            if (!sim.done) sim.draw($('eval-canvas-' + round).getContext('2d'));
         }
         if (now - state.lastTelemetry > 160) {
             state.lastTelemetry = now;
