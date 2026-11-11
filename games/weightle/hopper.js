@@ -156,7 +156,7 @@
             torso.applyTorque(clamp(-tilt * 12 - torso.getAngularVelocity() * 3.5, -9, 9), true);
             hip.setMotorSpeed(clamp((-tilt * .6 - hip.getJointAngle()) * 8,
                 -cfg.motorSpeed, cfg.motorSpeed));
-            slider.setMotorSpeed(clamp((actions[1] * .23 - slider.getJointTranslation()) * 12,
+            slider.setMotorSpeed(clamp((-actions[1] * .23 - slider.getJointTranslation()) * 12,
                 -cfg.extensionSpeed, cfg.extensionSpeed));
             drive.setMotorSpeed(actions[0] * 11 * cfg.direction);
             s.cooldown = Math.max(0, s.cooldown - 1);
