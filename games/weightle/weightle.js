@@ -246,8 +246,9 @@
     }
 
     function updateTelemetry() {
-        const p = state.practice;
-        const inputs = p ? p.getSensors() : Array(S.specs[state.type].inputs.length).fill(0);
+        const active = state.practice && !state.practice.done
+            ? state.practice : state.session?.sim;
+        const inputs = active ? active.getSensors() : Array(S.specs[state.type].inputs.length).fill(0);
         state.sensorCells.forEach((el, i) => { el.textContent = inputs[i].toFixed(2); });
         const actions = S.forward(state.type, state.weights, inputs);
         const panel = $('actions-live');
@@ -522,8 +523,9 @@
         const elapsed = lastFrame ? Math.min(.05, (now - lastFrame) / 1000) : 0;
         lastFrame = now;
         const practice = state.practice;
-        if (practice) {
-            advance(practice, 'practiceCarry', elapsed, state.practiceSpeed);
+        if (practice && !practice.done) {
+            advance(practice, 'practiceCarry', elapsed, state.practiceSpeed,
+                () => updatePracticeLabel());
             practice.draw($('practice-canvas').getContext('2d'));
         }
         const session = state.session;
@@ -537,9 +539,11 @@
         }
         if (now - state.lastTelemetry > 160) {
             state.lastTelemetry = now;
-            updateTelemetry();
-            updatePracticeLabel();
-            updateRoundLabel();
+            if ((state.practice && !state.practice.done) || (state.session?.sim && !state.session.finished)) {
+                updateTelemetry();
+            }
+            if (state.practice && !state.practice.done) updatePracticeLabel();
+            if (state.session?.sim && !state.session.finished) updateRoundLabel();
         }
         requestAnimationFrame(animationFrame);
     }
