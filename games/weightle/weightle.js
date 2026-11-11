@@ -188,6 +188,7 @@
                     const value = Number(input.value);
                     if (Number.isFinite(value)) {
                         state.weights[index] = Math.max(-6, Math.min(6, value));
+                        cancelBatch();
                         updateTelemetry();
                     }
                 });
@@ -205,6 +206,7 @@
     }
 
     function setWeights(weights) {
+        cancelBatch();
         state.weights.splice(0, state.weights.length, ...weights);
         const n = S.specs[state.type].inputs.length + 1;
         state.weightInputs.forEach(input => {
@@ -246,6 +248,7 @@
     }
 
     function startPractice() {
+        cancelBatch();
         state.practice = createPractice();
         state.practiceCarry = 0;
         $('practice-btn').textContent = 'Restart practice';
@@ -255,6 +258,53 @@
             : 'Watch your current network control the simulation.';
         state.practice.draw($('practice-canvas').getContext('2d'));
         updateTelemetry();
+    }
+
+
+    function cancelBatch() {
+        if (!state.batchWorker) return;
+        state.batchWorker.terminate();
+        state.batchWorker = null;
+        $('batch-test').disabled = false;
+        $('batch-test').textContent = 'Stress test · 5 maps';
+        $('batch-results').textContent = 'Weights changed. Run the stress test again.';
+    }
+
+    function stressTest() {
+        if (state.type !== 'hopper' || state.session && !state.session.finished) return;
+        cancelBatch();
+        const worker = new Worker('hopper-batch-worker.js');
+        state.batchWorker = worker;
+        const results = $('batch-results');
+        results.hidden = false;
+        results.textContent = 'Testing five new terrain maps…';
+        $('batch-test').disabled = true;
+        $('batch-test').textContent = 'Testing: 0/5';
+        worker.onmessage = function ({ data }) {
+            if (state.batchWorker !== worker) return;
+            if (data.kind === 'error') {
+                results.textContent = 'Stress test failed: ' + data.message;
+            } else {
+                const distances = data.results.map((r, i) =>
+                    'Map ' + (i + 1) + ': ' + r.distance.toFixed(2) + ' m (' + r.score + '/3)');
+                results.textContent = distances.join(' · ');
+                $('batch-test').textContent = data.kind === 'complete'
+                    ? 'Stress test · 5 maps' : 'Testing: ' + data.current + '/5';
+                if (data.kind !== 'complete') return;
+            }
+            worker.terminate();
+            state.batchWorker = null;
+            $('batch-test').disabled = false;
+        };
+        worker.onerror = function () {
+            if (state.batchWorker !== worker) return;
+            worker.terminate();
+            state.batchWorker = null;
+            results.textContent = 'Stress test worker failed. Check the browser console.';
+            $('batch-test').disabled = false;
+            $('batch-test').textContent = 'Stress test · 5 maps';
+        };
+        worker.postMessage({ cfg: state.cfg, seed: state.seed, weights: state.weights.slice() });
     }
 
     function updateTelemetry() {
@@ -469,14 +519,15 @@
         if (session.worker) { session.worker.terminate(); session.worker = null; }
         $('final-score').textContent = 'Result: ' + session.score + '/3';
         $('evaluation-message').textContent = session.score === 3
-            ? 'Perfect result. All three stages passed.'
-            : 'Evaluation complete. Change weights and retry, or share this seed.';
+            ? 'All three milestones reached on unseen terrain.'
+            : 'Evaluation complete. Retry for experimentation or share this seed. The first Hopper score is preserved.';
         $('retry-btn').hidden = false;
         setEditorEnabled(true);
+        $('batch-test').disabled = false;
         const key = 'weightle:' + session.type + ':' + session.seed;
         try {
             const old = JSON.parse(localStorage.getItem(key) || 'null');
-            if (!old || session.score >= old.score) {
+            if (!old || (session.type !== 'hopper' && session.score >= old.score)) {
                 localStorage.setItem(key, JSON.stringify({
                     score: session.score, weights: session.weights, at: new Date().toISOString()
                 }));
@@ -591,6 +642,7 @@
         setTimeout(() => { button.textContent = 'Copy link'; }, 2000);
     });
     $('practice-btn').addEventListener('click', startPractice);
+    $('batch-test').addEventListener('click', stressTest);
     $('practice-speed').addEventListener('click', () => cycleSpeed('practiceSpeed', 'practice-speed'));
     $('eval-speed').addEventListener('click', () => cycleSpeed('evalSpeed', 'eval-speed'));
     $('zero-weights').addEventListener('click', () => setWeights(Array(state.weights.length).fill(0)));
@@ -601,8 +653,9 @@
     $('retry-btn').addEventListener('click', () => {
         state.session = null;
         resetEvaluation();
-        $('evaluation-message').textContent = 'Weights are editable again. Submit to try another run.';
+        $('evaluation-message').textContent = 'Weights are editable again. Subsequent runs are experimental; the first submitted Hopper score stays recorded.';
         setEditorEnabled(true);
+        $('batch-test').disabled = false;
     });
     window.addEventListener('hashchange', () => {
         const link = parseHash();
@@ -613,6 +666,6 @@
 
     const link = parseHash();
     if (link) loadGame(link.type, link.seed, true);
-    else loadGame('pong', randomSeed());
+    else loadGame('hopper', randomSeed());
     requestAnimationFrame(animationFrame);
 })();
