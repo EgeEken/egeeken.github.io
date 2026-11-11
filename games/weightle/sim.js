@@ -24,7 +24,7 @@
                 ['Angular speed', 'Torso rotational velocity'],
                 ['Forward speed', 'Horizontal torso velocity'],
                 ['Leg sin', 'Sine of the leg angle relative to the body'],
-                ['Leg cos', 'Cosine of the leg angle relative to the body'],
+                ['Spring charge', 'Stored spring energy: -1 empty, +1 fully charged'],
                 ['Extension', 'Current telescoping joint extension'],
                 ['Foot contact', '+1 if the foot touches the ground, otherwise -1'],
                 ['Forward ray', 'Laser distance toward the upcoming terrain; -1 close, +1 far'],
@@ -32,7 +32,7 @@
                 ['Clock sine', 'Built-in gait timing signal'],
                 ['Clock cosine', 'Gait timing signal shifted by 90 degrees']
             ],
-            outputs: ['Hip motor', 'Extension motor']
+            outputs: ['Wheel drive', 'Spring command']
         },
         lander: {
             title: 'Lander', category: 'Task',
