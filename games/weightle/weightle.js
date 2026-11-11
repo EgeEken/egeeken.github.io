@@ -189,6 +189,7 @@
                     if (Number.isFinite(value)) {
                         state.weights[index] = Math.max(-6, Math.min(6, value));
                         cancelBatch();
+                        $('batch-results').hidden = true;
                         updateTelemetry();
                     }
                 });
@@ -207,6 +208,7 @@
 
     function setWeights(weights) {
         cancelBatch();
+        $('batch-results').hidden = true;
         state.weights.splice(0, state.weights.length, ...weights);
         const n = S.specs[state.type].inputs.length + 1;
         state.weightInputs.forEach(input => {
