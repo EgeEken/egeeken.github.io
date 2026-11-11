@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="weightle.css">
     <link rel="icon" href="../../assets/favicon.png" type="image/png">
     <title>Ege - Weightle (WIP)</title>
+    <script src="vendor/planck.min.js" defer></script>
     <script src="sim.js" defer></script>
+    <script src="hopper.js" defer></script>
     <script src="weightle.js" defer></script>
 </head>
 <body>
@@ -29,9 +31,9 @@
                 <label class="field">
                     <span>Game type</span>
                     <select id="game-type">
-                        <option value="pong">Adversarial · Pong</option>
-                        <option value="walker">Endurance · Rotor Walker</option>
-                        <option value="lander">Task · Lander</option>
+                        <option value="hopper">Endurance · Hopper (v2)</option>
+                        <option value="pong">Adversarial · Pong (experimental)</option>
+                        <option value="lander">Task · Lander (experimental)</option>
                     </select>
                 </label>
                 <button id="random-game" class="primary">Generate random game</button>
@@ -71,7 +73,7 @@
                     <button id="random-weights">Random weights</button>
                     <button id="baseline-weights">Example controller <span class="wip-inline">(WIP)</span></button>
                 </div>
-                <p class="panel-hint">The example controller is a testing aid, not a trained opponent. All submitted weights are fixed for every evaluation round.</p>
+                <p class="panel-hint">The example controller is a starting point, not an optimized solution. For Hopper, try to coordinate hip rotation, foot contact, and leg extension. Submitted weights are frozen during evaluation.</p>
                 <div class="actions-live" id="actions-live" aria-live="off"></div>
             </section>
 
@@ -90,8 +92,10 @@
                 <div class="practice-actions">
                     <button id="practice-btn" class="primary">Start practice</button>
                     <button id="practice-speed">Speed: 1×</button>
+                    <button id="batch-test" hidden>Stress test · 5 maps</button>
                 </div>
                 <p class="panel-hint" id="practice-note"></p>
+                <div class="batch-results" id="batch-results" aria-live="polite" hidden></div>
             </section>
         </div>
 
@@ -105,7 +109,7 @@
                 <div class="submission-actions">
                     <button id="eval-speed">Speed: 1×</button>
                     <button id="submit-btn" class="primary">Submit model</button>
-                    <button id="retry-btn" hidden>Try again (WIP)</button>
+                    <button id="retry-btn" hidden>Retry (experimental)</button>
                 </div>
             </div>
             <div class="evaluation-grid" id="evaluation-grid">
