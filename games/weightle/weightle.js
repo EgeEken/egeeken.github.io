@@ -21,11 +21,11 @@
             Sidewind: 'The ball experiences a weak constant vertical acceleration.'
         },
         hopper: {
-            'Rolling hills': 'Use a hinged leg and telescoping actuator to traverse rolling terrain.',
-            'Rough traction': 'Foot grip is reduced. Contact timing and body balance matter.',
-            'Heavy chassis': 'A heavier body demands more controlled extensions and landings.',
-            'Reverse motor': 'The hip motor rotates in the opposite direction from other variants.',
-            'Broken ground': 'Occasional small gaps interrupt the terrain. Coordinate extension with foot placement.'
+            'Rolling hills': 'Drive your spring-legged wheel over hills and use stored spring energy to jump barriers.',
+            'Rough traction': 'Reduced wheel grip changes acceleration and when to jump.',
+            'Heavy chassis': 'Extra body mass changes how far a fully charged spring can launch you.',
+            'Reverse motor': 'The wheel spins in the opposite direction. Reverse your drive command.',
+            'Broken ground': 'Some ground segments are missing. The wheel must carry momentum and the spring can jump gaps.'
         },
         lander: {
             Crosswind: 'Continuous wind pushes the craft sideways as it descends.',
@@ -92,7 +92,7 @@
         $('practice-note').textContent = type === 'pong'
             ? 'Positive motor output moves the paddle down. Practice uses the same random opponent with different ball trajectories.'
             : type === 'hopper'
-                ? 'Hip motor rotates the leg (reversed on Reverse motor days). Extension motor pushes or retracts the telescoping joint. Each practice attempt gets new terrain.'
+                ? 'Wheel drive: positive moves forward (reversed on Reverse motor days). Spring: positive charges while grounded, negative releases a jump. The leg has an automatic balancing hinge. Each practice uses new terrain.'
                 : 'Positive horizontal output moves right; vertical output −1 means no thrust and +1 means full thrust. Practice uses a separate landing.';
         $('practice-btn').textContent = 'Start practice';
         $('batch-test').hidden = type !== 'hopper';
@@ -104,7 +104,7 @@
         $('evaluation-description').textContent = type === 'pong'
             ? 'Win each match to unlock the next opponent. Training takes place only after the previous win.'
             : type === 'hopper'
-                ? 'One run on a fixed, unseen course. Reach 2 m, 5 m, and 9 m to score 1, 2, or 3 points.'
+                ? 'One run on an unseen, seeded obstacle course. The wheel can drive, but clearing the barriers requires charging and releasing the spring. Checkpoints: 2, 5 and 9 m.'
                 : 'Complete each landing to unlock the next, harder scenario. All use your submitted weights.';
         const labels = type === 'pong'
             ? ['1 · Random opponent', '2 · Basically trained', '3 · Better trained']
@@ -220,10 +220,8 @@
     function exampleWeights() {
         if (state.type === 'pong') return [3.8, 0, 0, .8, 0, 0, 0];
         if (state.type === 'hopper') {
-            const weights = Array(20).fill(0);
-            weights[9] = -1.2 * state.cfg.direction;
-            weights[16] = 1.5;
-            weights[19] = -.15;
+            const weights = Array(24).fill(0);
+            weights[11] = state.cfg.direction;
             return weights;
         }
         return [3, 0, -2, 0, -.6, 0, 0,
