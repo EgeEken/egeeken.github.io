@@ -11,7 +11,7 @@ onmessage = function ({ data }) {
             return;
         }
         try {
-            const sim = WeightleSim.makeHopper(cfg, seed + ':stress:' + (index + 1), weights);
+            const sim = self.WeightleSim.makeHopper(cfg, seed + ':stress:' + (index + 1), weights);
             while (!sim.done) sim.step();
             results.push({ distance: Math.round(sim.best * 100) / 100,
                 score: cfg.milestones.filter(v => sim.best >= v).length });
