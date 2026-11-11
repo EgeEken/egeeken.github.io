@@ -149,7 +149,7 @@
             const p = torso.getPosition();
             s.best = Math.max(s.best, p.x - initialX);
             const angle = Math.abs(Math.atan2(Math.sin(torso.getAngle()), Math.cos(torso.getAngle())));
-            const fallen = angle > 2.45 || p.y > height(p.x) - .13;
+            const fallen = angle > 2.25 || p.y > height(p.x) - .33;
             s.unstableFrames = fallen ? s.unstableFrames + 1 : Math.max(0, s.unstableFrames - 2);
             if (s.best >= cfg.milestones[2]) {
                 s.done = true;
