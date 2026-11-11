@@ -85,10 +85,10 @@
         $('practice-status').textContent = 'Ready';
         $('practice-detail').textContent = 'Edit weights and start a practice run.';
         $('practice-note').textContent = type === 'pong'
-            ? 'Practice matches use the same fixed random opponent, but different ball trajectories.'
+            ? 'Positive motor output moves the paddle down. Practice uses the same random opponent with different ball trajectories.'
             : type === 'walker'
-                ? 'The course is fixed for this seed. The model controls a rotating leg and its extension.'
-                : 'Practice uses a different initial condition from the three evaluation landings.';
+                ? 'Negative leg motor usually drives forward (positive on reverse-joint days). The spring motor changes leg length.'
+                : 'Positive horizontal output moves right; vertical output −1 means no thrust and +1 means full thrust. Practice uses a separate landing.';
         $('practice-btn').textContent = 'Start practice';
         $('evaluation-grid').classList.toggle('single', type === 'walker');
         $('evaluation-heading').textContent = type === 'walker'
