@@ -1,0 +1,173 @@
+#weightle {
+    width: min(1260px, 95vw);
+    margin: 26px auto 60px;
+    display: grid;
+    gap: 18px;
+    color: #edf3f6;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+#weightle * { box-sizing: border-box; }
+#weightle section { display: block; max-width: none; width: auto; }
+#weightle .panel {
+    background: #152632;
+    border: 1px solid #304b5a;
+    border-radius: 13px;
+    padding: 19px;
+    box-shadow: 0 8px 28px #17202c2a;
+}
+#weightle h3 { margin: 5px 0 10px; font-size: 1.28rem; font-weight: 700; }
+#weightle p { margin: 9px 0; }
+#weightle button, #weightle input, #weightle select { font: inherit; }
+#weightle button {
+    border: 1px solid #496377;
+    background: #243d50;
+    color: #edf4f7;
+    border-radius: 7px;
+    padding: 9px 12px;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+    white-space: nowrap;
+}
+#weightle button:hover:not(:disabled) { background: #34566c; border-color: #8abbb6; }
+#weightle button:disabled { opacity: .43; cursor: not-allowed; }
+#weightle button.primary { background: #126f6b; border-color: #2c9b90; font-weight: 700; }
+#weightle button.primary:hover:not(:disabled) { background: #168880; }
+#weightle input, #weightle select {
+    width: 100%;
+    background: #0d1c29;
+    color: #f1f5f8;
+    border: 1px solid #476073;
+    border-radius: 7px;
+    padding: 10px 9px;
+    outline-offset: 2px;
+}
+#weightle input:focus-visible, #weightle button:focus-visible, #weightle select:focus-visible {
+    outline: 2px solid #7ad7bf;
+}
+#weightle .eyebrow { color: #85b7c4; font-size: .72rem; font-weight: 700; letter-spacing: .085em; }
+#weightle .panel-hint { color: #a8bec9; font-size: .84rem; line-height: 1.5; }
+#weightle .wip-inline { font-size: .75rem; color: #bdd0dc; font-weight: 400; }
+#weightle code { color: #97ddc9; }
+#weightle .panel-heading, #weightle .generator-title, #weightle .submission-top {
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+}
+.wip-tag {
+    vertical-align: middle; font-size: .38em; letter-spacing: .07em; padding: 5px 8px;
+    background: #ddad67; color: #1e3037; border-radius: 5px;
+}
+#weightle .pill, #weightle .seed-label {
+    font-size: .75rem; font-weight: 700; color: #9ae1d1;
+    border: 1px solid #3b6e72; padding: 6px 9px; border-radius: 7px;
+    white-space: nowrap;
+}
+#weightle .generator-controls {
+    display: flex; align-items: end; flex-wrap: wrap; gap: 10px; margin: 9px 0 16px;
+}
+#weightle .field { display: grid; gap: 5px; min-width: 180px; flex: 1; color: #afcbd2; font-size: .8rem; }
+#weightle .field span { font-weight: 600; }
+#weightle .seed-controls { display: flex; flex: 1.2; align-items: end; gap: 8px; }
+#weightle .seed-controls .field { min-width: 120px; }
+#weightle .challenge {
+    border-top: 1px solid #304957; padding-top: 13px;
+    display: flex; align-items: center; justify-content: space-between; gap: 18px;
+    line-height: 1.5;
+}
+#weightle .challenge strong { color: #86dfcd; display: block; font-size: 1.04rem; }
+#weightle .challenge span { color: #c7d9e0; }
+#weightle #rules { color: #d6bd91; font-size: .8rem; max-width: 36%; }
+#weightle .work-area { display: grid; grid-template-columns: minmax(400px, 1.03fr) minmax(330px, 1fr); gap: 18px; }
+#weightle .weights-scroll { overflow: auto; margin-top: 16px; }
+#weightle #weights-table {
+    border-collapse: separate; border-spacing: 0 5px;
+    width: 100%; table-layout: fixed;
+}
+#weightle #weights-table th {
+    text-align: left; color: #acc9d3; font-size: .77rem;
+    font-weight: 700; padding: 3px 8px;
+}
+#weightle #weights-table th:first-child { width: 48%; }
+#weightle #weights-table td {
+    background: #203644; padding: 5px 8px;
+    font-size: .84rem; height: 41px;
+}
+#weightle #weights-table td:first-child { border-radius: 6px 0 0 6px; }
+#weightle #weights-table td:last-child { border-radius: 0 6px 6px 0; }
+#weightle .sensor-label { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+#weightle .sensor-value { color: #81d4c1; font-variant-numeric: tabular-nums; }
+#weightle .sensor-help { color: #7298ab; cursor: help; font-size: .8rem; }
+#weightle .weight-input {
+    min-width: 60px; width: 100%; max-width: 105px; padding: 7px 5px;
+    text-align: center; font-variant-numeric: tabular-nums;
+}
+#weightle .editor-actions, #weightle .practice-actions, #weightle .submission-actions {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px;
+}
+#weightle .actions-live {
+    margin-top: 13px; border-top: 1px solid #354c56; padding-top: 12px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+}
+#weightle .action-meter { background: #253c4b; border-radius: 7px; padding: 7px 11px; min-width: 116px; }
+#weightle .action-meter span { color: #a6c0cb; display: block; font-size: .75rem; }
+#weightle .action-meter strong { color: #8ce0cc; font-variant-numeric: tabular-nums; font-size: 1.04rem; }
+#weightle .canvas-shell, #weightle .eval-canvas-shell {
+    position: relative; background: #0b1723; border: 1px solid #395263;
+    border-radius: 8px; overflow: hidden;
+}
+#weightle canvas { display: block; width: 100%; height: auto; aspect-ratio: 26 / 15; }
+#weightle .under-canvas, #weightle .round-detail {
+    margin-top: 8px; min-height: 20px; color: #b6ccd5;
+    font-size: .82rem; font-variant-numeric: tabular-nums;
+}
+#weightle .submission-top { align-items: center; margin-bottom: 15px; }
+#weightle .submission-top .panel-hint { max-width: 610px; }
+#weightle .submission-actions { margin: 0; justify-content: end; }
+#weightle .evaluation-grid {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px;
+}
+#weightle .evaluation-grid.single {
+    grid-template-columns: minmax(0, 1fr); max-width: 720px; margin: auto;
+}
+#weightle .evaluation-grid.single .eval-card:not(:first-child) { display: none; }
+#weightle .eval-card { min-width: 0; border: 1px solid #344f5f; border-radius: 9px; padding: 9px; background: #1e3241; }
+#weightle .eval-title { display: flex; gap: 10px; justify-content: space-between; margin-bottom: 10px; align-items: center; font-size: .84rem; }
+#weightle .round-status { font-size: .75rem; color: #b0c8d2; }
+#weightle .round-status.success { color: #8ae0bc; }
+#weightle .round-status.failure { color: #e7aaaa; }
+#weightle .round-overlay {
+    position: absolute; inset: 0; background: #091725d6;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    gap: 12px; padding: 12px; text-align: center; color: #d9e8ee; font-size: .93rem;
+}
+#weightle .round-overlay[hidden] { display: none; }
+#weightle .round-overlay.success { background: #11764abf; color: #fff; }
+#weightle .round-overlay.failure { background: #8b3435c7; color: #fff; }
+#weightle .round-overlay progress {
+    width: min(90%, 240px); height: 10px; accent-color: #52c7b4;
+}
+#weightle .round-overlay small { color: #c0d6da; }
+#weightle .evaluation-footer { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; margin-top: 15px; border-top: 1px solid #344b59; padding-top: 12px; }
+#weightle .final-score { font-weight: 700; color: #86dfcc; font-size: 1.1rem; }
+#weightle .evaluation-message { color: #b5cbd5; font-size: .85rem; }
+@media (max-width: 980px) {
+    #weightle .work-area { grid-template-columns: 1fr; }
+    #weightle .evaluation-grid { grid-template-columns: 1fr; }
+    #weightle .eval-card { max-width: 650px; width: 100%; margin: auto; }
+    #weightle .challenge { flex-wrap: wrap; }
+    #weightle #rules { max-width: unset; }
+}
+@media (max-width: 600px) {
+    #weightle { width: 96vw; }
+    #weightle .panel { padding: 12px; }
+    #weightle .generator-controls, #weightle .seed-controls { align-items: stretch; }
+    #weightle .seed-controls { flex: 1 1 100%; }
+    #weightle .generator-controls > .field { flex: 1 1 100%; }
+    #weightle .generator-controls > button { flex: 1; }
+    #weightle .submission-top { flex-direction: column; align-items: stretch; }
+    #weightle .submission-actions { justify-content: start; }
+    #weightle .panel-heading { flex-wrap: wrap; }
+    #weightle #weights-table th:first-child { width: 43%; }
+    #weightle .weight-input { min-width: 40px; }
+    #weightle .sensor-label { font-size: .77rem; }
+    header h1 { font-size: 2.1em; }
+}
