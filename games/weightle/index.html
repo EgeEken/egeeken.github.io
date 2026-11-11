@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="weightle.css">
+    <link rel="icon" href="../../assets/favicon.png" type="image/png">
+    <title>Ege - Weightle (WIP)</title>
+    <script src="sim.js" defer></script>
+    <script src="weightle.js" defer></script>
+</head>
+<body>
+    <header>
+        <a class="back-button" href="../">← Return to Games</a>
+        <h1>Weightle <span class="wip-tag">WIP</span></h1>
+        <h2>Program a neural network by editing its weights.</h2>
+    </header>
+    <main id="weightle">
+        <section class="panel generator">
+            <div class="generator-title">
+                <div>
+                    <div class="eyebrow">PROCEDURAL PLAYGROUND</div>
+                    <h3>Generate a challenge</h3>
+                </div>
+                <div class="seed-label" id="seed-label">Seed: —</div>
+            </div>
+            <div class="generator-controls">
+                <label class="field">
+                    <span>Game type</span>
+                    <select id="game-type">
+                        <option value="pong">Adversarial · Pong</option>
+                        <option value="walker">Endurance · Rotor Walker</option>
+                        <option value="lander">Task · Lander</option>
+                    </select>
+                </label>
+                <button id="random-game" class="primary">Generate random game</button>
+                <div class="seed-controls">
+                    <label class="field">
+                        <span>Reproduce a seed</span>
+                        <input type="text" id="seed-input" maxlength="60" spellcheck="false" placeholder="Any number or text">
+                    </label>
+                    <button id="specific-seed">Generate this seed</button>
+                </div>
+                <button id="copy-link" title="Copy reproducible link">Copy link</button>
+            </div>
+            <div class="challenge">
+                <div><strong id="variant-name">—</strong><span id="challenge-description"></span></div>
+                <div id="rules"></div>
+            </div>
+        </section>
+
+        <div class="work-area">
+            <section class="panel model-panel">
+                <div class="panel-heading">
+                    <div>
+                        <div class="eyebrow">YOUR CONTROLLER</div>
+                        <h3>Neural network weights</h3>
+                    </div>
+                    <span id="architecture-label" class="pill"></span>
+                </div>
+                <p class="panel-hint">Each motor uses <code>tanh(Σ input × weight + bias)</code>. Change any weight, then test your model. Inputs are normalized to roughly −1 to +1.</p>
+                <div class="weights-scroll">
+                    <table id="weights-table">
+                        <thead id="weights-head"></thead>
+                        <tbody id="weights-body"></tbody>
+                    </table>
+                </div>
+                <div class="editor-actions">
+                    <button id="zero-weights">Set all to zero</button>
+                    <button id="random-weights">Random weights</button>
+                    <button id="baseline-weights">Example controller <span class="wip-inline">(WIP)</span></button>
+                </div>
+                <p class="panel-hint">The example controller is a testing aid, not a trained opponent. All submitted weights are fixed for every evaluation round.</p>
+                <div class="actions-live" id="actions-live" aria-live="off"></div>
+            </section>
+
+            <section class="panel practice-panel">
+                <div class="panel-heading">
+                    <div>
+                        <div class="eyebrow">UNLIMITED PRACTICE</div>
+                        <h3>Test your model</h3>
+                    </div>
+                    <span class="pill" id="practice-status">Ready</span>
+                </div>
+                <div class="canvas-shell">
+                    <canvas id="practice-canvas" width="520" height="300" aria-label="Practice simulation"></canvas>
+                </div>
+                <div class="under-canvas" id="practice-detail">Edit weights and start a practice run.</div>
+                <div class="practice-actions">
+                    <button id="practice-btn" class="primary">Start practice</button>
+                    <button id="practice-speed">Speed: 1×</button>
+                </div>
+                <p class="panel-hint" id="practice-note"></p>
+            </section>
+        </div>
+
+        <section class="panel submission-panel">
+            <div class="submission-top">
+                <div>
+                    <div class="eyebrow">FINAL EVALUATION</div>
+                    <h3 id="evaluation-heading">Three rounds, one controller</h3>
+                    <p class="panel-hint" id="evaluation-description"></p>
+                </div>
+                <div class="submission-actions">
+                    <button id="eval-speed">Speed: 1×</button>
+                    <button id="submit-btn" class="primary">Submit model</button>
+                    <button id="retry-btn" hidden>Try again (WIP)</button>
+                </div>
+            </div>
+            <div class="evaluation-grid" id="evaluation-grid">
+                <div class="eval-card">
+                    <div class="eval-title"><strong id="round-label-0">1 · Random</strong><span class="round-status" id="round-status-0">Locked</span></div>
+                    <div class="eval-canvas-shell">
+                        <canvas id="eval-canvas-0" width="520" height="300"></canvas>
+                        <div class="round-overlay" id="round-overlay-0"><strong>Ready</strong></div>
+                    </div>
+                    <div class="round-detail" id="round-detail-0">Waiting for submission</div>
+                </div>
+                <div class="eval-card">
+                    <div class="eval-title"><strong id="round-label-1">2 · Basic</strong><span class="round-status" id="round-status-1">Locked</span></div>
+                    <div class="eval-canvas-shell">
+                        <canvas id="eval-canvas-1" width="520" height="300"></canvas>
+                        <div class="round-overlay" id="round-overlay-1"><strong>Locked</strong></div>
+                    </div>
+                    <div class="round-detail" id="round-detail-1">Beat round 1 to unlock</div>
+                </div>
+                <div class="eval-card">
+                    <div class="eval-title"><strong id="round-label-2">3 · Stronger</strong><span class="round-status" id="round-status-2">Locked</span></div>
+                    <div class="eval-canvas-shell">
+                        <canvas id="eval-canvas-2" width="520" height="300"></canvas>
+                        <div class="round-overlay" id="round-overlay-2"><strong>Locked</strong></div>
+                    </div>
+                    <div class="round-detail" id="round-detail-2">Beat round 2 to unlock</div>
+                </div>
+            </div>
+            <div class="evaluation-footer">
+                <div class="final-score" id="final-score" role="status">Not submitted</div>
+                <div class="evaluation-message" id="evaluation-message">Practice as much as you like. A submission locks your weights for the full run.</div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
