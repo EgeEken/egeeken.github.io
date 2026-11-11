@@ -838,17 +838,10 @@
           "artist": "fox capture plan",
           "slug": "fox-capture-plan",
           "main": {
-            "title": "SAMBA TEMPERADO",
-            "video": "i2ZZrGKzc8g",
-            "iframeTitle": "fox capture plan - SAMBA TEMPERADO"
-          },
-          "additional": [
-            {
-              "title": "Additional piece",
-              "video": "oklj6UKJBrI",
-              "iframeTitle": "fox capture plan - Additional piece"
-            }
-          ]
+            "title": "Acceleration",
+            "video": "oklj6UKJBrI",
+            "iframeTitle": "fox capture plan - Acceleration"
+          }
         },
         {
           "artist": "insaneintherainmusic",
@@ -1168,11 +1161,16 @@
           "artist": "Tim Simonec (Whiplash Soundtrack)",
           "slug": "tim-simonec-whiplash-soundtrack",
           "main": {
-            "title": "Upswingin'",
-            "video": "-897VTkxvKw",
-            "iframeTitle": "Tim Simonec (Whiplash Soundtrack) - Upswingin'"
+            "title": "Caravan",
+            "video": "38CRu1rCaKg",
+            "iframeTitle": "Tim Simonec (Whiplash Soundtrack) - Caravan"
           },
           "additional": [
+            {
+              "title": "Upswingin'",
+              "video": "-897VTkxvKw",
+              "iframeTitle": "Tim Simonec (Whiplash Soundtrack) - Upswingin'"
+            },
             {
               "title": "Ouverture",
               "video": "tEfV9m2ereg",
@@ -1182,11 +1180,6 @@
               "title": "Whiplash",
               "video": "-jAtHf9RA4w",
               "iframeTitle": "Tim Simonec (Whiplash Soundtrack) - Whiplash"
-            },
-            {
-              "title": "Caravan",
-              "video": "38CRu1rCaKg",
-              "iframeTitle": "Tim Simonec (Whiplash Soundtrack) - Caravan"
             }
           ]
         },
