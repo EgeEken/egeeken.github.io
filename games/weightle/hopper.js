@@ -89,7 +89,7 @@
 
         const s = {
             type: 'hopper', cfg, seed, weights, world, torso, upper, lower, hip, slider,
-            frame: 0, done: false, win: false, best: initialX,
+            frame: 0, done: false, win: false, best: 0,
             footContact: false, unstableFrames: 0,
             groundAt: height, course: points, barriers, gaps,
             milestones: cfg.milestones.slice(), rayVisuals: []
@@ -147,7 +147,7 @@
             }
 
             const p = torso.getPosition();
-            s.best = Math.max(s.best, p.x);
+            s.best = Math.max(s.best, p.x - initialX);
             const angle = Math.abs(Math.atan2(Math.sin(torso.getAngle()), Math.cos(torso.getAngle())));
             const fallen = angle > 2.45 || p.y > height(p.x) - .13;
             s.unstableFrames = fallen ? s.unstableFrames + 1 : Math.max(0, s.unstableFrames - 2);
@@ -199,9 +199,9 @@
             }
 
             for (let i = 0; i < cfg.milestones.length; i++) {
-                const x = sx(cfg.milestones[i]);
+                const x = sx(initialX + cfg.milestones[i]);
                 if (x < -15 || x > w + 15) continue;
-                const y = sy(height(cfg.milestones[i]));
+                const y = sy(height(initialX + cfg.milestones[i]));
                 const reached = s.best >= cfg.milestones[i];
                 ctx.strokeStyle = reached ? '#54cfaa' : '#ddba77';
                 ctx.lineWidth = 2;
@@ -250,10 +250,10 @@
 
             ctx.fillStyle = '#e5f3f8';
             ctx.textAlign = 'left'; ctx.font = 'bold 16px system-ui';
-            ctx.fillText(Math.max(0, s.best - .55).toFixed(2) + ' m', 13, 25);
+            ctx.fillText(s.best.toFixed(2) + ' m', 13, 25);
             ctx.fillStyle = '#a4c4ca'; ctx.font = '12px system-ui';
             ctx.fillText((s.frame * DT).toFixed(1) + ' / ' + (cfg.maxFrames * DT).toFixed(0) + ' s', 13, 43);
         };
         return s;
     };
-})(window.WeightleSim, window.planck);
+})(globalThis.WeightleSim, globalThis.planck);
