@@ -17,18 +17,20 @@
             ],
             outputs: ['Paddle motor']
         },
-        walker: {
-            title: 'Rotor Walker', category: 'Endurance',
+        hopper: {
+            title: 'Hopper', category: 'Endurance',
             inputs: [
-                ['Ground ahead', 'Ground slope detected by a forward ray'],
-                ['Ground below', 'Distance from the body to the ground'],
-                ['Forward speed', 'Current horizontal speed'],
-                ['Foot contact', 'Whether the rotating foot is touching terrain'],
-                ['Leg angle', 'Sine of the leg angle'],
-                ['Clock sine', 'Internal periodic clock'],
-                ['Clock cosine', 'Internal periodic clock shifted by 90°']
+                ['Body tilt', 'Torso angle: negative left, positive right'],
+                ['Angular speed', 'Torso rotational velocity'],
+                ['Forward speed', 'Horizontal torso velocity'],
+                ['Leg sin', 'Sine of the leg angle relative to the body'],
+                ['Leg cos', 'Cosine of the leg angle relative to the body'],
+                ['Extension', 'Current telescoping joint extension'],
+                ['Foot contact', '+1 if the foot touches the ground, otherwise -1'],
+                ['Forward ray', 'Laser distance toward the upcoming terrain; -1 close, +1 far'],
+                ['Downward ray', 'Laser distance to the ground ahead; -1 close, +1 far']
             ],
-            outputs: ['Leg motor', 'Spring motor']
+            outputs: ['Hip motor', 'Extension motor']
         },
         lander: {
             title: 'Lander', category: 'Task',
@@ -83,19 +85,25 @@
                 wind: (rng() - .5) * .36
             };
         }
-        if (type === 'walker') {
-            const variants = ['Spinning leg', 'Elastic leg', 'Reverse joint', 'Rough ground'];
+        if (type === 'hopper') {
+            const variants = ['Rolling hills', 'Rough traction', 'Heavy chassis', 'Reverse motor', 'Broken ground'];
+            const variant = variants[Math.floor(rng() * variants.length)];
             return {
-                type, variant: variants[Math.floor(rng() * variants.length)],
-                roughness: .65 + rng() * .6,
-                grip: .75 + rng() * .5,
+                type, variant,
+                terrain: variant === 'Broken ground' ? 'Broken ground'
+                    : variant === 'Rolling hills' ? 'Rolling hills' : 'Mixed ridges',
+                roughness: .80 + rng() * .42,
+                grip: (.85 + rng() * .25) * (variant === 'Rough traction' ? .60 : 1),
+                mass: (variant === 'Heavy chassis' ? 1.35 : 1) * (.9 + rng() * .17),
+                gravity: 9.8,
+                torque: 6.5 + rng() * 1.4,
+                springForce: 26 + rng() * 6,
+                motorSpeed: 6.5,
+                extensionSpeed: 1.65,
+                direction: variant === 'Reverse motor' ? -1 : 1,
                 phase: rng() * Math.PI * 2,
-                bumps: Array.from({ length: 18 }, (_, i) => ({
-                    x: 1.1 + i * .72 + rng() * .38,
-                    h: (.045 + rng() * .10) * (i < 3 ? .5 : 1),
-                    w: .32 + rng() * .22
-                })),
-                milestones: [2, 5, 9]
+                milestones: [2, 5, 9],
+                maxFrames: 2400
             };
         }
         if (type === 'lander') {
@@ -249,119 +257,6 @@
         return s;
     }
 
-    function makeWalker(cfg, seed, weights) {
-        const rng = rngFrom(hashSeed('walk:' + seed));
-        const s = {
-            type: 'walker', cfg, weights, done: false, win: false,
-            frame: 0, x: .05, y: 1.95, vx: 0, vy: 0, theta: .4 + rng() * .2,
-            omega: 0, length: .43, legRate: 0, contact: false,
-            groundedFrames: 0, best: 0
-        };
-        const sign = cfg.variant === 'Reverse joint' ? -1 : 1;
-        function groundAt(x) {
-            let h = 2.48 - .02 * Math.sin(x * 2.3);
-            for (const bump of cfg.bumps) {
-                const d = (x - bump.x) / bump.w;
-                if (Math.abs(d) < 1) h -= bump.h * cfg.roughness * smooth(1 - Math.abs(d));
-            }
-            return h;
-        }
-        s.groundAt = groundAt;
-        s.getSensors = () => [
-            clamp((groundAt(s.x + .50) - groundAt(s.x)) * -3, -1, 1),
-            clamp((groundAt(s.x) - s.y - .2) * 2, -1, 1),
-            clamp(s.vx / 3, -1, 1),
-            s.contact ? 1 : -1,
-            Math.sin(s.theta),
-            Math.sin(s.frame * DT * 6 + cfg.phase),
-            Math.cos(s.frame * DT * 6 + cfg.phase)
-        ];
-        s.getActions = () => forward('walker', weights, s.getSensors());
-        s.step = function () {
-            if (s.done) return;
-            s.frame++;
-            const a = s.getActions();
-            const targetOmega = a[0] * 8 * sign;
-            s.omega += (targetOmega - s.omega) * .18;
-            s.theta += s.omega * DT;
-            const extensionSpeed = a[1] * (cfg.variant === 'Elastic leg' ? .85 : .48);
-            s.legRate = extensionSpeed;
-            s.length = clamp(s.length + extensionSpeed * DT, .27, .68);
-            const footX = s.x + Math.sin(s.theta) * s.length;
-            const footY = s.y + Math.cos(s.theta) * s.length;
-            const penetration = footY - groundAt(footX);
-            s.contact = penetration > 0;
-            let fx = 0, fy = 7.5;
-            if (s.contact) {
-                const footVy = s.vy - Math.sin(s.theta) * s.omega * s.length + Math.cos(s.theta) * s.legRate;
-                const normal = clamp(penetration * 125 + footVy * 13, 0, 55);
-                const footVx = s.vx + Math.cos(s.theta) * s.omega * s.length + Math.sin(s.theta) * s.legRate;
-                const grip = cfg.grip * (cfg.variant === 'Rough ground' ? .72 : 1);
-                fx = clamp(-footVx * 18, -normal * grip, normal * grip);
-                fy -= normal;
-            }
-            s.vx = clamp((s.vx + fx * DT) * .998, -5, 5);
-            s.vy = clamp((s.vy + fy * DT) * .997, -7, 7);
-            s.x += s.vx * DT;
-            s.y += s.vy * DT;
-            const ground = groundAt(s.x);
-            if (s.y + .19 > ground) {
-                s.y = ground - .19;
-                s.vy = Math.min(0, s.vy);
-                s.vx *= .90;
-                s.groundedFrames++;
-            } else {
-                s.groundedFrames = 0;
-            }
-            s.best = Math.max(s.best, s.x);
-            if (s.best >= cfg.milestones[2]) { s.done = true; s.win = true; }
-            if (s.x < -1.2 || s.frame >= 1800 || s.groundedFrames > 240) s.done = true;
-        };
-        s.draw = function (ctx) {
-            const w = ctx.canvas.width, h = ctx.canvas.height;
-            ctx.fillStyle = '#10202b'; ctx.fillRect(0, 0, w, h);
-            const scale = h / 3.2;
-            const camera = Math.max(-1.1, s.x - 1.25);
-            const sx = x => (x - camera) * scale;
-            const sy = y => (y - .35) * scale;
-            ctx.fillStyle = '#283e45';
-            ctx.beginPath(); ctx.moveTo(0, h);
-            for (let i = 0; i <= w + 10; i += 6) {
-                const x = camera + i / scale;
-                ctx.lineTo(i, sy(groundAt(x)));
-            }
-            ctx.lineTo(w, h); ctx.fill();
-            ctx.strokeStyle = '#7d9b87'; ctx.lineWidth = 3; ctx.beginPath();
-            for (let i = 0; i <= w; i += 5) {
-                const y = sy(groundAt(camera + i / scale));
-                if (i === 0) ctx.moveTo(i, y); else ctx.lineTo(i, y);
-            }
-            ctx.stroke();
-            for (let i = 0; i < cfg.milestones.length; i++) {
-                const x = sx(cfg.milestones[i]);
-                if (x < -10 || x > w + 10) continue;
-                ctx.strokeStyle = i === 2 ? '#65d5bd' : '#d6b379';
-                ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x, sy(groundAt(cfg.milestones[i])) - 52);
-                ctx.lineTo(x, sy(groundAt(cfg.milestones[i]))); ctx.stroke();
-                ctx.fillStyle = ctx.strokeStyle; ctx.font = 'bold 13px system-ui'; ctx.textAlign = 'center';
-                ctx.fillText(String(i + 1), x, sy(groundAt(cfg.milestones[i])) - 57);
-            }
-            const bx = sx(s.x), by = sy(s.y);
-            const fx = sx(s.x + Math.sin(s.theta) * s.length);
-            const fy = sy(s.y + Math.cos(s.theta) * s.length);
-            ctx.strokeStyle = '#d7a66f'; ctx.lineWidth = 9; ctx.lineCap = 'round';
-            ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(fx, fy); ctx.stroke();
-            ctx.fillStyle = s.contact ? '#f5cd83' : '#ac835a';
-            ctx.beginPath(); ctx.arc(fx, fy, 6, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = '#68d4bd';
-            ctx.beginPath(); ctx.arc(bx, by, 15, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = '#14313a'; ctx.beginPath(); ctx.arc(bx + 4, by - 3, 3, 0, Math.PI * 2); ctx.fill();
-            ctx.font = 'bold 16px system-ui'; ctx.textAlign = 'left'; ctx.fillStyle = '#eff8fc';
-            ctx.fillText(s.best.toFixed(1) + ' m', 14, 25);
-        };
-        return s;
-    }
-
     function makeLander(cfg, seed, weights, level) {
         const rng = rngFrom(hashSeed('land:' + seed + ':' + level));
         const direction = rng() < .5 ? -1 : 1;
@@ -435,5 +330,5 @@
         return s;
     }
 
-    root.WeightleSim = { DT, specs, hashSeed, rngFrom, randomWeights, configFor, forward, makePong, makeWalker, makeLander };
+    root.WeightleSim = { DT, specs, hashSeed, rngFrom, randomWeights, configFor, forward, makePong, makeLander };
 })(typeof self === 'undefined' ? globalThis : self);
