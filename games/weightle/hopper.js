@@ -80,7 +80,8 @@
         });
 
         const hip = world.createJoint(pl.RevoluteJoint({
-            enableMotor: true, motorSpeed: 0, maxMotorTorque: cfg.torque
+            enableMotor: true, motorSpeed: 0, maxMotorTorque: cfg.torque,
+            enableLimit: true, lowerAngle: -.92, upperAngle: .92
         }, torso, upper, V(initialX, initialY + .045)));
         const slider = world.createJoint(pl.PrismaticJoint({
             enableMotor: true, motorSpeed: 0, maxMotorForce: cfg.springForce,
@@ -122,7 +123,9 @@
                 Math.cos(jointAngle),
                 clamp(legExtension / .26, -1, 1),
                 s.footContact ? 1 : -1,
-                ahead, below
+                ahead, below,
+                Math.sin(s.frame * DT * 5.2 + cfg.phase),
+                Math.cos(s.frame * DT * 5.2 + cfg.phase)
             ];
         };
 
@@ -131,8 +134,12 @@
         s.step = function () {
             if (s.done) return;
             const actions = s.getActions();
-            hip.setMotorSpeed(actions[0] * cfg.motorSpeed * cfg.direction);
-            slider.setMotorSpeed(actions[1] * cfg.extensionSpeed);
+            const tilt = Math.atan2(Math.sin(torso.getAngle()), Math.cos(torso.getAngle()));
+            torso.applyTorque(clamp(-tilt * 12 - torso.getAngularVelocity() * 3.5, -9, 9), true);
+            hip.setMotorSpeed(clamp((actions[0] * .88 * cfg.direction - hip.getJointAngle()) * 8,
+                -cfg.motorSpeed, cfg.motorSpeed));
+            slider.setMotorSpeed(clamp((actions[1] * .23 - slider.getJointTranslation()) * 12,
+                -cfg.extensionSpeed, cfg.extensionSpeed));
             world.step(DT, 7, 3);
             s.frame++;
 
