@@ -385,6 +385,9 @@
         s.step = function () {
             if (s.done) return;
             s.frame++;
+            if (cfg.variant === 'Moving pad') {
+                s.padX = cfg.padX + Math.sin(s.frame * DT * .65 + level * .4) * (.035 + .012 * level);
+            }
             const a = s.getActions();
             s.sideways = a[0];
             s.burn = (a[1] + 1) / 2;
