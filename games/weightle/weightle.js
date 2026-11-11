@@ -3,9 +3,10 @@
 
     const S = window.WeightleSim;
     const $ = id => document.getElementById(id);
-    const types = ['pong', 'walker', 'lander'];
+    const types = ['hopper', 'pong', 'lander'];
     const state = {
-        type: 'pong', seed: '', cfg: null, weights: [],
+        type: 'hopper', seed: '', cfg: null, weights: [],
+        batchWorker: null,
         practice: null, practiceRuns: 0, practiceSpeed: 1, evalSpeed: 1,
         practiceCarry: 0, evalCarry: 0, session: null, sensorCells: [],
         weightInputs: [], lastTelemetry: 0
@@ -19,11 +20,12 @@
             'Paddle pulse': 'Both paddles periodically shrink and recover while the ball is in play.',
             Sidewind: 'The ball experiences a weak constant vertical acceleration.'
         },
-        walker: {
-            'Spinning leg': 'Rotate your single powered leg to move across the uneven ground.',
-            'Elastic leg': 'A high-speed spring motor extends and retracts your rotating leg.',
-            'Reverse joint': 'Motor direction is inverted. Positive commands spin the leg in the opposite direction.',
-            'Rough ground': 'The terrain is uneven and foot traction is reduced.'
+        hopper: {
+            'Rolling hills': 'Use a hinged leg and telescoping actuator to traverse rolling terrain.',
+            'Rough traction': 'Foot grip is reduced. Contact timing and body balance matter.',
+            'Heavy chassis': 'A heavier body demands more controlled extensions and landings.',
+            'Reverse motor': 'The hip motor rotates in the opposite direction from other variants.',
+            'Broken ground': 'Occasional small gaps interrupt the terrain. Coordinate extension with foot placement.'
         },
         lander: {
             Crosswind: 'Continuous wind pushes the craft sideways as it descends.',
@@ -56,6 +58,7 @@
     function loadGame(type, seed, fromHash = false) {
         if (!types.includes(type) || !seed) return;
         if (state.session?.worker) state.session.worker.terminate();
+        if (state.batchWorker) { state.batchWorker.terminate(); state.batchWorker = null; }
         state.type = type;
         state.seed = String(seed).slice(0, 60);
         state.cfg = S.configFor(type, state.seed);
@@ -63,6 +66,8 @@
         state.practice = null;
         state.session = null;
         state.practiceRuns = 0;
+        $('batch-results').hidden = true;
+        $('batch-results').textContent = '';
         state.practiceCarry = 0;
         state.evalCarry = 0;
         state.practiceSpeed = 1;
@@ -76,8 +81,8 @@
         $('challenge-description').textContent = descriptions[type][state.cfg.variant];
         $('rules').textContent = type === 'pong'
             ? 'Three matches · random → basic training → stronger training · first to 3 points'
-            : type === 'walker'
-                ? 'Distance milestones: ' + state.cfg.milestones.join(' / ') + ' m · 30-second limit'
+            : type === 'hopper'
+                ? 'Distance milestones: ' + state.cfg.milestones.join(' / ') + ' m · 40-second limit · unseen final course'
                 : 'Three landings · increasingly difficult starting positions, wind and landing tolerances';
         $('architecture-label').textContent =
             S.specs[type].inputs.length + ' sensors × ' + S.specs[type].outputs.length + ' motor' +
@@ -86,22 +91,25 @@
         $('practice-detail').textContent = 'Edit weights and start a practice run.';
         $('practice-note').textContent = type === 'pong'
             ? 'Positive motor output moves the paddle down. Practice uses the same random opponent with different ball trajectories.'
-            : type === 'walker'
-                ? 'Negative leg motor usually drives forward (positive on reverse-joint days). The spring motor changes leg length.'
+            : type === 'hopper'
+                ? 'Hip motor rotates the leg (reversed on Reverse motor days). Extension motor pushes or retracts the telescoping joint. Each practice attempt gets new terrain.'
                 : 'Positive horizontal output moves right; vertical output −1 means no thrust and +1 means full thrust. Practice uses a separate landing.';
         $('practice-btn').textContent = 'Start practice';
-        $('evaluation-grid').classList.toggle('single', type === 'walker');
-        $('evaluation-heading').textContent = type === 'walker'
+        $('batch-test').hidden = type !== 'hopper';
+        $('batch-test').disabled = false;
+        $('batch-test').textContent = 'Stress test · 5 maps';
+        $('evaluation-grid').classList.toggle('single', type === 'hopper');
+        $('evaluation-heading').textContent = type === 'hopper'
             ? 'Reach all three distance markers' : 'Three rounds, one controller';
         $('evaluation-description').textContent = type === 'pong'
             ? 'Win each match to unlock the next opponent. Training takes place only after the previous win.'
-            : type === 'walker'
-                ? 'One continuous run. Passing 2 m, 5 m and 9 m earns 1, 2 and 3 points.'
+            : type === 'hopper'
+                ? 'One run on a fixed, unseen course. Reach 2 m, 5 m, and 9 m to score 1, 2, or 3 points.'
                 : 'Complete each landing to unlock the next, harder scenario. All use your submitted weights.';
         const labels = type === 'pong'
             ? ['1 · Random opponent', '2 · Basically trained', '3 · Better trained']
-            : type === 'walker'
-                ? ['Endurance run', '', '']
+            : type === 'hopper'
+                ? ['Held-out endurance course', '', '']
                 : ['1 · Wide landing zone', '2 · Moderate landing', '3 · Precision landing'];
         labels.forEach((label, i) => { $('round-label-' + i).textContent = label; });
         renderWeightEditor();
@@ -209,10 +217,12 @@
 
     function exampleWeights() {
         if (state.type === 'pong') return [3.8, 0, 0, .8, 0, 0, 0];
-        if (state.type === 'walker') {
-            return [0, 0, 0, 0, 0, 0, 0,
-                state.cfg.variant === 'Reverse joint' ? 2.2 : -2.2,
-                0, 0, 0, .9, 0, 0, 0, 0];
+        if (state.type === 'hopper') {
+            const weights = Array(20).fill(0);
+            weights[9] = -1.2 * state.cfg.direction;
+            weights[16] = 1.5;
+            weights[19] = -.15;
+            return weights;
         }
         return [3, 0, -2, 0, -.6, 0, 0,
             0, -1.2, 0, 2.6, 0, 0, state.cfg.variant === 'Low gravity' ? -.55 : -.3];
@@ -231,7 +241,7 @@
             return S.makePong(state.cfg, seed, state.weights,
                 S.randomWeights('pong', state.seed + ':random-opponent'));
         }
-        if (state.type === 'walker') return S.makeWalker(state.cfg, seed, state.weights);
+        if (state.type === 'hopper') return S.makeHopper(state.cfg, seed, state.weights);
         return S.makeLander(state.cfg, seed, state.weights, 0);
     }
 
@@ -240,7 +250,9 @@
         state.practiceCarry = 0;
         $('practice-btn').textContent = 'Restart practice';
         $('practice-status').textContent = 'Running';
-        $('practice-detail').textContent = 'Watch your current network control the simulation.';
+        $('practice-detail').textContent = state.type === 'hopper'
+            ? 'Practice course ' + state.practiceRuns + ' · new terrain every run.'
+            : 'Watch your current network control the simulation.';
         state.practice.draw($('practice-canvas').getContext('2d'));
         updateTelemetry();
     }
@@ -310,6 +322,8 @@
     function startEvaluation() {
         if (state.session && !state.session.finished) return;
         state.practice = null;
+        if (state.batchWorker) { state.batchWorker.terminate(); state.batchWorker = null; }
+        $('batch-test').disabled = true;
         $('practice-status').textContent = 'Paused';
         $('submit-btn').hidden = true;
         $('retry-btn').hidden = true;
@@ -395,7 +409,7 @@
         } else if (session.type === 'lander') {
             sim = S.makeLander(state.cfg, session.seed + ':eval:' + round, session.weights, round);
         } else {
-            sim = S.makeWalker(state.cfg, session.seed + ':eval', session.weights);
+            sim = S.makeHopper(state.cfg, session.seed + ':held-out-final', session.weights);
         }
         session.sim = sim;
         state.evalCarry = 0;
@@ -405,7 +419,7 @@
             ? 'Round ' + (round + 1) + ': first to 3 points.'
             : session.type === 'lander'
                 ? 'Landing ' + (round + 1) + ': remain inside the pad and slow down before contact.'
-                : 'Reach the three markers before the 30-second limit.';
+                : 'Reach the three markers before the 40-second limit.';
         sim.draw($('eval-canvas-' + round).getContext('2d'));
     }
 
@@ -413,7 +427,7 @@
         if (state.session !== session || session.finished) return;
         const i = session.current, sim = session.sim;
         session.sim = null;
-        if (session.type === 'walker') {
+        if (session.type === 'hopper') {
             session.score = state.cfg.milestones.filter(d => sim.best >= d).length;
             setRoundStatus(0, session.score === 3 ? 'Completed' : 'Stopped',
                 session.score === 3 ? 'success' : 'failure');
@@ -478,7 +492,7 @@
         if (p.type === 'pong') {
             $('practice-detail').textContent = 'You ' + p.score[0] + ' : ' +
                 p.score[1] + ' random · ' + (p.frame / 60).toFixed(1) + ' s';
-        } else if (p.type === 'walker') {
+        } else if (p.type === 'hopper') {
             $('practice-detail').textContent = 'Distance ' + p.best.toFixed(2) +
                 ' m · ' + (p.frame / 60).toFixed(1) + ' s';
         } else {
@@ -497,7 +511,7 @@
             $('round-detail-' + i).textContent =
                 'You ' + s.score[0] + ' : ' + s.score[1] + ' opponent · ' +
                 (s.frame / 60).toFixed(1) + ' s';
-        } else if (session.type === 'walker') {
+        } else if (session.type === 'hopper') {
             $('round-detail-0').textContent = 'Distance ' + s.best.toFixed(2) +
                 ' m · next marker ' + (state.cfg.milestones.find(d => d > s.best) || 'finish');
         } else {
