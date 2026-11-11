@@ -28,7 +28,9 @@
                 ['Extension', 'Current telescoping joint extension'],
                 ['Foot contact', '+1 if the foot touches the ground, otherwise -1'],
                 ['Forward ray', 'Laser distance toward the upcoming terrain; -1 close, +1 far'],
-                ['Downward ray', 'Laser distance to the ground ahead; -1 close, +1 far']
+                ['Downward ray', 'Laser distance to the ground ahead; -1 close, +1 far'],
+                ['Clock sine', 'Built-in gait timing signal'],
+                ['Clock cosine', 'Gait timing signal shifted by 90 degrees']
             ],
             outputs: ['Hip motor', 'Extension motor']
         },
@@ -169,7 +171,7 @@
 
         function point(side) {
             s.score[side]++;
-            if (s.score[side] >= 3 || s.frame >= 3500) {
+            if (s.score[side] >= 3) {
                 s.done = true;
                 s.win = s.score[0] > s.score[1];
             } else {
