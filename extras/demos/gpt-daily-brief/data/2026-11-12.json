@@ -57,17 +57,17 @@
       "id": "music",
       "number": 9,
       "title": "Music corner",
-      "content": "<p>Three direct recommendations. <a href=\"https://www.youtube.com/watch_videos?video_ids=ASkVgB8I85o,gQ99OMlI5cg,_YOvQNgpfXY\" target=\"_blank\" rel=\"noopener noreferrer\">Open the three-video YouTube queue</a>.</p>",
-      "queue": "https://www.youtube.com/watch_videos?video_ids=ASkVgB8I85o,gQ99OMlI5cg,_YOvQNgpfXY",
+      "content": "<p>Three direct recommendations. <a href=\"https://www.youtube.com/watch_videos?video_ids=WuJGreIC6yk,gQ99OMlI5cg,_YOvQNgpfXY\" target=\"_blank\" rel=\"noopener noreferrer\">Open the three-video YouTube queue</a>.</p>",
+      "queue": "https://www.youtube.com/watch_videos?video_ids=WuJGreIC6yk,gQ99OMlI5cg,_YOvQNgpfXY",
       "items": [
         {
           "type": "classical",
           "label": "Classical",
-          "piece": "Pablo de Sarasate — Romanza andaluza, Spanish Dances, Op. 22 — Kristin Lee / Soyeon Kate Lee",
-          "performer": "Kristin Lee, violin; Soyeon Kate Lee, piano",
-          "videoId": "ASkVgB8I85o",
+          "piece": "Pablo de Sarasate — Romanza andaluza, Spanish Dances, Op. 22 — Julia Fischer / Augustin Hadelich",
+          "performer": "Julia Fischer, violin; Augustin Hadelich, piano",
+          "videoId": "WuJGreIC6yk",
           "description": "A compact violin-and-piano Romantic dance rather than another large-scale work. The sustained singing line and Spanish rhythmic inflections are the draw, with the piano doing more harmonic work than a simple accompaniment. Given your familiarity with violin repertoire and Sarasate, this may already be known; the test is the less obvious Romanza rather than Zigeunerweisen.",
-          "url": "https://www.youtube.com/watch?v=ASkVgB8I85o"
+          "url": "https://www.youtube.com/watch?v=WuJGreIC6yk"
         },
         {
           "type": "jazz",
