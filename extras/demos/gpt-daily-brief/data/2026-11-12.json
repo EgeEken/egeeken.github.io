@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-12",
+  "title": "Daily Brief — Thursday, 12 November 2026",
+  "generatedAt": "2026-11-12T12:34:53.906Z",
+  "readingTime": "10–15 min",
+  "sections": [
+    {
+      "id": "paris_events",
+      "number": 1,
+      "title": "Paris events",
+      "content": "<p><strong>Tonight — BenArt Ensemble feat. Baptiste Herbin.</strong> Thursday 12 November, 20:30, at New Morning, 7–9 rue des Petites Écuries, 10e. Tickets from approximately €21. This album-release concert brings together an eight-piece group with saxophones, flute, Fender Rhodes, guitar and percussion. The arrangements draw on jazz, 1970s funk and Afro-Caribbean rhythms; a promising option if you want substantial ensemble writing rather than an extended jam. <a href=\"https://www.newmorning.com/20261112-7801-benart-ensemble-ft-baptiste-herbin.html\" target=\"_blank\" rel=\"noopener noreferrer\">Concert details</a>.</p>\n<p><strong>Friday — Michael Felberbaum Quartet.</strong> 13 November, 19:00 or 21:00, at Le Baiser Salé, 58 rue des Lombards, 1er. €13–33. Guitar, piano/keyboards, double bass and drums, with a contemporary jazz approach that makes room for both melodic development and improvisation. <a href=\"https://www.paris.fr/evenements/michael-felberbaum-quartet-117660\" target=\"_blank\" rel=\"noopener noreferrer\">City of Paris listing</a>.</p>\n<p><strong>Saturday — London Symphony Orchestra / Susanna Mälkki: Steve Reich.</strong> 14 November, 20:00, Grande salle Pierre Boulez, Philharmonie de Paris, 221 avenue Jean-Jaurès, 19e. €13–88; the venue advertises limited remaining tickets. The programme spans <em>Music for Pieces of Wood</em>, <em>Variations for Winds, Strings and Keyboards</em>, <em>Three Movements</em>, and <em>Music for Ensemble and Orchestra</em>. This is the more unusual classical option: rhythm, phase relationships and changing orchestral colour rather than Romantic melody. <a href=\"https://philharmoniedeparis.fr/en/activite/29178\" target=\"_blank\" rel=\"noopener noreferrer\">Programme and tickets</a>.</p>"
+    },
+    {
+      "id": "cs_ai",
+      "number": 2,
+      "title": "CS and AI developments",
+      "content": "<h3>TIGER: when a vision-language model can read an image but cannot reason with it</h3>\n<p><a href=\"https://arxiv.org/abs/2611.10552\" target=\"_blank\" rel=\"noopener noreferrer\">Seeing Isn't Enough</a>, submitted 7 November, isolates an interesting failure mode. A multimodal model can correctly transcribe text appearing in an image and solve the problem when given that transcription, yet fail when reasoning directly from the image. The bottleneck is therefore not necessarily OCR or perception: it can be <strong>access to reasoning capabilities already present in the language backbone</strong>.</p>\n<p>The proposed method, TIGER, finds examples the model solves as text but fails as rendered images, then post-trains on those counterfactual failures using reinforcement learning. Although its training examples are synthetic rendered text, the authors report improvements on diagram, chart, scientific and spatial-reasoning benchmarks.</p>\n<p>The practical implication is a useful diagnostic: before spending more visual tokens or enlarging a vision encoder, test whether converting the perceived evidence into explicit text eliminates the error. That distinguishes missing visual information from a failure to use information the model already extracted. The reported generalization remains specific to the evaluated models and benchmarks.</p>\n<h3>A robot safety monitor that updates after deployment</h3>\n<p><a href=\"https://arxiv.org/abs/2611.11688\" target=\"_blank\" rel=\"noopener noreferrer\">Streaming Failure Forecasting</a>, submitted 8 November, addresses a mundane problem in vision-language-action robotics: a failure detector calibrated for one camera, task or policy version may become unreliable after those conditions change.</p>\n<p>Instead of continually fine-tuning the entire monitor, the researchers freeze its feature extractor and refit <strong>only its final linear layer</strong> using the success/failure label available after each completed episode. They report a 2.18 ms per-policy-call cost on a Jetson CPU core, improvements over a frozen monitor in four of five simulated drift suites, and improvements across four robot policies evaluated using replays of 434 recorded physical-robot runs.</p>\n<p>The important distinction is between <em>updating a robot's policy</em> and <em>updating the system that warns when the policy is about to fail</em>. This is promising low-cost adaptation, but the real-robot results are offline replay, not proof of reliable autonomous online deployment.</p>"
+    },
+    {
+      "id": "technical_idea",
+      "number": 3,
+      "title": "Technical idea: Aho–Corasick and the failure-link automaton",
+      "content": "<p>Suppose you must detect 10,000 phrases in a continuous text stream. Running 10,000 independent substring searches repeats work, especially when patterns share prefixes.</p>\n<p><strong>Aho–Corasick</strong> first builds a trie of all patterns. Each trie node also has a <em>failure link</em>: when the next character does not extend the current match, the automaton jumps to the longest suffix of what it has seen that could still be the prefix of another pattern.</p>\n<p>For example, after reading \"ushers\", a matcher looking for \"he\", \"she\", \"his\" and \"hers\" can report overlapping matches without restarting a separate scan at every character.</p>\n<p>With conventional assumptions about transition lookup and a fixed alphabet, preprocessing is linear in the total pattern length, and scanning costs approximately <strong>O(n + z)</strong> for text length n and z reported matches. This makes it useful in intrusion detection, lexical analysis and large-scale exact-term filtering.</p>\n<p>The trade-off is that a precompiled automaton is efficient for a relatively stable dictionary; frequent additions and removals may require rebuilding or maintaining multiple automatons. <a href=\"https://doi.org/10.1145/360825.360855\" target=\"_blank\" rel=\"noopener noreferrer\">Original paper: Aho and Corasick, 1975</a>.</p>"
+    },
+    {
+      "id": "non_cs_science",
+      "number": 4,
+      "title": "Non-CS science: tidal turbines with flexible rubber blades",
+      "content": "<p>A <a href=\"https://www.nature.com/articles/s41586-026-11278-w\" target=\"_blank\" rel=\"noopener noreferrer\">Nature paper published 11 November</a> proposes a mechanically simpler approach to tidal energy. Conventional turbine blades often need motors and bearings to adjust their angle as currents change, preventing excessive forces from damaging the machinery.</p>\n<p>The new blades keep a rigid front section but use a <strong>flexible rubber trailing edge</strong>. Stronger water flow bends this edge and flattens the blade's profile automatically. That reduces excessive loading without a separate mechanism constantly repositioning the blade.</p>\n<p>In tank experiments, the researchers measured up to a <strong>one-third reduction in rapid, fatigue-inducing force fluctuations</strong>. In a modeled tidal cycle, the flexible design produced a total energy yield comparable to a rigid turbine with active blade-angle control.</p>\n<p>Why it matters: underwater maintenance is expensive. Removing actuators and reducing repeated mechanical stress could make tidal electricity more economical, particularly in turbulent locations. Full-scale operating life and costs have not yet been demonstrated in the field.</p>"
+    },
+    {
+      "id": "geopolitics",
+      "number": 5,
+      "title": "Geopolitics and political economy",
+      "content": "<ul><li><strong>Ukraine: a prisoner exchange, not a peace agreement.</strong> US-mediated talks in Abu Dhabi produced an agreement in principle for a large exchange of prisoners between Ukraine and Russia. US envoys Steve Witkoff and Jared Kushner were due in Moscow today, but territorial demands and durable security guarantees remain unresolved. The practical breakthrough is humanitarian; the negotiating positions on ending the war have not converged. <a href=\"https://www.abc.net.au/news/2026-11-12/ukraine-russia-agree-prisoner-swap-abu-dhabi-talks/107375462\" target=\"_blank\" rel=\"noopener noreferrer\">ABC / Reuters</a>.</li></ul>\n<ul><li><strong>Turkey: COP31 financing becomes a policy test.</strong> The Asian Infrastructure Investment Bank announced a <strong>$1.6 billion</strong> climate-policy package for Turkey. The programme includes emissions reporting by at least 180 industrial facilities by April 2027, renewable-energy licensing and drought adaptation. Turkey estimates an additional <strong>$68 billion</strong> of climate investment is needed by 2030: the constraint is mobilizing capital and enforcing reforms, not merely announcing targets. <a href=\"https://www.reuters.com/sustainability/cop/cop31-host-turkey-aiib-strike-record-16-billion-climate-policy-deal-2026-11-12/\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters, 12 November</a>.</li></ul>\n<ul><li><strong>Gaza: a strike on a functioning hospital.</strong> A strike on Nasser Hospital in Khan Younis early today killed at least six people, including a surgeon, according to Gaza civil defence; footage showed damage inside the surgical department. Israel said it was targeting militants, but the claim was not independently substantiated in initial reports. Beyond the immediate casualties, losing surgical capacity further reduces care for patients who had nothing to do with the intended target. <a href=\"https://today.lorientlejour.com/article/1554147/israeli-strike-on-southern-gaza-hospital-kills-six-gaza-civil-defense-says.html\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters</a> · <a href=\"https://apnews.com/article/50b547b5a82388b6b415aee4d776fbfb\" target=\"_blank\" rel=\"noopener noreferrer\">AP</a>.</li></ul>\n<ul><li><strong>Taiwan: participation in a China-hosted trade forum is itself contested.</strong> Ahead of next week's APEC leaders' meeting in Shenzhen, President Lai says Taiwan will participate on an \"equal basis\" and is seeking written guarantees from Beijing. APEC is one of the few international forums in which Taiwan takes part; the dispute illustrates how diplomatic protocol can determine practical access to economic institutions. <a href=\"https://www.taipeitimes.com/News/taiwan/archives/2026/11/12/2003867626\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters via Taipei Times</a>.</li></ul>\n<ul><li><strong>Niger: displacement pressure from northern Nigeria.</strong> The UN refugee agency reports nearly <strong>64,000 arrivals in Niger from Nigeria this year</strong>, adding to a refugee and asylum-seeker population already exceeding half a million. The immediate problem is not only border security: host communities and an underfunded humanitarian system must absorb people fleeing violence while facing their own local instability. <a href=\"https://www.unhcr.org/news/briefing-notes/tens-thousands-flee-violence-nigeria-and-face-growing-crisis-niger\" target=\"_blank\" rel=\"noopener noreferrer\">UNHCR, 10 November</a>.</li></ul>"
+    },
+    {
+      "id": "marxist_fragment",
+      "number": 6,
+      "title": "Marxist fragment: what worker cooperatives prove—and do not prove",
+      "content": "<blockquote><p>“The co-operative factories of the labourers themselves represent within the old form the first sprouts of the new”</p></blockquote>\n<p>— Karl Marx, <em>Capital</em>, Volume III, chapter 27, \"The Role of Credit in Capitalist Production\" (edited for publication by Engels in 1894). <a href=\"https://www.marxists.org/archive/marx/works/1894-c3/ch27.htm\" target=\"_blank\" rel=\"noopener noreferrer\">Primary English text</a>.</p>\n<p>Marx regards worker-run enterprises as evidence that production does not require a separate class of private owners directing labour. But the phrase <strong>\"within the old form\"</strong> is doing important work: cooperatives still compete, borrow, sell and respond to market pressures. They can change authority within the workplace without eliminating the external constraints of capitalist exchange.</p>\n<p>The contradiction is sharpened by the same chapter's discussion of joint-stock companies: ownership has already become dispersed and production socialized in practice, but the income claim of shareholders remains private. Neither the corporation nor an isolated cooperative automatically solves the question of social control over investment.</p>"
+    },
+    {
+      "id": "philosophy_fragments",
+      "number": 7,
+      "title": "Two philosophy and political fragments",
+      "content": "<h3>Friedrich Hayek: the knowledge problem is not simply a calculation problem</h3>\n<blockquote><p>“the problem of the utilization of knowledge which is not given to anyone in its totality.”</p></blockquote>\n<p>— Friedrich A. Hayek, <a href=\"https://www.econlib.org/library/Essays/hykKnw.html\" target=\"_blank\" rel=\"noopener noreferrer\">\"The Use of Knowledge in Society\" (1945)</a>.</p>\n<p>Hayek's objection to central economic planning was not merely that computers could not solve enough equations. Much knowledge is local, changing and context-dependent—known to particular workers, producers or consumers rather than stored in one dataset. Prices can transmit condensed signals about such dispersed circumstances. The counter-question is which forms of coordination transmit information that markets omit or misprice, such as ecological damage, care and public goods.</p>\n<h3>Simone Weil: force turns people into objects</h3>\n<blockquote><p>“it is that x that turns anybody who is subjected to it into a thing.”</p></blockquote>\n<p>— Simone Weil, <a href=\"https://theanarchistlibrary.org/library/simone-weil-the-iliad\" target=\"_blank\" rel=\"noopener noreferrer\">\"The Iliad, or The Poem of Force\"</a>, published in English in 1945.</p>\n<p>Weil reads Homer's epic less as a celebration of heroism than as an account of what coercion does to human agency. Force does not need to kill to strip someone of practical freedom: a person living under a standing threat can be reduced to someone else's instrument. It is also a warning about the corrupting effect of force on victors, not only victims.</p>"
+    },
+    {
+      "id": "french_usage",
+      "number": 8,
+      "title": "French usage: être à la bourre",
+      "content": "<p><strong>Être à la bourre</strong> is a very common <em>familiar</em> way of saying you are late or running behind schedule. It is more conversational than <em>être en retard</em>, and often implies a little urgency.</p>\n<ul><li><em>Désolé, je suis à la bourre, le métro était bloqué.</em> → \"Sorry, I'm running late; the metro was stuck.\"</li><li><em>On est un peu à la bourre sur le projet.</em> → \"We're a bit behind schedule on the project.\"</li><li><em>Je vais être à la bourre</em> predicts lateness; <em>je suis à la bourre</em> says the problem is already happening.</li></ul>\n<p>It is perfectly ordinary with friends or colleagues, but less suitable for a formal apology to an administration or in a professional report. <a href=\"https://www.larousse.fr/dictionnaires/francais/bourre/10667\" target=\"_blank\" rel=\"noopener noreferrer\">Larousse</a>.</p>"
+    },
+    {
+      "id": "music",
+      "number": 9,
+      "title": "Music corner",
+      "content": "<p>Three direct recommendations. <a href=\"https://www.youtube.com/watch_videos?video_ids=ASkVgB8I85o,gQ99OMlI5cg,_YOvQNgpfXY\" target=\"_blank\" rel=\"noopener noreferrer\">Open the three-video YouTube queue</a>.</p>",
+      "queue": "https://www.youtube.com/watch_videos?video_ids=ASkVgB8I85o,gQ99OMlI5cg,_YOvQNgpfXY",
+      "items": [
+        {
+          "type": "classical",
+          "label": "Classical",
+          "piece": "Pablo de Sarasate — Romanza andaluza, Spanish Dances, Op. 22 — Kristin Lee / Soyeon Kate Lee",
+          "performer": "Kristin Lee, violin; Soyeon Kate Lee, piano",
+          "videoId": "ASkVgB8I85o",
+          "description": "A compact violin-and-piano Romantic dance rather than another large-scale work. The sustained singing line and Spanish rhythmic inflections are the draw, with the piano doing more harmonic work than a simple accompaniment. Given your familiarity with violin repertoire and Sarasate, this may already be known; the test is the less obvious Romanza rather than Zigeunerweisen.",
+          "url": "https://www.youtube.com/watch?v=ASkVgB8I85o"
+        },
+        {
+          "type": "jazz",
+          "label": "Jazz",
+          "piece": "Snarky Puppy — Binky (groundUP)",
+          "performer": "Snarky Puppy / Michael League",
+          "videoId": "gQ99OMlI5cg",
+          "description": "Recorded live without overdubs, this is keyboard-rich ensemble fusion built around a strong riff, rhythmic breaks and sharply coordinated changes of texture. The multiple keyboards and horn section keep the arrangement evolving; the risk is that its density may be busier than your preferred melody-first jazz.",
+          "url": "https://www.youtube.com/watch?v=gQ99OMlI5cg"
+        },
+        {
+          "type": "other",
+          "label": "Other",
+          "piece": "Lianne La Havas — Bittersweet | A COLORS SHOW",
+          "performer": "Lianne La Havas / COLORS",
+          "videoId": "_YOvQNgpfXY",
+          "description": "A soul and singer-songwriter departure from last time's dream-pop. The attraction is an unusually expressive vocal melody, carefully paced harmonic tension and a convincing build rather than a groove that simply repeats. This tests whether stronger vocal development lands better than another restrained atmospheric track.",
+          "url": "https://www.youtube.com/watch?v=_YOvQNgpfXY"
+        }
+      ]
+    },
+    {
+      "id": "unrelated_fact",
+      "number": 10,
+      "title": "Unrelated fact: the first cross-Channel telegraph cable survived one night",
+      "content": "<p>On <strong>28 August 1850</strong>, engineers laid an experimental submarine telegraph cable between Dover and Cap Gris-Nez. It was essentially a <strong>single copper wire insulated with gutta-percha</strong>, a naturally occurring plant-derived material. Unlike later cables, it had no protective armour. According to the Science Museum, the cable failed during its first night, reportedly after a fisherman caught it with an anchor and cut it free.</p>\n<p>The engineering lesson was immediate: an insulating material that could keep electricity in and seawater out was not enough. A seabed cable also needed mechanical protection from anchors, abrasion and tides. A more durable cable followed in <strong>1851</strong>, helping establish cross-Channel telegraphic communication. The relevant preserved fragment is in the <a href=\"https://collection.sciencemuseumgroup.org.uk/objects/co33777\" target=\"_blank\" rel=\"noopener noreferrer\">Science Museum Group collection</a>.</p>"
+    },
+    {
+      "id": "puzzle",
+      "number": 11,
+      "title": "Puzzle: twelve counterfeit coins in three weighings",
+      "content": "<p>You have <strong>12 identical-looking coins</strong>. Exactly one is counterfeit, and it has a different weight—but you do not know whether it is <strong>heavier or lighter</strong> than a genuine coin.</p>\n<p>You have a two-pan balance scale that reports one of three results: left side heavier, right side heavier, or balanced. You may use it <strong>only three times</strong>.</p>\n<p><strong>Can you identify the counterfeit coin and determine whether it is heavier or lighter, for every possible case?</strong> Give a decision strategy, not just a count of possibilities.</p>\n<p>A starting observation: there are 24 possible answers (12 choices × heavier/lighter), while three balance weighings have at most 27 distinct outcome sequences. That makes success information-theoretically possible, but does not establish that a valid weighing strategy exists.</p>\n<p>No solution included today.</p>"
+    }
+  ]
+}
