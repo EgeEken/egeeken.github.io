@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-13",
+  "title": "Daily Brief — Friday, 13 November 2026",
+  "generatedAt": "2026-11-13T10:07:53.352Z",
+  "readingTime": "10–15 min",
+  "sections": [
+    {
+      "id": "paris_events",
+      "number": 1,
+      "title": "Istanbul events",
+      "content": "<p>The Beyoğlu Jazz Festival runs from 13–15 November. Two of its concerts are free, and there is also a chamber-music option next week.</p>\n<ul><li><strong>Tonight, 18:00 — Dishwasher_</strong>, Urban Cafe, Galatasaray Kartal Sk. No:6/A, Beyoğlu. <strong>Free, no registration.</strong> A Belgian saxophone–bass–drums trio combining jazz with synthesizers, distortion and krautrock influences. Worth considering for its unusual ensemble sound. <a href=\"https://www.beyoglucazfestivali.com/en/event-details/dishwasher\" target=\"_blank\" rel=\"noopener noreferrer\">Official event page</a>.</li><li><strong>Sunday 15 November, 19:00 — Downbeat Collective</strong>, NOH Extended, Tosbağa Sokak No:14/A, Beyoğlu. <strong>Free, no registration.</strong> A nine-vocalist collective drawing on neo-soul, R&amp;B and hip-hop, supported by a live rhythm section. More arrangement-driven than a conventional small-group jazz performance. <a href=\"https://www.beyoglucazfestivali.com/bilet/downbeat-collective\" target=\"_blank\" rel=\"noopener noreferrer\">Event details</a>.</li><li><strong>Thursday 19 November, 20:00 — LGT Young Soloists</strong>, Cemal Reşit Rey Concert Hall, Darülbedayi Cad. No:6, Şişli. <strong>From ₺66.</strong> An international young string ensemble performing Holst's St Paul's Suite, Beethoven's Kreutzer Sonata, Hindemith's Trauermusik, Sollima and Bottesini. Particularly relevant if you want to hear substantial string repertoire live. <a href=\"https://www.biletix.com/etkinlik/5CRRX/ISTANBUL/tr/lgt-young-soloists-lgt-genc-solistler-19-11-2026-istanbul\" target=\"_blank\" rel=\"noopener noreferrer\">Programme and tickets</a>.</li></ul>"
+    },
+    {
+      "id": "cs_ai",
+      "number": 2,
+      "title": "CS and AI developments",
+      "content": "<h3>Does a multimodal model need a separate vision encoder?</h3>\n<p><a href=\"https://arxiv.org/abs/2611.17334\" target=\"_blank\" rel=\"noopener noreferrer\">Unbundling Multimodal Vision Encoding</a>, submitted 12 November, asks a more fundamental architecture question than whether one vision encoder outperforms another.</p>\n<p>The authors control pretraining data and compute while separating three effects: pretrained visual knowledge, capacity devoted to vision, and where visual processing occurs in the network. Their central finding is that <strong>dedicated visual-processing capacity matters more than having a separately pretrained vision encoder</strong>. Moving visual processing into earlier layers of the multimodal model can remain effective, potentially simplifying the conventional vision-encoder-plus-language-model pipeline and reducing time to first token.</p>\n<p>This does not show that pretrained encoders are useless in existing production VLMs. It suggests that, when designing and training a multimodal architecture from scratch, a separate pretrained vision backbone may be less necessary than assumed.</p>\n<h3>Mixed-resolution video diffusion</h3>\n<p><a href=\"https://arxiv.org/abs/2611.12069\" target=\"_blank\" rel=\"noopener noreferrer\">MPEG-Diffusion</a>, released 9 November, tackles the cost of video generation by asking why every region of every frame should receive the same spatial resolution.</p>\n<p>The method lets the model select visually important regions for high-resolution processing, while treating less important regions at lower resolution. Separate attention paths prevent the two resolutions from interfering, and a mixed-resolution decoder combines their outputs.</p>\n<p>The authors report processing <strong>30% of full-resolution tokens</strong> and achieving <strong>4.8× faster denoising</strong> on Wan2.1 14B, with quality reportedly close to full-resolution generation in their user study. That is <em>denoising speed</em>, not necessarily a 4.8× reduction in complete video-generation latency. It is also a video-generation technique, not a video codec.</p>\n<p>The architectural point is that allocation of spatial computation can itself be learned by the generative model, rather than prescribed by an external detector.</p>"
+    },
+    {
+      "id": "technical_idea",
+      "number": 3,
+      "title": "Technical idea: write skew under snapshot isolation",
+      "content": "<p>Consider a hospital database with two doctors on call, Alice and Bob. Its business rule is simple: <strong>at least one doctor must always remain on call</strong>.</p>\n<p>Alice starts a database transaction, checks that Bob is on call, and removes herself from duty. At the same time, Bob starts another transaction, checks that Alice is on call, and removes himself. Each transaction sees a consistent snapshot. Each modifies a different row. Under ordinary <em>snapshot isolation</em>, both may commit successfully.</p>\n<p><strong>Transaction A:</strong> Reads that Bob is on call; writes Alice = off.</p>\n<p><strong>Transaction B:</strong> Reads that Alice is on call; writes Bob = off.</p>\n<p><strong>Both commit:</strong> Nobody remains on call.</p>\n<p>This anomaly is called <strong>write skew</strong>. Preventing two transactions from overwriting the same row is not sufficient to preserve a constraint involving multiple rows.</p>\n<p>Serializable isolation can prevent this outcome by identifying dangerous dependencies and aborting one transaction. Alternatively, the application can arrange for competing changes to conflict on a shared lock or record.</p>\n<p>The general lesson extends to inventory, reservation limits, staffing and financial controls: <strong>a database transaction can be internally consistent without the concurrent system being globally consistent</strong>. <a href=\"https://www.postgresql.org/docs/current/transaction-iso.html\" target=\"_blank\" rel=\"noopener noreferrer\">PostgreSQL isolation documentation</a>.</p>"
+    },
+    {
+      "id": "non_cs_science",
+      "number": 4,
+      "title": "Non-CS science: low-methane rice changes microbial chemistry",
+      "content": "<p>A <a href=\"https://www.nature.com/articles/s41587-026-03277-z\" target=\"_blank\" rel=\"noopener noreferrer\">10 November Nature Biotechnology commentary</a> argues for deploying low-methane rice. The underlying experimental result, published in <a href=\"https://www.nature.com/articles/s41467-026-68640-9\" target=\"_blank\" rel=\"noopener noreferrer\">Nature Communications in January</a>, is more interesting than simply breeding a plant that grows differently.</p>\n<p>Flooded rice fields create oxygen-poor conditions in which microorganisms produce methane. But the rice plant helps determine what those microorganisms eat: its roots release organic compounds into the surrounding soil.</p>\n<p>Researchers modified rice genes involved in root development and secretion. That changed microbial activity around the roots, apparently encouraging bacteria to consume hydrogen that methane-producing microorganisms would otherwise use.</p>\n<p>In a 70-day greenhouse experiment, two modified rice genotypes emitted <strong>38% and 58% less methane</strong> than control plants.</p>\n<p>Why it matters: reducing agricultural methane could slow near-term warming without requiring every farm to abandon flooded-rice cultivation. However, this is <strong>not yet evidence of equivalent reductions across commercial farms</strong>. Yield, local soil ecology, field-scale performance and deployment costs still require assessment.</p>"
+    },
+    {
+      "id": "geopolitics",
+      "number": 5,
+      "title": "Geopolitics and political economy",
+      "content": "<ul><li><strong>Spain — housing measures before an election.</strong> Following major protests and a general strike over housing costs, Spain's interim parliament narrowly approved measures extending eviction protections for vulnerable tenants, restricting certain rent increases and taxing tourist rentals. Their durability is uncertain: the <strong>29 November election</strong> could bring a government committed to reversing them. The dispute is not simply over rent levels but over whether to prioritize immediate tenant protection or policies intended to expand supply. <a href=\"https://apnews.com/article/d73fcfb03e4d13e46da6b9762810a450\" target=\"_blank\" rel=\"noopener noreferrer\">AP</a>.</li><li><strong>Indonesia — the vice president resigns.</strong> Gibran Rakabuming Raka resigned on <strong>12 November</strong> amid renewed legal and political challenges concerning his eligibility and education credentials. President Prabowo accepted the resignation. Parliament must now choose a replacement from presidential nominees, making the succession an institutional test—and weakening the political connection to Gibran's father, former president Joko Widodo. <a href=\"https://setkab.go.id/en/president-prabowo-accepts-the-resignation-of-vice-president-gibran/\" target=\"_blank\" rel=\"noopener noreferrer\">Official presidential statement</a> · <a href=\"https://apnews.com/article/abfe5e288fad3b8b26719eae634f2ee0\" target=\"_blank\" rel=\"noopener noreferrer\">AP</a>.</li><li><strong>Europe — security coordination beyond the EU.</strong> Leaders gathered in Dublin on <strong>12 November</strong> for the European Political Community summit, a forum bringing together EU and non-EU European states. One underlying question is whether European governments can coordinate security commitments when their members have different relationships with NATO, the EU and Russia. It is a political coordination forum, not a new mutual-defence treaty. <a href=\"https://www.consilium.europa.eu/en/meetings/international-summit/2026/11/12/\" target=\"_blank\" rel=\"noopener noreferrer\">European Council summit information</a>.</li><li><strong>South Sudan — warnings before a massacre.</strong> New reporting and an Amnesty International investigation examine failures to protect civilians during the <strong>1 March Abiemnom massacre</strong>, in which more than 200 people were reportedly killed. The current issue is accountability: authorities and peacekeepers reportedly received warnings, raising questions about what forces knew, what they could deploy and why protection failed. <a href=\"https://www.amnestyusa.org/press-releases/south-sudan-authorities-un-must-investigate-failure-to-protect-victims-of-abiemnom-massacre/\" target=\"_blank\" rel=\"noopener noreferrer\">Amnesty International</a>.</li></ul>"
+    },
+    {
+      "id": "marxist_fragment",
+      "number": 6,
+      "title": "Marxist fragment: Engels revises the revolutionary timetable",
+      "content": "<blockquote><p>“History has proved us wrong, and all who thought like us.”</p></blockquote>\n<p>— Friedrich Engels, <a href=\"https://www.marxists.org/archive/marx/works/1895/03/06.htm\" target=\"_blank\" rel=\"noopener noreferrer\">1895 Introduction</a> to Marx's <em>The Class Struggles in France, 1848–1850</em>, Progress Publishers English translation.</p>\n<p>Engels is correcting an earlier expectation: that the European revolutions of 1848 might rapidly develop into a successful socialist transformation. His later assessment is that capitalism still had enormous capacity to expand. Large-scale industry had not yet developed the social conditions for the kind of mass proletarian movement Marx and Engels envisioned. The revolutionary wave was defeated, while capitalist development accelerated.</p>\n<p>By 1895, Engels saw a different political situation. Industrialization had enlarged and organized the working class, and the German Social Democratic Party was using elections, legal organization and public agitation to accumulate support.</p>\n<p>The point is not that Engels abandoned revolution for parliamentary reform. Rather, <strong>the means of political struggle must be reconsidered when the economic and organizational conditions change</strong>. A strategy appropriate to a small revolutionary minority need not suit a mass working-class movement.</p>\n<p>There is also a historical complication: the Introduction was initially published in abridged form, and its interpretation as an endorsement of an exclusively peaceful parliamentary path became politically contested.</p>"
+    },
+    {
+      "id": "philosophy_fragments",
+      "number": 7,
+      "title": "Two philosophy and political fragments",
+      "content": "<h3>James Madison: class interests are a source of political factions</h3>\n<blockquote><p>“The most common and durable source of factions has been the various and unequal distribution of property.”</p></blockquote>\n<p>— James Madison, <a href=\"https://avalon.law.yale.edu/18th_century/fed10.asp\" target=\"_blank\" rel=\"noopener noreferrer\">Federalist No. 10</a>, 1787.</p>\n<p>Madison explicitly recognizes that creditors and debtors, owners and nonowners, and different economic sectors have conflicting political interests. His response is not to abolish those divisions. Instead, he argues for a large representative republic in which competing factions constrain one another and make domination by a single majority harder.</p>\n<p>It is a contrast with socialist accounts of class rule: Madison identifies a material source of political conflict but treats its management through constitutional institutions as more realistic than removing the underlying inequalities.</p>\n<h3>John Stuart Mill: understanding an opposing argument</h3>\n<blockquote><p>“He who knows only his own side of the case, knows little of that.”</p></blockquote>\n<p>— John Stuart Mill, <a href=\"https://www.axialcommons.org/read/mill-on-liberty-1859/1/\" target=\"_blank\" rel=\"noopener noreferrer\">On Liberty, chapter II</a>, 1859.</p>\n<p>Mill's point is stronger than the generic advice to listen to opposing views. Someone who cannot reconstruct the strongest objections to a position may believe a correct conclusion for weak reasons.</p>\n<p>That does not imply treating all positions as equally credible. It means that a properly justified view should survive contact with the best available criticism, not merely its weakest opponents.</p>"
+    },
+    {
+      "id": "french_usage",
+      "number": 8,
+      "title": "French usage: quitte à",
+      "content": "<p><strong>Quitte à + infinitive</strong> introduces a consequence or cost one is willing to accept. It can also imply that, since one is already undertaking an effort, one might as well make full use of it.</p>\n<ul><li><em>Je vais lui demander, quitte à paraître insistant.</em> — “I'll ask him, even if it makes me seem pushy.”</li><li><em>Quitte à traverser tout Paris, autant rester pour le concert.</em> — “If we're going all the way across Paris, we might as well stay for the concert.”</li></ul>\n<p>The second construction, <strong>quitte à …, autant …</strong>, is particularly useful in everyday speech. It expresses a practical “while we're at it” logic rather than simply accepting a risk.</p>\n<p>Compare <em>en être quitte pour</em>, which has a different meaning: <em>J'en ai été quitte pour une petite frayeur</em> means “I got away with just a bit of a scare.” <a href=\"https://www.larousse.fr/dictionnaires/francais/quitte/65784\" target=\"_blank\" rel=\"noopener noreferrer\">Larousse</a>.</p>"
+    },
+    {
+      "id": "music",
+      "number": 9,
+      "title": "Music corner",
+      "content": "<p>Three direct recommendations, selected with your expanded jazz catalog in mind. <a href=\"https://www.youtube.com/watch_videos?video_ids=8KHV5b9IJLk,984ksjle4YA,7nJRGARveVc\" target=\"_blank\" rel=\"noopener noreferrer\">Open the three-video YouTube queue</a>.</p>",
+      "queue": "https://www.youtube.com/watch_videos?video_ids=8KHV5b9IJLk,984ksjle4YA,7nJRGARveVc",
+      "items": [
+        {
+          "type": "classical",
+          "label": "Classical",
+          "piece": "Lili Boulanger — D’un matin de printemps",
+          "performer": "Deutsches Symphonie-Orchester Berlin / Cornelius Meister",
+          "videoId": "8KHV5b9IJLk",
+          "description": "A compact, brilliantly orchestrated work from Boulanger's final years. The bright opening and quick rhythmic figures develop into more ambiguous harmonic colours before the music recovers its momentum. A short-form orchestral recommendation with considerable movement and individuality, rather than a prolonged late-Romantic argument.",
+          "url": "https://www.youtube.com/watch?v=8KHV5b9IJLk"
+        },
+        {
+          "type": "jazz",
+          "label": "Jazz",
+          "piece": "Emmet Cohen with Bruce Harris and Patrick Bartley — After You’ve Gone",
+          "performer": "Emmet Cohen, Bruce Harris, Patrick Bartley, Russell Hall and Joe Saylor",
+          "videoId": "984ksjle4YA",
+          "description": "A high-energy, 14-minute small-group performance built around a familiar standard, with Cohen's piano driving the rhythmic character and the horns developing distinct improvisational lines. This tests a more traditional, improvisation-forward jazz lane without repeating artists and pieces from your curated jazz list.",
+          "url": "https://www.youtube.com/watch?v=984ksjle4YA"
+        },
+        {
+          "type": "other",
+          "label": "Other",
+          "piece": "Jungle — Casio",
+          "performer": "Jungle (official music video)",
+          "videoId": "7nJRGARveVc",
+          "description": "A tightly arranged groove with an insistent keyboard figure, layered vocals and a clearly defined melodic hook. It occupies some of the funk/soul territory that worked with Cortex and L’Impératrice, but with a different, more contemporary production style.",
+          "url": "https://www.youtube.com/watch?v=7nJRGARveVc"
+        }
+      ]
+    },
+    {
+      "id": "unrelated_fact",
+      "number": 10,
+      "title": "Unrelated fact: Krakatoa's pressure wave circled the Earth",
+      "content": "<p>The <strong>1883 eruption of Krakatoa</strong>, between Java and Sumatra, generated atmospheric pressure waves that barometers recorded around the world. The resulting disturbances were detected repeatedly as the waves travelled around the planet—accounts describe as many as <strong>seven global circuits</strong>. <a href=\"https://archive.blogs.harvard.edu/wheredisasterstrikes/volcano/krakatoa-1883/\" target=\"_blank\" rel=\"noopener noreferrer\">Harvard Map Collection</a>.</p>\n<p>The mechanism was not an earthquake travelling through solid Earth. The explosions displaced an enormous volume of air, generating a low-frequency atmospheric pressure disturbance. Instruments called <em>barographs</em> continuously recorded changes in air pressure, allowing scientists to follow the same wave on successive passes.</p>\n<p>This became an early demonstration that the atmosphere itself could transmit measurable, planet-scale waves. It also showed how widely separated instruments could be used together to study a physical event long before satellites and modern global sensor networks.</p>"
+    },
+    {
+      "id": "puzzle",
+      "number": 11,
+      "title": "Puzzle: the secretary problem",
+      "content": "<p>You must hire exactly one candidate from <strong>100 applicants</strong>. Their quality is fixed but unknown, and they arrive in a uniformly random order.</p>\n<p>You interview candidates one by one. After each interview, you can rank the current candidate against everyone already seen, but you cannot compare them with applicants you have not interviewed.</p>\n<p>You must decide immediately whether to accept or reject. <strong>Rejection is permanent</strong>, and if you reject the first 99 candidates, you must hire the last.</p>\n<p>Your objective is not to hire someone generally good. It is to <strong>maximize the probability of selecting the single best applicant of all 100</strong>.</p>\n<p><strong>What hiring strategy would you use, and why?</strong></p>\n<p>The interesting challenge is that interviewing more candidates improves your knowledge of the field while permanently sacrificing opportunities to hire them. No solution included today. <a href=\"https://en.wikipedia.org/wiki/Secretary_problem\" target=\"_blank\" rel=\"noopener noreferrer\">Background</a>.</p>"
+    }
+  ]
+}
