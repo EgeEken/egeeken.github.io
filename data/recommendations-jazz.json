@@ -490,22 +490,6 @@
           ]
         },
         {
-          "artist": "Kitri",
-          "slug": "kitri",
-          "main": {
-            "title": "Mujunritsu",
-            "video": "aKsed7AdsT0",
-            "iframeTitle": "Kitri - Mujunritsu"
-          },
-          "additional": [
-            {
-              "title": "NEW ME",
-              "video": "vjgEVCbST_A",
-              "iframeTitle": "Kitri - NEW ME"
-            }
-          ]
-        },
-        {
           "artist": "Laufey",
           "slug": "laufey",
           "main": {
@@ -938,6 +922,22 @@
               "title": "Guadalquivir / Tiburón",
               "video": "Q-ynG3Mszzw",
               "iframeTitle": "Jesus Molina - Guadalquivir / Tiburón"
+            }
+          ]
+        },
+        {
+          "artist": "Kitri",
+          "slug": "kitri",
+          "main": {
+            "title": "Mujunritsu",
+            "video": "aKsed7AdsT0",
+            "iframeTitle": "Kitri - Mujunritsu"
+          },
+          "additional": [
+            {
+              "title": "NEW ME",
+              "video": "vjgEVCbST_A",
+              "iframeTitle": "Kitri - NEW ME"
             }
           ]
         },
