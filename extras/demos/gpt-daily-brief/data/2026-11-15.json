@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-15",
+  "title": "Daily Brief — Sunday, 15 November 2026",
+  "generatedAt": "2026-11-15T17:08:00+03:00",
+  "readingTime": "10–15 min",
+  "sections": [
+    {
+      "id": "paris_events",
+      "number": 1,
+      "title": "Paris events",
+      "content": "<p>Three options for after your return to Paris, excluding 4 December.</p>\n<ul>\n<li><strong>Thursday 3 December, 15:00 — Yaron Herman jazz-piano masterclass.</strong> Salle Cortot, 78 rue Cardinet, Paris 17e. <strong>Free, reservation required.</strong> Herman will discuss improvisation and creative practice for both jazz and classical musicians. Particularly relevant given your instrumental background. <a href=\"https://sallecortot.com/event/masterclass-yaron-herman-piano-jazz/\" target=\"_blank\" rel=\"noopener noreferrer\">Official event page</a>.</li>\n<li><strong>Thursday 3 December, 20:00 — Orchestre de Paris / Klaus Mäkelä / Stephen Hough.</strong> Philharmonie de Paris, 221 avenue Jean-Jaurès, Paris 19e. Salonen's <em>Helix</em>, Beethoven's Piano Concerto No. 5 (<em>Emperor</em>) and Sibelius's <em>Lemminkäinen Suite</em>. A substantial programme combining familiar Romantic concerto writing with Finnish orchestral repertoire. <a href=\"https://philharmoniedeparis.fr/en/activite/29624\" target=\"_blank\" rel=\"noopener noreferrer\">Programme and tickets</a>.</li>\n<li><strong>Saturday 5 December, 20:00 — Fred Hersch, solo piano.</strong> Salle Cortot. <strong>€25–€65</strong>, depending on category. Hersch is especially interesting for his treatment of melody, harmony and space in solo improvisation. <a href=\"https://sallecortot.com/event/fred-hersch/\" target=\"_blank\" rel=\"noopener noreferrer\">Official programme</a>.</li>\n</ul>"
+    },
+    {
+      "id": "cs_ai",
+      "number": 2,
+      "title": "CS and AI developments",
+      "content": "<h3>Visual prompt injection can emerge from image resizing</h3>\n<p>A new paper, <a href=\"https://arxiv.org/abs/2611.16744\" target=\"_blank\" rel=\"noopener noreferrer\">*Scale-Induced Semantic Shift in Visual Prompt Injection Against VLMs and Web Agents*</a>, identifies an unusual failure mode: text that a model does not recover from an image at 512×512 may become readable to it after aggressive downsampling.</p>\n<p>In the authors' controlled benchmark, refined attacks reached <strong>58.75% success</strong>, versus <strong>41.08%</strong> for their strongest generation baseline. But the distinction between <em>recognizing a hidden instruction</em> and <em>actually following it</em> matters: downstream web-agent behavioral compromise remained around <strong>4%</strong>.</p>\n<p>The architectural implication is that preprocessing is part of a VLM's security boundary. A system that accepts an image at one resolution but interprets it through another may expose instructions the apparent original input did not reveal. The paper tests a scale-consistency detector as a possible defense.</p>\n<h3>Let the model decide <em>what</em>; let a solver determine <em>how</em></h3>\n<p><a href=\"https://arxiv.org/abs/2611.16671\" target=\"_blank\" rel=\"noopener noreferrer\">NSDL: Neuro-Symbolic Division of Labor for Multi-Robot Task Planning</a> divides robotic planning into two responsibilities.</p>\n<p>A vision-language model examines a scene, decides which goals remain unmet and proposes the assignments. A deterministic solver then handles prerequisites, ordering, robot coordination and scheduling.</p>\n<p>The authors report <strong>97.0% out-of-distribution accuracy</strong> on VIKI-L2 for their 7B configuration. More revealing than the headline score is the error distribution: scheduling failures largely disappear when the solver owns the schedule, while missed or misperceived goals remain.</p>\n<p>This is a useful example of a hybrid system in which neural perception and symbolic planning have distinct, testable failure modes. It is still a research benchmark, not evidence of deployment reliability.</p>"
+    },
+    {
+      "id": "technical_idea",
+      "number": 3,
+      "title": "Technical idea: dominance frontiers and Static Single Assignment",
+      "content": "<p>Consider a compiler processing:</p>\n<pre><code>if condition:\n    x = 10\nelse:\n    x = 20\n\nprint(x)</code></pre>\n<p>In <strong>Static Single Assignment (SSA)</strong> form, every variable has exactly one assignment. The compiler therefore represents the two definitions as <code>x1</code> and <code>x2</code>, and inserts a <em>phi function</em> at the join:</p>\n<p><code>x3 = φ(x1, x2)</code></p>\n<p>The phi function selects the incoming value according to which control-flow edge was taken. It is not an ordinary runtime function call.</p>\n<p>The interesting question is: <strong>where should the compiler insert phi functions automatically?</strong></p>\n<p>A control-flow node <em>dominates</em> another node when every path from the entry to the latter passes through the former. A node's <strong>dominance frontier</strong> identifies merge points where its control-flow influence stops being exclusive.</p>\n<p>For each variable definition, the compiler uses dominance frontiers to find where alternative definitions can meet. This gives an efficient, structural procedure for constructing SSA rather than manually tracing every possible execution path.</p>\n<p>SSA makes subsequent optimizations—constant propagation, dead-code elimination and dataflow analysis—much easier. <a href=\"https://cs.brown.edu/research/pubs/techreports/reports/CS-91-21.html\" target=\"_blank\" rel=\"noopener noreferrer\">Cytron et al., foundational SSA work</a>.</p>"
+    },
+    {
+      "id": "non_cs_science",
+      "number": 4,
+      "title": "Non-CS science: why BMI alone misses clinically relevant obesity",
+      "content": "<p>A <a href=\"https://www.nature.com/articles/s41586-026-11237-5\" target=\"_blank\" rel=\"noopener noreferrer\">study published in *Nature* on 11 November</a> examined <strong>844,108 adults</strong> in China, the UK, the US and Spain, comparing the familiar BMI-based classification with a framework that also considers waist measurements and health consequences.</p>\n<p>BMI relates weight to height, but it cannot directly reveal fat distribution or whether excess body fat is impairing organs. The newer framework distinguishes:</p>\n<ul>\n<li><strong>Preclinical obesity:</strong> excess body fat without established obesity-related organ dysfunction.</li>\n<li><strong>Clinical obesity:</strong> excess body fat accompanied by associated organ dysfunction.</li>\n</ul>\n<p>Depending on the cohort, BMI alone underestimated obesity in <strong>5.2–8.6%</strong> of participants and overestimated it in <strong>1.2–3.1%</strong>.</p>\n<p>The distinction had prognostic value: compared with the reference group, clinical obesity was associated with a <strong>69% higher mortality hazard</strong>, versus <strong>19%</strong> for preclinical obesity, after the study's adjustments.</p>\n<p><strong>Practical relevance:</strong> screening and treatment decisions could become less dependent on one numerical threshold and more attentive to actual health impairment. These are observational associations; the study does not establish that a new classification or particular intervention reduces mortality.</p>"
+    },
+    {
+      "id": "geopolitics",
+      "number": 5,
+      "title": "Geopolitics and political economy",
+      "content": "<ul>\n<li><strong>Ukraine — territorial concessions and NATO are being discussed together.</strong> On 14 November, Zelenskyy said US negotiators had raised a hypothetical withdrawal from the remaining Ukrainian-held Donbas in exchange for NATO membership. Kyiv has <strong>not</strong> agreed to a territorial concession; he said any comprehensive security-and-reconstruction package involving territory would have to go to a referendum. This is a reported negotiating idea, not an agreed US or NATO offer. <a href=\"https://www.reuters.com/world/europe/us-floated-idea-ukraine-ceding-donbas-nato-membership-zelenskiy-says-2026-11-14/\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters</a>.</li>\n<li><strong>South China Sea — the code of conduct misses its deadline.</strong> ASEAN and China ended the Philippines' chairmanship without completing the long-negotiated maritime code, despite provisional agreement on about <strong>80%</strong> of the text. Whether it will be <strong>legally binding</strong> remains unresolved—a consequential gap when governments dispute territory and confront one another at sea. Singapore inherits negotiations in 2027. <a href=\"https://www.reuters.com/world/china/asean-china-fail-conclude-south-china-sea-code-conduct-2026-11-15/\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters, 15 November</a>.</li>\n<li><strong>Turkey and Qatar — a mutual-defence pact.</strong> Erdoğan and Emir Tamim signed a mutual-defence agreement in Istanbul on 13 November, alongside four other cooperation agreements. A formal mutual-defence commitment has significance amid the wider Gulf conflict, but its actual operational procedures and the conditions for invoking it need to be distinguished from the signing ceremony. <a href=\"https://www.aa.com.tr/en/politics/turkiye-qatar-sign-5-agreements-including-mutual-defense-pact/4124634\" target=\"_blank\" rel=\"noopener noreferrer\">Anadolu Agency</a>.</li>\n<li><strong>Gaza — senior Hamas commander killed.</strong> Israel reported killing a senior Hamas military figure in a strike on 15 November. The incident is another test of the durability and enforcement of the existing Gaza ceasefire: an agreement to stop large-scale fighting does not by itself resolve disputes over targeted strikes, armed-group activity or implementation. <a href=\"https://apnews.com/article/3b4adde832dadd333451fd2f7a51908c\" target=\"_blank\" rel=\"noopener noreferrer\">Associated Press</a>.</li>\n<li><strong>Gulf markets — shipping insecurity becomes a measurable commercial cost.</strong> Following reported mine strikes on three tankers in the Strait of Hormuz and Houthi attacks on Saudi Arabia, the Saudi benchmark stock index fell <strong>0.7%</strong> and Qatar's fell <strong>1.8%</strong> on Sunday. Reuters also reports the cancellation of a long-term Gulf LNG contract after earlier force-majeure disruption. These are specific market and contractual effects, not proof of a permanent blockade. <a href=\"https://www.reuters.com/world/middle-east/gulf-bourses-slide-hormuz-tensions-houthi-strikes-rattle-traders-2026-11-15/\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters, 15 November</a>.</li>\n</ul>"
+    },
+    {
+      "id": "marxist_fragment",
+      "number": 6,
+      "title": "Marxist fragment: class position is not the same as political organization",
+      "content": "<blockquote><p>“They cannot represent themselves, they must be represented.”</p></blockquote>\n<p>— Karl Marx, <a href=\"https://www.marxists.org/archive/marx/works/1852/18th-brumaire/ch07.htm\" target=\"_blank\" rel=\"noopener noreferrer\">*The Eighteenth Brumaire of Louis Bonaparte*, chapter VII</a>, 1852; English translation hosted by Marxists Internet Archive.</p>\n<p>Marx is discussing <strong>French smallholding peasants</strong> after Louis-Napoléon Bonaparte's December 1851 coup. They shared an economic position, but their dispersed production and limited national organization made collective political action difficult.</p>\n<p>His distinction is sharp: they formed a class by their material conditions, yet lacked the organizational connections needed to act as an autonomous political class. Bonaparte could consequently present himself as their protector while concentrating executive power over them.</p>\n<p>This is not a general claim that farmers cannot represent themselves. It is a historically specific argument about the relationship between <strong>economic commonality, political organization and state autonomy</strong>.</p>"
+    },
+    {
+      "id": "philosophy_fragments",
+      "number": 7,
+      "title": "Two philosophy and political fragments",
+      "content": "<h3>Hobbes: agreements need an enforcing power</h3>\n<blockquote><p>“And Covenants, without the Sword, are but Words”</p></blockquote>\n<p>— Thomas Hobbes, <a href=\"https://www.cambridge.org/highereducation/books/hobbes-leviathan/A25B89A5632E978BA9DC74930D78EC33/of-the-causes-generation-and-definition-of-a-commonwealth/A26C5B5C3B95A26DCE10032DD80F0285\" target=\"_blank\" rel=\"noopener noreferrer\">*Leviathan*, chapter XVII</a>, 1651.</p>\n<p>Writing after the English Civil Wars, Hobbes argues that mutual promises alone cannot guarantee safety when each participant fears others may defect. Centralized enforcement changes incentives. His argument raises a continuing dilemma: enough coercive power to make cooperation credible may also become a danger to those it supposedly protects.</p>\n<h3>Rawls: institutions must be judged by justice, not aggregate benefit alone</h3>\n<blockquote><p>“Justice is the first virtue of social institutions, as truth is of systems of thought.”</p></blockquote>\n<p>— John Rawls, <a href=\"https://www.cambridge.org/core/books/abs/rawlss-a-theory-of-justice/part-i-of-a-theory-of-justice-theory/C831C20CD2CA2BD6DB05FFAEA51DF2B1\" target=\"_blank\" rel=\"noopener noreferrer\">*A Theory of Justice*</a>, opening section, 1971.</p>\n<p>Rawls rejects the idea that a system is acceptable simply because it maximizes total welfare. Distribution, basic liberties and the treatment of the least advantaged matter independently. The productive disagreement with consequentialist or revolutionary approaches is whether some institutional rights should constrain even policies promising large collective gains.</p>"
+    },
+    {
+      "id": "french_usage",
+      "number": 8,
+      "title": "French usage: censé versus sensé",
+      "content": "<p><strong>Être censé(e) + infinitive</strong> means <em>to be supposed or expected to do something</em>. In speech it often carries a hint that reality is not complying.</p>\n<ul>\n<li><em>Je suis censé rendre le mémoire lundi.</em> — “I'm supposed to submit the dissertation on Monday.”</li>\n<li><em>C'était censé être rapide, mais on y a passé deux heures.</em> — “It was supposed to be quick, but we spent two hours on it.”</li>\n</ul>\n<p>Do not confuse <strong>censé</strong> (<em>supposed</em>) with <strong>sensé</strong> (<em>sensible, reasonable</em>): <em>une décision sensée</em> is a sensible decision. The pronunciation is identical, which makes the distinction especially easy to miss in writing. <a href=\"https://www.academie-francaise.fr/cense-sense\" target=\"_blank\" rel=\"noopener noreferrer\">Académie française</a>.</p>"
+    },
+    {
+      "id": "music",
+      "number": 9,
+      "title": "Music corner",
+      "content": "<p>Three direct recommendations. <a href=\"https://www.youtube.com/watch_videos?video_ids=aLaMIlNbs6g,1w3FVfkBVTE,7hlGqj3ImQI\" target=\"_blank\" rel=\"noopener noreferrer\">Open the three-video YouTube queue</a>.</p>",
+      "queue": "https://www.youtube.com/watch_videos?video_ids=aLaMIlNbs6g,1w3FVfkBVTE,7hlGqj3ImQI",
+      "items": [
+        {
+          "type": "classical",
+          "label": "Classical",
+          "piece": "Amy Beach — Romance for Violin and Piano, Op. 23",
+          "performer": "Maria Ioudenitch and Kenny Broberg",
+          "videoId": "aLaMIlNbs6g",
+          "description": "A concise late-Romantic violin work with an expressive, songlike melody that grows into a more impassioned middle section before relaxing again. Beach gives the piano a genuine harmonic role rather than treating it as neutral accompaniment. The choice tests lyrical coherence in short chamber music without repeating another violin showpiece.",
+          "url": "https://www.youtube.com/watch?v=aLaMIlNbs6g"
+        },
+        {
+          "type": "jazz",
+          "label": "Jazz",
+          "piece": "Roy Hargrove Quintet — Strasbourg / St. Denis (live at New Morning, Paris, 2007)",
+          "performer": "Roy Hargrove, Gerald Clayton, Justin Robinson, Danton Boller and Montez Coleman",
+          "videoId": "1w3FVfkBVTE",
+          "description": "An infectious, clearly shaped hard-bop theme followed by vigorous solos and a rhythm section that keeps the momentum moving. After the positive response to Emmet Cohen, this explores a different traditional-jazz voice with trumpet-led ensemble writing and especially strong melodic character. This is archival performance footage uploaded by a third party, not a verified official upload.",
+          "url": "https://www.youtube.com/watch?v=1w3FVfkBVTE"
+        },
+        {
+          "type": "other",
+          "label": "Other",
+          "piece": "Khruangbin — Maria También (official video)",
+          "performer": "Khruangbin",
+          "videoId": "7hlGqj3ImQI",
+          "description": "Instrumental psychedelic funk with an insistent guitar motif, tightly interlocked bass and drums, and Middle Eastern-inflected melodic turns. It moves away from the polished vocal production of Jungle toward a leaner, guitar-driven arrangement, while retaining rhythmic clarity. The exact video link is identified in the band's published promotional materials.",
+          "url": "https://www.youtube.com/watch?v=7hlGqj3ImQI"
+        }
+      ]
+    },
+    {
+      "id": "unrelated_fact",
+      "number": 10,
+      "title": "Unrelated fact: the nineteenth-century trade in natural ice",
+      "content": "<p>In <strong>1833</strong>, a ship called the <em>Tuscany</em> left Boston with <strong>180 tons of natural ice</strong> and reached Calcutta roughly four months later with about <strong>100 tons</strong> remaining. It had crossed the equator twice. <a href=\"https://www.cambridge.org/core/journals/itinerario/article/contingent-commodity-boston-bombay-and-the-end-of-the-global-ice-trade/45415D8285D1040CC4CB1F423C0EFC84\" target=\"_blank\" rel=\"noopener noreferrer\">Historical research in *Itinerario*</a>.</p>\n<p>The cargo survived because merchants cut ice into large, closely packed blocks and insulated it with sawdust, slowing heat transfer and melting. Frederick Tudor's export network turned winter ice from New England ponds into a transoceanic commodity well before electric refrigeration. Trade routes, low freight costs and wealthy colonial demand made the business viable; it was not an early form of refrigeration accessible to everyone.</p>\n<p>A commodity that seems inherently local and perishable became part of global commerce through insulation, shipping logistics and highly unequal purchasing power.</p>"
+    },
+    {
+      "id": "puzzle",
+      "number": 11,
+      "title": "Puzzle: the airplane-seat problem",
+      "content": "<p>A plane has <strong>100 numbered seats</strong> and <strong>100 passengers</strong>, each with a matching assigned seat.</p>\n<p>The first passenger loses their boarding pass and chooses a seat <strong>uniformly at random</strong>. Every subsequent passenger takes their assigned seat if it is free; otherwise, they choose uniformly at random among the remaining empty seats.</p>\n<p><strong>What is the probability that the hundredth passenger ends up in their own assigned seat?</strong></p>\n<p>Try to find an argument that works for an arbitrary number of passengers, not just 100. No solution today. <a href=\"https://en.wikipedia.org/wiki/Airplane_seating_problem\" target=\"_blank\" rel=\"noopener noreferrer\">Background (contains spoilers)</a>.</p>"
+    }
+  ]
+}
