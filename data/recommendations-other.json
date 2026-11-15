@@ -1,0 +1,1668 @@
+{
+  "_instructions": [
+    "Preliminary Other Music recommendations catalog built from downloaded_music_corrected.csv.",
+    "This page is intentionally broad and under manual review.",
+    "Genre groups display in the exact order stored here.",
+    "Each artist/group has one provisional main track and optional additional tracks.",
+    "Rows without a YouTube link remain in the catalog and display as missing-link entries for review."
+  ],
+  "genres": [
+    {
+      "genre": "Electronic",
+      "artists": [
+        {
+          "artist": "Mort Garson",
+          "slug": "mort-garson",
+          "main": {
+            "id": "LkesIsPGlSU",
+            "title": "Plantasia",
+            "video": "LkesIsPGlSU",
+            "iframeTitle": "Mort Garson - Plantasia"
+          },
+          "additional": [
+            {
+              "id": "kQA_bMRluEE",
+              "title": "A Mellow Mood for Maidenhair",
+              "video": "kQA_bMRluEE",
+              "iframeTitle": "Mort Garson - A Mellow Mood for Maidenhair"
+            },
+            {
+              "id": "KAdd1GIr88g",
+              "title": "Baby's Tears Blues",
+              "video": "KAdd1GIr88g",
+              "iframeTitle": "Mort Garson - Baby's Tears Blues"
+            },
+            {
+              "id": "-x7JLXsZk-w",
+              "title": "Concerto for Philodendron & Pothos",
+              "video": "-x7JLXsZk-w",
+              "iframeTitle": "Mort Garson - Concerto for Philodendron & Pothos"
+            },
+            {
+              "id": "vexUQqCdSrI",
+              "title": "Is He Trying to Tell Us Something？ (Instrumental)",
+              "video": "vexUQqCdSrI",
+              "iframeTitle": "Mort Garson - Is He Trying to Tell Us Something？ (Instrumental)"
+            },
+            {
+              "id": "omyDZ5-Lbxo",
+              "title": "Music to Soothe the Savage Snake Plant",
+              "video": "omyDZ5-Lbxo",
+              "iframeTitle": "Mort Garson - Music to Soothe the Savage Snake Plant"
+            },
+            {
+              "id": "o-KDr3a3-FU",
+              "title": "Ode to an African Violet",
+              "video": "o-KDr3a3-FU",
+              "iframeTitle": "Mort Garson - Ode to an African Violet"
+            },
+            {
+              "id": "VndbXaMdGYc",
+              "title": "Rhapsody in Green",
+              "video": "VndbXaMdGYc",
+              "iframeTitle": "Mort Garson - Rhapsody in Green"
+            },
+            {
+              "id": "C1yzxgNLChI",
+              "title": "Swingin' Spathiphyllums",
+              "video": "C1yzxgNLChI",
+              "iframeTitle": "Mort Garson - Swingin' Spathiphyllums"
+            },
+            {
+              "id": "8W_KsniYt10",
+              "title": "Symphony for a Spider Plant",
+              "video": "8W_KsniYt10",
+              "iframeTitle": "Mort Garson - Symphony for a Spider Plant"
+            },
+            {
+              "id": "zHvK0mtxQBI",
+              "title": "The Unexplained",
+              "video": "zHvK0mtxQBI",
+              "iframeTitle": "Mort Garson - The Unexplained"
+            },
+            {
+              "id": "zHy-l7KSJw4",
+              "title": "This Is My Beloved",
+              "video": "zHy-l7KSJw4",
+              "iframeTitle": "Mort Garson - This Is My Beloved"
+            },
+            {
+              "id": "nhMK4GYC_x4",
+              "title": "You Don't Have to Walk a Begonia",
+              "video": "nhMK4GYC_x4",
+              "iframeTitle": "Mort Garson - You Don't Have to Walk a Begonia"
+            }
+          ]
+        },
+        {
+          "artist": "Yellow Magic Orchestra",
+          "slug": "yellow-magic-orchestra",
+          "main": {
+            "id": "-BUZ_zRAmf0",
+            "title": "Rydeen",
+            "video": "-BUZ_zRAmf0",
+            "iframeTitle": "Yellow Magic Orchestra - Rydeen"
+          },
+          "additional": [
+            {
+              "id": "u4VMLYnH_Dc",
+              "title": "Behind the Mask",
+              "video": "u4VMLYnH_Dc",
+              "iframeTitle": "Yellow Magic Orchestra - Behind the Mask"
+            },
+            {
+              "id": "2T7TXVtGGFc",
+              "title": "Tong Poo",
+              "video": "2T7TXVtGGFc",
+              "iframeTitle": "Yellow Magic Orchestra - Tong Poo"
+            }
+          ]
+        },
+        {
+          "artist": "Cyriak Harris",
+          "slug": "cyriak-harris",
+          "main": {
+            "id": "mKNsITyJKTw",
+            "title": "7 Billion",
+            "video": "mKNsITyJKTw",
+            "iframeTitle": "Cyriak Harris - 7 Billion"
+          },
+          "additional": [
+            {
+              "id": "3XcYAo-_xnk",
+              "title": "Cows",
+              "video": "3XcYAo-_xnk",
+              "iframeTitle": "Cyriak Harris - Cows"
+            },
+            {
+              "id": "jEWqu_cbx34",
+              "title": "Kitty City",
+              "video": "jEWqu_cbx34",
+              "iframeTitle": "Cyriak Harris - Kitty City"
+            },
+            {
+              "id": "knOFx_mx1RU",
+              "title": "Moo (Remix)",
+              "video": "knOFx_mx1RU",
+              "iframeTitle": "Cyriak Harris - Moo (Remix)"
+            },
+            {
+              "id": "Fb_ayrWIJqg",
+              "title": "Walks of Life (Remix)",
+              "video": "Fb_ayrWIJqg",
+              "iframeTitle": "Cyriak Harris - Walks of Life (Remix)"
+            }
+          ]
+        },
+        {
+          "artist": "Justice",
+          "slug": "justice",
+          "main": {
+            "id": "missing-justice-dance-instrumental",
+            "title": "DANCE (Instrumental)",
+            "iframeTitle": "Justice - DANCE (Instrumental)"
+          }
+        },
+        {
+          "artist": "Perfume",
+          "slug": "perfume",
+          "main": {
+            "id": "daE23BkN5Jc",
+            "title": "Polyrhythm",
+            "video": "daE23BkN5Jc",
+            "iframeTitle": "Perfume - Polyrhythm"
+          }
+        },
+        {
+          "artist": "Sevish",
+          "slug": "sevish",
+          "main": {
+            "id": "3DfUv-meu-U",
+            "title": "Gleam",
+            "video": "3DfUv-meu-U",
+            "iframeTitle": "Sevish - Gleam"
+          }
+        },
+        {
+          "artist": "Jean-Jacques Perrey",
+          "slug": "jean-jacques-perrey",
+          "main": {
+            "id": "missing-jean-jacques-perrey-la-bas",
+            "title": "Là-Bas",
+            "iframeTitle": "Jean-Jacques Perrey - Là-Bas"
+          }
+        },
+        {
+          "artist": "Graham Kartna",
+          "slug": "graham-kartna",
+          "main": {
+            "id": "_F9IO9Plldc",
+            "title": "Browser History",
+            "video": "_F9IO9Plldc",
+            "iframeTitle": "Graham Kartna - Browser History"
+          },
+          "additional": [
+            {
+              "id": "dTDTUSkT6n4",
+              "title": "Hay River, NWT (3d)",
+              "video": "dTDTUSkT6n4",
+              "iframeTitle": "Graham Kartna - Hay River, NWT (3d)"
+            },
+            {
+              "id": "ppwq7zDSzzU",
+              "title": "My Great Movie 01",
+              "video": "ppwq7zDSzzU",
+              "iframeTitle": "Graham Kartna - My Great Movie 01"
+            },
+            {
+              "id": "DnO0eMMb5c0",
+              "title": "Star U",
+              "video": "DnO0eMMb5c0",
+              "iframeTitle": "Graham Kartna - Star U"
+            },
+            {
+              "id": "T0RyRCD97D0",
+              "title": "Wilton, Clarkson, James",
+              "video": "T0RyRCD97D0",
+              "iframeTitle": "Graham Kartna - Wilton, Clarkson, James"
+            }
+          ]
+        },
+        {
+          "artist": "Astrophysics",
+          "slug": "astrophysics",
+          "main": {
+            "id": "IAPQREO_nlg",
+            "title": "Synthwave Crusaders",
+            "video": "IAPQREO_nlg",
+            "iframeTitle": "Astrophysics - Synthwave Crusaders"
+          }
+        },
+        {
+          "artist": "GLASYS",
+          "slug": "glasys",
+          "main": {
+            "id": "zpcGYnYCV7c",
+            "title": "The MIDI Skull Song",
+            "video": "zpcGYnYCV7c",
+            "iframeTitle": "GLASYS - The MIDI Skull Song"
+          }
+        },
+        {
+          "artist": "N.K.E",
+          "slug": "n-k-e",
+          "main": {
+            "id": "wLyQX42Os4c",
+            "title": "Block Party",
+            "video": "wLyQX42Os4c",
+            "iframeTitle": "N.K.E - Block Party"
+          }
+        }
+      ]
+    },
+    {
+      "genre": "Rock",
+      "artists": [
+        {
+          "artist": "Yes",
+          "slug": "yes",
+          "main": {
+            "id": "cPCLFtxpadE",
+            "title": "Roundabout",
+            "video": "cPCLFtxpadE",
+            "iframeTitle": "Yes - Roundabout"
+          },
+          "additional": [
+            {
+              "id": "IG_VDj8Eh_g",
+              "title": "Owner of a Lonely Heart",
+              "video": "IG_VDj8Eh_g",
+              "iframeTitle": "Yes - Owner of a Lonely Heart"
+            }
+          ]
+        },
+        {
+          "artist": "David Bowie",
+          "slug": "david-bowie",
+          "main": {
+            "id": "aBKEt3MhNMM",
+            "title": "Starman",
+            "video": "aBKEt3MhNMM",
+            "iframeTitle": "David Bowie - Starman"
+          },
+          "additional": [
+            {
+              "id": "missing-david-bowie-the-man-who-sold-the-world",
+              "title": "The Man Who Sold the World",
+              "iframeTitle": "David Bowie - The Man Who Sold the World"
+            }
+          ]
+        },
+        {
+          "artist": "Queen",
+          "slug": "queen",
+          "main": {
+            "id": "xG16sdjLtc0",
+            "title": "Bohemian Rhapsody (Remastered 2011)",
+            "video": "xG16sdjLtc0",
+            "iframeTitle": "Queen - Bohemian Rhapsody (Remastered 2011)"
+          }
+        },
+        {
+          "artist": "Electric Light Orchestra",
+          "slug": "electric-light-orchestra",
+          "main": {
+            "id": "4xM4M4LIbgw",
+            "title": "Mr. Blue Sky",
+            "video": "4xM4M4LIbgw",
+            "iframeTitle": "Electric Light Orchestra - Mr. Blue Sky"
+          },
+          "additional": [
+            {
+              "id": "7gncH7WOQvY",
+              "title": "Turn to Stone",
+              "video": "7gncH7WOQvY",
+              "iframeTitle": "Electric Light Orchestra - Turn to Stone"
+            }
+          ]
+        },
+        {
+          "artist": "Kansas",
+          "slug": "kansas",
+          "main": {
+            "id": "tH2w6Oxx0kQ",
+            "title": "Dust in the Wind",
+            "video": "tH2w6Oxx0kQ",
+            "iframeTitle": "Kansas - Dust in the Wind"
+          }
+        },
+        {
+          "artist": "King Gizzard & The Lizard Wizard",
+          "slug": "king-gizzard-the-lizard-wizard",
+          "main": {
+            "id": "Q4IyeKKStY4",
+            "title": "tetrachromacy",
+            "video": "Q4IyeKKStY4",
+            "iframeTitle": "King Gizzard & The Lizard Wizard - tetrachromacy"
+          }
+        },
+        {
+          "artist": "Psychedelic Porn Crumpets",
+          "slug": "psychedelic-porn-crumpets",
+          "main": {
+            "id": "jrp39d9ZFtE",
+            "title": "Found God in a Tomato",
+            "video": "jrp39d9ZFtE",
+            "iframeTitle": "Psychedelic Porn Crumpets - Found God in a Tomato"
+          }
+        },
+        {
+          "artist": "Eric Clapton",
+          "slug": "eric-clapton",
+          "main": {
+            "id": "EOs0qeiJyIg",
+            "title": "Layla (Acoustic Live)",
+            "video": "EOs0qeiJyIg",
+            "iframeTitle": "Eric Clapton - Layla (Acoustic Live)"
+          }
+        },
+        {
+          "artist": "Wings",
+          "slug": "wings",
+          "main": {
+            "id": "_zcYw3f2k44",
+            "title": "Arrow Through Me (Remastered 1993)",
+            "video": "_zcYw3f2k44",
+            "iframeTitle": "Wings - Arrow Through Me (Remastered 1993)"
+          }
+        },
+        {
+          "artist": "The Beach Boys",
+          "slug": "the-beach-boys",
+          "main": {
+            "id": "CWPo5SC3zik",
+            "title": "God Only Knows",
+            "video": "CWPo5SC3zik",
+            "iframeTitle": "The Beach Boys - God Only Knows"
+          },
+          "additional": [
+            {
+              "id": "PBkA4-U4MPk",
+              "title": "Add Some Music to Your Day",
+              "video": "PBkA4-U4MPk",
+              "iframeTitle": "The Beach Boys - Add Some Music to Your Day"
+            },
+            {
+              "id": "wREBD2og5iY",
+              "title": "I Get Around",
+              "video": "wREBD2og5iY",
+              "iframeTitle": "The Beach Boys - I Get Around"
+            },
+            {
+              "id": "dWVghCHOxBs",
+              "title": "Busy Doin' Nothin'",
+              "video": "dWVghCHOxBs",
+              "iframeTitle": "The Beach Boys - Busy Doin' Nothin'"
+            },
+            {
+              "id": "bZAdVImVbE0",
+              "title": "Girls On the Beach",
+              "video": "bZAdVImVbE0",
+              "iframeTitle": "The Beach Boys - Girls On the Beach"
+            },
+            {
+              "id": "fJWmbLS2_ec",
+              "title": "Kokomo",
+              "video": "fJWmbLS2_ec",
+              "iframeTitle": "The Beach Boys - Kokomo"
+            },
+            {
+              "id": "45JrckfvYis",
+              "title": "Little Saint Nick (Remix)",
+              "video": "45JrckfvYis",
+              "iframeTitle": "The Beach Boys - Little Saint Nick (Remix)"
+            },
+            {
+              "id": "rf6rOCRhYH4",
+              "title": "We Three Kings Of Orient Are (Remix)",
+              "video": "rf6rOCRhYH4",
+              "iframeTitle": "The Beach Boys - We Three Kings Of Orient Are (Remix)"
+            },
+            {
+              "id": "missing-the-beach-boys-wouldnt-it-be-nice",
+              "title": "Wouldnt It Be Nice",
+              "iframeTitle": "The Beach Boys - Wouldnt It Be Nice"
+            }
+          ]
+        },
+        {
+          "artist": "Madness",
+          "slug": "madness",
+          "main": {
+            "id": "KwIe_sjKeAY",
+            "title": "Our House (Official 4K Video)",
+            "video": "KwIe_sjKeAY",
+            "iframeTitle": "Madness - Our House (Official 4K Video)"
+          },
+          "additional": [
+            {
+              "id": "Dc3AovUZgvo",
+              "title": "Baggy Trousers (Official 4K Video)",
+              "video": "Dc3AovUZgvo",
+              "iframeTitle": "Madness - Baggy Trousers (Official 4K Video)"
+            },
+            {
+              "id": "GJ2X9SANsME",
+              "title": "House of Fun (Official 4K Video)",
+              "video": "GJ2X9SANsME",
+              "iframeTitle": "Madness - House of Fun (Official 4K Video)"
+            },
+            {
+              "id": "lLLL1KxpYMA",
+              "title": "Night Boat to Cairo",
+              "video": "lLLL1KxpYMA",
+              "iframeTitle": "Madness - Night Boat to Cairo"
+            },
+            {
+              "id": "Ul_Kotlqi3k",
+              "title": "Shut Up",
+              "video": "Ul_Kotlqi3k",
+              "iframeTitle": "Madness - Shut Up"
+            }
+          ]
+        },
+        {
+          "artist": "Thank You Scientist",
+          "slug": "thank-you-scientist",
+          "main": {
+            "id": "BE50naHdWbA",
+            "title": "Rube Goldberg Variations",
+            "video": "BE50naHdWbA",
+            "iframeTitle": "Thank You Scientist - Rube Goldberg Variations"
+          }
+        },
+        {
+          "artist": "The Lemon Twigs",
+          "slug": "the-lemon-twigs",
+          "main": {
+            "id": "N6evZm2Jn2Q",
+            "title": "If You Give Enough",
+            "video": "N6evZm2Jn2Q",
+            "iframeTitle": "The Lemon Twigs - If You Give Enough"
+          }
+        },
+        {
+          "artist": "Messer Chups",
+          "slug": "messer-chups",
+          "main": {
+            "id": "y6HbZjJfgZc",
+            "title": "Crocotiger",
+            "video": "y6HbZjJfgZc",
+            "iframeTitle": "Messer Chups - Crocotiger"
+          }
+        }
+      ]
+    },
+    {
+      "genre": "Pop / Indie Pop",
+      "artists": [
+        {
+          "artist": "Tame Impala",
+          "slug": "tame-impala",
+          "main": {
+            "id": "missing-tame-impala-dracula",
+            "title": "Dracula",
+            "iframeTitle": "Tame Impala - Dracula"
+          }
+        },
+        {
+          "artist": "ABBA",
+          "slug": "abba",
+          "main": {
+            "id": "5mHzaIehRTE",
+            "title": "Lay All Your Love On Me",
+            "video": "5mHzaIehRTE",
+            "iframeTitle": "ABBA - Lay All Your Love On Me"
+          }
+        },
+        {
+          "artist": "Billy Joel",
+          "slug": "billy-joel",
+          "main": {
+            "id": "irl89Gmcv8c",
+            "title": "Vienna",
+            "video": "irl89Gmcv8c",
+            "iframeTitle": "Billy Joel - Vienna"
+          }
+        },
+        {
+          "artist": "Mac DeMarco",
+          "slug": "mac-demarco",
+          "main": {
+            "id": "qBoQzo98EpQ",
+            "title": "Heart To Heart",
+            "video": "qBoQzo98EpQ",
+            "iframeTitle": "Mac DeMarco - Heart To Heart"
+          }
+        },
+        {
+          "artist": "Liana Flores",
+          "slug": "liana-flores",
+          "main": {
+            "id": "5e1zT7miep8",
+            "title": "rises the moon",
+            "video": "5e1zT7miep8",
+            "iframeTitle": "Liana Flores - rises the moon"
+          }
+        },
+        {
+          "artist": "Miracle Musical",
+          "slug": "miracle-musical",
+          "main": {
+            "id": "uxyM7vhU0uU",
+            "title": "Dream Sweet in Sea Major",
+            "video": "uxyM7vhU0uU",
+            "iframeTitle": "Miracle Musical - Dream Sweet in Sea Major"
+          },
+          "additional": [
+            {
+              "id": "u8kVTxAX-aI",
+              "title": "Black Rainbows",
+              "video": "u8kVTxAX-aI",
+              "iframeTitle": "Miracle Musical - Black Rainbows"
+            },
+            {
+              "id": "zkU5JYX-bIc",
+              "title": "Introduction to the Snow",
+              "video": "zkU5JYX-bIc",
+              "iframeTitle": "Miracle Musical - Introduction to the Snow"
+            },
+            {
+              "id": "uQnz55oYEA4",
+              "title": "Isle Unto Thyself",
+              "video": "uQnz55oYEA4",
+              "iframeTitle": "Miracle Musical - Isle Unto Thyself"
+            },
+            {
+              "id": "CaTX0pt3uyg",
+              "title": "Murders",
+              "video": "CaTX0pt3uyg",
+              "iframeTitle": "Miracle Musical - Murders"
+            },
+            {
+              "id": "bnUZ8HcPKsA",
+              "title": "White Ball",
+              "video": "bnUZ8HcPKsA",
+              "iframeTitle": "Miracle Musical - White Ball"
+            }
+          ]
+        },
+        {
+          "artist": "Lemon Demon",
+          "slug": "lemon-demon",
+          "main": {
+            "id": "rbxL5BVEkRs",
+            "title": "Touch-Tone Telephone",
+            "video": "rbxL5BVEkRs",
+            "iframeTitle": "Lemon Demon - Touch-Tone Telephone"
+          },
+          "additional": [
+            {
+              "id": "HXk-0_rETJ8",
+              "title": "Redesign Your Logo (Bonus Track)",
+              "video": "HXk-0_rETJ8",
+              "iframeTitle": "Lemon Demon - Redesign Your Logo (Bonus Track)"
+            },
+            {
+              "id": "5P9_FHeFRcc",
+              "title": "The Ocean",
+              "video": "5P9_FHeFRcc",
+              "iframeTitle": "Lemon Demon - The Ocean"
+            }
+          ]
+        },
+        {
+          "artist": "Austin Weber",
+          "slug": "austin-weber",
+          "main": {
+            "id": "KEvRT4-EApc",
+            "title": "＂I Don't Want to Miss You (Like I Do)＂",
+            "video": "KEvRT4-EApc",
+            "iframeTitle": "Austin Weber - ＂I Don't Want to Miss You (Like I Do)＂"
+          },
+          "additional": [
+            {
+              "id": "zxkRSMmhx4w",
+              "title": "＂Love Songs for No One＂",
+              "video": "zxkRSMmhx4w",
+              "iframeTitle": "Austin Weber - ＂Love Songs for No One＂"
+            }
+          ]
+        },
+        {
+          "artist": "Tipling Rock",
+          "slug": "tipling-rock",
+          "main": {
+            "id": "RXpe-kbDJE8",
+            "title": "Staring",
+            "video": "RXpe-kbDJE8",
+            "iframeTitle": "Tipling Rock - Staring"
+          }
+        },
+        {
+          "artist": "Tally Hall",
+          "slug": "tally-hall",
+          "main": {
+            "id": "At8ao5iABFg",
+            "title": "Ruler of Everything",
+            "video": "At8ao5iABFg",
+            "iframeTitle": "Tally Hall - Ruler of Everything"
+          },
+          "additional": [
+            {
+              "id": "ipYafcHd0jA",
+              "title": "The Bidding",
+              "video": "ipYafcHd0jA",
+              "iframeTitle": "Tally Hall - The Bidding"
+            }
+          ]
+        },
+        {
+          "artist": "Jerry Paper",
+          "slug": "jerry-paper",
+          "main": {
+            "id": "kXa9hp2xeCw",
+            "title": "Pause",
+            "video": "kXa9hp2xeCw",
+            "iframeTitle": "Jerry Paper - Pause"
+          }
+        },
+        {
+          "artist": "Joe Hawley",
+          "slug": "joe-hawley",
+          "main": {
+            "id": "ACAzcGYNX80",
+            "title": "Rotary Park",
+            "video": "ACAzcGYNX80",
+            "iframeTitle": "Joe Hawley - Rotary Park"
+          },
+          "additional": [
+            {
+              "id": "gnbfDd5iGss",
+              "title": "Go to Bed (feat. Minimall)",
+              "video": "gnbfDd5iGss",
+              "iframeTitle": "Joe Hawley - Go to Bed (feat. Minimall)"
+            }
+          ]
+        },
+        {
+          "artist": "Pomplamoose / dodie",
+          "slug": "pomplamoose-dodie",
+          "main": {
+            "id": "4TKcz5AqcnQ",
+            "title": "Monster",
+            "video": "4TKcz5AqcnQ",
+            "iframeTitle": "Pomplamoose / dodie - Monster"
+          }
+        },
+        {
+          "artist": "Kaden MacKay",
+          "slug": "kaden-mackay",
+          "main": {
+            "id": "fOSVzv3iioE",
+            "title": "Passing Through (Can't the Future Just Wait)",
+            "video": "fOSVzv3iioE",
+            "iframeTitle": "Kaden MacKay - Passing Through (Can't the Future Just Wait)"
+          }
+        }
+      ]
+    },
+    {
+      "genre": "Soul / Funk",
+      "artists": [
+        {
+          "artist": "Stevie Wonder",
+          "slug": "stevie-wonder",
+          "main": {
+            "id": "oE56g61mW44",
+            "title": "Isn't She Lovely",
+            "video": "oE56g61mW44",
+            "iframeTitle": "Stevie Wonder - Isn't She Lovely"
+          },
+          "additional": [
+            {
+              "id": "3wZ_b_uUAdQ",
+              "title": "Stevie Wonder You Are The Sunshine Of My Life",
+              "video": "3wZ_b_uUAdQ",
+              "iframeTitle": "Stevie Wonder - Stevie Wonder You Are The Sunshine Of My Life"
+            }
+          ]
+        },
+        {
+          "artist": "Vulfpeck",
+          "slug": "vulfpeck",
+          "main": {
+            "id": "le0BLAEO93g",
+            "title": "Dean Town",
+            "video": "le0BLAEO93g",
+            "iframeTitle": "Vulfpeck - Dean Town"
+          }
+        },
+        {
+          "artist": "Redbone",
+          "slug": "redbone",
+          "main": {
+            "id": "rsf_gTZG4cI",
+            "title": "Come and Get Your Love",
+            "video": "rsf_gTZG4cI",
+            "iframeTitle": "Redbone - Come and Get Your Love"
+          }
+        },
+        {
+          "artist": "George Michael",
+          "slug": "george-michael",
+          "main": {
+            "id": "gTwn_LoH7ig",
+            "title": "Careless Whisper",
+            "video": "gTwn_LoH7ig",
+            "iframeTitle": "George Michael - Careless Whisper"
+          }
+        },
+        {
+          "artist": "Seal",
+          "slug": "seal",
+          "main": {
+            "id": "3-Yh6rnOchs",
+            "title": "Kiss From A Rose",
+            "video": "3-Yh6rnOchs",
+            "iframeTitle": "Seal - Kiss From A Rose"
+          }
+        },
+        {
+          "artist": "Sting",
+          "slug": "sting",
+          "main": {
+            "id": "dOjFcx3GJHg",
+            "title": "Shape Of My Heart",
+            "video": "dOjFcx3GJHg",
+            "iframeTitle": "Sting - Shape Of My Heart"
+          }
+        }
+      ]
+    },
+    {
+      "genre": "Soundtracks",
+      "artists": [
+        {
+          "artist": "A Shell in the Pit / Tettix",
+          "slug": "a-shell-in-the-pit-tettix",
+          "main": {
+            "id": "j_BQ4iI8K9Y",
+            "title": "Subterranean Sunrise",
+            "video": "j_BQ4iI8K9Y",
+            "iframeTitle": "A Shell in the Pit / Tettix - Subterranean Sunrise"
+          }
+        },
+        {
+          "artist": "Adrian Talens",
+          "slug": "adrian-talens",
+          "main": {
+            "id": "xulzfCPA0ls",
+            "title": "Under Construction",
+            "video": "xulzfCPA0ls",
+            "iframeTitle": "Adrian Talens - Under Construction"
+          }
+        },
+        {
+          "artist": "Akifumi Tada",
+          "slug": "akifumi-tada",
+          "main": {
+            "id": "missing-akifumi-tada-best-vgm-255-bomberman-64-blue-resort",
+            "title": "Best VGM 255 - Bomberman 64 - Blue Resort",
+            "iframeTitle": "Akifumi Tada - Best VGM 255 - Bomberman 64 - Blue Resort"
+          }
+        },
+        {
+          "artist": "Arata Iiyoshi / Hideki Sakamoto / Keisuke Ito",
+          "slug": "arata-iiyoshi-hideki-sakamoto-keisuke-ito",
+          "main": {
+            "id": "missing-arata-iiyoshi-hideki-sakamoto-keisuke-ito-040-northern-desert-pokemon-mystery-dungeon-explorers-of-sky",
+            "title": "040 - Northern Desert - (Pokémon Mystery Dungeon - Explorers of Sky)",
+            "iframeTitle": "Arata Iiyoshi / Hideki Sakamoto / Keisuke Ito - 040 - Northern Desert - (Pokémon Mystery Dungeon - Explorers of Sky)"
+          }
+        },
+        {
+          "artist": "C418",
+          "slug": "c418",
+          "main": {
+            "id": "T5-faDLv1Vs",
+            "title": "Mice On Venus",
+            "video": "T5-faDLv1Vs",
+            "iframeTitle": "C418 - Mice On Venus"
+          }
+        },
+        {
+          "artist": "Carlos Rafael Rivera",
+          "slug": "carlos-rafael-rivera",
+          "main": {
+            "id": "I72JWzLveTk",
+            "title": "Main Titles",
+            "video": "I72JWzLveTk",
+            "iframeTitle": "Carlos Rafael Rivera - Main Titles"
+          },
+          "additional": [
+            {
+              "id": "BEmR39zCTH4",
+              "title": "Beth's Story",
+              "video": "BEmR39zCTH4",
+              "iframeTitle": "Carlos Rafael Rivera - Beth's Story"
+            },
+            {
+              "id": "HAgFpz4bOXs",
+              "title": "Mexico City Invitational 1966",
+              "video": "HAgFpz4bOXs",
+              "iframeTitle": "Carlos Rafael Rivera - Mexico City Invitational 1966"
+            },
+            {
+              "id": "1rPNagc1w-Q",
+              "title": "Playing Benny - Las Vegas 1966",
+              "video": "1rPNagc1w-Q",
+              "iframeTitle": "Carlos Rafael Rivera - Playing Benny - Las Vegas 1966"
+            }
+          ]
+        },
+        {
+          "artist": "Christopher Larkin",
+          "slug": "christopher-larkin",
+          "main": {
+            "id": "hLGJZ7DSB_E",
+            "title": "Kingdom's Edge",
+            "video": "hLGJZ7DSB_E",
+            "iframeTitle": "Christopher Larkin - Kingdom's Edge"
+          },
+          "additional": [
+            {
+              "id": "e6b-lWhn8pg",
+              "title": "Bonebottom (Silksong OST Sample)",
+              "video": "e6b-lWhn8pg",
+              "iframeTitle": "Christopher Larkin - Bonebottom (Silksong OST Sample)"
+            },
+            {
+              "id": "KkVwuWH-woA",
+              "title": "City of Tears (with rain)",
+              "video": "KkVwuWH-woA",
+              "iframeTitle": "Christopher Larkin - City of Tears (with rain)"
+            },
+            {
+              "id": "qQhBLnweJ0E",
+              "title": "Soul Sanctum",
+              "video": "qQhBLnweJ0E",
+              "iframeTitle": "Christopher Larkin - Soul Sanctum"
+            },
+            {
+              "id": "Q6is6K8jbho",
+              "title": "Hollow Knight： Silksong (Original Soundtrack)",
+              "video": "Q6is6K8jbho",
+              "iframeTitle": "Christopher Larkin - Hollow Knight： Silksong (Original Soundtrack)"
+            }
+          ]
+        },
+        {
+          "artist": "Go Ichinose",
+          "slug": "go-ichinose",
+          "main": {
+            "id": "yzmKmiAUFaE",
+            "title": "Stars Over Lake Verity (Sinnoh Lake Theme)",
+            "video": "yzmKmiAUFaE",
+            "iframeTitle": "Go Ichinose - Stars Over Lake Verity (Sinnoh Lake Theme)"
+          },
+          "additional": [
+            {
+              "id": "MFxZeaKtOQg",
+              "title": "Lake Guardians (Battle! Uxie, Mesprit, Azelf)",
+              "video": "MFxZeaKtOQg",
+              "iframeTitle": "Go Ichinose - Lake Guardians (Battle! Uxie, Mesprit, Azelf)"
+            }
+          ]
+        },
+        {
+          "artist": "Joe Hisaishi",
+          "slug": "joe-hisaishi",
+          "main": {
+            "id": "iKMHCmDdJ2U",
+            "title": "il porco rosso",
+            "video": "iKMHCmDdJ2U",
+            "iframeTitle": "Joe Hisaishi - il porco rosso"
+          },
+          "additional": [
+            {
+              "id": "SnYGW2yNKl4",
+              "title": "02 海の見える街 - Air on the GHIBLI vol.1 -Kiki's Delivery Service- ⧸ Meine Meinung",
+              "video": "SnYGW2yNKl4",
+              "iframeTitle": "Joe Hisaishi - 02 海の見える街 - Air on the GHIBLI vol.1 -Kiki's Delivery Service- ⧸ Meine Meinung"
+            },
+            {
+              "id": "6I-NiRXCkVk",
+              "title": "Kids Return",
+              "video": "6I-NiRXCkVk",
+              "iframeTitle": "Joe Hisaishi - Kids Return"
+            }
+          ]
+        },
+        {
+          "artist": "John Williams",
+          "slug": "john-williams",
+          "main": {
+            "id": "BqxAZoiZnQw",
+            "title": "Three Pieces from Schindler's List： I. Theme",
+            "video": "BqxAZoiZnQw",
+            "iframeTitle": "John Williams - Three Pieces from Schindler's List： I. Theme"
+          }
+        },
+        {
+          "artist": "Jun Chikuma",
+          "slug": "jun-chikuma",
+          "main": {
+            "id": "missing-jun-chikuma-bomberman-hero-ost-redial",
+            "title": "Bomberman Hero OST - Redial",
+            "iframeTitle": "Jun Chikuma - Bomberman Hero OST - Redial"
+          },
+          "additional": [
+            {
+              "id": "missing-jun-chikuma-16-bomberman-hero-milky",
+              "title": "16_Bomberman Hero - Milky",
+              "iframeTitle": "Jun Chikuma - 16_Bomberman Hero - Milky"
+            },
+            {
+              "id": "missing-jun-chikuma-bomberman-hero-dessert",
+              "title": "bomberman hero - Dessert",
+              "iframeTitle": "Jun Chikuma - bomberman hero - Dessert"
+            }
+          ]
+        },
+        {
+          "artist": "Junichi Masuda",
+          "slug": "junichi-masuda",
+          "main": {
+            "id": "h9DOgMiwsOI",
+            "title": "Lavender Town",
+            "video": "h9DOgMiwsOI",
+            "iframeTitle": "Junichi Masuda - Lavender Town"
+          },
+          "additional": [
+            {
+              "id": "LBSQm0oEwSs",
+              "title": "Wild Pokemon!",
+              "video": "LBSQm0oEwSs",
+              "iframeTitle": "Junichi Masuda - Wild Pokemon!"
+            }
+          ]
+        },
+        {
+          "artist": "Justin E. Bell",
+          "slug": "justin-e-bell",
+          "main": {
+            "id": "jVwPnLMchC8",
+            "title": "Hope (Title Theme)",
+            "video": "jVwPnLMchC8",
+            "iframeTitle": "Justin E. Bell - Hope (Title Theme)"
+          }
+        },
+        {
+          "artist": "Laura Shigihara",
+          "slug": "laura-shigihara",
+          "main": {
+            "id": "V9QV9PFVCs8",
+            "title": "Crazy Dave (Intro Theme)",
+            "video": "V9QV9PFVCs8",
+            "iframeTitle": "Laura Shigihara - Crazy Dave (Intro Theme)"
+          }
+        },
+        {
+          "artist": "Lena Raine",
+          "slug": "lena-raine",
+          "main": {
+            "id": "N8OHSXvneOE",
+            "title": "First Steps",
+            "video": "N8OHSXvneOE",
+            "iframeTitle": "Lena Raine - First Steps"
+          },
+          "additional": [
+            {
+              "id": "1rwAvUvvQzQ",
+              "title": "Resurrections",
+              "video": "1rwAvUvvQzQ",
+              "iframeTitle": "Lena Raine - Resurrections"
+            },
+            {
+              "id": "fOzvP1I5tLU",
+              "title": "Checking In",
+              "video": "fOzvP1I5tLU",
+              "iframeTitle": "Lena Raine - Checking In"
+            },
+            {
+              "id": "0etenwnI1wo",
+              "title": "Scattered and Lost",
+              "video": "0etenwnI1wo",
+              "iframeTitle": "Lena Raine - Scattered and Lost"
+            },
+            {
+              "id": "FjG0ivBT4lQ",
+              "title": "Quiet and Falling",
+              "video": "FjG0ivBT4lQ",
+              "iframeTitle": "Lena Raine - Quiet and Falling"
+            },
+            {
+              "id": "y-f8pEX1Q1M",
+              "title": "Infinite Amethyst",
+              "video": "y-f8pEX1Q1M",
+              "iframeTitle": "Lena Raine - Infinite Amethyst"
+            },
+            {
+              "id": "BTthtlT80Rc",
+              "title": "Pigstep (Stereo Mix)",
+              "video": "BTthtlT80Rc",
+              "iframeTitle": "Lena Raine - Pigstep (Stereo Mix)"
+            }
+          ]
+        },
+        {
+          "artist": "Mahito Yokota",
+          "slug": "mahito-yokota",
+          "main": {
+            "id": "ACSD4uN2W9E",
+            "title": "Gusty Garden Galaxy",
+            "video": "ACSD4uN2W9E",
+            "iframeTitle": "Mahito Yokota - Gusty Garden Galaxy"
+          }
+        },
+        {
+          "artist": "Mahito Yokota / Koji Kondo",
+          "slug": "mahito-yokota-koji-kondo",
+          "main": {
+            "id": "AhueZ4d-vKk",
+            "title": "Battlerock Galaxy - Super Mario Galaxy Music - Extended",
+            "video": "AhueZ4d-vKk",
+            "iframeTitle": "Mahito Yokota / Koji Kondo - Battlerock Galaxy - Super Mario Galaxy Music - Extended"
+          }
+        },
+        {
+          "artist": "Mahito Yokota / Ryo Nagamatsu / Koji Kondo",
+          "slug": "mahito-yokota-ryo-nagamatsu-koji-kondo",
+          "main": {
+            "id": "_5qbb_F4oSI",
+            "title": "Space Storm Galaxy",
+            "video": "_5qbb_F4oSI",
+            "iframeTitle": "Mahito Yokota / Ryo Nagamatsu / Koji Kondo - Space Storm Galaxy"
+          },
+          "additional": [
+            {
+              "id": "COzZgc7WUSA",
+              "title": "Space Storm Galaxy (Alternate)",
+              "video": "COzZgc7WUSA",
+              "iframeTitle": "Mahito Yokota / Ryo Nagamatsu / Koji Kondo - Space Storm Galaxy (Alternate)"
+            }
+          ]
+        },
+        {
+          "artist": "Mahito Yokota / Toru Minegishi / Yasuaki Iwata",
+          "slug": "mahito-yokota-toru-minegishi-yasuaki-iwata",
+          "main": {
+            "id": "YAYLJ19cxoA",
+            "title": "World 8 Bowser Theme - Music From Super Mario 3D World OST (Original Unextended Version)",
+            "video": "YAYLJ19cxoA",
+            "iframeTitle": "Mahito Yokota / Toru Minegishi / Yasuaki Iwata - World 8 Bowser Theme - Music From Super Mario 3D World OST (Original Unextended Version)"
+          }
+        },
+        {
+          "artist": "Manaka Kataoka / Yasuaki Iwata / Hajime Wakai",
+          "slug": "manaka-kataoka-yasuaki-iwata-hajime-wakai",
+          "main": {
+            "id": "due5zY4bjdY",
+            "title": "Revali's Theme",
+            "video": "due5zY4bjdY",
+            "iframeTitle": "Manaka Kataoka / Yasuaki Iwata / Hajime Wakai - Revali's Theme"
+          }
+        },
+        {
+          "artist": "Michael Wyckoff",
+          "slug": "michael-wyckoff",
+          "main": {
+            "id": "GlPVZR9MTWc",
+            "title": "Opera De Ossium",
+            "video": "GlPVZR9MTWc",
+            "iframeTitle": "Michael Wyckoff - Opera De Ossium"
+          }
+        },
+        {
+          "artist": "Michiru Oshima",
+          "slug": "michiru-oshima",
+          "main": {
+            "id": "6N7wEzSRPWQ",
+            "title": "Castle in The Mist",
+            "video": "6N7wEzSRPWQ",
+            "iframeTitle": "Michiru Oshima - Castle in The Mist"
+          }
+        },
+        {
+          "artist": "Michiru Yamane",
+          "slug": "michiru-yamane",
+          "main": {
+            "id": "9-3jRX86AAs",
+            "title": "Moonlit Melee",
+            "video": "9-3jRX86AAs",
+            "iframeTitle": "Michiru Yamane - Moonlit Melee"
+          },
+          "additional": [
+            {
+              "id": "454lU4zO0KY",
+              "title": "Unfinished Business",
+              "video": "454lU4zO0KY",
+              "iframeTitle": "Michiru Yamane - Unfinished Business"
+            }
+          ]
+        },
+        {
+          "artist": "Nintendo Sound Team",
+          "slug": "nintendo-sound-team",
+          "main": {
+            "id": "SlYod3BRCxY",
+            "title": "Lake Lapcat - Bowser's Fury OST",
+            "video": "SlYod3BRCxY",
+            "iframeTitle": "Nintendo Sound Team - Lake Lapcat - Bowser's Fury OST"
+          },
+          "additional": [
+            {
+              "id": "zYk8g9ZqeT8",
+              "title": "Mount Magmeow - Bowser's Fury OST",
+              "video": "zYk8g9ZqeT8",
+              "iframeTitle": "Nintendo Sound Team - Mount Magmeow - Bowser's Fury OST"
+            },
+            {
+              "id": "-2sjMCWXeIY",
+              "title": "Plessie - Bowser's Fury OST",
+              "video": "-2sjMCWXeIY",
+              "iframeTitle": "Nintendo Sound Team - Plessie - Bowser's Fury OST"
+            },
+            {
+              "id": "sskOqjJbsgI",
+              "title": "Pounce Bounce Isle - Bowser's Fury OST",
+              "video": "sskOqjJbsgI",
+              "iframeTitle": "Nintendo Sound Team - Pounce Bounce Isle - Bowser's Fury OST"
+            },
+            {
+              "id": "a5rrpOGeZxc",
+              "title": "Scamper Shores - Bowser's Fury OST",
+              "video": "a5rrpOGeZxc",
+              "iframeTitle": "Nintendo Sound Team - Scamper Shores - Bowser's Fury OST"
+            }
+          ]
+        },
+        {
+          "artist": "Polytopia Music",
+          "slug": "polytopia-music",
+          "main": {
+            "id": "qc6ecV8ZKDs",
+            "title": "Cymanticore",
+            "video": "qc6ecV8ZKDs",
+            "iframeTitle": "Polytopia Music - Cymanticore"
+          },
+          "additional": [
+            {
+              "id": "eKO5RLXHtjo",
+              "title": "Oumaji La",
+              "video": "eKO5RLXHtjo",
+              "iframeTitle": "Polytopia Music - Oumaji La"
+            },
+            {
+              "id": "bEwzeIbxPBc",
+              "title": "Saladik Ătjum",
+              "video": "bEwzeIbxPBc",
+              "iframeTitle": "Polytopia Music - Saladik Ătjum"
+            }
+          ]
+        },
+        {
+          "artist": "Polytopia Music / Cawas Talay",
+          "slug": "polytopia-music-cawas-talay",
+          "main": {
+            "id": "Bate-cQuOdk",
+            "title": "Wopquchu Ca Talwas (Quetzali Anthem)",
+            "video": "Bate-cQuOdk",
+            "iframeTitle": "Polytopia Music / Cawas Talay - Wopquchu Ca Talwas (Quetzali Anthem)"
+          }
+        },
+        {
+          "artist": "Satoru Kōsaki",
+          "slug": "satoru-kosaki",
+          "main": {
+            "id": "cOFghheVfzA",
+            "title": "JUNO is in love -adult",
+            "video": "cOFghheVfzA",
+            "iframeTitle": "Satoru Kōsaki - JUNO is in love -adult"
+          }
+        },
+        {
+          "artist": "Shogo Sakai",
+          "slug": "shogo-sakai",
+          "main": {
+            "id": "missing-shogo-sakai-monkey-s-love-song-mother-3",
+            "title": "Monkey's Love Song - MOTHER 3",
+            "iframeTitle": "Shogo Sakai - Monkey's Love Song - MOTHER 3"
+          }
+        },
+        {
+          "artist": "Takahiro Obata",
+          "slug": "takahiro-obata",
+          "main": {
+            "id": "z7zKU96g5mk",
+            "title": "The Promised Neverland Main Theme 2",
+            "video": "z7zKU96g5mk",
+            "iframeTitle": "Takahiro Obata - The Promised Neverland Main Theme 2"
+          },
+          "additional": [
+            {
+              "id": "sobF0ka0VN4",
+              "title": "Dancing Krone",
+              "video": "sobF0ka0VN4",
+              "iframeTitle": "Takahiro Obata - Dancing Krone"
+            }
+          ]
+        },
+        {
+          "artist": "Takeshi Abo",
+          "slug": "takeshi-abo",
+          "main": {
+            "id": "czFK4QoDkhs",
+            "title": "GATE OF STEINER symphonic ver.",
+            "video": "czFK4QoDkhs",
+            "iframeTitle": "Takeshi Abo - GATE OF STEINER symphonic ver."
+          }
+        },
+        {
+          "artist": "Tim Follin",
+          "slug": "tim-follin",
+          "main": {
+            "id": "iXFd6M_6Nto",
+            "title": "Time Trax - Title Music",
+            "video": "iXFd6M_6Nto",
+            "iframeTitle": "Tim Follin - Time Trax - Title Music"
+          }
+        },
+        {
+          "artist": "Tim Follin / Geoff Follin",
+          "slug": "tim-follin-geoff-follin",
+          "main": {
+            "id": "Gz0fAz9n_Os",
+            "title": "Beach",
+            "video": "Gz0fAz9n_Os",
+            "iframeTitle": "Tim Follin / Geoff Follin - Beach"
+          }
+        },
+        {
+          "artist": "Toby Fox",
+          "slug": "toby-fox",
+          "main": {
+            "id": "QwXWBKUPN3o",
+            "title": "Waterfall",
+            "video": "QwXWBKUPN3o",
+            "iframeTitle": "Toby Fox - Waterfall"
+          },
+          "additional": [
+            {
+              "id": "qrtt7mgwCTw",
+              "title": "ASGORE",
+              "video": "qrtt7mgwCTw",
+              "iframeTitle": "Toby Fox - ASGORE"
+            },
+            {
+              "id": "NTzEYzzfPac",
+              "title": "Infinite Realm of Incomprehensible Suffering",
+              "video": "NTzEYzzfPac",
+              "iframeTitle": "Toby Fox - Infinite Realm of Incomprehensible Suffering"
+            },
+            {
+              "id": "47GvY9rOMUs",
+              "title": "Song That Might Play When You Fight Sans",
+              "video": "47GvY9rOMUs",
+              "iframeTitle": "Toby Fox - Song That Might Play When You Fight Sans"
+            },
+            {
+              "id": "missing-toby-fox-undertale-bergentruckung-asgore-jazz-cover-insaneintherainmusic",
+              "title": "UNDERTALE Bergentrückung ASGORE - Jazz Cover insaneintherainmusic",
+              "iframeTitle": "Toby Fox - UNDERTALE Bergentrückung ASGORE - Jazz Cover insaneintherainmusic"
+            },
+            {
+              "id": "Ce-gU8G6Vik",
+              "title": "Vs. Lancer",
+              "video": "Ce-gU8G6Vik",
+              "iframeTitle": "Toby Fox - Vs. Lancer"
+            }
+          ]
+        },
+        {
+          "artist": "Yoshi's Crafted World Sound Team",
+          "slug": "yoshi-s-crafted-world-sound-team",
+          "main": {
+            "id": "zVNugChBjgI",
+            "title": "A Crafted World",
+            "video": "zVNugChBjgI",
+            "iframeTitle": "Yoshi's Crafted World Sound Team - A Crafted World"
+          }
+        }
+      ]
+    },
+    {
+      "genre": "Comedy / Novelty",
+      "artists": [
+        {
+          "artist": "Tom Cardy",
+          "slug": "tom-cardy",
+          "main": {
+            "id": "LvOt9z2c2Pc",
+            "title": "H.Y.C.Y.BH",
+            "video": "LvOt9z2c2Pc",
+            "iframeTitle": "Tom Cardy - H.Y.C.Y.BH"
+          },
+          "additional": [
+            {
+              "id": "RnFQM0LPHF8",
+              "title": "Big Dumb Idiot",
+              "video": "RnFQM0LPHF8",
+              "iframeTitle": "Tom Cardy - Big Dumb Idiot"
+            },
+            {
+              "id": "laok_vQmrro",
+              "title": "Business Man",
+              "video": "laok_vQmrro",
+              "iframeTitle": "Tom Cardy - Business Man"
+            },
+            {
+              "id": "AV5HKWRMyAY",
+              "title": "Call your Mother",
+              "video": "AV5HKWRMyAY",
+              "iframeTitle": "Tom Cardy - Call your Mother"
+            },
+            {
+              "id": "V61FKsr2T7s",
+              "title": "Gym Bro Betrayal (The Song)",
+              "video": "V61FKsr2T7s",
+              "iframeTitle": "Tom Cardy - Gym Bro Betrayal (The Song)"
+            },
+            {
+              "id": "QKMN8t6U6sw",
+              "title": "The Ballad of Smokin' Joe Rudeboy",
+              "video": "QKMN8t6U6sw",
+              "iframeTitle": "Tom Cardy - The Ballad of Smokin' Joe Rudeboy"
+            }
+          ]
+        },
+        {
+          "artist": "Bo Burnham",
+          "slug": "bo-burnham",
+          "main": {
+            "id": "KsTG1ETKkHo",
+            "title": "Problematic",
+            "video": "KsTG1ETKkHo",
+            "iframeTitle": "Bo Burnham - Problematic"
+          }
+        },
+        {
+          "artist": "Flight of the Conchords",
+          "slug": "flight-of-the-conchords",
+          "main": {
+            "id": "rQawwsBv8PQ",
+            "title": "Carol Brown (FOTC Cover)",
+            "video": "rQawwsBv8PQ",
+            "iframeTitle": "Flight of the Conchords - Carol Brown (FOTC Cover)"
+          }
+        },
+        {
+          "artist": "Ninja Sex Party",
+          "slug": "ninja-sex-party",
+          "main": {
+            "id": "3YXUWWZJXpE",
+            "title": "Welcome To My Parents' House",
+            "video": "3YXUWWZJXpE",
+            "iframeTitle": "Ninja Sex Party - Welcome To My Parents' House"
+          }
+        },
+        {
+          "artist": "Da Vinci's Notebook",
+          "slug": "da-vinci-s-notebook",
+          "main": {
+            "id": "EWMPVn1kgIQ",
+            "title": "Enormous Penis",
+            "video": "EWMPVn1kgIQ",
+            "iframeTitle": "Da Vinci's Notebook - Enormous Penis"
+          }
+        },
+        {
+          "artist": "Jonathan Coulton",
+          "slug": "jonathan-coulton",
+          "main": {
+            "id": "_CF1iBrnacQ",
+            "title": "Want You Gone",
+            "video": "_CF1iBrnacQ",
+            "iframeTitle": "Jonathan Coulton - Want You Gone"
+          }
+        },
+        {
+          "artist": "Value Select",
+          "slug": "value-select",
+          "main": {
+            "id": "uV2afqzb4Yk",
+            "title": "Hit Me With Your Car 2020",
+            "video": "uV2afqzb4Yk",
+            "iframeTitle": "Value Select - Hit Me With Your Car 2020"
+          }
+        },
+        {
+          "artist": "Bill Wurtz",
+          "slug": "bill-wurtz",
+          "main": {
+            "id": "5YiyngGmJGc",
+            "title": "Long Long Long Journey",
+            "video": "5YiyngGmJGc",
+            "iframeTitle": "Bill Wurtz - Long Long Long Journey"
+          }
+        },
+        {
+          "artist": "Rob Cantor",
+          "slug": "rob-cantor",
+          "main": {
+            "id": "KcfMJYjPTGA",
+            "title": "I'm Gonna Win",
+            "video": "KcfMJYjPTGA",
+            "iframeTitle": "Rob Cantor - I'm Gonna Win"
+          }
+        },
+        {
+          "artist": "Jazz Emu",
+          "slug": "jazz-emu",
+          "main": {
+            "id": "_ws0QtAiiXQ",
+            "title": "Still Waiting",
+            "video": "_ws0QtAiiXQ",
+            "iframeTitle": "Jazz Emu - Still Waiting"
+          }
+        },
+        {
+          "artist": "Jerma985 / Jonny Dyas",
+          "slug": "jerma985-jonny-dyas",
+          "main": {
+            "id": "TB-bjK1iH2c",
+            "title": "Buy Mode",
+            "video": "TB-bjK1iH2c",
+            "iframeTitle": "Jerma985 / Jonny Dyas - Buy Mode"
+          }
+        }
+      ]
+    },
+    {
+      "genre": "Folk / Chanson / World",
+      "artists": [
+        {
+          "artist": "Édith Piaf",
+          "slug": "edith-piaf",
+          "main": {
+            "id": "JksEW_XezLI",
+            "title": "La Vie En Rose",
+            "video": "JksEW_XezLI",
+            "iframeTitle": "Édith Piaf - La Vie En Rose"
+          },
+          "additional": [
+            {
+              "id": "O526KtL5i3U",
+              "title": "La vie en rose (Remastered)",
+              "video": "O526KtL5i3U",
+              "iframeTitle": "Édith Piaf - La vie en rose (Remastered)"
+            }
+          ]
+        },
+        {
+          "artist": "Jean Ferrat",
+          "slug": "jean-ferrat",
+          "main": {
+            "id": "YW2UXieHWfg",
+            "title": "La montagne",
+            "video": "YW2UXieHWfg",
+            "iframeTitle": "Jean Ferrat - La montagne"
+          },
+          "additional": [
+            {
+              "id": "IfACZiOcTCI",
+              "title": "Autant d'amour, autant de fleurs",
+              "video": "IfACZiOcTCI",
+              "iframeTitle": "Jean Ferrat - Autant d'amour, autant de fleurs"
+            },
+            {
+              "id": "jwigKcB_vr0",
+              "title": "La jeunesse",
+              "video": "jwigKcB_vr0",
+              "iframeTitle": "Jean Ferrat - La jeunesse"
+            }
+          ]
+        },
+        {
+          "artist": "Daniel Balavoine",
+          "slug": "daniel-balavoine",
+          "main": {
+            "id": "lDl7oclJcrw",
+            "title": "Le chanteur",
+            "video": "lDl7oclJcrw",
+            "iframeTitle": "Daniel Balavoine - Le chanteur"
+          }
+        },
+        {
+          "artist": "Muhlis Sabahattin Ezgi",
+          "slug": "muhlis-sabahattin-ezgi",
+          "main": {
+            "id": "YlQ9Z-S1Gjw",
+            "title": "HATIRLA SEVGİLİ",
+            "video": "YlQ9Z-S1Gjw",
+            "iframeTitle": "Muhlis Sabahattin Ezgi - HATIRLA SEVGİLİ"
+          }
+        },
+        {
+          "artist": "Traditional Ottoman/Turkish",
+          "slug": "traditional-ottoman-turkish",
+          "main": {
+            "id": "szSln7ugFq8",
+            "title": "SULTANIYEGAH SİRTO",
+            "video": "szSln7ugFq8",
+            "iframeTitle": "Traditional Ottoman/Turkish - SULTANIYEGAH SİRTO"
+          }
+        },
+        {
+          "artist": "Chalino Sánchez",
+          "slug": "chalino-sanchez",
+          "main": {
+            "id": "NhzaIt5y4Ek",
+            "title": "Alma Enamorada",
+            "video": "NhzaIt5y4Ek",
+            "iframeTitle": "Chalino Sánchez - Alma Enamorada"
+          }
+        },
+        {
+          "artist": "Rubén González",
+          "slug": "ruben-gonzalez",
+          "main": {
+            "id": "missing-ruben-gonzalez-melodia-del-rio-irakereisthebest",
+            "title": "Melodía del rio - Irakereisthebest",
+            "iframeTitle": "Rubén González - Melodía del rio - Irakereisthebest"
+          }
+        },
+        {
+          "artist": "Chico Buarque / Caetano Veloso",
+          "slug": "chico-buarque-caetano-veloso",
+          "main": {
+            "id": "VxnGYx7SlzU",
+            "title": "Vai Levando",
+            "video": "VxnGYx7SlzU",
+            "iframeTitle": "Chico Buarque / Caetano Veloso - Vai Levando"
+          }
+        },
+        {
+          "artist": "Kitri",
+          "slug": "kitri",
+          "main": {
+            "id": "aKsed7AdsT0",
+            "title": "Mujunritsu",
+            "video": "aKsed7AdsT0",
+            "iframeTitle": "Kitri - Mujunritsu"
+          }
+        },
+        {
+          "artist": "Traditional Serbian",
+          "slug": "traditional-serbian",
+          "main": {
+            "id": "6G3_xciICII",
+            "title": "Tamo daleko",
+            "video": "6G3_xciICII",
+            "iframeTitle": "Traditional Serbian - Tamo daleko"
+          }
+        },
+        {
+          "artist": "Minyo Crusaders",
+          "slug": "minyo-crusaders",
+          "main": {
+            "id": "jy6No4Xuq_E",
+            "title": "Minyo Cumbiero - Cumbia del Monte Fuji",
+            "video": "jy6No4Xuq_E",
+            "iframeTitle": "Minyo Crusaders - Minyo Cumbiero - Cumbia del Monte Fuji"
+          }
+        },
+        {
+          "artist": "Franco Battiato",
+          "slug": "franco-battiato",
+          "main": {
+            "id": "0XW9XN_vDaA",
+            "title": "Centro di gravità permanente",
+            "video": "0XW9XN_vDaA",
+            "iframeTitle": "Franco Battiato - Centro di gravità permanente"
+          }
+        },
+        {
+          "artist": "Raphael",
+          "slug": "raphael",
+          "main": {
+            "id": "missing-raphael-balada-de-la-trompeta",
+            "title": "Balada de la trompeta",
+            "iframeTitle": "Raphael - Balada de la trompeta"
+          }
+        },
+        {
+          "artist": "Vinicius de Moraes / Toquinho",
+          "slug": "vinicius-de-moraes-toquinho",
+          "main": {
+            "id": "P8d_097EEWY",
+            "title": "Carta ae Tom 74",
+            "video": "P8d_097EEWY",
+            "iframeTitle": "Vinicius de Moraes / Toquinho - Carta ae Tom 74"
+          }
+        }
+      ]
+    }
+  ]
+}
