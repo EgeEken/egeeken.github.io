@@ -11,79 +11,6 @@
       "genre": "Classic Jazz",
       "artists": [
         {
-          "artist": "Buddy Rich",
-          "slug": "buddy-rich",
-          "main": {
-            "title": "Willowcrest",
-            "video": "aw-_nw9zE7E",
-            "iframeTitle": "Buddy Rich - Willowcrest"
-          },
-          "additional": [
-            {
-              "title": "Time Check",
-              "video": "lS31jL3tIBU",
-              "iframeTitle": "Buddy Rich - Time Check"
-            },
-            {
-              "title": "Nutville",
-              "video": "8pF0xG912VY",
-              "iframeTitle": "Buddy Rich - Nutville"
-            }
-          ]
-        },
-        {
-          "artist": "Count Basie",
-          "slug": "count-basie",
-          "main": {
-            "title": "Swingin' the Blues",
-            "video": "Gh8q19pjKL0",
-            "iframeTitle": "Count Basie - Swingin' the Blues"
-          },
-          "additional": [
-            {
-              "title": "Straight Ahead",
-              "video": "fm8uHT-BJP4",
-              "iframeTitle": "Count Basie - Straight Ahead"
-            },
-            {
-              "title": "Tickle Toe",
-              "video": "0Fdz3XIce7Y",
-              "iframeTitle": "Count Basie - Tickle Toe"
-            },
-            {
-              "title": "Splanky",
-              "video": "VYO3gC962PM",
-              "iframeTitle": "Count Basie - Splanky"
-            }
-          ]
-        },
-        {
-          "artist": "Duke Ellington",
-          "slug": "duke-ellington",
-          "main": {
-            "title": "In a Sentimental Mood",
-            "video": "Z401K8VKX5g",
-            "iframeTitle": "Duke Ellington - In a Sentimental Mood"
-          },
-          "additional": [
-            {
-              "title": "Satin Doll",
-              "video": "wQ-n7jhs_K8",
-              "iframeTitle": "Duke Ellington - Satin Doll"
-            },
-            {
-              "title": "Wig Wise",
-              "video": "t6s0iDoXpdY",
-              "iframeTitle": "Duke Ellington - Wig Wise"
-            },
-            {
-              "title": "Warm Valley",
-              "video": "nbg6Vhykx-g",
-              "iframeTitle": "Duke Ellington - Warm Valley"
-            }
-          ]
-        },
-        {
           "artist": "Ahmad Jamal Trio",
           "slug": "ahmad-jamal-trio",
           "main": {
@@ -147,6 +74,27 @@
           ]
         },
         {
+          "artist": "Buddy Rich",
+          "slug": "buddy-rich",
+          "main": {
+            "title": "Willowcrest",
+            "video": "aw-_nw9zE7E",
+            "iframeTitle": "Buddy Rich - Willowcrest"
+          },
+          "additional": [
+            {
+              "title": "Time Check",
+              "video": "lS31jL3tIBU",
+              "iframeTitle": "Buddy Rich - Time Check"
+            },
+            {
+              "title": "Nutville",
+              "video": "8pF0xG912VY",
+              "iframeTitle": "Buddy Rich - Nutville"
+            }
+          ]
+        },
+        {
           "artist": "Charles Mingus",
           "slug": "charles-mingus",
           "main": {
@@ -168,6 +116,32 @@
               "title": "Anthropology",
               "video": "VXncfHa8DZw",
               "iframeTitle": "Charlie Parker - Anthropology"
+            }
+          ]
+        },
+        {
+          "artist": "Count Basie",
+          "slug": "count-basie",
+          "main": {
+            "title": "Swingin' the Blues",
+            "video": "Gh8q19pjKL0",
+            "iframeTitle": "Count Basie - Swingin' the Blues"
+          },
+          "additional": [
+            {
+              "title": "Straight Ahead",
+              "video": "fm8uHT-BJP4",
+              "iframeTitle": "Count Basie - Straight Ahead"
+            },
+            {
+              "title": "Tickle Toe",
+              "video": "0Fdz3XIce7Y",
+              "iframeTitle": "Count Basie - Tickle Toe"
+            },
+            {
+              "title": "Splanky",
+              "video": "VYO3gC962PM",
+              "iframeTitle": "Count Basie - Splanky"
             }
           ]
         },
@@ -216,6 +190,32 @@
             "video": "fNPdG0SGWSQ",
             "iframeTitle": "Dexter Gordon - For Regulars Only"
           }
+        },
+        {
+          "artist": "Duke Ellington",
+          "slug": "duke-ellington",
+          "main": {
+            "title": "In a Sentimental Mood",
+            "video": "Z401K8VKX5g",
+            "iframeTitle": "Duke Ellington - In a Sentimental Mood"
+          },
+          "additional": [
+            {
+              "title": "Satin Doll",
+              "video": "wQ-n7jhs_K8",
+              "iframeTitle": "Duke Ellington - Satin Doll"
+            },
+            {
+              "title": "Wig Wise",
+              "video": "t6s0iDoXpdY",
+              "iframeTitle": "Duke Ellington - Wig Wise"
+            },
+            {
+              "title": "Warm Valley",
+              "video": "nbg6Vhykx-g",
+              "iframeTitle": "Duke Ellington - Warm Valley"
+            }
+          ]
         },
         {
           "artist": "Duke Jordan",
@@ -516,6 +516,15 @@
           ]
         },
         {
+          "artist": "Redbone",
+          "slug": "redbone",
+          "main": {
+            "title": "Come and Get Your Love",
+            "video": "rsf_gTZG4cI",
+            "iframeTitle": "Redbone - Come and Get Your Love"
+          }
+        },
+        {
           "artist": "Samara Joy",
           "slug": "samara-joy",
           "main": {
@@ -534,9 +543,9 @@
           },
           "additional": [
             {
-              "title": "You Are The Sunshine Of My Life",
+              "title": "You Are the Sunshine of My Life",
               "video": "3wZ_b_uUAdQ",
-              "iframeTitle": "Stevie Wonder - You Are The Sunshine Of My Life"
+              "iframeTitle": "Stevie Wonder - You Are the Sunshine of My Life"
             }
           ]
         },
@@ -577,6 +586,11 @@
               "title": "Águas De Março",
               "video": "BnB1G63XvCQ",
               "iframeTitle": "Antônio Carlos Jobim - Águas De Março"
+            },
+            {
+              "title": "Vai Levando",
+              "video": "VxnGYx7SlzU",
+              "iframeTitle": "Antônio Carlos Jobim - Vai Levando"
             }
           ]
         },
@@ -621,6 +635,15 @@
             "title": "O Barquinho",
             "video": "1v-NeQrmm3E",
             "iframeTitle": "Nara Leão - O Barquinho"
+          }
+        },
+        {
+          "artist": "Vinicius de Moraes / Toquinho",
+          "slug": "vinicius-de-moraes-toquinho",
+          "main": {
+            "title": "Carta ao Tom 74",
+            "video": "P8d_097EEWY",
+            "iframeTitle": "Vinicius de Moraes / Toquinho - Carta ao Tom 74"
           }
         }
       ]
@@ -926,22 +949,6 @@
           ]
         },
         {
-          "artist": "Kitri",
-          "slug": "kitri",
-          "main": {
-            "title": "Mujunritsu",
-            "video": "aKsed7AdsT0",
-            "iframeTitle": "Kitri - Mujunritsu"
-          },
-          "additional": [
-            {
-              "title": "NEW ME",
-              "video": "vjgEVCbST_A",
-              "iframeTitle": "Kitri - NEW ME"
-            }
-          ]
-        },
-        {
           "artist": "Larnell Lewis",
           "slug": "larnell-lewis",
           "main": {
@@ -956,24 +963,6 @@
               "iframeTitle": "Larnell Lewis - COCONUTS"
             }
           ]
-        },
-        {
-          "artist": "Louis Cole",
-          "slug": "louis-cole",
-          "main": {
-            "title": "Thinking (live sesh)",
-            "video": "ZMI1iU7VgyI",
-            "iframeTitle": "Louis Cole - Thinking (live sesh)"
-          }
-        },
-        {
-          "artist": "LP Septet",
-          "slug": "lp-septet",
-          "main": {
-            "title": "Stag (Live)",
-            "video": "luNf5IF9AWo",
-            "iframeTitle": "LP Septet - Stag (Live)"
-          }
         },
         {
           "artist": "Louie Zong",
@@ -1018,8 +1007,31 @@
               "title": "Yoshologie",
               "video": "zHcHpz1Iqps",
               "iframeTitle": "Louie Zong - Yoshologie"
+            },
+            {
+              "title": "A Crafted World",
+              "video": "zVNugChBjgI",
+              "iframeTitle": "Louie Zong - A Crafted World"
             }
           ]
+        },
+        {
+          "artist": "Louis Cole",
+          "slug": "louis-cole",
+          "main": {
+            "title": "Thinking (live sesh)",
+            "video": "ZMI1iU7VgyI",
+            "iframeTitle": "Louis Cole - Thinking (live sesh)"
+          }
+        },
+        {
+          "artist": "LP Septet",
+          "slug": "lp-septet",
+          "main": {
+            "title": "Stag (Live)",
+            "video": "luNf5IF9AWo",
+            "iframeTitle": "LP Septet - Stag (Live)"
+          }
         },
         {
           "artist": "Minyo Crusaders",
