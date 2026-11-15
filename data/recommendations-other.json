@@ -427,9 +427,10 @@
               "iframeTitle": "The Beach Boys - We Three Kings Of Orient Are (Remix)"
             },
             {
-              "id": "missing-the-beach-boys-wouldnt-it-be-nice",
-              "title": "Wouldnt It Be Nice",
-              "iframeTitle": "The Beach Boys - Wouldnt It Be Nice"
+              "id": "5lP8BZcyoEQ",
+              "title": "Wouldn't It Be Nice",
+              "iframeTitle": "The Beach Boys - Wouldn't It Be Nice",
+              "video": "5lP8BZcyoEQ"
             }
           ]
         },
@@ -467,13 +468,13 @@
       "genre": "Soundtracks",
       "artists": [
         {
-          "artist": "A Shell in the Pit / Tettix",
-          "slug": "a-shell-in-the-pit-tettix",
+          "artist": "A Shell in the Pit (Rogue Legacy 2 Soundtrack)",
+          "slug": "a-shell-in-the-pit-rogue-legacy-2-soundtrack",
           "main": {
             "id": "j_BQ4iI8K9Y",
             "title": "Subterranean Sunrise",
             "video": "j_BQ4iI8K9Y",
-            "iframeTitle": "A Shell in the Pit / Tettix - Subterranean Sunrise"
+            "iframeTitle": "A Shell in the Pit (Rogue Legacy 2 Soundtrack) - Subterranean Sunrise"
           }
         },
         {
@@ -671,13 +672,13 @@
           ]
         },
         {
-          "artist": "Go Ichinose",
-          "slug": "go-ichinose",
+          "artist": "Go Ichinose (Pokémon Soundtrack)",
+          "slug": "go-ichinose-pokemon-soundtrack",
           "main": {
             "id": "yzmKmiAUFaE",
             "title": "Stars Over Lake Verity (Sinnoh Lake Theme)",
             "video": "yzmKmiAUFaE",
-            "iframeTitle": "Go Ichinose - Stars Over Lake Verity (Sinnoh Lake Theme)"
+            "iframeTitle": "Go Ichinose (Pokémon Soundtrack) - Stars Over Lake Verity (Sinnoh Lake Theme)"
           }
         },
         {
@@ -699,13 +700,13 @@
           ]
         },
         {
-          "artist": "John Williams",
-          "slug": "john-williams",
+          "artist": "John Williams (Schindler's List Soundtrack)",
+          "slug": "john-williams-schindler-s-list-soundtrack",
           "main": {
             "id": "BqxAZoiZnQw",
             "title": "Three Pieces from Schindler's List： I. Theme",
             "video": "BqxAZoiZnQw",
-            "iframeTitle": "John Williams - Three Pieces from Schindler's List： I. Theme"
+            "iframeTitle": "John Williams (Schindler's List Soundtrack) - Three Pieces from Schindler's List： I. Theme"
           }
         },
         {
@@ -733,13 +734,13 @@
           ]
         },
         {
-          "artist": "Justin E. Bell",
-          "slug": "justin-e-bell",
+          "artist": "Justin E. Bell (The Outer Worlds Soundtrack)",
+          "slug": "justin-e-bell-the-outer-worlds-soundtrack",
           "main": {
             "id": "jVwPnLMchC8",
             "title": "Hope (Title Theme)",
             "video": "jVwPnLMchC8",
-            "iframeTitle": "Justin E. Bell - Hope (Title Theme)"
+            "iframeTitle": "Justin E. Bell (The Outer Worlds Soundtrack) - Hope (Title Theme)"
           }
         },
         {
@@ -893,13 +894,13 @@
           ]
         },
         {
-          "artist": "Satoru Kōsaki",
-          "slug": "satoru-kosaki",
+          "artist": "Satoru Kōsaki (BEASTARS Soundtrack)",
+          "slug": "satoru-kosaki-beastars-soundtrack",
           "main": {
             "id": "cOFghheVfzA",
             "title": "JUNO is in love -adult",
             "video": "cOFghheVfzA",
-            "iframeTitle": "Satoru Kōsaki - JUNO is in love -adult"
+            "iframeTitle": "Satoru Kōsaki (BEASTARS Soundtrack) - JUNO is in love -adult"
           }
         },
         {
@@ -913,13 +914,13 @@
           }
         },
         {
-          "artist": "Takeshi Abo",
-          "slug": "takeshi-abo",
+          "artist": "Takeshi Abo (Steins;Gate Soundtrack)",
+          "slug": "takeshi-abo-steins-gate-soundtrack",
           "main": {
             "id": "czFK4QoDkhs",
             "title": "GATE OF STEINER symphonic ver.",
             "video": "czFK4QoDkhs",
-            "iframeTitle": "Takeshi Abo - GATE OF STEINER symphonic ver."
+            "iframeTitle": "Takeshi Abo (Steins;Gate Soundtrack) - GATE OF STEINER symphonic ver."
           }
         },
         {
@@ -1019,9 +1020,9 @@
           "additional": [
             {
               "id": "HXk-0_rETJ8",
-              "title": "Redesign Your Logo (Bonus Track)",
+              "title": "Redesign Your Logo",
               "video": "HXk-0_rETJ8",
-              "iframeTitle": "Lemon Demon - Redesign Your Logo (Bonus Track)"
+              "iframeTitle": "Lemon Demon - Redesign Your Logo"
             }
           ]
         },
@@ -1330,9 +1331,9 @@
           "slug": "value-select",
           "main": {
             "id": "uV2afqzb4Yk",
-            "title": "Hit Me With Your Car 2020",
+            "title": "Hit Me With Your Car",
             "video": "uV2afqzb4Yk",
-            "iframeTitle": "Value Select - Hit Me With Your Car 2020"
+            "iframeTitle": "Value Select - Hit Me With Your Car"
           }
         }
       ]
