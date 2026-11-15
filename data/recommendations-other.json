@@ -12,36 +12,6 @@
       "genre": "Electronic",
       "artists": [
         {
-          "artist": "Cyriak Harris",
-          "slug": "cyriak-harris",
-          "main": {
-            "id": "mKNsITyJKTw",
-            "title": "7 Billion",
-            "video": "mKNsITyJKTw",
-            "iframeTitle": "Cyriak Harris - 7 Billion"
-          },
-          "additional": [
-            {
-              "id": "3XcYAo-_xnk",
-              "title": "Cows",
-              "video": "3XcYAo-_xnk",
-              "iframeTitle": "Cyriak Harris - Cows"
-            },
-            {
-              "id": "knOFx_mx1RU",
-              "title": "Moo (Remix)",
-              "video": "knOFx_mx1RU",
-              "iframeTitle": "Cyriak Harris - Moo (Remix)"
-            },
-            {
-              "id": "Fb_ayrWIJqg",
-              "title": "Walks of Life (Remix)",
-              "video": "Fb_ayrWIJqg",
-              "iframeTitle": "Cyriak Harris - Walks of Life (Remix)"
-            }
-          ]
-        },
-        {
           "artist": "Graham Kartna",
           "slug": "graham-kartna",
           "main": {
@@ -90,8 +60,8 @@
             {
               "id": "_L3NugiRTfg",
               "video": "_L3NugiRTfg",
-              "title": "Additional piece (title TBD)",
-              "iframeTitle": "Jean-Jacques Perrey - Additional piece (title TBD)"
+              "title": "Sentimental Trip",
+              "iframeTitle": "Jean-Jacques Perrey - Sentimental Trip"
             }
           ]
         },
@@ -264,7 +234,57 @@
             "title": "tetrachromacy",
             "video": "Q4IyeKKStY4",
             "iframeTitle": "Oliver Buckland - tetrachromacy"
-          }
+          },
+          "additional": [
+            {
+              "id": "iC452qNLXFg",
+              "video": "iC452qNLXFg",
+              "title": "backroom labyrinth",
+              "iframeTitle": "Oliver Buckland - backroom labyrinth"
+            },
+            {
+              "id": "Qefh921dhRU",
+              "video": "Qefh921dhRU",
+              "title": "espial",
+              "iframeTitle": "Oliver Buckland - espial"
+            },
+            {
+              "id": "ENBqnVRm2A0",
+              "video": "ENBqnVRm2A0",
+              "title": "icosa",
+              "iframeTitle": "Oliver Buckland - icosa"
+            },
+            {
+              "id": "2vPmjYXcIxA",
+              "video": "2vPmjYXcIxA",
+              "title": "incision",
+              "iframeTitle": "Oliver Buckland - incision"
+            },
+            {
+              "id": "XldKKsGOJMo",
+              "video": "XldKKsGOJMo",
+              "title": "oceanid",
+              "iframeTitle": "Oliver Buckland - oceanid"
+            },
+            {
+              "id": "TQLJUxhL-JM",
+              "video": "TQLJUxhL-JM",
+              "title": "simple geometry",
+              "iframeTitle": "Oliver Buckland - simple geometry"
+            },
+            {
+              "id": "6_IVXdUdwoQ",
+              "video": "6_IVXdUdwoQ",
+              "title": "the insides of tears",
+              "iframeTitle": "Oliver Buckland - the insides of tears"
+            },
+            {
+              "id": "wQVeozekdYg",
+              "video": "wQVeozekdYg",
+              "title": "vacillate",
+              "iframeTitle": "Oliver Buckland - vacillate"
+            }
+          ]
         },
         {
           "artist": "Paul McCartney",
@@ -320,12 +340,18 @@
           "artist": "Tally Hall",
           "slug": "tally-hall",
           "main": {
-            "id": "At8ao5iABFg",
-            "title": "Ruler of Everything",
-            "video": "At8ao5iABFg",
-            "iframeTitle": "Tally Hall - Ruler of Everything"
+            "id": "bnUZ8HcPKsA",
+            "title": "White Ball",
+            "video": "bnUZ8HcPKsA",
+            "iframeTitle": "Tally Hall - White Ball"
           },
           "additional": [
+            {
+              "id": "At8ao5iABFg",
+              "title": "Ruler of Everything",
+              "video": "At8ao5iABFg",
+              "iframeTitle": "Tally Hall - Ruler of Everything"
+            },
             {
               "id": "ipYafcHd0jA",
               "title": "The Bidding",
@@ -355,12 +381,6 @@
               "title": "Murders",
               "video": "CaTX0pt3uyg",
               "iframeTitle": "Tally Hall - Murders"
-            },
-            {
-              "id": "bnUZ8HcPKsA",
-              "title": "White Ball",
-              "video": "bnUZ8HcPKsA",
-              "iframeTitle": "Tally Hall - White Ball"
             }
           ]
         },
@@ -442,7 +462,21 @@
             "title": "If You Give Enough",
             "video": "N6evZm2Jn2Q",
             "iframeTitle": "The Lemon Twigs - If You Give Enough"
-          }
+          },
+          "additional": [
+            {
+              "id": "0TsbzIALBdQ",
+              "video": "0TsbzIALBdQ",
+              "title": "The Bully",
+              "iframeTitle": "The Lemon Twigs - The Bully"
+            },
+            {
+              "id": "8IW-viFpmz8",
+              "video": "8IW-viFpmz8",
+              "title": "Never Know",
+              "iframeTitle": "The Lemon Twigs - Never Know"
+            }
+          ]
         },
         {
           "artist": "Yes",
@@ -813,30 +847,12 @@
           "artist": "Nintendo Sound Team",
           "slug": "nintendo-sound-team",
           "main": {
-            "id": "oOGzdzezFrI",
-            "title": "Lake Lapcat (Bowser's Fury)",
-            "video": "oOGzdzezFrI",
-            "iframeTitle": "Nintendo Sound Team - Lake Lapcat (Bowser's Fury)"
+            "id": "ACSD4uN2W9E",
+            "title": "Gusty Garden Galaxy (Super Mario Galaxy)",
+            "video": "ACSD4uN2W9E",
+            "iframeTitle": "Nintendo Sound Team - Gusty Garden Galaxy (Super Mario Galaxy)"
           },
           "additional": [
-            {
-              "id": "-70xfwqvA7Q",
-              "title": "Plessie (Bowser's Fury)",
-              "video": "-70xfwqvA7Q",
-              "iframeTitle": "Nintendo Sound Team - Plessie (Bowser's Fury)"
-            },
-            {
-              "id": "zQxNB7lJYDY",
-              "title": "Pounce Bounce Isle (Bowser's Fury)",
-              "video": "zQxNB7lJYDY",
-              "iframeTitle": "Nintendo Sound Team - Pounce Bounce Isle (Bowser's Fury)"
-            },
-            {
-              "id": "ACSD4uN2W9E",
-              "title": "Gusty Garden Galaxy (Super Mario Galaxy)",
-              "video": "ACSD4uN2W9E",
-              "iframeTitle": "Nintendo Sound Team - Gusty Garden Galaxy (Super Mario Galaxy)"
-            },
             {
               "id": "AhueZ4d-vKk",
               "title": "Battlerock Galaxy (Super Mario Galaxy)",
@@ -860,6 +876,24 @@
               "title": "World 8 Bowser Theme (Super Mario 3D World)",
               "video": "YAYLJ19cxoA",
               "iframeTitle": "Nintendo Sound Team - World 8 Bowser Theme (Super Mario 3D World)"
+            },
+            {
+              "id": "oOGzdzezFrI",
+              "title": "Lake Lapcat (Bowser's Fury)",
+              "video": "oOGzdzezFrI",
+              "iframeTitle": "Nintendo Sound Team - Lake Lapcat (Bowser's Fury)"
+            },
+            {
+              "id": "-70xfwqvA7Q",
+              "title": "Plessie (Bowser's Fury)",
+              "video": "-70xfwqvA7Q",
+              "iframeTitle": "Nintendo Sound Team - Plessie (Bowser's Fury)"
+            },
+            {
+              "id": "zQxNB7lJYDY",
+              "title": "Pounce Bounce Isle (Bowser's Fury)",
+              "video": "zQxNB7lJYDY",
+              "iframeTitle": "Nintendo Sound Team - Pounce Bounce Isle (Bowser's Fury)"
             }
           ]
         },
@@ -1270,7 +1304,15 @@
             "title": "Problematic",
             "video": "KsTG1ETKkHo",
             "iframeTitle": "Bo Burnham - Problematic"
-          }
+          },
+          "additional": [
+            {
+              "id": "TA9deCtUNGM",
+              "video": "TA9deCtUNGM",
+              "title": "Goodbye",
+              "iframeTitle": "Bo Burnham - Goodbye"
+            }
+          ]
         },
         {
           "artist": "Da Vinci's Notebook",
@@ -1317,12 +1359,6 @@
               "title": "Big Dumb Idiot",
               "video": "RnFQM0LPHF8",
               "iframeTitle": "Tom Cardy - Big Dumb Idiot"
-            },
-            {
-              "id": "rQawwsBv8PQ",
-              "title": "Carol Brown (FOTC Cover)",
-              "video": "rQawwsBv8PQ",
-              "iframeTitle": "Tom Cardy - Carol Brown (FOTC Cover)"
             }
           ]
         },
