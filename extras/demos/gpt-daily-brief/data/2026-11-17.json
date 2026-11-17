@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-17",
+  "title": "Daily Brief — Tuesday, 17 November 2026",
+  "generatedAt": "2026-11-17T14:03:00+03:00",
+  "readingTime": "10–15 min",
+  "sections": [
+    {
+      "id": "paris_events",
+      "number": 1,
+      "title": "Istanbul events",
+      "content": "<ul><li><strong>Wednesday 18 November, 21:30 — Ferit Odman &amp; Çağrı Sertel.</strong> Fiba Salon İKSV, Beyoğlu. Drummer Ferit Odman's jazz-club series pairs him with pianist Çağrı Sertel. A good choice for close-up improvisation rather than a large concert-hall programme. <a href=\"https://ssrprod.passo.com.tr/en/event/ferit-odmanla-caz-kulubu-ferit-odman-ve-cagri-sertel-fibasalon-iksv-etkinlik-biletleri/12744328\" target=\"_blank\" rel=\"noopener noreferrer\">Event details and tickets</a>.</li><li><strong>Friday 20 November — Mahler's Symphony No. 6.</strong> Istanbul State Symphony Orchestra, conducted by Sascha Goetzel, at AKM's Türk Telekom Opera Hall in Taksim. A large-scale, tightly constructed symphony whose recurring march rhythms and transformations matter more than any simplistic reading of its <em>Tragic</em> nickname. <a href=\"https://akmistanbul.gov.tr/tr/etkinlik/istanbul-devlet-senfoni-orkestrasi-denizbank-konserleri-mahler-6\" target=\"_blank\" rel=\"noopener noreferrer\">Official programme and ticket information</a>.</li><li><strong>Friday 20 November, 20:00 — CRR Jazz Orchestra with Aubrey Logan and Sezin Ahmet Türkmenoğlu.</strong> Cemal Reşit Rey Concert Hall, Harbiye. Vocalist and trombonist Logan brings jazz, swing and soul into a larger orchestral setting, with Türkmenoğlu on bass. This conflicts with the Mahler concert, so it is an alternative for Friday. <a href=\"https://www.biletix.com/etkinlik/5CRSA/TURKIYE/tr/music-crr-caz-orkestrasi-aubrey-logan-sezin-ahmet-turkmenoglu-20-11-2026-istanbul\" target=\"_blank\" rel=\"noopener noreferrer\">Programme and tickets</a>.</li></ul>"
+    },
+    {
+      "id": "cs_ai",
+      "number": 2,
+      "title": "CS and AI developments",
+      "content": "<h3>An AI co-scientist evaluated against actual biomedical analyses</h3><p><a href=\"https://www.nature.com/articles/s41591-026-04808-6\" target=\"_blank\" rel=\"noopener noreferrer\">OpenScientist, published in <em>Nature Medicine</em> on 16 November</a>, is an open-source agentic system that connects literature search, hypothesis generation, code execution and analyses of clinical datasets. Domain experts evaluated its outputs across five biomedical case studies, including Alzheimer's biomarker analyses and survival modelling.</p><p>The interesting architecture is not the presence of multiple agents: it is the <strong>attachment of proposed claims to executable analyses and underlying data</strong>. The authors report tasks completed in minutes that otherwise involve substantial research time. Five selected case studies, however, cannot establish general reliability, and generated hypotheses still need independent scientific validation.</p><h3>Simulating a supply chain requires more than plausible dialogue</h3><p>A <a href=\"https://www.nature.com/articles/s43588-026-01080-z\" target=\"_blank\" rel=\"noopener noreferrer\">16 November <em>Nature Computational Science</em> study</a> investigated seven language models in the <em>Beer Distribution Game</em>, a supply-chain simulation where individually reasonable orders can collectively amplify demand fluctuations. Across <strong>231 experimental sessions</strong>, agents given qualitative descriptions of established human decision rules behaved closer to human-calibrated benchmarks.</p><p>The lesson is methodological: an LLM producing credible explanations of human decisions is not necessarily a credible <strong>generative model of population behaviour</strong>. Even simple behavioural constraints can matter more than additional verbal fluency.</p>"
+    },
+    {
+      "id": "technical_idea",
+      "number": 3,
+      "title": "Technical idea: rendezvous hashing",
+      "content": "<p>Suppose a distributed cache has four servers. Assigning each object with <code>hash(key) % 4</code> seems reasonable—until a fifth server arrives. Changing the modulus can move most objects, invalidating caches for no useful reason.</p><p><strong>Rendezvous hashing</strong>, also called <em>highest random weight</em> hashing, instead scores every eligible server for each object:</p><p><code>owner(key) = argmax_server hash(key, server)</code></p><p>Every client using the same server list and hash function chooses the same owner without consulting a central directory. Adding a fifth server changes ownership <strong>only for keys where that new server wins</strong>—about one fifth of keys under uniform hashing. Removing a server moves only the keys it owned.</p><p>The trade-off is that the straightforward lookup computes a score for every candidate server, <strong>O(number of servers)</strong>. It is elegant for modest clusters and stable replica selection; very large systems may need optimized variants. <a href=\"https://www.microsoft.com/en-us/research/publication/using-name-based-mappings-increase-hit-rates/\" target=\"_blank\" rel=\"noopener noreferrer\">Thaler and Ravishankar, <em>Using Name-Based Mappings to Increase Hit Rates</em> (1998)</a>.</p>"
+    },
+    {
+      "id": "non_cs_science",
+      "number": 4,
+      "title": "Non-CS science: measuring what CRISPR actually changes",
+      "content": "<p>A <a href=\"https://www.nature.com/articles/s41592-026-03319-z\" target=\"_blank\" rel=\"noopener noreferrer\"><em>Nature Methods</em> paper published on 16 November</a> introduces <strong>Superb-seq</strong>, which links two measurements in the <em>same individual cell</em>: the precise DNA changes left by Cas9 gene editing, and the genes that the cell subsequently expresses.</p><p>Why combine them? Existing pooled screens often know which guide RNA a cell received but not exactly which DNA edits actually occurred. Two cells given the same guide may acquire different mutations, while unintended edits at other locations may also affect their behaviour.</p><p>By connecting actual edits to downstream RNA activity, researchers can distinguish an intended intervention from some of its unintended consequences. <strong>Practical relevance:</strong> it could improve the design and safety assessment of gene-editing experiments, including work upstream of therapies. This is a laboratory measurement method, not evidence that a particular CRISPR treatment is safe in patients.</p>"
+    },
+    {
+      "id": "geopolitics",
+      "number": 5,
+      "title": "Geopolitics and political economy",
+      "content": "<ul><li><strong>COP31, Antalya — the draft is now on the table.</strong> Negotiators issued a first proposed agreement on <strong>16 November</strong>, reopening disputes over wording on fossil-fuel phaseout and the financing developing countries would receive for climate adaptation. A draft is not a deal; the immediate question is which commitments survive consensus negotiations. <a href=\"https://www.internazionale.it/ultime-notizie-reuters/2026/11/16/first-draft-of-cop31-deal-signals-tough-negotiations-to-come\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters, 16 November</a>.</li><li><strong>Ukraine — an IMF payment is blocked on financing assurances.</strong> The IMF reported progress toward releasing around <strong>$1.6 billion</strong>, but not yet approval or disbursement. It estimates Ukraine's <strong>2027 residual financing gap at $32–34 billion</strong>. The problem is not simply negotiating another tranche: the IMF needs confidence that other donors will cover the wider gap. <a href=\"https://www.reuters.com/world/imf-says-it-is-near-deal-with-ukraine-16-billion-once-financing-assurances-2026-11-16/\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters, 16 November</a>.</li><li><strong>West Bank and Gaza — Britain targets companies, not just officials.</strong> On <strong>17 November</strong>, the UK announced sanctions on <strong>eight companies</strong> involved in Israeli settlement construction in the occupied West Bank, plus an activist group accused of obstructing Gaza aid. Targeting companies may affect business transactions directly, though the impact depends on enforcement and how exposed those firms are to British finance. <a href=\"https://www.reuters.com/world/uk/britain-sanctions-israeli-settlement-builders-gaza-aid-blocking-activists-2026-11-17/\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters, 17 November</a>.</li><li><strong>Syria — the EU seeks a formal institutional reset.</strong> EU foreign ministers agreed on <strong>16 November</strong> to advance a cooperation agreement with Syria, reviving an accord initially drafted in 2008. The EU has already committed <strong>€620 million for 2026–27</strong> in humanitarian and recovery support. The distinction is between a political decision to reopen a formal relationship and the much harder task of building functioning economic institutions. <a href=\"https://cyprus-mail.com/2026/11/16/eu-ministers-agree-to-move-ahead-with-eu-syria-deal\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters, 16 November</a>.</li></ul>"
+    },
+    {
+      "id": "marxist_fragment",
+      "number": 6,
+      "title": "Marxist fragment: political means and economic ends",
+      "content": "<blockquote><p>“the great end to which every political movement ought to be subordinate as a means”</p></blockquote><p>— Karl Marx, <a href=\"https://en.wikisource.org/wiki/Address_and_Provisional_Rules_of_the_International_Working_Men%27s_Association\" target=\"_blank\" rel=\"noopener noreferrer\"><em>Provisional Rules of the International Working Men's Association</em></a>, 1864 (English original text).</p><p>The “great end” in the preceding words is <strong>the economic emancipation of the working classes</strong>. Writing for the First International, Marx was trying to establish a common programme across workers' organizations with different national traditions and political strategies.</p><p>The formulation does <strong>not</strong> dismiss political struggle; it makes political victories instrumental rather than self-justifying. Winning office, legal equality or representation would be judged partly by whether they alter the material relations that keep labour subordinate. The tension is that political organization also has its own demands and can become an end in itself.</p>"
+    },
+    {
+      "id": "philosophy_fragments",
+      "number": 7,
+      "title": "Two philosophy and political fragments",
+      "content": "<h3>Hume: even coercive government depends on opinion</h3><blockquote><p>“It is, therefore, on opinion only that government is founded”</p></blockquote><p>— David Hume, <a href=\"https://www.gutenberg.org/cache/epub/36120/pg36120-images.html\" target=\"_blank\" rel=\"noopener noreferrer\"><em>Of the First Principles of Government</em></a>, 1741, English original.</p><p>Hume's puzzle is why the many obey the few. Even military regimes depend on soldiers, officials and subjects believing something about authority, interest or legitimacy. Coercion is real, but cannot explain by itself why those who administer it continue to cooperate.</p><h3>Machiavelli: the people may judge better than a prince</h3><blockquote><p>“a people is more prudent, more stable, and of better judgment than a prince.”</p></blockquote><p>— Niccolò Machiavelli, <a href=\"https://www.gutenberg.org/files/10827/10827-h/10827-h.htm\" target=\"_blank\" rel=\"noopener noreferrer\"><em>Discourses on Livy</em>, Book I, chapter 58</a>, English translation by Ninian Hill Thomson.</p><p>Against the familiar image of Machiavelli as a theorist of princely manipulation, the <em>Discourses</em> often defend republican judgment. His comparison is conditional: a people <strong>restrained by laws</strong> can be more dependable than an unconstrained ruler. That is an argument for institutions and public contestation, not a claim that majorities are inherently wise.</p>"
+    },
+    {
+      "id": "french_usage",
+      "number": 8,
+      "title": "French usage: à la rigueur",
+      "content": "<p><strong>À la rigueur</strong> means <em>at a push</em>, <em>if absolutely necessary</em>, or <em>as a last acceptable option</em>. It communicates <strong>reluctant feasibility</strong>, not genuine preference.</p><ul><li><em>Je peux passer jeudi. À la rigueur, vendredi matin, mais pas plus tard.</em> — “I can come Thursday. Friday morning at a push, but no later.”</li><li><em>À la rigueur, on peut faire ça en visio.</em> — “We could do it over video if we have to.”</li></ul><p>In conversation it can be a diplomatic way to offer a fallback while making clear that it is second-best. Compare <strong>au pire</strong>, which more explicitly imagines the worst-case alternative. <a href=\"https://www.larousse.fr/dictionnaires/college/rigueur/35146\" target=\"_blank\" rel=\"noopener noreferrer\">Larousse</a>.</p>"
+    },
+    {
+      "id": "music",
+      "number": 9,
+      "title": "Music corner",
+      "content": "<p>Three direct recommendations. <a href=\"https://www.youtube.com/watch_videos?video_ids=JQDTVDmbEpA,XjUjJyvIcFo,iLcvmUEglA8\" target=\"_blank\" rel=\"noopener noreferrer\">Open the three-video YouTube queue</a>.</p>",
+      "queue": "https://www.youtube.com/watch_videos?video_ids=JQDTVDmbEpA,XjUjJyvIcFo,iLcvmUEglA8",
+      "items": [
+        {
+          "type": "classical",
+          "label": "Classical",
+          "piece": "Cécile Chaminade — Concertino for Flute and Orchestra, Op. 107",
+          "performer": "Hayley Miller, flute; Boston Philharmonic Youth Orchestra; Benjamin Zander",
+          "videoId": "JQDTVDmbEpA",
+          "description": "About eight minutes of sharply defined late-Romantic writing: the flute starts lyrically, then moves into increasingly brilliant passagework before a clear return. It changes the instrumental palette from the recent violin-and-piano pick without sacrificing melodic continuity. This performance is by Hayley Miller with Benjamin Zander and the Boston Philharmonic Youth Orchestra.",
+          "url": "https://www.youtube.com/watch?v=JQDTVDmbEpA"
+        },
+        {
+          "type": "jazz",
+          "label": "Jazz",
+          "piece": "Christian McBride & Inside Straight — Brother Mister (live, San Javier Jazz Festival, 2009)",
+          "performer": "Christian McBride & Inside Straight",
+          "videoId": "XjUjJyvIcFo",
+          "description": "A buoyant, bass-led modern straight-ahead quintet performance, with Warren Wolf's vibraphone changing the colour of the frontline. Its hook is immediate, but the improvisation and ensemble responses keep developing it. This tests the melodic drive you liked in Roy Hargrove without simply recommending another performance of the same tune.",
+          "url": "https://www.youtube.com/watch?v=XjUjJyvIcFo"
+        },
+        {
+          "type": "other",
+          "label": "Other",
+          "piece": "Kishi Bashi — Manchester (Official Video)",
+          "performer": "Kishi Bashi",
+          "videoId": "iLcvmUEglA8",
+          "description": "Violin-rich orchestral indie pop with an unmistakable vocal lead and an arrangement that accumulates momentum instead of settling into a single guitar groove. The combination of strings, pop melody and an increasingly full texture may address what felt missing in Khruangbin's Maria También.",
+          "url": "https://www.youtube.com/watch?v=iLcvmUEglA8"
+        }
+      ]
+    },
+    {
+      "id": "unrelated_fact",
+      "number": 10,
+      "title": "Unrelated fact: the US once delivered mail by cruise missile",
+      "content": "<p>On <strong>8 June 1959</strong>, the US Navy launched a <strong>Regulus I guided missile carrying 3,000 letters</strong> from the submarine <em>USS Barbero</em> off Florida. The missile landed at a naval station near Jacksonville, where the mail could continue through the ordinary postal system. <a href=\"https://news.usps.com/2024/06/07/faster-than-express/\" target=\"_blank\" rel=\"noopener noreferrer\">US Postal Service history</a>.</p><p>The flight was less a practical transport innovation than a Cold War demonstration of missile guidance: the military could hit a specified destination accurately enough to deliver a mail container. The experiment was never adopted as a delivery service. The <a href=\"https://postalmuseum.si.edu/firing-letters-the-60th-anniversary-of-missile-mail\" target=\"_blank\" rel=\"noopener noreferrer\">Smithsonian's National Postal Museum</a> preserves the episode and surviving mail artifacts.</p>"
+    },
+    {
+      "id": "puzzle",
+      "number": 11,
+      "title": "Puzzle: the dollar auction",
+      "content": "<p>Economist <strong>Martin Shubik</strong> proposed the following auction. A genuine <strong>$1 bill</strong> goes to the highest bidder. Bids rise in <strong>5-cent increments</strong>, but there is a catch: <strong>both the highest and second-highest bidders must pay their final bids</strong>, and only the highest gets the dollar.</p><p>Imagine you have already bid <strong>$0.80</strong> and your rival has bid <strong>$0.85</strong>. You can concede and lose $0.80, or bid $0.90, hoping to win the dollar—but your rival then faces the same dilemma.</p><p><strong>Question:</strong> What should you do <em>now</em>, and would the rational answer have been different <em>before the auction began</em>? Try to distinguish past costs from the incentives governing the next bid.</p><p><a href=\"https://link.springer.com/article/10.1007/s13235-016-0212-4\" target=\"_blank\" rel=\"noopener noreferrer\">Background: Shubik's dollar auction, a model of competitive escalation</a>.</p>"
+    }
+  ]
+}
