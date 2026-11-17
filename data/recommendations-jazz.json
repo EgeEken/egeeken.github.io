@@ -406,6 +406,15 @@
           ]
         },
         {
+          "artist": "Roy Hargrove Quintet",
+          "slug": "roy-hargrove-quintet",
+          "main": {
+            "title": "Strasbourg / St. Denis (live at New Morning, 2007)",
+            "video": "1w3FVfkBVTE",
+            "iframeTitle": "Roy Hargrove Quintet - Strasbourg / St. Denis (Live at New Morning, 2007)"
+          }
+        },
+        {
           "artist": "Ryo Fukui",
           "slug": "ryo-fukui",
           "main": {
@@ -1112,6 +1121,15 @@
               "iframeTitle": "Kristofer Maddigan (Cuphead Soundtrack) - Ruse of an Ooze"
             }
           ]
+        },
+        {
+          "artist": "Matt Christensen (Superliminal Soundtrack)",
+          "slug": "matt-christensen-superliminal-soundtrack",
+          "main": {
+            "title": "Hopeful",
+            "video": "QjGYHf0jTRA",
+            "iframeTitle": "Matt Christensen feat. John Reeves - Hopeful (Superliminal Soundtrack)"
+          }
         },
         {
           "artist": "Martial Solal",
