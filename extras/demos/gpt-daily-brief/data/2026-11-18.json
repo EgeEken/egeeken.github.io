@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-18",
+  "title": "Daily Brief — Wednesday, 18 November 2026",
+  "generatedAt": "2026-11-18T13:00:00+03:00",
+  "readingTime": "10–15 min",
+  "sections": [
+    {
+      "id": "paris_events",
+      "number": 1,
+      "title": "Paris events — 2–9 December",
+      "content": "<p>Returning to Paris in early December, with 4 December excluded for graduation:</p>\n<ul><li><strong>Thursday 3 December — Adopt AI</strong>, Grand Palais. A large conference focused on deploying AI in organisations, with industry case studies and discussions of implementation rather than primarily academic research. The event runs approximately 08:00–18:00; check registration conditions. <a href=\"https://www.grandpalais.fr/fr/programme/adopt-ai-2026\" target=\"_blank\" rel=\"noopener noreferrer\">Official programme</a>.</li><li><strong>Tuesday 8 December, 20:30 — Antoine Karacostas Quartet</strong>, New Morning, Paris 10e. The pianist's quartet presents <em>Open Water</em>, bringing Greek melodic influences into contemporary jazz. A more distinctive option than another conventional standards session. <a href=\"https://www.newmorning.com/20261208-7781-antoine-karacostas-quartet.html\" target=\"_blank\" rel=\"noopener noreferrer\">Programme and tickets</a>.</li></ul>"
+    },
+    {
+      "id": "cs_ai",
+      "number": 2,
+      "title": "CS and AI developments",
+      "content": "<p><strong>Cross-image comparison: the information may already be inside the model.</strong> The preprint <a href=\"https://arxiv.org/abs/2611.21539\" target=\"_blank\" rel=\"noopener noreferrer\"><em>Seen but Unsaid</em></a> investigates why vision-language models struggle to compare corresponding elements across two images. Its central finding is that some internal attention heads encode useful comparison information that fails to influence the final answer. The authors report substantial gains from selectively adjusting attention projections—rather than retraining the full model—including a 28.3-percentage-point improvement on SPair-71k for one evaluated model.</p>\n<p>The interesting distinction is between <em>failure to perceive a relationship</em> and <em>failure to use an internally represented relationship</em>. The results are preprint findings, however, and do not establish that this mechanism explains all VLM comparison errors.</p>\n<p><strong>Faster autoregressive video diffusion without retraining.</strong> <a href=\"https://arxiv.org/abs/2611.21038\" target=\"_blank\" rel=\"noopener noreferrer\"><em>ScoutCache</em></a> exploits reuse between successive video-generation steps, combining cached internal representations with selective recomputation. The authors report speedups of up to 2.28× on one generation setup. This is a video-generation inference optimisation, not a claim about compression efficiency or video-codec bitrate.</p>"
+    },
+    {
+      "id": "technical_idea",
+      "number": 3,
+      "title": "Technical idea — fractional cascading",
+      "content": "<p>Suppose a query must find the predecessor of the <em>same</em> value in 100 related sorted arrays. Performing 100 independent binary searches costs roughly <strong>O(k log n)</strong> for k arrays of size n. The observation behind <strong>fractional cascading</strong> is that these searches should not be independent.</p>\n<p>Copy a carefully selected fraction of each array's elements into its neighbour, and store pointers linking their positions. One binary search in an augmented first array gives an approximate position in the next; from there a constant amount of local inspection locates the answer. For a chain of arrays, this reduces the query to <strong>O(log n + k)</strong>, with linear additional space under the standard bounded-degree assumptions.</p>\n<p>Chazelle and Guibas introduced the technique in 1986, especially for geometric search structures. It is a useful example of preprocessing that exploits <em>correlation between queries</em>, rather than making each individual search faster. <a href=\"https://collaborate.princeton.edu/en/publications/fractional-cascading-i-a-data-structuring-technique/\" target=\"_blank\" rel=\"noopener noreferrer\">Original paper</a>.</p>"
+    },
+    {
+      "id": "non_cs_science",
+      "number": 4,
+      "title": "Non-CS science — chemicals that interfere with hormones",
+      "content": "<p>A <a href=\"https://www.unep.org/en/news-and-stories/press-release/evidence-mounts-exposure-hormone-disrupting-chemicals-starts-birth\" target=\"_blank\" rel=\"noopener noreferrer\">new UNEP–WHO global assessment released 17 November</a> reviews the much larger body of evidence on <strong>endocrine-disrupting chemicals</strong> accumulated since the organisations' 2012 assessment. Such substances can imitate, block or otherwise alter hormonal signals—the chemical messages that regulate development, reproduction and metabolism. Exposure can begin before birth, when the timing of a disturbance may matter as much as its magnitude.</p>\n<p>The finding is not that every plastic container or cosmetic product is dangerous. Effects differ by substance, concentration, exposure route and developmental stage. The practical policy problem is incomplete testing: UNEP says more than 350,000 chemicals and mixtures are registered globally, but only a fraction have been evaluated for hormone-disrupting properties. Better screening, exposure information and substitution requirements matter more than a generic instruction to avoid 'chemicals'. <a href=\"https://wedocs.unep.org/entities/publication/30aed16d-b89c-433b-8d4a-587019ea55a3\" target=\"_blank\" rel=\"noopener noreferrer\">Full assessment</a>.</p>"
+    },
+    {
+      "id": "geopolitics",
+      "number": 5,
+      "title": "Geopolitics — four developments",
+      "content": "<ul><li><strong>Ukraine / Russia:</strong> Ukrainian strikes severely damaged the <strong>Kerch Strait bridge</strong> linking Russia to occupied Crimea; Reuters has since verified footage of the collapsed road arch. The bridge is strategically and symbolically important, although Russian military supply already relies more heavily on the occupied overland corridor. Russia has meanwhile continued attacking Ukrainian infrastructure. <a href=\"https://www.internazionale.it/ultime-notizie-reuters/2026/11/18/ukraine-strikes-crimean-bridge-for-second-day-as-russia-pounds-kyiv-bridges\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters, 18 November</a>.</li><li><strong>Yemen / Red Sea:</strong> The Saudi-led coalition says it carried out a major air attack in Houthi-controlled territory. The Houthis report at least 17 deaths; that figure is their claim, not independently established in the report. With wider Gulf hostilities already active, renewed fighting threatens to complicate maritime security and regional diplomacy. <a href=\"https://apnews.com/article/b71b1d25f3cff987b4b125196ecb4c3a\" target=\"_blank\" rel=\"noopener noreferrer\">Associated Press, 18 November</a>.</li><li><strong>Indo-Pacific:</strong> The US, Japan, India and Australia met at a <strong>Quad leaders' summit in Manila</strong> and announced cooperation on critical-mineral supply chains and security. The strategic problem is practical: processing and refining capacity cannot be replaced merely by signing supply agreements, so diversification requires investment and years of industrial buildout. <a href=\"https://www.whitehouse.gov/briefings-statements/2026/11/quad-leaders-summit-joint-press-release/\" target=\"_blank\" rel=\"noopener noreferrer\">Joint statement</a> · <a href=\"https://www.abc.net.au/news/2026-11-18/quad-meeting-india-japan-usa-anthony-albanese-donald-trump/107396716\" target=\"_blank\" rel=\"noopener noreferrer\">ABC reporting</a>.</li><li><strong>Climate policy / AI:</strong> At COP31 in Antalya, a voluntary pledge to reduce AI's environmental footprint has attracted few major technology companies; Reuters reports Alibaba is the only major tech signatory so far and US Big Tech remains absent. The issue is not whether a declaration sounds ambitious, but whether electricity use, water demand and emissions become measurable obligations with credible oversight. <a href=\"https://www.reuters.com/sustainability/cop/cop31-ai-pledge-fails-lure-us-big-tech-2026-11-17/\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters, 17 November</a>.</li></ul>"
+    },
+    {
+      "id": "marxist_fragment",
+      "number": 6,
+      "title": "Marxist fragment — overwork and unemployment",
+      "content": "<p>From Karl Marx, <a href=\"https://www.marxists.org/archive/marx/works/1867-c1/ch25.htm\" target=\"_blank\" rel=\"noopener noreferrer\"><em>Capital</em>, Volume I, chapter 25, section 3</a> (English translation): “<strong>The condemnation of one part of the working class to enforced idleness by the overwork of the other part</strong>”.</p>\n<p>In his discussion of the <strong>industrial reserve army</strong>, Marx describes unemployment and excessive working hours as mutually reinforcing rather than opposing anomalies. A pool of available labour weakens employed workers' bargaining power; longer hours and intensified work can, in turn, reduce the number of additional workers firms need. He wrote against nineteenth-century political economists who explained wage movements chiefly through population growth. The claim is about how capitalist labour markets organise available working time, not that every instance of unemployment has a single cause.</p>"
+    },
+    {
+      "id": "philosophy_fragments",
+      "number": 7,
+      "title": "Two philosophy and political fragments",
+      "content": "<p><strong>John Stuart Mill — argument from the other side.</strong> “He who knows only his own side of the case, knows little of that.” — <a href=\"https://constitution.org/2-Authors/jsm/liberty.htm\" target=\"_blank\" rel=\"noopener noreferrer\"><em>On Liberty</em>, chapter II (1859)</a>. Mill's point is stronger than tolerating dissent: a defensible conviction requires understanding its most persuasive objections. This is a demanding epistemic standard even for views formed through careful historical study.</p>\n<p><strong>Edmund Burke — scepticism about moral reinvention.</strong> “We know that we have made no discoveries, and we think that no discoveries are to be made, in morality” — <a href=\"https://www.gutenberg.org/files/15679/15679-h/15679-h.htm\" target=\"_blank\" rel=\"noopener noreferrer\"><em>Reflections on the Revolution in France</em> (1790)</a>. Burke feared that revolutionary programmes built from abstract reason would dismantle institutions containing hard-won, imperfect knowledge. A serious objection is that inherited institutions also preserve domination and can become obstacles to reform; institutional experience is evidence, not a veto.</p>"
+    },
+    {
+      "id": "french_usage",
+      "number": 8,
+      "title": "French usage — j’en ai pour…",
+      "content": "<p><strong>“J'en ai pour dix minutes”</strong> means <em>I need about ten minutes to finish or do this</em>, not simply <em>I have ten minutes available</em>. For example: “Pars devant, <strong>j'en ai encore pour cinq minutes</strong>” — <em>Go ahead; I still need five minutes</em>. In the same conversation, “<strong>T'en as pour longtemps ?</strong>” asks <em>Will you be much longer?</em> This conversational construction is particularly useful when you are finishing work, shopping or getting ready to leave. <a href=\"https://fr.wiktionary.org/wiki/en_avoir_pour\" target=\"_blank\" rel=\"noopener noreferrer\">Usage examples</a>.</p>"
+    },
+    {
+      "id": "music",
+      "number": 9,
+      "title": "Music corner",
+      "content": "<p>Three direct recommendations. <a href=\"https://www.youtube.com/watch_videos?video_ids=b2Akyr0v7iU,FieH5e-dO4o,DfcWOPpmw14\" target=\"_blank\" rel=\"noopener noreferrer\">Open the three-video YouTube queue</a>.</p>",
+      "queue": "https://www.youtube.com/watch_videos?video_ids=b2Akyr0v7iU,FieH5e-dO4o,DfcWOPpmw14",
+      "items": [
+        {
+          "type": "classical",
+          "label": "Classical",
+          "piece": "Florence Price — Adoration (for organ)",
+          "performer": "andreas osiander, organ",
+          "videoId": "b2Akyr0v7iU",
+          "description": "A compact, quietly lyrical piece by Florence Price. Its sustained organ lines and gently shifting harmonies are a different test of the instrument from Jongen’s large-scale Symphonie concertante, which worked particularly well for you. The attraction here is how much shape Price gives a few minutes of apparently simple material.",
+          "url": "https://www.youtube.com/watch?v=b2Akyr0v7iU"
+        },
+        {
+          "type": "jazz",
+          "label": "Jazz",
+          "piece": "Cedar Walton — Bolivia (live at Montmartre, 1977)",
+          "performer": "Cedar Walton and ensemble",
+          "videoId": "FieH5e-dO4o",
+          "description": "A memorable, rhythmically pointed hard-bop theme that opens into muscular improvisation. This moves back toward the melodic and ensemble-driven energy of the Roy Hargrove performance you rated highly, without recycling that recording or tune. Pay attention to how the repeated figure anchors the solos.",
+          "url": "https://www.youtube.com/watch?v=FieH5e-dO4o"
+        },
+        {
+          "type": "other",
+          "label": "Other",
+          "piece": "Magdalena Bay — Image (Official Video)",
+          "performer": "Magdalena Bay",
+          "videoId": "DfcWOPpmw14",
+          "description": "Detailed modern synth-pop with a clear vocal lead, bright electronic counterlines and a stronger sense of successive arrangement changes than a groove left to run on its own. It is a different pop lane from yesterday’s string-heavy Kishi Bashi track, and tests whether denser production supplies the melodic layer you wanted in Khruangbin.",
+          "url": "https://www.youtube.com/watch?v=DfcWOPpmw14"
+        }
+      ]
+    },
+    {
+      "id": "unrelated_fact",
+      "number": 10,
+      "title": "Unrelated fact — Death Valley’s moving stones",
+      "content": "<p>For decades, rocks on <strong>Racetrack Playa</strong> in California's Death Valley left long tracks in dried mud without anyone seeing them move. The explanation, directly observed during winter 2013–14, is more particular than 'the wind pushes rocks': a shallow lake forms, a thin sheet of ice freezes around the stones, then breaks into drifting panels that can push them across slippery mud under a light breeze.</p>\n<p>The process needs an unusual overlap of rain, freezing nights, sunshine and wind, which is why the movements were so rarely witnessed. Researchers captured the movements with GPS-equipped stones and time-lapse photography. <a href=\"https://www.nps.gov/deva/learn/news/racetrack.htm\" target=\"_blank\" rel=\"noopener noreferrer\">US National Park Service</a>.</p>"
+    },
+    {
+      "id": "puzzle",
+      "number": 11,
+      "title": "Puzzle — Pólya’s reinforcing urn",
+      "content": "<p>An urn begins with <strong>one red and one blue ball</strong>. On each turn, draw a ball uniformly at random, return it, and add one <em>new</em> ball of the same colour. Repeat this for <strong>100 turns</strong>, leaving 102 balls in total.</p>\n<p>Which outcome is more likely: <strong>A)</strong> the final red fraction lies between 45% and 55% inclusive, or <strong>B)</strong> it exceeds 90%? And by roughly how much?</p>\n<p>This differs from repeatedly tossing a fair coin because every draw changes the probabilities faced by later draws. Try to reason about how a small early lead can become self-reinforcing before calculating. <a href=\"https://mathworld.wolfram.com/PolyaUrn.html\" target=\"_blank\" rel=\"noopener noreferrer\">Background on Pólya's urn</a> — contains the underlying mathematics, so avoid opening it until you have an answer.</p>"
+    }
+  ]
+}
