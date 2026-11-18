@@ -577,7 +577,7 @@
           ]
         },
         {
-          "composer": "Amy Beach",
+          "composer": "Beach",
           "slug": "amy-beach",
           "main": {
             "title": "Romance for Violin and Piano, Op. 23",
@@ -684,6 +684,15 @@
               "iframeTitle": "Ravel - Pavane pour une infante défunte, M. 19"
             }
           ]
+        },
+        {
+          "composer": "Price",
+          "slug": "price",
+          "main": {
+            "title": "Adoration (for organ)",
+            "video": "b2Akyr0v7iU",
+            "iframeTitle": "Florence Price — Adoration (organ) — andreas osiander"
+          }
         }
       ]
     }
